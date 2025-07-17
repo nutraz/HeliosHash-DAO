@@ -14,3 +14,8 @@ cp .env.example .env
 # Fill your keys
 npm run dev
 ```
+## 🔗 Live Demo
+
+👉 [View Live](https://your-live-site-url.com)  
+_(Make sure your canisters and frontend are running correctly)_
+

@@ -1,4 +1,10 @@
 {
+  "scripts": {
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
+    "format": "prettier -w ."
+  }
+}
+{
   "name": "helioshash-dao",
   "version": "0.1.0",
   "private": true,

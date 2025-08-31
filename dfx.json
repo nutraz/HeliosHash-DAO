@@ -1,0 +1,39 @@
+{
+  "canisters": {
+    "hhdao_frontend": {
+      "type": "assets",
+      "source": ["src"],
+      "dependencies": []
+    },
+    "hhdao_dao": {
+      "main": "canisters/dao/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_identity": {
+      "main": "canisters/identity/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_telemetry": {
+      "main": "canisters/telemetry/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_documents": {
+      "main": "canisters/documents/main.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000"
+    },
+    "ic": {
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}

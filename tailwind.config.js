@@ -18,6 +18,10 @@ module.exports = {
         gray: "#979797", // rgb(151, 151, 151)
         light: "#ffffff", // rgb(255, 255, 255)
         muted: "#cccccc", // rgb(204, 204, 204)
+        'hh-white': '#FFFFFF',
+        'hh-dark-blue': '#0A192F',
+        'hh-sky-blue': '#87CEEB',
+        'hh-black': '#000000',
       },
     },
   },

@@ -19,7 +19,7 @@
     "web3modal": "^1.9.12"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^4.0.0",
+    "@vitejs/plugin-react": "^5.0.2",
     "autoprefixer": "^10.4.0",
     "eslint": "^8.57.0",
     "postcss": "^8.4.0",

@@ -1,0 +1,5 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="60" r="56" fill="#fff" stroke="#fbbf24" stroke-width="8"/>
+  <path d="M60 30L90 47V73L60 90L30 73V47L60 30Z" fill="#1a237e"/>
+  <text x="50%" y="62%" text-anchor="middle" fill="#fff" font-size="32" font-family="Arial" dy=".3em">☀️</text>
+</svg>

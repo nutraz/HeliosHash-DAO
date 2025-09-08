@@ -1,0 +1,30 @@
+/* Modern animated landing page styles */
+.landing-bg {
+  background: linear-gradient(135deg, #1a202c 60%, #fbbf24 100%);
+  background-attachment: fixed;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 1s ease-out;
+}
+.animate-fade-in-delay {
+  animation: fade-in 1.5s ease-out;
+}
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+  animation: spin-slow 4s linear infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.animate-bounce {
+  animation: bounce 1.2s infinite;
+}

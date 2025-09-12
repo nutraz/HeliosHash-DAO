@@ -1,5 +1,4 @@
 
-
 export default function LandingPage() {
   return (
     <div className="bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen font-sans text-white">

@@ -1,9 +1,21 @@
 {
   "canisters": {
+    "hhdao": {
+      "main": "canisters/hhdao/src/main.mo",
+      "type": "motoko"
+    },
     "hhdao_frontend": {
-      "type": "assets",
-      "source": ["src"],
-      "dependencies": []
+      "dependencies": [
+        "hhdao"
+      ],
+      "frontend": {
+        "entrypoint": "public/index.html"
+      },
+      "source": [
+        "public/",
+        "dist/"
+      ],
+      "type": "assets"
     },
     "hhdao_dao": {
       "main": "canisters/dao/main.mo",

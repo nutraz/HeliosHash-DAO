@@ -1,38 +1,24 @@
 import { Link } from 'react-router-dom';
-import { useAuthContext } from '../hooks/useAuthContext.tsx';
 
 export const Header = () => {
-  const { user, logout } = useAuthContext();
-
   return (
-    <header className="bg-white shadow">
-      <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-xl font-bold">HeliosHash DAO</div>
-        <div className="flex items-center space-x-4">
-          {user ? (
-            <>
-              <span className="text-gray-700">Welcome, {user.username}!</span>
-              <ul className="flex space-x-4">
-                <li><Link to="/" className="text-gray-700 hover:text-indigo-600">Dashboard</Link></li>
-                <li><Link to="/projects" className="text-gray-700 hover:text-indigo-600">Projects</Link></li>
-                <li><Link to="/governance" className="text-gray-700 hover:text-indigo-600">Governance</Link></li>
-                <li><Link to="/nft" className="text-gray-700 hover:text-indigo-600">NFT</Link></li>
-              </ul>
-              <button
-                onClick={logout}
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <div className="flex space-x-4">
-              <Link to="/login" className="text-gray-700 hover:text-indigo-600">Login</Link>
-              <Link to="/signup" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded">Sign Up</Link>
-            </div>
-          )}
+    <header className="top-0 z-50 sticky bg-gradient-to-b from-indigo-950/90 via-indigo-900/80 to-indigo-950/60 backdrop-blur-lg">
+      <div className="flex justify-between items-center gap-4 mx-auto px-5 py-4 max-w-6xl">
+        <Link className="brand" to="/">
+          <img src="/logo no background.png" alt="HeliosHash DAO Logo" style={{display:'inline-block',width:'34px',height:'34px'}}/>
+          <span className="font-extrabold tracking-tight">HeliosHash DAO</span>
+        </Link>
+        <nav className="hidden md:flex flex-wrap items-center gap-6 navlinks">
+          <Link to="/#dao" className="opacity-90 text-white text-sm no-underline">DAO</Link>
+          <Link to="/#smb" className="opacity-90 text-white text-sm no-underline">Small Businesses</Link>
+          <Link to="/#resources" className="opacity-90 text-white text-sm no-underline">Resources</Link>
+          <Link to="/dashboard" className="opacity-90 text-white text-sm no-underline">Dashboard</Link>
+        </nav>
+        <div className="flex flex-wrap items-center gap-2 actions">
+          <Link className="bg-[#17171a] px-4 py-2 border border-white/10 rounded-full font-semibold text-white text-sm no-underline btn" to="/#list">List a Project</Link>
+          <Link className="bg-gradient-to-r from-[#3a2a66] to-[#191a1f] shadow-lg px-4 py-2 border border-white/10 rounded-full font-semibold text-white text-sm no-underline btn primary" to="/#signup">Sign Up</Link>
         </div>
-      </nav>
+      </div>
     </header>
   );
-};
+}

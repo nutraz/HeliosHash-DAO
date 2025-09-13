@@ -2,33 +2,6 @@
 export default function LandingPage() {
   return (
     <div className="bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen font-sans text-white">
-      {/* Header */}
-      <header className="top-0 z-50 sticky bg-gradient-to-b from-indigo-950/90 via-indigo-900/80 to-indigo-950/60 backdrop-blur-lg">
-        <div className="flex justify-between items-center gap-4 mx-auto px-5 py-4 max-w-6xl">
-          <a className="brand" href="#">
-            {/* Inline SVG logo */}
-            <span style={{display:'inline-block',width:'34px',height:'34px'}}>
-              <svg viewBox="0 0 48 48" fill="none" aria-label="HeliosHash DAO Logo">
-                <circle cx="24" cy="24" r="22" stroke="#8c42c8" strokeWidth="2" fill="#0e0e10" />
-                <circle cx="24" cy="24" r="14" fill="#65bad6" />
-                {/* "H" hash mark */}
-                <rect x="21" y="16" width="6" height="16" rx="3" fill="#fff" />
-                <rect x="16" y="21" width="16" height="6" rx="3" fill="#fff" />
-              </svg>
-            </span>
-            <span className="font-extrabold tracking-tight">HeliosHash DAO</span>
-          </a>
-          <nav className="hidden md:flex flex-wrap items-center gap-6 navlinks">
-            <a href="#dao" className="opacity-90 text-white text-sm no-underline">DAO</a>
-            <a href="#smb" className="opacity-90 text-white text-sm no-underline">Small Businesses</a>
-            <a href="#resources" className="opacity-90 text-white text-sm no-underline">Resources</a>
-          </nav>
-          <div className="flex flex-wrap items-center gap-2 actions">
-            <a className="bg-[#17171a] px-4 py-2 border border-white/10 rounded-full font-semibold text-white text-sm no-underline btn" href="#list">List a Project</a>
-            <a className="bg-gradient-to-r from-[#3a2a66] to-[#191a1f] shadow-lg px-4 py-2 border border-white/10 rounded-full font-semibold text-white text-sm no-underline btn primary" href="#signup">Sign Up</a>
-          </div>
-        </div>
-      </header>
 
       {/* Hero */}
   <section className="items-center gap-12 grid grid-cols-1 md:grid-cols-2 mx-auto px-5 pt-24 pb-10 max-w-6xl">
@@ -173,18 +146,6 @@ export default function LandingPage() {
         <p className="muted">Docs, guides, and FAQs are coming soon.</p>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-b from-[#0b0b0d] to-[#0a0a0c] px-5 py-6 border-white/10 border-t text-[#8f9098] text-xs">
-        <div className="flex md:flex-row flex-col flex-wrap justify-between gap-3 mx-auto max-w-[1200px] footer-wrap">
-          <div>© {new Date().getFullYear()} HHDAO. All rights reserved.</div>
-          <div className="flex flex-wrap gap-4 footer-links">
-            <a href="#" className="text-[#a6a6af] no-underline">Terms of Service</a>
-            <a href="#" className="text-[#a6a6af] no-underline">Privacy Policy</a>
-            <a href="#" className="text-[#a6a6af] no-underline">Contact</a>
-            <a href="#" className="text-[#a6a6af] no-underline">Support</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }

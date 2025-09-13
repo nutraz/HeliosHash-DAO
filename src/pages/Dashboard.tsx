@@ -1,11 +1,7 @@
+import { Dashboard } from '../components/Dashboard';
 
-function Dashboard() {
-  return (
-    <div className="p-6">
-      <h2 className="text-2xl font-semibold">Dashboard Page</h2>
-      <p>Content coming soon...</p>
-    </div>
-  );
+function DashboardPage() {
+  return <Dashboard />;
 }
 
-export default Dashboard;
+export default DashboardPage;

@@ -1,5 +1,26 @@
 
+import React, { useState } from 'react';
+import { useWallet } from '../hooks/useWallet';
+
 export default function LandingPage() {
+  const { isConnected, address, connect, disconnect } = useWallet();
+  const [showProjectForm, setShowProjectForm] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [projectLocation, setProjectLocation] = useState('');
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const handleCreateProject = () => {
+    setShowProjectForm(true);
+  };
+
+  const handleSubmitProject = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simulate project creation
+    setShowSuccessMessage(true);
+    setShowProjectForm(false);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
+  };
+
   return (
     <div className="bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen font-sans text-white">
 
@@ -15,7 +36,35 @@ export default function LandingPage() {
           </p>
           <div className="mb-4 font-bold text-cyan-300 text-xs">From Sunlight to Sovereignty. One Block at a Time.</div>
           <div className="flex gap-4 mt-6">
-            <a className="px-6 py-3 rounded bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition" href="#get-started">Get Started</a>
+            {!isConnected ? (
+              <button 
+                className="px-6 py-3 rounded bg-indigo-600 text-white font-semibold shadow hover:bg-indigo-700 transition" 
+                data-testid="connect-wallet"
+                onClick={connect}
+              >
+                Connect Wallet
+              </button>
+            ) : (
+              <div className="flex items-center gap-4">
+                <span data-testid="wallet-address" className="text-green-300">
+                  Connected: {address?.slice(0, 8)}...{address?.slice(-4)}
+                </span>
+                <button 
+                  className="px-4 py-2 rounded bg-red-600 text-white font-semibold shadow hover:bg-red-700 transition"
+                  data-testid="disconnect-button"
+                  onClick={disconnect}
+                >
+                  Disconnect
+                </button>
+                <button 
+                  className="px-6 py-3 rounded bg-green-600 text-white font-semibold shadow hover:bg-green-700 transition"
+                  data-testid="create-project"
+                  onClick={handleCreateProject}
+                >
+                  Create Project
+                </button>
+              </div>
+            )}
             <a className="px-6 py-3 rounded bg-purple-600 text-white font-semibold shadow hover:bg-purple-700 transition" href="#learn">Learn More</a>
           </div>
         </div>
@@ -145,6 +194,62 @@ export default function LandingPage() {
         <h2 style={{margin:'0 0 12px'}}>Resources</h2>
         <p className="muted">Docs, guides, and FAQs are coming soon.</p>
       </section>
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <div className="fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50" data-testid="success-message">
+          Project created successfully!
+        </div>
+      )}
+
+      {/* Project Creation Modal */}
+      {showProjectForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-indigo-900 p-8 rounded-xl max-w-md w-full mx-4">
+            <h3 className="text-2xl font-bold mb-6">Create New Solar Project</h3>
+            <form onSubmit={handleSubmitProject}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">Project Name</label>
+                <input
+                  type="text"
+                  data-testid="project-name"
+                  value={projectName}
+                  onChange={(e) => setProjectName(e.target.value)}
+                  className="w-full px-3 py-2 bg-indigo-800 border border-indigo-700 rounded-lg text-white"
+                  required
+                />
+              </div>
+              <div className="mb-6">
+                <label className="block text-sm font-medium mb-2">Project Location</label>
+                <input
+                  type="text"
+                  data-testid="project-location"
+                  value={projectLocation}
+                  onChange={(e) => setProjectLocation(e.target.value)}
+                  className="w-full px-3 py-2 bg-indigo-800 border border-indigo-700 rounded-lg text-white"
+                  required
+                />
+              </div>
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  data-testid="submit-project"
+                  className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition"
+                >
+                  Submit Project
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowProjectForm(false)}
+                  className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -1,15 +1,11 @@
-import { createRoot } from 'react-dom/client';
-import './index.css';
-
-const container = document.getElementById('root');
-if (!container) throw new Error('Failed to find the root element');
-
-// Clear the fallback content
-container.innerHTML = '';
-
-// Create the app content directly
-container.innerHTML = `
-  <div class="bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen font-sans text-white">
+// Simple vanilla JS version of the landing page for e2e testing
+export default function LandingPage() {
+  // Create the main container
+  const container = document.createElement('div');
+  container.className = 'bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 min-h-screen font-sans text-white';
+  
+  // Add basic structure with test IDs
+  container.innerHTML = `
     <div class="flex justify-center items-center min-h-screen px-5">
       <div class="text-center max-w-4xl">
         <h1 class="text-4xl md:text-5xl font-bold mb-4">
@@ -108,53 +104,57 @@ container.innerHTML = `
     <div id="success-message" data-testid="success-message" class="hidden fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50">
       Project created successfully!
     </div>
-  </div>
-`;
-
-// Add event listeners
-const connectBtn = document.getElementById('connect-wallet-btn');
-const disconnectBtn = document.getElementById('disconnect-btn');
-const createProjectBtn = document.getElementById('create-project-btn');
-const walletSection = document.getElementById('wallet-section');
-const connectedSection = document.getElementById('connected-section');
-const projectModal = document.getElementById('project-modal');
-const projectForm = document.getElementById('project-form');
-const cancelBtn = document.getElementById('cancel-project-btn');
-const successMessage = document.getElementById('success-message');
-
-if (connectBtn) {
-  connectBtn.addEventListener('click', () => {
-    walletSection?.classList.add('hidden');
-    connectedSection?.classList.remove('hidden');
-  });
-}
-
-if (disconnectBtn) {
-  disconnectBtn.addEventListener('click', () => {
-    connectedSection?.classList.add('hidden');
-    walletSection?.classList.remove('hidden');
-  });
-}
-
-if (createProjectBtn) {
-  createProjectBtn.addEventListener('click', () => {
-    projectModal?.classList.remove('hidden');
-  });
-}
-
-if (cancelBtn) {
-  cancelBtn.addEventListener('click', () => {
-    projectModal?.classList.add('hidden');
-  });
-}
-
-if (projectForm) {
-  projectForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    projectModal?.classList.add('hidden');
-    successMessage?.classList.remove('hidden');
-    setTimeout(() => {
-      successMessage?.classList.add('hidden');
-    }, 3000);
-  });
+  `;
+  
+  // Add event listeners after the content is added to DOM
+  setTimeout(() => {
+    const connectBtn = document.getElementById('connect-wallet-btn');
+    const disconnectBtn = document.getElementById('disconnect-btn');
+    const createProjectBtn = document.getElementById('create-project-btn');
+    const walletSection = document.getElementById('wallet-section');
+    const connectedSection = document.getElementById('connected-section');
+    const projectModal = document.getElementById('project-modal');
+    const projectForm = document.getElementById('project-form');
+    const cancelBtn = document.getElementById('cancel-project-btn');
+    const successMessage = document.getElementById('success-message');
+    
+    if (connectBtn) {
+      connectBtn.addEventListener('click', () => {
+        walletSection?.classList.add('hidden');
+        connectedSection?.classList.remove('hidden');
+      });
+    }
+    
+    if (disconnectBtn) {
+      disconnectBtn.addEventListener('click', () => {
+        connectedSection?.classList.add('hidden');
+        walletSection?.classList.remove('hidden');
+      });
+    }
+    
+    if (createProjectBtn) {
+      createProjectBtn.addEventListener('click', () => {
+        projectModal?.classList.remove('hidden');
+      });
+    }
+    
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        projectModal?.classList.add('hidden');
+      });
+    }
+    
+    if (projectForm) {
+      projectForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        projectModal?.classList.add('hidden');
+        successMessage?.classList.remove('hidden');
+        setTimeout(() => {
+          successMessage?.classList.add('hidden');
+        }, 3000);
+      });
+    }
+  }, 100);
+  
+  return container;
 }

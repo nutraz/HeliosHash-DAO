@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
@@ -13,22 +13,17 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     actionTimeout: 10000,
     ignoreHTTPSErrors: true,
-    video: 'retain-on-failure',
+    video: 'off', // Disable video recording
   },
   // Set environment variables for canister IDs
   globalSetup: './e2e/global-setup.ts',
   projects: [
     {
       name: 'chromium',
-      use: { browserName: 'chromium' },
-    },
-    {
-      name: 'firefox',
-      use: { browserName: 'firefox' },
-    },
-    {
-      name: 'webkit',
-      use: { browserName: 'webkit' },
+      use: { 
+        ...devices['Desktop Chrome'],
+        channel: 'chrome' // Use system Chrome
+      },
     },
   ],
 });

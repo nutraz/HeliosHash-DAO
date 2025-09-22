@@ -27,7 +27,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@web3modal/ethereum": "^2.7.1",
     "@web3modal/react": "^2.7.1",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^12.23.16",
     "i18next": "^25.5.2",
     "lucide-react": "^0.543.0",
     "react": "^18.3.1",

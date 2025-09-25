@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Users, MessageSquare, Vote, Plus, ArrowLeft, Briefcase, MapPin, Camera, FileText, Video, Star, Clock, Calendar, Monitor, Shield, Wrench, BookOpen, HardHat, Zap, Factory, Building, Sprout, Layers } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
+import JobBoard from "@/components/community/opportunities/JobBoard";
 
 interface CommunityPost {
   id: string;
@@ -462,32 +463,7 @@ export default function CommunityPage() {
           </TabsContent>
 
           <TabsContent value="opportunities" className="space-y-4">
-            {opportunities.map((opportunity) => (
-              <Card key={opportunity.id} className="minimal-card p-6">
-                <div className="space-y-3">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="text-lg font-semibold text-foreground mb-1">{opportunity.title}</h3>
-                      <p className="text-muted-foreground mb-2">{opportunity.company} • {opportunity.location}</p>
-                      <p className="text-foreground mb-2">{opportunity.description}</p>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Badge className={getOpportunityTypeColor(opportunity.type)}>
-                          {opportunity.type}
-                        </Badge>
-                        <span>{opportunity.salary}</span>
-                        <span>Posted {opportunity.posted}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm text-muted-foreground">
-                      Deadline: {opportunity.deadline}
-                    </div>
-                    <Button variant="outline" size="sm">Apply</Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
+            <JobBoard />
           </TabsContent>
 
           <TabsContent value="projects" className="space-y-4">

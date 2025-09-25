@@ -1,6 +1,3 @@
-Here is the full, updated README.md content for HeliosHash DAO (HHDAO) as requested. You can copy and paste this directly into README.md:
-
-```markdown
 # HeliosHash DAO (HHDAO)
 
 ### 🌍 India Node of the One World Project (1WP)

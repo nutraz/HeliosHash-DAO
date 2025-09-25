@@ -252,5 +252,9 @@ module {
     public func getAllNFTs() : [NFT] {
       Iter.toArray(nfts.vals());
     };
+
+    public func getUserProjects(user : Principal) : [Project] {
+      Array.filter<Project>(projects, func (p : Project) : Bool { p.owner == user })
+    };
   };
 }

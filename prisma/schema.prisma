@@ -1,0 +1,874 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  name                  String?
+  role                  String    @default("member")
+  walletAddress         String?
+  authenticationMethod   String    // "internet-identity", "wallet", "email"
+  kycStatus             KYCStatus @default(NOT_VERIFIED)
+  kycVerifiedAt         DateTime?
+  kycProvider           String?   // "onfido", "manual", etc.
+  kycReferenceId        String?   // provider-specific reference
+  phoneNumber           String?
+  country               String?
+  state                 String?
+  city                  String?
+  postalCode            String?
+  dateOfBirth           DateTime?
+  governmentId          String?   // Aadhaar, PAN, etc.
+  governmentIdType      GovernmentIdType?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  projectApplications    ProjectApplication[]
+  proposalVotes         ProposalVote[]
+  nfts                  NFT[]
+  miningRewards         MiningReward[]
+  communityPosts        CommunityPost[]
+  comments              Comment[]
+  proposals             DAOProposal[]
+  kycDocuments          KYCDocument[]
+  remittanceTransactions RemittanceTransaction[]
+  miningOperations      MiningOperation[]
+  dataCenterServices    DataCenterService[]
+  receivedRemittances   RemittanceTransaction[] @relation("RemittanceRecipient")
+
+  @@map("users")
+}
+
+model SolarProject {
+  id                    String    @id @default(cuid())
+  name                  String
+  description           String
+  state                 String
+  city                  String
+  latitude              Float
+  longitude             Float
+  capacity              Float     // in MW
+  status                ProjectStatus
+  startDate             DateTime?
+  expectedCompletion    DateTime?
+  actualCompletion      DateTime?
+  totalBudget           Float     // in INR
+  spentBudget           Float     @default(0)
+  energyGenerated       Float?    // in MWh
+  co2Reduced            Float?    // in tons
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  applications          ProjectApplication[]
+  approvals             ProjectApproval[]
+  documents             ProjectDocument[]
+  images                ProjectImage[]
+  landRecords           LandRecord[]
+  miningOperations      MiningOperation[]
+  dataCenterServices    DataCenterService[]
+  iosSensors            IOSSensor[]
+  governmentReports     GovernmentReport[]
+
+  @@map("solar_projects")
+}
+
+model ProjectApplication {
+  id                    String    @id @default(cuid())
+  projectId             String
+  applicantId           String
+  applicationDate       DateTime  @default(now())
+  status                ApplicationStatus @default(PENDING)
+  proposal              String
+  budget                Float
+  timeline              String
+  environmentalImpact   String?
+  socialImpact          String?
+  technicalDetails      String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  applicant             User        @relation(fields: [applicantId], references: [id])
+  approvals             ProjectApproval[]
+
+  @@map("project_applications")
+}
+
+model ProjectApproval {
+  id                    String    @id @default(cuid())
+  projectId             String
+  applicationId         String
+  agency                ApprovalAgency
+  status                ApprovalStatus @default(PENDING)
+  approvedBy            String?
+  approvedAt            DateTime?
+  comments              String?
+  requirements          String?   @default("[]")
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  application           ProjectApplication @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+
+  @@map("project_approvals")
+}
+
+model LandRecord {
+  id                    String    @id @default(cuid())
+  projectId             String?
+  surveyNumber          String?
+  location              String
+  area                  Float     // in square meters
+  ownershipType         OwnershipType
+  ownerName             String
+  ownerContact          String?
+  marketValue           Float?    // in INR
+  soilQuality           String?
+  waterAvailability     String?
+  gridConnectivity      String?
+  environmentalClearance Boolean   @default(false)
+  legalClearance        Boolean   @default(false)
+  zoningCompliance      Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject? @relation(fields: [projectId], references: [id])
+
+  @@map("land_records")
+}
+
+model ProjectDocument {
+  id                    String    @id @default(cuid())
+  projectId             String
+  type                  DocumentType
+  title                 String
+  fileUrl               String
+  fileSize              Int       // in bytes
+  mimeType              String
+  uploadedBy            String
+  verified              Boolean   @default(false)
+  verifiedAt            DateTime?
+  verifiedBy            String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_documents")
+}
+
+model ProjectImage {
+  id                    String    @id @default(cuid())
+  projectId             String
+  title                 String?
+  fileUrl               String
+  fileSize              Int       // in bytes
+  mimeType              String
+  uploadedBy            String
+  isPrimary             Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_images")
+}
+
+model DAOProposal {
+  id                    String    @id @default(cuid())
+  title                 String
+  description           String
+  category              ProposalCategory
+  proposerId            String
+  status                ProposalStatus @default(DRAFT)
+  votingStartDate       DateTime?
+  votingEndDate         DateTime?
+  quorum                Int       @default(10) // percentage
+  votesFor              Int       @default(0)
+  votesAgainst          Int       @default(0)
+  votesAbstain          Int       @default(0)
+  executorId            String?
+  executionDate         DateTime?
+  executionResult       String?
+  budgetAmount          Float?    // in INR
+  budgetCurrency        String?   @default("INR")
+  budgetDescription     String?
+  tags                  String?   @default("[]")
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  proposer              User           @relation(fields: [proposerId], references: [id])
+  votes                 ProposalVote[]
+  comments              Comment[]
+  attachments           ProposalAttachment[]
+
+  @@map("dao_proposals")
+}
+
+model ProposalVote {
+  id                    String    @id @default(cuid())
+  proposalId            String
+  userId                String
+  vote                  VoteType
+  votingPower           Int       @default(1)
+  comment               String?
+  transactionHash       String
+  createdAt             DateTime  @default(now())
+
+  // Relations
+  proposal              DAOProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  user                  User        @relation(fields: [userId], references: [id])
+
+  @@unique([proposalId, userId])
+  @@map("proposal_votes")
+}
+
+model ProposalAttachment {
+  id                    String    @id @default(cuid())
+  proposalId            String
+  name                  String
+  fileUrl               String
+  fileSize              Int       // in bytes
+  mimeType              String
+  uploadedBy            String
+  createdAt             DateTime  @default(now())
+
+  // Relations
+  proposal              DAOProposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  @@map("proposal_attachments")
+}
+
+model NFT {
+  id                    String    @id @default(cuid())
+  tokenId               String    @unique
+  contractAddress       String
+  ownerId               String
+  name                  String
+  description           String
+  imageUrl              String
+  animationUrl          String?
+  externalUrl           String?
+  attributes            Json      // Array of trait_type/value objects
+  rarity                NFTRarity
+  category              NFTCategory
+  priceAmount           Float?    // for listed NFTs
+  priceCurrency         String?   @default("INR")
+  listingType           ListingType?
+  auctionEndTime        DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  transactionHash       String
+
+  // Relations
+  owner                 User        @relation(fields: [ownerId], references: [id])
+
+  @@map("nfts")
+}
+
+model MiningReward {
+  id                    String    @id @default(cuid())
+  userId                String
+  amount                Float
+  currency              String    @default("HLX")
+  type                  RewardType
+  description           String?
+  projectId             String?   // if project-specific reward
+  operationId           String?   // if mining operation specific
+  claimed               Boolean   @default(false)
+  claimedAt             DateTime?
+  createdAt             DateTime  @default(now())
+
+  // Relations
+  user                  User        @relation(fields: [userId], references: [id])
+  operation             MiningOperation? @relation("MiningOperationRewards", fields: [operationId], references: [id])
+
+  @@map("mining_rewards")
+}
+
+model CommunityPost {
+  id                    String    @id @default(cuid())
+  authorId              String
+  title                 String?
+  content               String
+  category              PostCategory
+  imageUrl              String?
+  likes                 Int       @default(0)
+  views                 Int       @default(0)
+  isPinned              Boolean   @default(false)
+  isFeatured            Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  author                User        @relation(fields: [authorId], references: [id])
+  comments              Comment[]
+
+  @@map("community_posts")
+}
+
+model Comment {
+  id                    String    @id @default(cuid())
+  postId                String?
+  proposalId            String?
+  authorId              String
+  content               String
+  parentId              String?   // for nested comments
+  likes                 Int       @default(0)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  post                  CommunityPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  proposal              DAOProposal?   @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  author                User           @relation(fields: [authorId], references: [id])
+  parent                Comment?       @relation("CommentReplies", fields: [parentId], references: [id])
+  replies               Comment[]      @relation("CommentReplies")
+
+  @@map("comments")
+}
+
+// KYC Verification Models
+model KYCDocument {
+  id                    String    @id @default(cuid())
+  userId                String
+  documentType          KYCDocumentType
+  documentNumber        String?
+  issuingCountry        String?
+  expiryDate            DateTime?
+  fileUrl               String
+  fileSize              Int
+  mimeType              String
+  verificationStatus    VerificationStatus @default(PENDING)
+  verifiedAt            DateTime?
+  verifiedBy            String?
+  rejectionReason       String?
+  metadata              Json?     // OCR results, face match scores, etc.
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  user                  User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("kyc_documents")
+}
+
+// Bitcoin Mining Operations
+model MiningOperation {
+  id                    String    @id @default(cuid())
+  userId                String
+  projectId             String?
+  operationType         MiningOperationType
+  status                MiningStatus @default(OFFLINE)
+  hashrate              Float     // TH/s
+  powerConsumption      Float     // kW
+  temperature           Float     // Celsius
+  humidity              Float     // Percentage
+  thermalOutput         Float     // kW (waste heat)
+  heatUtilization       Float     // Percentage of waste heat utilized
+  efficiency            Float     // J/TH
+  uptime                Float     // Percentage
+  lastMaintenance       DateTime?
+  nextMaintenance       DateTime?
+  location              String?
+  coordinates           String?   // "lat,lng"
+  hardwareModel         String?
+  firmwareVersion       String?
+  poolName              String?
+  walletAddress         String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  user                  User        @relation(fields: [userId], references: [id])
+  project               SolarProject? @relation(fields: [projectId], references: [id])
+  thermalData           ThermalData[]
+  miningRewards         MiningReward[] @relation("MiningOperationRewards")
+
+  @@map("mining_operations")
+}
+
+model ThermalData {
+  id                    String    @id @default(cuid())
+  operationId           String
+  inletTemperature      Float     // Celsius
+  outletTemperature     Float     // Celsius
+  ambientTemperature    Float     // Celsius
+  coolantFlowRate       Float     // L/min
+  heatRecovered         Float     // kWh
+  heatUtilized          Float     // kWh
+  utilizationMethod     HeatUtilizationMethod
+  efficiency            Float     // Percentage
+  timestamp             DateTime  @default(now())
+
+  // Relations
+  operation             MiningOperation @relation(fields: [operationId], references: [id], onDelete: Cascade)
+
+  @@map("thermal_data")
+}
+
+// Remittance System
+model RemittanceTransaction {
+  id                    String    @id @default(cuid())
+  senderId              String
+  recipientId           String?
+  recipientName         String
+  recipientContact      String
+  amount                Float
+  sourceCurrency        String    @default("USD")
+  targetCurrency        String    @default("INR")
+  exchangeRate          Float
+  fee                   Float
+  totalAmount           Float
+  status                RemittanceStatus @default(PENDING)
+  purpose               RemittancePurpose?
+  referenceNumber       String    @unique
+  provider              String    // "1WP", "stripe", "razorpay", etc.
+  providerTxId          String?
+  estimatedDelivery     DateTime?
+  deliveredAt           DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  sender                User        @relation(fields: [senderId], references: [id])
+  recipient             User?       @relation("RemittanceRecipient", fields: [recipientId], references: [id])
+
+  @@map("remittance_transactions")
+}
+
+// Micro Data Center Services
+model DataCenterService {
+  id                    String    @id @default(cuid())
+  userId                String
+  projectId             String?
+  serviceName           String
+  serviceType           DataCenterServiceType
+  status                ServiceStatus @default(ACTIVE)
+  resourceAllocation    Json      // CPU, RAM, Storage allocation
+  utilization           Json      // Current usage metrics
+  performanceMetrics    Json      // Response time, uptime, etc.
+  pricing               Json      // Cost structure
+  revenue               Float     // Generated revenue
+  customersServed       Int       @default(0)
+  serviceLevel          ServiceLevel @default(BASIC)
+  lastMaintenance       DateTime?
+  nextMaintenance       DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  user                  User        @relation(fields: [userId], references: [id])
+  project               SolarProject? @relation(fields: [projectId], references: [id])
+
+  @@map("data_center_services")
+}
+
+// IoT Sensor Data
+model IOSSensor {
+  id                    String    @id @default(cuid())
+  projectId             String
+  sensorType            IOSSensorType
+  location              String
+  coordinates           String?   // "lat,lng"
+  status                SensorStatus @default(ACTIVE)
+  lastReading           Json?
+  batteryLevel          Float?    // Percentage
+  signalStrength        Float?    // dBm
+  calibrationDate       DateTime?
+  maintenanceSchedule   String?
+  manufacturer          String?
+  modelNumber           String?
+  serialNumber          String?
+  firmwareVersion       String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject @relation(fields: [projectId], references: [id])
+  sensorData            IOSSensorData[]
+
+  @@map("ios_sensors")
+}
+
+model IOSSensorData {
+  id                    String    @id @default(cuid())
+  sensorId              String
+  dataType              IOSSensorDataType
+  value                 Float
+  unit                  String
+  quality               DataQuality @default(GOOD)
+  timestamp             DateTime  @default(now())
+  metadata              Json?
+
+  // Relations
+  sensor                IOSSensor @relation(fields: [sensorId], references: [id], onDelete: Cascade)
+
+  @@map("ios_sensor_data")
+}
+
+// Government Integration
+model GovernmentReport {
+  id                    String    @id @default(cuid())
+  projectId             String?
+  reportType            GovernmentReportType
+  agency                GovernmentAgency
+  reportPeriod          String    // "2023-Q4", "2023-12", etc.
+  data                  Json      // Report data
+  status                ReportStatus @default(DRAFT)
+  submittedAt           DateTime?
+  submittedBy           String?
+  referenceNumber       String?
+  responseReceived      Boolean   @default(false)
+  responseDate          DateTime?
+  responseComments      String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  // Relations
+  project               SolarProject? @relation(fields: [projectId], references: [id])
+
+  @@map("government_reports")
+}
+
+// Enums
+enum ProjectStatus {
+  PROPOSED
+  APPROVED
+  UNDER_CONSTRUCTION
+  OPERATIONAL
+  COMPLETED
+  ON_HOLD
+  CANCELLED
+}
+
+enum ApplicationStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  REQUESTED_CHANGES
+}
+
+enum ApprovalAgency {
+  GEDA
+  COLLECTOR_OFFICE
+  GPCB
+  FOREST_DEPARTMENT
+  POLLUTION_CONTROL_BOARD
+  TOWN_PLANNING
+  OTHER
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CONDITIONAL_APPROVAL
+}
+
+enum OwnershipType {
+  PRIVATE
+  GOVERNMENT
+  COMMUNITY
+  LEASED
+  JOINT_VENTURE
+}
+
+enum DocumentType {
+  LAND_RECORD
+  ENVIRONMENTAL_CLEARANCE
+  BUILDING_PERMIT
+  ELECTRICAL_PERMIT
+  WATER_PERMIT
+  LEGAL_DOCUMENT
+  TECHNICAL_REPORT
+  FINANCIAL_DOCUMENT
+  OTHER
+}
+
+enum ProposalCategory {
+  GOVERNANCE
+  TECHNICAL
+  FINANCIAL
+  COMMUNITY
+  DEVELOPMENT
+  PARTNERSHIP
+}
+
+enum ProposalStatus {
+  DRAFT
+  ACTIVE
+  VOTING
+  PASSED
+  REJECTED
+  EXECUTED
+  CANCELLED
+}
+
+enum VoteType {
+  FOR
+  AGAINST
+  ABSTAIN
+}
+
+enum NFTRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+enum NFTCategory {
+  ACHIEVEMENT
+  ARTWORK
+  UTILITY
+  MEMBERSHIP
+}
+
+enum ListingType {
+  FIXED_PRICE
+  AUCTION
+}
+
+enum RewardType {
+  MINING
+  STAKING
+  COMMUNITY
+  ACHIEVEMENT
+  REFERRAL
+}
+
+enum PostCategory {
+  ANNOUNCEMENT
+  DISCUSSION
+  SUCCESS_STORY
+  QUESTION
+  COLLABORATION
+  NEWS
+}
+
+// KYC Verification Enums
+enum KYCStatus {
+  NOT_VERIFIED
+  PENDING
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+  SUSPENDED
+}
+
+enum KYCDocumentType {
+  PASSPORT
+  DRIVERS_LICENSE
+  NATIONAL_ID
+  AADHAAR_CARD
+  PAN_CARD
+  VOTER_ID
+  UTILITY_BILL
+  BANK_STATEMENT
+  SELFIE
+  ADDRESS_PROOF
+}
+
+enum VerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  MANUAL_REVIEW
+}
+
+enum GovernmentIdType {
+  AADHAAR
+  PAN
+  PASSPORT
+  DRIVERS_LICENSE
+  VOTER_ID
+}
+
+// Mining Operation Enums
+enum MiningOperationType {
+  BITCOIN_ASIC
+  ETHEREUM_GPU
+  MONERO_CPU
+  MULTI_ALGO
+  IMMERSION_COOLING
+}
+
+enum MiningStatus {
+  OFFLINE
+  STARTING
+  ONLINE
+  MAINTENANCE
+  ERROR
+  UPGRADING
+}
+
+enum HeatUtilizationMethod {
+  WATER_HEATING
+  SPACE_HEATING
+  COOLING_SYSTEM
+  GREENHOUSE
+  INDUSTRIAL_PROCESS
+  POWER_GENERATION
+}
+
+// Remittance Enums
+enum RemittanceStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+  REFUNDED
+}
+
+enum RemittancePurpose {
+  FAMILY_SUPPORT
+  EDUCATION
+  MEDICAL
+  BUSINESS
+  INVESTMENT
+  PROPERTY
+  PROJECT_FUNDING
+  OTHER
+}
+
+// Data Center Service Enums
+enum DataCenterServiceType {
+  WEB_HOSTING
+  CLOUD_STORAGE
+  COMPUTE_INSTANCE
+  DATABASE_SERVICE
+  CDN_SERVICE
+  EDGE_COMPUTING
+  AI_INFERENCE
+  BLOCKCHAIN_NODE
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  DEGRADED
+  ERROR
+}
+
+enum ServiceLevel {
+  BASIC
+  STANDARD
+  PREMIUM
+  ENTERPRISE
+}
+
+// IoT Sensor Enums
+enum IOSSensorType {
+  TEMPERATURE
+  HUMIDITY
+  PRESSURE
+  LIGHT_INTENSITY
+  AIR_QUALITY
+  WATER_QUALITY
+  ENERGY_METER
+  POWER_MONITOR
+  VIBRATION
+  SOUND_LEVEL
+  MOTION
+  CO2_LEVEL
+  SOLAR_IRRADIANCE
+  WIND_SPEED
+  RAINFALL
+}
+
+enum SensorStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+  ERROR
+  CALIBRATING
+}
+
+enum IOSSensorDataType {
+  TEMPERATURE
+  HUMIDITY
+  PRESSURE
+  LUMINOSITY
+  CO2_PPM
+  POWER_WATTS
+  ENERGY_KWH
+  VOLTAGE
+  CURRENT
+  FREQUENCY
+  VIBRATION
+  SOUND_DECIBEL
+  MOTION_COUNT
+  IRRADIANCE_W_M2
+  WIND_SPEED_MS
+  RAINFALL_MM
+}
+
+enum DataQuality {
+  EXCELLENT
+  GOOD
+  FAIR
+  POOR
+  BAD
+}
+
+// Government Integration Enums
+enum GovernmentReportType {
+  ENERGY_PRODUCTION
+  ENVIRONMENTAL_IMPACT
+  COMPLIANCE_REPORT
+  SAFETY_AUDIT
+  FINANCIAL_REPORT
+  COMMUNITY_IMPACT
+  PROGRESS_REPORT
+  INCIDENT_REPORT
+}
+
+enum GovernmentAgency {
+  GEDA
+  COLLECTOR_OFFICE
+  GPCB
+  FOREST_DEPARTMENT
+  POLLUTION_CONTROL_BOARD
+  TOWN_PLANNING
+  PWD
+  POLICE_DEPARTMENT
+  FIRE_DEPARTMENT
+  DISASTER_MANAGEMENT
+  ENERGY_REGULATOR
+  ENVIRONMENT_MINISTRY
+}
+
+enum ReportStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  NEEDS_REVISION
+  ARCHIVED
+}

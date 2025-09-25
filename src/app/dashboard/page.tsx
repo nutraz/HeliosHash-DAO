@@ -1,0 +1,491 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { EnergyCircle } from '@/components/energy-circle';
+import { ActionCard } from '@/components/action-card';
+import { AppHeader } from '@/components/app-header';
+import { AppBranding } from '@/components/app-branding';
+import { RewardItem } from '@/components/reward-item';
+import { CommunityPost } from '@/components/community-post';
+import { BottomNav } from '@/components/bottom-nav';
+import { useAuth } from '@/contexts/AuthContext';
+import { Zap, Users, Gift, Wallet, ArrowRight, ArrowUpRight, TrendingUp, Star, Award } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const { user, isLoading, isAuthenticated } = useAuth();
+  const [activePage, setActivePage] = useState('home');
+  const [energyLevel, setEnergyLevel] = useState(73);
+  const [dailyProgress, setDailyProgress] = useState(70);
+  const [showAchievement, setShowAchievement] = useState(false);
+
+  // Redirect to auth if not authenticated
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/auth/login');
+    }
+  }, [isAuthenticated, isLoading, router]);
+
+  useEffect(() => {
+    // Simulate real-time energy updates
+    const interval = setInterval(() => {
+      setEnergyLevel(prev => {
+        const change = Math.floor(Math.random() * 10) - 5;
+        return Math.max(60, Math.min(90, prev + change));
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const handlePageChange = (page: string) => {
+    setActivePage(page);
+    
+    // Navigate to different routes
+    switch (page) {
+      case 'home':
+        // Stay on dashboard
+        break;
+      case 'mining':
+        router.push('/mining');
+        break;
+      case 'community':
+        router.push('/community');
+        break;
+      case 'partners':
+        router.push('/partners');
+        break;
+      case 'rewards':
+        router.push('/rewards');
+        break;
+      case 'wallet':
+        router.push('/wallet');
+        break;
+    }
+  };
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 flex items-center justify-center">
+        <div className="text-white">Loading...</div>
+      </div>
+    );
+  }
+
+  // Don't render if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800 pb-20">
+      <AppBranding />
+
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {/* Energy Status */}
+        <Card className="card-readable">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h2 className="text-xl font-bold text-white">Energy Network Status - UPDATED DASHBOARD</h2>
+                <p className="text-gray-400">Urgam Valley Solar Grid - New Layout Active</p>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-orange-400">{energyLevel}%</div>
+                <div className="text-sm text-gray-400">Active</div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+              <div className="text-center">
+                <EnergyCircle percentage={energyLevel} size="sm" />
+                <p className="text-sm text-gray-400 mt-2">Solar Generation</p>
+              </div>
+              <div className="text-center">
+                <EnergyCircle percentage={85} size="sm" />
+                <p className="text-sm text-gray-400 mt-2">Grid Stability</p>
+              </div>
+              <div className="text-center">
+                <EnergyCircle percentage={92} size="sm" />
+                <p className="text-sm text-gray-400 mt-2">Community Coverage</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span className="text-gray-400">Online: 247 households</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-orange-500 rounded-full animate-pulse"></div>
+                  <span className="text-gray-400">Generating: 387 kW</span>
+                </div>
+              </div>
+              <Button size="sm" variant="outline" className="border-gray-600">
+                View Details
+                <ArrowUpRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* User Status */}
+        <Card className="card-readable">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold">
+                    {user?.name?.charAt(0) || 'M'}
+                  </span>
+                </div>
+                <div>
+                  <div className="font-semibold text-white">
+                    {user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1)) : 'Member'} Tier
+                  </div>
+                  <div className="text-sm text-gray-400">
+                    Voting Power: 1
+                  </div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-lg font-bold text-white">₹2,847</div>
+                <div className="text-xs text-gray-400">Energy Credits</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <ActionCard
+            icon={Zap}
+            title="Solar Projects"
+            description="View and invest in community solar initiatives"
+            onClick={() => router.push('/projects')}
+          />
+          <ActionCard
+            icon={Users}
+            title="Governance"
+            description="Vote on proposals and participate in DAO decisions"
+            onClick={() => router.push('/governance')}
+          />
+          <ActionCard
+            icon={Gift}
+            title="NFT Marketplace"
+            description="Trade membership NFTs and energy certificates"
+            onClick={() => router.push('/nft')}
+          />
+          <ActionCard
+            icon={Wallet}
+            title="Wallet"
+            description="Manage your ICP tokens and energy credits"
+            onClick={() => router.push('/wallet')}
+          />
+        </div>
+
+        {/* Dashboard Tabs - RESTRUCTURED LAYOUT */}
+        <Tabs defaultValue="overview" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-4 bg-red-800 border-red-700">
+            <TabsTrigger value="overview" className="text-white">📊 Overview</TabsTrigger>
+            <TabsTrigger value="applications" className="text-white">📋 Applications</TabsTrigger>
+            <TabsTrigger value="projects" className="text-white">🏗️ Projects</TabsTrigger>
+            <TabsTrigger value="stats" className="text-white">📈 Statistics</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <TrendingUp className="w-5 h-5 mr-2 text-green-400" />
+                    Energy Production
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between text-sm mb-1">
+                        <span className="text-gray-400">Daily Target</span>
+                        <span className="text-white">{dailyProgress}%</span>
+                      </div>
+                      <Progress value={dailyProgress} className="h-2" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                      <div>
+                        <div className="text-xl font-bold text-white">1.2 MW</div>
+                        <div className="text-xs text-gray-400">Peak Today</div>
+                      </div>
+                      <div>
+                        <div className="text-xl font-bold text-white">8.7 MWh</div>
+                        <div className="text-xs text-gray-400">Generated</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Award className="w-5 h-5 mr-2 text-yellow-400" />
+                    Recent Achievements
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-3 p-2 rounded bg-gray-800/50">
+                      <Star className="w-4 h-4 text-yellow-400" />
+                      <div className="text-sm">
+                        <div className="text-white">Solar Advocate</div>
+                        <div className="text-gray-400">Voted on 5 proposals</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3 p-2 rounded bg-gray-800/50">
+                      <Star className="w-4 h-4 text-green-400" />
+                      <div className="text-sm">
+                        <div className="text-white">Energy Saver</div>
+                        <div className="text-gray-400">15% efficiency boost</div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="applications">
+            <div className="space-y-4">
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Users className="w-5 h-5 mr-2 text-blue-400" />
+                    Your Applications
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                      <div>
+                        <div className="text-white font-semibold">Partnership: Solar Installation</div>
+                        <div className="text-sm text-gray-400">Applied for installation partner role</div>
+                        <div className="text-xs text-gray-500 mt-1">Submitted: Sept 20, 2025</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="px-3 py-1 bg-yellow-600/20 text-yellow-400 rounded-full text-xs">
+                          Under Review
+                        </div>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs">
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                      <div>
+                        <div className="text-white font-semibold">Job: Community Coordinator</div>
+                        <div className="text-sm text-gray-400">Full-time position managing local outreach</div>
+                        <div className="text-xs text-gray-500 mt-1">Submitted: Sept 15, 2025</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="px-3 py-1 bg-green-600/20 text-green-400 rounded-full text-xs">
+                          Interview Scheduled
+                        </div>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs">
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                      <div>
+                        <div className="text-white font-semibold">Grant: Research Project</div>
+                        <div className="text-sm text-gray-400">Energy efficiency research funding</div>
+                        <div className="text-xs text-gray-500 mt-1">Submitted: Sept 10, 2025</div>
+                      </div>
+                      <div className="text-right">
+                        <div className="px-3 py-1 bg-green-600/20 text-green-400 rounded-full text-xs">
+                          Approved
+                        </div>
+                        <Button variant="outline" size="sm" className="mt-2 text-xs">
+                          View Contract
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white">Available Opportunities</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                      <div>
+                        <div className="text-white font-medium">Technical Consultant</div>
+                        <div className="text-sm text-gray-400">Solar system maintenance</div>
+                      </div>
+                      <Button variant="outline" size="sm">Apply Now</Button>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-gray-700/30 rounded-lg">
+                      <div>
+                        <div className="text-white font-medium">Marketing Partnership</div>
+                        <div className="text-sm text-gray-400">Community outreach program</div>
+                      </div>
+                      <Button variant="outline" size="sm">Apply Now</Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="projects">
+            <div className="space-y-4">
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center">
+                    <Zap className="w-5 h-5 mr-2 text-orange-400" />
+                    Active Solar Projects
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="p-4 bg-gray-800/50 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <div className="text-white font-semibold">Urgam Valley Phase 2</div>
+                          <div className="text-sm text-gray-400">300kW Expansion Project</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-green-400 font-semibold">85% Complete</div>
+                          <Button variant="outline" size="sm" className="mt-1">
+                            View Project
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Project Details with Government Status */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 p-3 bg-gray-700/30 rounded">
+                        <div>
+                          <div className="text-xs text-gray-400">Government Status</div>
+                          <div className="text-sm text-green-400">✓ Approved</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Land Records</div>
+                          <div className="text-sm text-white">Verified</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Environmental</div>
+                          <div className="text-sm text-green-400">✓ Cleared</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Investment</div>
+                          <div className="text-sm text-white">₹45L</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="p-4 bg-gray-800/50 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <div className="text-white font-semibold">Mumbai Grid Connect</div>
+                          <div className="text-sm text-gray-400">50MW Urban Solar Initiative</div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-yellow-400 font-semibold">25% Complete</div>
+                          <Button variant="outline" size="sm" className="mt-1">
+                            View Project
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      {/* Project Details with Government Status */}
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4 p-3 bg-gray-700/30 rounded">
+                        <div>
+                          <div className="text-xs text-gray-400">Government Status</div>
+                          <div className="text-sm text-yellow-400">⏳ Pending</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Land Records</div>
+                          <div className="text-sm text-yellow-400">Processing</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Environmental</div>
+                          <div className="text-sm text-gray-400">Under Review</div>
+                        </div>
+                        <div>
+                          <div className="text-xs text-gray-400">Investment</div>
+                          <div className="text-sm text-white">₹2.5Cr</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="stats">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white">Your Impact</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Energy Generated</span>
+                      <span className="text-white font-semibold">2.4 MWh</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">CO₂ Saved</span>
+                      <span className="text-white font-semibold">1.8 tons</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Community Rank</span>
+                      <span className="text-white font-semibold">#23</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="card-readable">
+                <CardHeader>
+                  <CardTitle className="text-white">Network Stats</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Total Members</span>
+                      <span className="text-white font-semibold">1,247</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Active Proposals</span>
+                      <span className="text-white font-semibold">3</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Total Capacity</span>
+                      <span className="text-white font-semibold">850 kW</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+
+      <BottomNav activePage={activePage} onPageChange={handlePageChange} />
+    </div>
+  );
+}

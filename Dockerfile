@@ -1,45 +1,56 @@
-# Use official Node.js LTS image as the base
-FROM ubuntu:22.04
+# Use the official Node.js runtime as the base image
+FROM node:18-alpine AS base
 
-# Set working directory
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install system dependencies for Dfinity SDK and build tools
-RUN apt-get update && \
-	apt-get install -y curl build-essential libssl-dev pkg-config ca-certificates && \
-	rm -rf /var/lib/apt/lists/*
+# Copy package files
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
 
-# Install Node.js 20.x and pnpm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-	apt-get install -y nodejs && \
-	npm install -g pnpm && \
-	rm -rf /var/lib/apt/lists/*
-
-# Install Dfinity SDK (dfx)
-ENV DFX_VERSION=0.17.0
-RUN curl -LO https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz && \
-	tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz && \
-	mv dfx /usr/local/bin/ && \
-	rm -rf dfx dfx-${DFX_VERSION}-x86_64-linux.tar.gz
-
-# Add dfx to PATH
-ENV PATH="/usr/local/bin:${PATH}"
-
-# Copy package.json and pnpm-lock.yaml
-COPY package.json pnpm-lock.yaml ./
-
-# Install dependencies
-RUN pnpm install --frozen-lockfile
-
-# Copy the rest of the application code
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Set environment variables for build
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
 
-# Build the frontend only (canisters will be created/built at runtime)
-RUN pnpm build
+# Build the application
+RUN npm run build
 
-# Expose port for Vite dev server or production server
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+# Copy the public folder
+COPY --from=builder /app/public ./public
+
+# Set the correct permission for prerender cache
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
+
+# Copy the built application
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
 EXPOSE 3000
 
-# Default command to start the app (adjust if needed)
-CMD bash -c "dfx start --background && pnpm dev"
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+# Start the server
+CMD ["node", "server.js"]

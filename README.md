@@ -329,6 +329,4 @@ dfx deploy                 # Deploy to local IC replica
 - 🚀 **Next.js Team** - React framework and development tools
 
 **Built with ❤️ for sustainable energy and community empowerment in India** 🇮🇳
-```
-Let me know if you need this content in a different format or want to automate the replacement!
 

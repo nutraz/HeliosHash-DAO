@@ -7,7 +7,28 @@
 import React, { useEffect, useState } from 'react';
 import type { MembershipInfo, Proposal, ProposalStats } from '../services/daoService';
 import { daoService, HHDAOError, HHDAOService } from '../services/daoService';
-import ProposalMap from './governance/ProposalMap';
+import dynamic from 'next/dynamic';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+
+const ProposalMap = dynamic(() => import('./governance/ProposalMap'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-96 w-full bg-gray-200 animate-pulse rounded-lg flex items-center justify-center">
+      <p>Loading map...</p>
+    </div>
+  ),
+});
 
 interface GovernanceDashboardProps {
   className?: string;
@@ -19,6 +40,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
   const [membership, setMembership] = useState<MembershipInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isCreateProposalOpen, setCreateProposalOpen] = useState(false);
 
   useEffect(() => {
     loadDashboardData();
@@ -178,7 +200,11 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
         <div className='flex items-center justify-between mb-6'>
           <h2 className='text-2xl font-bold text-gray-900'>Community Proposals</h2>
           {membership?.isMember && (
-            <button className='bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors'>
+            <button
+              onClick={() => setCreateProposalOpen(true)}
+              data-testid="create-proposal-button"
+              className='bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors'
+            >
               + Create Proposal
             </button>
           )}
@@ -190,7 +216,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
             <p className='text-gray-600'>Be the first to create a proposal for the community!</p>
           </div>
         ) : (
-          <div className='proposals-grid space-y-4'>
+          <div className='proposals-grid space-y-4' data-testid="dao-proposals-list">
             {proposals.map((proposal) => (
               <ProposalCard
                 key={proposal.id.toString()}
@@ -202,6 +228,31 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
           </div>
         )}
       </div>
+
+      <Dialog open={isCreateProposalOpen} onOpenChange={setCreateProposalOpen}>
+        <DialogContent data-testid="create-proposal-dialog">
+          <DialogHeader>
+            <DialogTitle>Create New Proposal</DialogTitle>
+            <DialogDescription>
+              Fill out the details below to submit a new proposal to the DAO.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="title">Title</Label>
+              <Input id="title" data-testid="proposal-title-input" placeholder="Proposal title" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="description">Description</Label>
+              <Textarea id="description" data-testid="proposal-description-input" placeholder="Describe your proposal..." />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setCreateProposalOpen(false)}>Cancel</Button>
+            <Button>Submit Proposal</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -277,7 +328,10 @@ const ProposalCard: React.FC<ProposalCardProps> = ({ proposal, totalMembers, onV
   const meetsThreshold = HHDAOService.meetsApprovalThreshold(proposal, totalMembers);
 
   return (
-    <div className='proposal-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow'>
+    <div
+      data-testid={`proposal-card-${proposal.id}`}
+      className='proposal-card bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow'
+    >
       {/* Proposal Header */}
       <div className='proposal-header mb-4'>
         <div className='flex items-center justify-between mb-2'>

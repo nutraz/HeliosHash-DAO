@@ -116,8 +116,7 @@ export default function CommunityPage() {
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      setPosts([
+    setPosts([
         {
           id: '1',
           author: 'Rajesh Kumar',
@@ -238,7 +237,6 @@ export default function CommunityPage() {
       ]);
 
       setLoading(false);
-    }, 1000);
   }, []);
 
   const getOpportunityTypeColor = (type: string) => {

@@ -10,25 +10,17 @@ import { expect, Page, test } from '@playwright/test';
 
 const COMMUNITY_URL = '/community';
 
-// Helper to open community page and switch to Opportunities tab
+// Helper to open community page and switch to the correct nested tab for the Job Board
 async function openJobBoard(page: Page) {
   await page.goto(COMMUNITY_URL);
-  // Locate the Opportunities tab trigger by its text (fallback) or value attribute
-  const opportunitiesTab = page.getByRole('tab', { name: /opportunities/i });
-  if (await opportunitiesTab.isVisible()) {
-    await opportunitiesTab.click();
-  } else {
-    // Fallback: attempt to click via data-state or nth
-    const triggers = page.getByRole('tab');
-    const count = await triggers.count();
-    for (let i = 0; i < count; i++) {
-      const t = triggers.nth(i);
-      if (/opportun/i.test(await t.innerText())) {
-        await t.click();
-        break;
-      }
-    }
-  }
+
+  // 1. Click the main "Opportunities" tab
+  await page.getByRole('tab', { name: 'Opportunities' }).click();
+
+  // 2. Click the "Job Board" sub-tab within the opportunities content
+  await page.getByRole('tab', { name: 'Job Board' }).click();
+
+  // Now the wrapper should be visible
   await expect(page.getByTestId('job-board-wrapper')).toBeVisible();
 }
 

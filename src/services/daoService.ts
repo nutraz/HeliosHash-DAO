@@ -122,6 +122,11 @@ export class HHDAOService {
    * Must be called before using other methods
    */
   async initialize(): Promise<void> {
+    // @ts-ignore
+    if (window.__MOCK_DAO_PROPOSALS__ || window.__MOCK_MEMBERSHIP_INFO__) {
+      this.mockMode = true;
+      return;
+    }
     try {
       await this.setupActor();
     } catch (error) {
@@ -265,6 +270,11 @@ export class HHDAOService {
    * Note: For now returns basic info, will add identity integration later
    */
   async getMembershipInfo(): Promise<MembershipInfo> {
+    // @ts-ignore
+    if (window.__MOCK_MEMBERSHIP_INFO__) {
+      // @ts-ignore
+      return window.__MOCK_MEMBERSHIP_INFO__;
+    }
     if (this.isMockMode()) {
       return {
         isMember: false,
@@ -348,6 +358,14 @@ export class HHDAOService {
    * Get all proposals in the DAO
    */
   async getAllProposals(): Promise<Proposal[]> {
+    // @ts-ignore
+    if (window.__MOCK_DAO_PROPOSALS__) {
+      // @ts-ignore
+      return window.__MOCK_DAO_PROPOSALS__.map(p => ({
+        ...p,
+        createdAt: new Date(p.createdAt),
+      }));
+    }
     if (this.isMockMode()) {
       // Return mock proposals when canister is unavailable
       return this.getMockProposals();
@@ -492,6 +510,11 @@ export class HHDAOService {
    * Get comprehensive proposal statistics
    */
   async getProposalStats(): Promise<ProposalStats> {
+    // @ts-ignore
+    if (window.__MOCK_PROPOSAL_STATS__) {
+      // @ts-ignore
+      return window.__MOCK_PROPOSAL_STATS__;
+    }
     try {
       const [proposals, memberCount] = await Promise.all([
         this.getAllProposals(),

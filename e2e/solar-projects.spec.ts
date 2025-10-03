@@ -1,33 +1,32 @@
 import { test, expect } from '@playwright/test';
 
 test('should create new solar project', async ({ page }) => {
-  console.log('Adding wallet mock...');
-  await page.addInitScript(() => {
-    (window as any).ic = {
-      plug: {
-        requestConnect: async () => true,
-        createAgent: async () => ({ getPrincipal: () => 'test-principal' }),
-      },
-    };
-  });
+  await page.goto('/community');
 
-  console.log('Navigating to / ...');
-  await page.goto('http://localhost:3000/', { waitUntil: 'networkidle' });
-  console.log('Waiting for connect-wallet button...');
-  await page.waitForSelector('[data-testid="connect-wallet"]', { timeout: 60000 });
-  console.log('Clicking connect-wallet button...');
-  await page.click('[data-testid="connect-wallet"]');
-  console.log('Waiting for create-project button...');
-  await page.waitForSelector('[data-testid="create-project"]', { timeout: 60000 });
-  await page.click('[data-testid="create-project"]');
+  // Switch to the 'Projects' tab
+  await page.click('role=tab[name="Projects"]');
 
-  console.log('Filling project name...');
-  await page.fill('[data-testid="project-name"]', 'Test Solar Farm');
-  console.log('Filling project location...');
-  await page.fill('[data-testid="project-location"]', 'Rural Area');
-  console.log('Submitting project...');
-  await page.click('[data-testid="submit-project"]');
+  // Click the button to open the 'Create Project' dialog
+  await page.getByRole('button', { name: 'Create Project' }).click();
 
-  console.log('Checking for success message...');
-  await expect(page.locator('[data-testid="success-message"]')).toBeVisible();
+  // Wait for the dialog to appear
+  const dialog = page.locator('[role="dialog"]');
+  await expect(dialog).toBeVisible();
+
+  // Fill out the form
+  await dialog.locator('input#title').fill('Test Solar Farm');
+  await dialog.locator('input#landOwner').fill('Community Land');
+  await dialog.locator('input#location').fill('Testville, India');
+  await dialog.locator('input#budget').fill('₹10 Crore');
+  await dialog.locator('textarea#description').fill('A test solar project for the community.');
+
+  // Select a project type
+  await dialog.locator('button[role="combobox"]').first().click(); // Open the select dropdown
+  await page.locator('div[role="option"]:has-text("Solar Energy")').click();
+
+  // Submit the form
+  await dialog.locator('button:has-text("Create Project")').click();
+
+  // Assert that the new project appears in the list
+  await expect(page.locator('h3:has-text("Test Solar Farm")')).toBeVisible();
 });

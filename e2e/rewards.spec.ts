@@ -17,7 +17,7 @@ test.describe('Rewards Page', () => {
   });
 
   test('should display rewards stats and available rewards', async ({ page }) => {
-    await page.goto('http://localhost:3000/rewards', { waitUntil: 'networkidle' });
+    await page.goto('/rewards', { waitUntil: 'networkidle' });
 
     // Header present
     await expect(page.locator('[data-testid="rewards-header"]')).toBeVisible();
@@ -56,7 +56,7 @@ test.describe('Rewards Page', () => {
   });
 
   test('should allow claim button interaction (UI only)', async ({ page }) => {
-    await page.goto('http://localhost:3000/rewards', { waitUntil: 'networkidle' });
+    await page.goto('/rewards', { waitUntil: 'networkidle' });
     await page.waitForTimeout(1500);
 
     // Find first claim button

@@ -6,14 +6,44 @@ export const revalidate = 0; // always fresh
 
 export async function GET() {
   try {
-    const [snapshot, resolutions] = await Promise.all([
+    const [healthSnapshot, resolutions] = await Promise.all([
       getHealthSnapshot(),
       Promise.resolve(getCanisterIdResolutions()),
     ]);
-    return NextResponse.json({ ...snapshot, resolutions }, { status: 200 });
+
+    const responseData = {
+      status: 'ok',
+      timestamp: healthSnapshot.generatedAt,
+      build: {
+        commit: 'dev',
+        branch: 'local',
+        timestamp: Date.now().toString(),
+      },
+      version: {
+        app: '0.1.0',
+        canisters: {
+          hhdao_dao: '0.1.0', // Placeholder
+        },
+      },
+      metrics: {
+        uptimeMs: 0, // Placeholder
+        uptimeSeconds: 0, // Placeholder
+        activeUsers24h: 0, // Placeholder
+        requestCount: 0, // Placeholder
+        errorRate: 0, // Placeholder
+      },
+      ...healthSnapshot,
+      resolutions,
+    };
+
+    return NextResponse.json(responseData, { status: 200 });
   } catch (e: any) {
     return NextResponse.json(
-      { error: e?.message || 'Failed to generate health snapshot' },
+      {
+        status: 'error',
+        timestamp: Date.now(),
+        error: e?.message || 'Failed to generate health snapshot',
+      },
       { status: 500 }
     );
   }

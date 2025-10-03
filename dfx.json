@@ -16,31 +16,35 @@
       "main": "canisters/documents/main.mo",
       "type": "motoko"
     },
+    "hhdao_dispute_resolution": {
+      "main": "canisters/dispute-resolution/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_treasury": {
+      "main": "canisters/treasury/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_meeting_management": {
+      "main": "canisters/meeting-management/main.mo",
+      "type": "motoko"
+    },
     "hhdao": {
       "main": "canisters/hhdao/src/main.mo",
       "type": "motoko",
-      "dependencies": [
-        "hhdao_dao",
-        "hhdao_identity", 
-        "hhdao_telemetry",
-        "hhdao_documents"
-      ]
+      "dependencies": ["hhdao_dao", "hhdao_identity", "hhdao_telemetry", "hhdao_documents"]
     },
     "hhdao_frontend": {
       "dependencies": [
         "hhdao",
         "hhdao_dao",
         "hhdao_identity",
-        "hhdao_telemetry", 
+        "hhdao_telemetry",
         "hhdao_documents"
       ],
       "frontend": {
         "entrypoint": "public/index.html"
       },
-      "source": [
-        "public/",
-        "dist/"
-      ],
+      "source": ["public/"],
       "type": "assets"
     }
   },

@@ -1,13 +1,15 @@
-import Time "mo:base/Time";
-import Map "mo:base/HashMap";
-import Iter "mo:base/Iter";
-import Principal "mo:base/Principal";
-import Result "mo:base/Result";
-import Option "mo:base/Option";
-import Text "mo:base/Text";
+
 
 persistent actor Identity {
     // Data Types
+    public type Role = {
+        #Community;   // Villagers, local residents
+        #Investor;    // Token holders, financial participants
+        #Authority;   // Gram Panchayat, government officials
+        #Partner;     // NGOs, corporate partners
+        #DAO;         // DAO governance participants
+    };
+
     public type UserProfile = {
         principal: Principal;
         username: ?Text;
@@ -17,10 +19,15 @@ persistent actor Identity {
         avatar: ?Text;
         location: ?Text;
         website: ?Text;
+        role: Role;
+        secondaryRoles: [Role];  // Users can have multiple roles
         createdAt: Int;
         updatedAt: Int;
         isVerified: Bool;
         verificationLevel: VerificationLevel;
+        aadhaarVerified: Bool;   // For KYC compliance
+        owpBalance: Nat;         // Will sync with treasury
+        prefersDuoValidation: Bool;  // NEW: Preference for paired validation
     };
 
     public type VerificationLevel = {
@@ -58,19 +65,21 @@ persistent actor Identity {
     };
 
     // Stable storage
-    stable var verificationCounter: Nat = 0;
-    stable var profileEntries: [(Principal, UserProfile)] = [];
-    stable var sessionEntries: [(Text, AuthSession)] = [];
-    stable var usernameEntries: [(Text, Principal)] = [];
-    stable var emailEntries: [(Text, Principal)] = [];
-    stable var verificationEntries: [(Nat, VerificationRequest)] = [];
+    private var verificationCounter: Nat = 0;
+    private var profileEntries: [(Principal, UserProfile)] = [];
+    private var sessionEntries: [(Text, AuthSession)] = [];
+    private var usernameEntries: [(Text, Principal)] = [];
+    private var emailEntries: [(Text, Principal)] = [];
+    private var verificationEntries: [(Nat, VerificationRequest)] = [];
 
-    // In-memory maps
-    var profiles = Map.fromIter<Principal, UserProfile>(profileEntries.vals(), 10, Principal.hash, Principal.equal);
-    var sessions = Map.fromIter<Text, AuthSession>(sessionEntries.vals(), 10, Text.hash, Text.equal);
-    var usernameMap = Map.fromIter<Text, Principal>(usernameEntries.vals(), 10, Text.hash, Text.equal);
-    var emailMap = Map.fromIter<Text, Principal>(emailEntries.vals(), 10, Text.hash, Text.equal);
-    var verifications = Map.fromIter<Nat, VerificationRequest>(verificationEntries.vals(), 10, func(n: Nat): Nat32 { Nat32.fromNat(n % 100000) }, func(a: Nat, b: Nat): Bool { a == b });
+    // In-memory maps (rebuilt on init/post-upgrade)
+    transient var profiles = HashMap.HashMap<Principal, UserProfile>(10, Principal.equal, Principal.hash);
+    transient var sessions = HashMap.HashMap<Text, AuthSession>(10, Text.equal, Text.hash);
+    transient var usernameMap = HashMap.HashMap<Text, Principal>(10, Text.equal, Text.hash);
+    transient var emailMap = HashMap.HashMap<Text, Principal>(10, Text.equal, Text.hash);
+    transient var verifications = HashMap.HashMap<Nat, VerificationRequest>(10, Nat.equal, func (n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
+    // Treasury authorization (set-once)
+    private var treasuryCanister : ?Principal = null;
 
     // System functions for upgrades
     system func preupgrade() {
@@ -82,11 +91,11 @@ persistent actor Identity {
     };
 
     system func postupgrade() {
-        profileEntries := [];
-        sessionEntries := [];
-        usernameEntries := [];
-        emailEntries := [];
-        verificationEntries := [];
+        profiles := HashMap.fromIter<Principal, UserProfile>(profileEntries.vals(), profileEntries.size(), Principal.equal, Principal.hash);
+        sessions := HashMap.fromIter<Text, AuthSession>(sessionEntries.vals(), sessionEntries.size(), Text.equal, Text.hash);
+        usernameMap := HashMap.fromIter<Text, Principal>(usernameEntries.vals(), usernameEntries.size(), Text.equal, Text.hash);
+        emailMap := HashMap.fromIter<Text, Principal>(emailEntries.vals(), emailEntries.size(), Text.equal, Text.hash);
+        verifications := HashMap.fromIter<Nat, VerificationRequest>(verificationEntries.vals(), verificationEntries.size(), Nat.equal, func (n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
     };
 
     // Helper functions
@@ -111,7 +120,8 @@ persistent actor Identity {
     public shared ({ caller }) func createProfile(
         username: ?Text,
         email: ?Text,
-        displayName: ?Text
+        displayName: ?Text,
+        role: Role
     ): async Result.Result<UserProfile, Text> {
         if (Principal.isAnonymous(caller)) {
             return #err("Anonymous principal cannot create profile");
@@ -119,7 +129,7 @@ persistent actor Identity {
 
         // Check if profile already exists
         switch (profiles.get(caller)) {
-            case (?existing) { return #err("Profile already exists") };
+            case (?_existing) { return #err("Profile already exists") };
             case (null) {};
         };
 
@@ -158,10 +168,15 @@ persistent actor Identity {
             avatar = null;
             location = null;
             website = null;
+            role = role;
+            secondaryRoles = [];
             createdAt = Time.now();
             updatedAt = Time.now();
             isVerified = false;
             verificationLevel = #Basic;
+            aadhaarVerified = false;
+            owpBalance = 0;
+            prefersDuoValidation = false;  // Default to false
         };
 
         profiles.put(caller, profile);
@@ -258,6 +273,14 @@ persistent actor Identity {
         profiles.get(principal)
     };
 
+    // One-time treasury canister setter
+    public shared ({ caller }) func setTreasuryCanister(p : Principal) : async Result.Result<(), Text> {
+        switch (treasuryCanister) {
+            case (?_) { return #err("treasuryCanister already set") };
+            case null { treasuryCanister := ?p; return #ok(()) };
+        }
+    };
+
     public query func getProfileByUsername(username: Text): async ?UserProfile {
         switch (usernameMap.get(username)) {
             case (?principal) { profiles.get(principal) };
@@ -335,7 +358,7 @@ persistent actor Identity {
     ): async Result.Result<Nat, Text> {
         switch (profiles.get(caller)) {
             case (null) { return #err("Profile not found") };
-            case (?profile) {
+            case (?_profile) {
                 verificationCounter += 1;
                 let requestId = verificationCounter;
 
@@ -368,7 +391,7 @@ persistent actor Identity {
     };
 
     // Administrative functions (would need proper authorization in production)
-    public shared ({ caller }) func processVerificationRequest(
+    public shared ({ caller = _caller }) func processVerificationRequest(
         requestId: Nat,
         status: VerificationStatus,
         notes: ?Text
@@ -432,5 +455,171 @@ persistent actor Identity {
             activeSessions = activeSessionCount;
             pendingVerifications = pendingCount;
         }
+    };
+
+    // === ROLE MANAGEMENT FUNCTIONS ===
+
+    public shared ({ caller }) func updateUserRole(role: Role): async Result.Result<UserProfile, Text> {
+        if (Principal.isAnonymous(caller)) {
+            return #err("Anonymous principal cannot update role");
+        };
+
+        switch (profiles.get(caller)) {
+            case (null) { return #err("Profile not found") };
+            case (?profile) {
+                let updatedProfile = {
+                    profile with 
+                    role = role;
+                    updatedAt = Time.now();
+                };
+                profiles.put(caller, updatedProfile);
+                #ok(updatedProfile)
+            };
+        }
+    };
+
+    public shared ({ caller }) func addSecondaryRole(role: Role): async Result.Result<UserProfile, Text> {
+        if (Principal.isAnonymous(caller)) {
+            return #err("Anonymous principal cannot add secondary role");
+        };
+
+        switch (profiles.get(caller)) {
+            case (null) { return #err("Profile not found") };
+            case (?profile) {
+                // Check if role already exists in secondary roles
+                let hasRole = Array.find<Role>(profile.secondaryRoles, func(r: Role): Bool { r == role });
+                switch (hasRole) {
+                    case (?_) { return #err("Role already assigned") };
+                    case (null) {
+                        let newSecondaryRoles = Array.append<Role>(profile.secondaryRoles, [role]);
+                        let updatedProfile = {
+                            profile with 
+                            secondaryRoles = newSecondaryRoles;
+                            updatedAt = Time.now();
+                        };
+                        profiles.put(caller, updatedProfile);
+                        #ok(updatedProfile)
+                    };
+                }
+            };
+        }
+    };
+
+    public query func getUserRole(principal: Principal): async ?Role {
+        switch (profiles.get(principal)) {
+            case (null) { null };
+            case (?profile) { ?profile.role };
+        }
+    };
+
+    public query func getUserRoles(principal: Principal): async ?{primary: Role; secondary: [Role]} {
+        switch (profiles.get(principal)) {
+            case (null) { null };
+            case (?profile) { ?{primary = profile.role; secondary = profile.secondaryRoles} };
+        }
+    };
+
+    public query func hasRole(principal: Principal, role: Role): async Bool {
+        switch (profiles.get(principal)) {
+            case (null) { false };
+            case (?profile) {
+                if (profile.role == role) {
+                    true
+                } else {
+                    Option.isSome(Array.find<Role>(profile.secondaryRoles, func(r: Role): Bool { r == role }))
+                }
+            };
+        }
+    };
+
+    // Authority-specific functions
+    public query func getAuthorities(): async [Principal] {
+        let authoritiesList = Iter.toArray(Iter.filter<(Principal, UserProfile)>(profiles.entries(), func(entry): Bool {
+            let (_, profile) = entry;
+            profile.role == #Authority or Option.isSome(Array.find<Role>(profile.secondaryRoles, func(r: Role): Bool { r == #Authority }))
+        }));
+        Array.map<(Principal, UserProfile), Principal>(authoritiesList, func(entry): Principal {
+            let (principal, _) = entry;
+            principal
+        })
+    };
+
+    // Update OWP balance (called only by treasury canister)
+    public shared ({ caller }) func updateOWPBalance(userPrincipal: Principal, newBalance: Nat): async Result.Result<(), Text> {
+        switch (treasuryCanister) {
+            case null { return #err("treasuryCanister not configured") };
+            case (?t) { if (t != caller) { return #err("unauthorized") } };
+        };
+        switch (profiles.get(userPrincipal)) {
+            case (null) { #err("Profile not found") };
+            case (?profile) {
+                let updatedProfile = {
+                    profile with 
+                    owpBalance = newBalance;
+                    updatedAt = Time.now();
+                };
+                profiles.put(userPrincipal, updatedProfile);
+                #ok(())
+            };
+        }
+    };
+
+    // Aadhaar verification
+    public shared ({ caller }) func setAadhaarVerified(): async Result.Result<UserProfile, Text> {
+        if (Principal.isAnonymous(caller)) {
+            return #err("Anonymous principal cannot update Aadhaar status");
+        };
+
+        switch (profiles.get(caller)) {
+            case (null) { return #err("Profile not found") };
+            case (?profile) {
+                let updatedProfile = {
+                    profile with 
+                    aadhaarVerified = true;
+                    verificationLevel = #KYC;  // Upgrade verification level
+                    updatedAt = Time.now();
+                };
+                profiles.put(caller, updatedProfile);
+                #ok(updatedProfile)
+            };
+        }
+    };
+
+    // Duo Validation Preferences
+    public shared ({ caller }) func setDuoValidationPreference(prefersDuo: Bool): async Result.Result<UserProfile, Text> {
+        if (Principal.isAnonymous(caller)) {
+            return #err("Anonymous principal cannot update preferences");
+        };
+
+        switch (profiles.get(caller)) {
+            case (null) { return #err("Profile not found") };
+            case (?profile) {
+                let updatedProfile = {
+                    profile with 
+                    prefersDuoValidation = prefersDuo;
+                    updatedAt = Time.now();
+                };
+                profiles.put(caller, updatedProfile);
+                #ok(updatedProfile)
+            };
+        }
+    };
+
+    public query func getDuoValidationPreference(userPrincipal: Principal): async Bool {
+        switch (profiles.get(userPrincipal)) {
+            case (null) { false };
+            case (?profile) { profile.prefersDuoValidation };
+        }
+    };
+
+    // Get users who prefer duo validation (for partner discovery)
+    public query func getUsersWithDuoPreference(): async [Principal] {
+        let duoUsers = profiles.entries()
+            |> Iter.filter(_, func ((principal, profile): (Principal, UserProfile)): Bool {
+                profile.prefersDuoValidation
+            })
+            |> Iter.map(_, func ((principal, profile): (Principal, UserProfile)): Principal { principal })
+            |> Iter.toArray(_);
+        duoUsers
     };
 }

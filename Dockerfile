@@ -7,8 +7,11 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 # Copy package files
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+COPY package.json pnpm-lock.yaml* ./
+
+# Enable pnpm and install dependencies
+RUN corepack enable pnpm && \
+    pnpm install --prod --frozen-lockfile
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -20,8 +23,9 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
-# Build the application
-RUN npm run build
+# Enable pnpm and build the application
+RUN corepack enable pnpm && \
+    pnpm build
 
 # Production image, copy all the files and run next
 FROM base AS runner
@@ -54,3 +58,28 @@ ENV HOSTNAME "0.0.0.0"
 
 # Start the server
 CMD ["node", "server.js"]
+
+# Development Stage
+FROM base AS development
+WORKDIR /app
+
+# Install dependencies needed for development
+RUN apk add --no-cache libc6-compat
+
+# Enable pnpm
+RUN corepack enable pnpm
+
+# Copy package files
+COPY package.json pnpm-lock.yaml* ./
+
+# Install all dependencies (including dev)
+RUN pnpm install
+
+# Copy source code
+COPY . .
+
+# Expose port
+EXPOSE 3000
+
+# Start development server using standard Next.js
+CMD ["pnpm", "dev:next"]

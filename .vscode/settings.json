@@ -1,3 +1,117 @@
 {
-    "git.ignoreLimitWarning": true
+  "git.ignoreLimitWarning": true,
+
+  "motoko.vessel": true,
+  "motoko.dfx": true,
+  "motoko.enableLanguageServer": true,
+  "motoko.canister": "hhdao",
+  "files.associations": {
+    "*.mo": "motoko",
+    "dfx.json": "jsonc",
+    "canister_ids.json": "jsonc"
+  },
+
+  "typescript.preferences.includePackageJsonAutoImports": "auto",
+  "typescript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+
+  "emmet.includeLanguages": {
+    "typescript": "html",
+    "typescriptreact": "html",
+    "javascript": "html",
+    "javascriptreact": "html"
+  },
+  "emmet.triggerExpansionOnTab": true,
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  "github.copilot.enable": {
+    "*": true,
+    "motoko": true,
+    "typescript": true,
+    "typescriptreact": true,
+    "javascript": true,
+    "javascriptreact": true
+  },
+  "github.copilot.advanced": {
+    "length": 500,
+    "temperature": 0.1,
+    "top_p": 1,
+    "inlineSuggestCount": 3,
+    "listCount": 10
+  },
+
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.suggest.completeFunctionCalls": true,
+  "javascript.suggest.completeFunctionCalls": true,
+
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js, ${capture}.*.ts, ${capture}_*.ts",
+    "*.tsx": "${capture}.js, ${capture}.*.tsx, ${capture}_*.tsx",
+    "*.mo": "${capture}.test.mo, ${capture}.*.mo",
+    "package.json": "package-lock.json, pnpm-lock.yaml, yarn.lock",
+    "dfx.json": "canister_ids.json, .dfx",
+    "tailwind.config.*": "postcss.config.*, tailwind.config.*"
+  },
+
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.env.linux": {
+    "DFX_NETWORK": "local"
+  },
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.dfx": true,
+    "**/dist": true,
+    "**/.next": true,
+    "**/coverage": true,
+    "**/.nyc_output": true
+  },
+
+  "[motoko]": {
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.wordWrap": "on"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.tabSize": 2
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+
+  "security.workspace.trust.untrustedFiles": "open"
 }

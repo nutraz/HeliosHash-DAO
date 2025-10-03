@@ -1,36 +1,50 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { ThemeProvider } from "@/components/theme-provider";
-import ErrorBoundary from "@/components/error-boundary";
+import ErrorBoundary from '@/components/error-boundary';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
+import { AuthProvider } from '@/hooks/useAuthContext';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
+import { Providers } from './providers';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+  display: 'swap',
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
+  display: 'swap',
+  preload: false, // Only preload if actually used
 });
 
 export const metadata: Metadata = {
-  title: "HeliosHash DAO - Solar Energy Decentralized Autonomous Organization",
-  description: "Empowering India's Solar Future through Decentralized Autonomous Organization powered by Internet Computer",
-  keywords: ["HeliosHash", "DAO", "Solar Energy", "Internet Computer", "Blockchain", "India", "Renewable Energy"],
-  authors: [{ name: "HeliosHash Team" }],
+  title: 'HeliosHash DAO - Solar Energy Decentralized Autonomous Organization',
+  description:
+    "Empowering India's Solar Future through Decentralized Autonomous Organization powered by Internet Computer",
+  keywords: [
+    'HeliosHash',
+    'DAO',
+    'Solar Energy',
+    'Internet Computer',
+    'Blockchain',
+    'India',
+    'Renewable Energy',
+  ],
+  authors: [{ name: 'HeliosHash Team' }],
   openGraph: {
-    title: "HeliosHash DAO",
+    title: 'HeliosHash DAO',
     description: "Empowering India's Solar Future through Decentralized Autonomous Organization",
-    url: "https://helioshash.org",
-    siteName: "HeliosHash DAO",
-    type: "website",
+    url: 'https://helioshash.org',
+    siteName: 'HeliosHash DAO',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "HeliosHash DAO",
+    card: 'summary_large_image',
+    title: 'HeliosHash DAO',
     description: "Empowering India's Solar Future through Decentralized Autonomous Organization",
   },
 };
@@ -41,23 +55,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >
-        <ErrorBoundary>
-          <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              {children}
-              <Toaster />
-            </ThemeProvider>
-          </AuthProvider>
-        </ErrorBoundary>
+        <Providers>
+          <ErrorBoundary>
+            <AuthProvider>
+              <ThemeProvider
+                attribute='class'
+                defaultTheme='system'
+                enableSystem
+                disableTransitionOnChange
+              >
+                {children}
+                <Toaster />
+              </ThemeProvider>
+            </AuthProvider>
+          </ErrorBoundary>
+        </Providers>
       </body>
     </html>
   );

@@ -60,15 +60,20 @@ check_exists "vite.config.ts"
 check_exists "tailwind.config.js"
 
 echo -e "\n--- Frontend (Mobile) Structure ---"
-check_exists "lib"
-check_exists "lib/screens"
-check_exists "lib/widgets"
-check_exists "lib/models"
-check_exists "lib/services"
-check_exists "lib/test"
+
+# Enhanced Mobile Flutter structure checks
+echo -e "\n--- Mobile Flutter Structure ---"
 check_exists "lib/main.dart"
-check_exists "android"
-check_exists "ios"
+check_exists "pubspec.yaml"
+check_exists "android/app/src/main/AndroidManifest.xml"
+check_exists "android/build.gradle"
+check_exists "ios/Runner/Info.plist"
+check_exists "ios/Podfile"
+check_exists "test/widget_test.dart"
+check_exists "assets"
+
+# Check that lib/screens exists and is not empty
+check_not_empty "lib/screens"
 
 echo -e "\n--- Configuration Files ---"
 check_exists "dfx.json"

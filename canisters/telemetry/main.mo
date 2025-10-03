@@ -1,11 +1,4 @@
-import Time "mo:base/Time";
-import Array "mo:base/Array";
-import Map "mo:base/HashMap";
-import Iter "mo:base/Iter";
-import Principal "mo:base/Principal";
-import Result "mo:base/Result";
-import Float "mo:base/Float";
-import Int "mo:base/Int";
+
 
 persistent actor Telemetry {
     // Data Types
@@ -119,15 +112,15 @@ persistent actor Telemetry {
     };
 
     // Stable storage
-    stable var alertCounter: Nat = 0;
-    stable var deviceEntries: [(Text, Device)] = [];
-    stable var dataEntries: [(Text, [DataPoint])] = []; // key: deviceId
-    stable var alertEntries: [(Nat, Alert)] = [];
+    private var alertCounter: Nat = 0;
+    private var deviceEntries: [(Text, Device)] = [];
+    private var dataEntries: [(Text, [DataPoint])] = []; // key: deviceId
+    private var alertEntries: [(Nat, Alert)] = [];
 
-    // In-memory maps
-    var devices = Map.fromIter<Text, Device>(deviceEntries.vals(), 10, Text.hash, Text.equal);
-    var deviceData = Map.fromIter<Text, [DataPoint]>(dataEntries.vals(), 10, Text.hash, Text.equal);
-    var alerts = Map.fromIter<Nat, Alert>(alertEntries.vals(), 10, func(n: Nat): Nat32 { Nat32.fromNat(n % 100000) }, func(a: Nat, b: Nat): Bool { a == b });
+    // In-memory maps (rebuilt on init/post-upgrade)
+    transient var devices : HashMap.HashMap<Text, Device> = HashMap.HashMap<Text, Device>(10, Text.equal, Text.hash);
+    transient var deviceData : HashMap.HashMap<Text, [DataPoint]> = HashMap.HashMap<Text, [DataPoint]>(10, Text.equal, Text.hash);
+    transient var alerts : HashMap.HashMap<Nat, Alert> = HashMap.HashMap<Nat, Alert>(10, Nat.equal, func (n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
 
     // System functions for upgrades
     system func preupgrade() {
@@ -137,6 +130,12 @@ persistent actor Telemetry {
     };
 
     system func postupgrade() {
+        devices := HashMap.HashMap<Text, Device>(deviceEntries.size(), Text.equal, Text.hash);
+        for ((k, v) in deviceEntries.vals()) { devices.put(k, v) };
+        deviceData := HashMap.HashMap<Text, [DataPoint]>(dataEntries.size(), Text.equal, Text.hash);
+        for ((k, v) in dataEntries.vals()) { deviceData.put(k, v) };
+        alerts := HashMap.HashMap<Nat, Alert>(alertEntries.size(), Nat.equal, func (n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
+        for ((k, v) in alertEntries.vals()) { alerts.put(k, v) };
         deviceEntries := [];
         dataEntries := [];
         alertEntries := [];
@@ -184,7 +183,7 @@ persistent actor Telemetry {
 
         // Check if device already exists
         switch (devices.get(deviceId)) {
-            case (?existing) { return #err("Device ID already registered") };
+            case (?_existing) { return #err("Device ID already registered") };
             case (null) {};
         };
 

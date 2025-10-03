@@ -1,40 +1,40 @@
-"use client";
+'use client';
 
-import React, { useState } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { 
-  Plus, 
-  X, 
-  Save, 
-  Send, 
-  AlertCircle,
-  Building,
-  MapPin,
-  DollarSign,
-  Calendar,
-  Briefcase,
-  Users
-} from 'lucide-react';
-import { 
-  JobPostingFormData, 
-  JobCategory, 
-  Currency,
-  JOB_CATEGORIES,
+import { useAuth } from '@/hooks/useAuthContext';
+import {
+  CATEGORY_SKILLS,
   CURRENCIES,
+  Currency,
   EXPERIENCE_LEVELS,
+  JOB_CATEGORIES,
+  JobCategory,
+  JobPostingFormData,
   WORK_TYPES,
-  CATEGORY_SKILLS
 } from '@/types/jobs';
-import { useAuth } from '@/contexts/AuthContext';
+import { Briefcase, MapPin, Plus, Save, Send, X } from 'lucide-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 interface JobPostFormProps {
   isOpen: boolean;
@@ -44,12 +44,12 @@ interface JobPostFormProps {
   className?: string;
 }
 
-export default function JobPostForm({ 
-  isOpen, 
-  onClose, 
-  onSubmit, 
+export default function JobPostForm({
+  isOpen,
+  onClose,
+  onSubmit,
   initialData,
-  className 
+  className,
 }: JobPostFormProps) {
   const { user } = useAuth();
   const [step, setStep] = useState(1);
@@ -68,7 +68,7 @@ export default function JobPostForm({
         paymentType: 'Monthly',
         isRange: false,
         minAmount: 0,
-        maxAmount: 0
+        maxAmount: 0,
       },
       requirements: [''],
       skills: [],
@@ -80,30 +80,38 @@ export default function JobPostForm({
       companyInfo: {
         name: 'HeliosHash DAO',
         description: 'Decentralized solar energy infrastructure organization',
-        website: 'https://helioshash.org'
+        website: 'https://helioshash.org',
       },
-      ...initialData
-    }
+      ...initialData,
+    },
   });
 
-  const { 
-    register, 
-    control, 
-    handleSubmit, 
-    watch, 
-    setValue, 
-    formState: { errors } 
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
   } = form;
 
-  const requirementsArray = useFieldArray({
-    control,
-    name: 'requirements'
-  });
+  // Manual array management for primitive string arrays (useFieldArray targets object arrays)
+  const requirements = watch('requirements');
+  const benefits = watch('benefits');
 
-  const benefitsArray = useFieldArray({
-    control,
-    name: 'benefits'
-  });
+  const appendRequirement = () => setValue('requirements', [...requirements, '']);
+  const removeRequirement = (index: number) =>
+    setValue(
+      'requirements',
+      requirements.filter((_, i) => i !== index)
+    );
+
+  const appendBenefit = () => setValue('benefits', [...(benefits || []), '']);
+  const removeBenefit = (index: number) =>
+    setValue(
+      'benefits',
+      (benefits || []).filter((_, i) => i !== index)
+    );
 
   const watchedCategory = watch('category');
   const watchedLocationType = watch('locationType');
@@ -113,9 +121,9 @@ export default function JobPostForm({
     setIsSubmitting(true);
     try {
       // Clean up empty requirements and benefits
-      data.requirements = data.requirements.filter(req => req.trim() !== '');
-      data.benefits = data.benefits?.filter(benefit => benefit.trim() !== '') || [];
-      
+      data.requirements = data.requirements.filter((req) => req.trim() !== '');
+      data.benefits = data.benefits?.filter((benefit) => benefit.trim() !== '') || [];
+
       await onSubmit(data);
       onClose();
     } catch (error) {
@@ -134,7 +142,10 @@ export default function JobPostForm({
 
   const removeSkill = (skill: string) => {
     const currentSkills = watch('skills') || [];
-    setValue('skills', currentSkills.filter(s => s !== skill));
+    setValue(
+      'skills',
+      currentSkills.filter((s) => s !== skill)
+    );
   };
 
   const suggestedSkills = CATEGORY_SKILLS[watchedCategory as JobCategory] || [];
@@ -144,22 +155,22 @@ export default function JobPostForm({
     switch (step) {
       case 1:
         return (
-          <div className="space-y-6">
-            <div className="space-y-4">
+          <div className='space-y-6'>
+            <div className='space-y-4'>
               <div>
-                <Label htmlFor="title">Job Title *</Label>
+                <Label htmlFor='title'>Job Title *</Label>
                 <Input
-                  id="title"
+                  id='title'
                   {...register('title', { required: 'Job title is required' })}
-                  placeholder="e.g., Solar Panel Installation Technician"
+                  placeholder='e.g., Solar Panel Installation Technician'
                 />
                 {errors.title && (
-                  <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
+                  <p className='text-sm text-red-500 mt-1'>{errors.title.message}</p>
                 )}
               </div>
 
               <div>
-                <Label htmlFor="category">Category *</Label>
+                <Label htmlFor='category'>Category *</Label>
                 <Select
                   value={watchedCategory}
                   onValueChange={(value) => setValue('category', value as JobCategory)}
@@ -168,9 +179,9 @@ export default function JobPostForm({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {JOB_CATEGORIES.map(cat => (
+                    {JOB_CATEGORIES.map((cat) => (
                       <SelectItem key={cat.value} value={cat.value}>
-                        <div className="flex items-center gap-2">
+                        <div className='flex items-center gap-2'>
                           <span>{cat.icon}</span>
                           {cat.label}
                         </div>
@@ -181,21 +192,21 @@ export default function JobPostForm({
               </div>
 
               <div>
-                <Label htmlFor="description">Job Description *</Label>
+                <Label htmlFor='description'>Job Description *</Label>
                 <Textarea
-                  id="description"
+                  id='description'
                   {...register('description', { required: 'Job description is required' })}
-                  placeholder="Describe the role, responsibilities, and what makes this opportunity special..."
+                  placeholder='Describe the role, responsibilities, and what makes this opportunity special...'
                   rows={6}
                 />
                 {errors.description && (
-                  <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>
+                  <p className='text-sm text-red-500 mt-1'>{errors.description.message}</p>
                 )}
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <div>
-                  <Label htmlFor="experienceLevel">Experience Level</Label>
+                  <Label htmlFor='experienceLevel'>Experience Level</Label>
                   <Select
                     value={watch('experienceLevel')}
                     onValueChange={(value) => setValue('experienceLevel', value as any)}
@@ -204,7 +215,7 @@ export default function JobPostForm({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {EXPERIENCE_LEVELS.map(level => (
+                      {EXPERIENCE_LEVELS.map((level) => (
                         <SelectItem key={level.value} value={level.value}>
                           {level.label}
                         </SelectItem>
@@ -214,7 +225,7 @@ export default function JobPostForm({
                 </div>
 
                 <div>
-                  <Label htmlFor="workType">Employment Type</Label>
+                  <Label htmlFor='workType'>Employment Type</Label>
                   <Select
                     value={watch('workType')}
                     onValueChange={(value) => setValue('workType', value as any)}
@@ -223,7 +234,7 @@ export default function JobPostForm({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {WORK_TYPES.map(type => (
+                      {WORK_TYPES.map((type) => (
                         <SelectItem key={type.value} value={type.value}>
                           {type.label}
                         </SelectItem>
@@ -238,19 +249,19 @@ export default function JobPostForm({
 
       case 2:
         return (
-          <div className="space-y-6">
+          <div className='space-y-6'>
             <div>
               <Label>Work Location *</Label>
-              <div className="space-y-3 mt-2">
-                {['OnSite', 'Remote', 'Hybrid'].map(type => (
-                  <div key={type} className="flex items-center space-x-2">
+              <div className='space-y-3 mt-2'>
+                {['OnSite', 'Remote', 'Hybrid'].map((type) => (
+                  <div key={type} className='flex items-center space-x-2'>
                     <Checkbox
                       id={`location-${type}`}
                       checked={watchedLocationType === type}
                       onCheckedChange={() => setValue('locationType', type as any)}
                     />
-                    <Label htmlFor={`location-${type}`} className="cursor-pointer">
-                      <MapPin className="h-4 w-4 inline mr-1" />
+                    <Label htmlFor={`location-${type}`} className='cursor-pointer'>
+                      <MapPin className='h-4 w-4 inline mr-1' />
                       {type === 'OnSite' ? 'On-site' : type}
                     </Label>
                   </div>
@@ -260,32 +271,30 @@ export default function JobPostForm({
 
             {(watchedLocationType === 'OnSite' || watchedLocationType === 'Hybrid') && (
               <div>
-                <Label htmlFor="locationName">Location Details</Label>
+                <Label htmlFor='locationName'>Location Details</Label>
                 <Input
-                  id="locationName"
+                  id='locationName'
                   {...register('locationName')}
-                  placeholder="e.g., Urgam Valley, Gujarat"
+                  placeholder='e.g., Urgam Valley, Gujarat'
                 />
               </div>
             )}
 
-            <div className="space-y-4">
+            <div className='space-y-4'>
               <Label>Compensation *</Label>
-              
-              <div className="grid grid-cols-2 gap-4">
+
+              <div className='grid grid-cols-2 gap-4'>
                 <div>
-                  <Label htmlFor="currency">Currency</Label>
+                  <Label htmlFor='currency'>Currency</Label>
                   <Select
                     value={watchedCompensation.currency}
-                    onValueChange={(value) => 
-                      setValue('compensation.currency', value as Currency)
-                    }
+                    onValueChange={(value) => setValue('compensation.currency', value as Currency)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {CURRENCIES.map(curr => (
+                      {CURRENCIES.map((curr) => (
                         <SelectItem key={curr.value} value={curr.value}>
                           {curr.symbol} {curr.label}
                         </SelectItem>
@@ -295,72 +304,70 @@ export default function JobPostForm({
                 </div>
 
                 <div>
-                  <Label htmlFor="paymentType">Payment Type</Label>
+                  <Label htmlFor='paymentType'>Payment Type</Label>
                   <Select
                     value={watchedCompensation.paymentType}
-                    onValueChange={(value) => 
-                      setValue('compensation.paymentType', value as any)
-                    }
+                    onValueChange={(value) => setValue('compensation.paymentType', value as any)}
                   >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Hourly">Hourly</SelectItem>
-                      <SelectItem value="Monthly">Monthly</SelectItem>
-                      <SelectItem value="Project">Per Project</SelectItem>
-                      <SelectItem value="Equity">Equity</SelectItem>
+                      <SelectItem value='Hourly'>Hourly</SelectItem>
+                      <SelectItem value='Monthly'>Monthly</SelectItem>
+                      <SelectItem value='Project'>Per Project</SelectItem>
+                      <SelectItem value='Equity'>Equity</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className='flex items-center space-x-2'>
                 <Checkbox
-                  id="isRange"
+                  id='isRange'
                   checked={watchedCompensation.isRange}
-                  onCheckedChange={(checked) => 
+                  onCheckedChange={(checked) =>
                     setValue('compensation.isRange', checked as boolean)
                   }
                 />
-                <Label htmlFor="isRange">Compensation Range</Label>
+                <Label htmlFor='isRange'>Compensation Range</Label>
               </div>
 
               {watchedCompensation.isRange ? (
-                <div className="grid grid-cols-2 gap-4">
+                <div className='grid grid-cols-2 gap-4'>
                   <div>
-                    <Label htmlFor="minAmount">Minimum Amount</Label>
+                    <Label htmlFor='minAmount'>Minimum Amount</Label>
                     <Input
-                      id="minAmount"
-                      type="number"
+                      id='minAmount'
+                      type='number'
                       {...register('compensation.minAmount', { valueAsNumber: true })}
-                      placeholder="0"
+                      placeholder='0'
                     />
                   </div>
                   <div>
-                    <Label htmlFor="maxAmount">Maximum Amount</Label>
+                    <Label htmlFor='maxAmount'>Maximum Amount</Label>
                     <Input
-                      id="maxAmount"
-                      type="number"
+                      id='maxAmount'
+                      type='number'
                       {...register('compensation.maxAmount', { valueAsNumber: true })}
-                      placeholder="0"
+                      placeholder='0'
                     />
                   </div>
                 </div>
               ) : (
                 <div>
-                  <Label htmlFor="amount">Amount *</Label>
+                  <Label htmlFor='amount'>Amount *</Label>
                   <Input
-                    id="amount"
-                    type="number"
-                    {...register('compensation.amount', { 
+                    id='amount'
+                    type='number'
+                    {...register('compensation.amount', {
                       required: 'Amount is required',
-                      valueAsNumber: true 
+                      valueAsNumber: true,
                     })}
-                    placeholder="0"
+                    placeholder='0'
                   />
                   {errors.compensation?.amount && (
-                    <p className="text-sm text-red-500 mt-1">
+                    <p className='text-sm text-red-500 mt-1'>
                       {errors.compensation.amount.message}
                     </p>
                   )}
@@ -368,9 +375,9 @@ export default function JobPostForm({
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <div>
-                <Label htmlFor="urgency">Priority Level</Label>
+                <Label htmlFor='urgency'>Priority Level</Label>
                 <Select
                   value={watch('urgency')}
                   onValueChange={(value) => setValue('urgency', value as any)}
@@ -379,21 +386,17 @@ export default function JobPostForm({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Low">Low</SelectItem>
-                    <SelectItem value="Medium">Medium</SelectItem>
-                    <SelectItem value="High">High</SelectItem>
-                    <SelectItem value="Critical">Critical</SelectItem>
+                    <SelectItem value='Low'>Low</SelectItem>
+                    <SelectItem value='Medium'>Medium</SelectItem>
+                    <SelectItem value='High'>High</SelectItem>
+                    <SelectItem value='Critical'>Critical</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div>
-                <Label htmlFor="deadline">Application Deadline</Label>
-                <Input
-                  id="deadline"
-                  type="date"
-                  {...register('deadline')}
-                />
+                <Label htmlFor='deadline'>Application Deadline</Label>
+                <Input id='deadline' type='date' {...register('deadline')} />
               </div>
             </div>
           </div>
@@ -401,35 +404,30 @@ export default function JobPostForm({
 
       case 3:
         return (
-          <div className="space-y-6">
+          <div className='space-y-6'>
             <div>
               <Label>Requirements *</Label>
-              <div className="space-y-2 mt-2">
-                {requirementsArray.fields.map((field, index) => (
-                  <div key={field.id} className="flex gap-2">
+              <div className='space-y-2 mt-2'>
+                {requirements.map((_, index) => (
+                  <div key={index} className='flex gap-2'>
                     <Input
                       {...register(`requirements.${index}` as const)}
-                      placeholder="Enter a requirement..."
+                      placeholder='Enter a requirement...'
                     />
-                    {requirementsArray.fields.length > 1 && (
+                    {requirements.length > 1 && (
                       <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => requirementsArray.remove(index)}
+                        type='button'
+                        variant='outline'
+                        size='sm'
+                        onClick={() => removeRequirement(index)}
                       >
-                        <X className="h-4 w-4" />
+                        <X className='h-4 w-4' />
                       </Button>
                     )}
                   </div>
                 ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => requirementsArray.append('')}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button type='button' variant='outline' size='sm' onClick={appendRequirement}>
+                  <Plus className='h-4 w-4 mr-2' />
                   Add Requirement
                 </Button>
               </div>
@@ -437,43 +435,41 @@ export default function JobPostForm({
 
             <div>
               <Label>Required Skills</Label>
-              
+
               {currentSkills.length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-2 mb-4">
-                  {currentSkills.map(skill => (
-                    <Badge key={skill} variant="secondary" className="text-xs">
+                <div className='flex flex-wrap gap-1 mt-2 mb-4'>
+                  {currentSkills.map((skill) => (
+                    <Badge key={skill} variant='secondary' className='text-xs'>
                       {skill}
                       <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="h-auto p-0 ml-1"
+                        type='button'
+                        variant='ghost'
+                        size='sm'
+                        className='h-auto p-0 ml-1'
                         onClick={() => removeSkill(skill)}
                       >
-                        <X className="h-3 w-3" />
+                        <X className='h-3 w-3' />
                       </Button>
                     </Badge>
                   ))}
                 </div>
               )}
 
-              <div className="space-y-3">
+              <div className='space-y-3'>
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-2">
+                  <p className='text-sm font-medium text-muted-foreground mb-2'>
                     Suggested skills for {watchedCategory}:
                   </p>
-                  <div className="flex flex-wrap gap-1">
-                    {suggestedSkills.slice(0, 8).map(skill => (
+                  <div className='flex flex-wrap gap-1'>
+                    {suggestedSkills.slice(0, 8).map((skill) => (
                       <Button
                         key={skill}
-                        type="button"
-                        variant={currentSkills.includes(skill) ? "default" : "outline"}
-                        size="sm"
-                        className="text-xs h-6"
-                        onClick={() => 
-                          currentSkills.includes(skill) 
-                            ? removeSkill(skill) 
-                            : addSkill(skill)
+                        type='button'
+                        variant={currentSkills.includes(skill) ? 'default' : 'outline'}
+                        size='sm'
+                        className='text-xs h-6'
+                        onClick={() =>
+                          currentSkills.includes(skill) ? removeSkill(skill) : addSkill(skill)
                         }
                       >
                         {skill}
@@ -482,9 +478,9 @@ export default function JobPostForm({
                   </div>
                 </div>
 
-                <div className="flex gap-2">
+                <div className='flex gap-2'>
                   <Input
-                    placeholder="Add custom skill..."
+                    placeholder='Add custom skill...'
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         e.preventDefault();
@@ -502,30 +498,25 @@ export default function JobPostForm({
 
             <div>
               <Label>Benefits (Optional)</Label>
-              <div className="space-y-2 mt-2">
-                {benefitsArray.fields.map((field, index) => (
-                  <div key={field.id} className="flex gap-2">
+              <div className='space-y-2 mt-2'>
+                {(benefits || []).map((_, index) => (
+                  <div key={index} className='flex gap-2'>
                     <Input
                       {...register(`benefits.${index}` as const)}
-                      placeholder="Enter a benefit..."
+                      placeholder='Enter a benefit...'
                     />
                     <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => benefitsArray.remove(index)}
+                      type='button'
+                      variant='outline'
+                      size='sm'
+                      onClick={() => removeBenefit(index)}
                     >
-                      <X className="h-4 w-4" />
+                      <X className='h-4 w-4' />
                     </Button>
                   </div>
                 ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => benefitsArray.append('')}
-                >
-                  <Plus className="h-4 w-4 mr-2" />
+                <Button type='button' variant='outline' size='sm' onClick={appendBenefit}>
+                  <Plus className='h-4 w-4 mr-2' />
                   Add Benefit
                 </Button>
               </div>
@@ -540,63 +531,48 @@ export default function JobPostForm({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+      <DialogContent className='sm:max-w-[700px] max-h-[80vh] overflow-y-auto'>
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Briefcase className="h-5 w-5" />
+          <DialogTitle className='flex items-center gap-2'>
+            <Briefcase className='h-5 w-5' />
             Post New Job Opportunity
           </DialogTitle>
           <DialogDescription>
-            Create a new job posting for the HeliosHash DAO community.
-            Step {step} of 3
+            Create a new job posting for the HeliosHash DAO community. Step {step} of 3
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-6">
+        <form onSubmit={handleSubmit(handleFormSubmit)} className='space-y-6'>
           {renderStepContent()}
 
-          <DialogFooter className="flex justify-between">
-            <div className="flex gap-2">
+          <DialogFooter className='flex justify-between'>
+            <div className='flex gap-2'>
               {step > 1 && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setStep(step - 1)}
-                >
+                <Button type='button' variant='outline' onClick={() => setStep(step - 1)}>
                   Previous
                 </Button>
               )}
             </div>
-            
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-              >
+
+            <div className='flex gap-2'>
+              <Button type='button' variant='outline' onClick={onClose}>
                 Cancel
               </Button>
-              
+
               {step < 3 ? (
-                <Button
-                  type="button"
-                  onClick={() => setStep(step + 1)}
-                >
+                <Button type='button' onClick={() => setStep(step + 1)}>
                   Next
                 </Button>
               ) : (
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                >
+                <Button type='submit' disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
-                      <Save className="h-4 w-4 mr-2 animate-spin" />
+                      <Save className='h-4 w-4 mr-2 animate-spin' />
                       Publishing...
                     </>
                   ) : (
                     <>
-                      <Send className="h-4 w-4 mr-2" />
+                      <Send className='h-4 w-4 mr-2' />
                       Publish Job
                     </>
                   )}

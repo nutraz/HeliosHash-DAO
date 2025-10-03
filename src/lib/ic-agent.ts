@@ -7,11 +7,11 @@ const getCanisterId = (canisterName: string): string => {
 
   const canisterIds = {
     local: {
-      hhdao: 'be2us-64aaa-aaaaa-qaabq-cai',
-      dao: 'rdmx6-jaaaa-aaaah-qdrpq-cai',
-      identity: 'rrkah-fqaaa-aaaah-qdrpq-cai',
-      telemetry: 'ryjl3-tyaaa-aaaah-qdrpq-cai',
-      documents: 'rno2w-sqaaa-aaaah-qdrpq-cai',
+      hhdao: process.env.CANISTER_ID_HHDAO || 'umunu-kh777-77774-qaaca-cai',
+      dao: process.env.CANISTER_ID_HHDAO_DAO || 'ulvla-h7777-77774-qaacq-cai',
+      identity: process.env.CANISTER_ID_HHDAO_IDENTITY || 'uxrrr-q7777-77774-qaaaq-cai',
+      telemetry: process.env.CANISTER_ID_HHDAO_TELEMETRY || 'vpyes-67777-77774-qaaeq-cai',
+      documents: process.env.CANISTER_ID_HHDAO_DOCUMENTS || 'uzt4z-lp777-77774-qaabq-cai',
     },
     ic: {
       hhdao: process.env.NEXT_PUBLIC_HHDAO_CANISTER_ID_IC || 'be2us-64aaa-aaaaa-qaabq-cai',
@@ -19,22 +19,39 @@ const getCanisterId = (canisterName: string): string => {
       identity: process.env.NEXT_PUBLIC_IDENTITY_CANISTER_ID_IC || 'rrkah-fqaaa-aaaah-qdrpq-cai',
       telemetry: process.env.NEXT_PUBLIC_TELEMETRY_CANISTER_ID_IC || 'ryjl3-tyaaa-aaaah-qdrpq-cai',
       documents: process.env.NEXT_PUBLIC_DOCUMENTS_CANISTER_ID_IC || 'rno2w-sqaaa-aaaah-qdrpq-cai',
-    }
+    },
   };
 
-  return canisterIds[network as keyof typeof canisterIds]?.[canisterName as keyof typeof canisterIds.local] || '';
+  return (
+    canisterIds[network as keyof typeof canisterIds]?.[
+      canisterName as keyof typeof canisterIds.local
+    ] || ''
+  );
 };
 
 // Create HTTP Agent
 export const createAgent = (identity?: Identity): HttpAgent => {
-  const host = process.env.NEXT_PUBLIC_IC_HOST || 'http://127.0.0.1:8000';
+  // Use different host based on environment
+  const isProduction = process.env.NODE_ENV === 'production';
+  const host = isProduction
+    ? 'https://ic0.app'
+    : process.env.NEXT_PUBLIC_IC_HOST || 'http://127.0.0.1:8000';
 
-  return new HttpAgent({
+  const agent = new HttpAgent({
     identity,
     host,
     // Disable fetchRootKey in production
-    verifyQuerySignatures: process.env.NODE_ENV === 'production',
+    verifyQuerySignatures: isProduction,
   });
+
+  // Fetch root key for local development
+  if (!isProduction) {
+    agent.fetchRootKey().catch((err) => {
+      console.warn('Unable to fetch root key. Check IC replica is running:', err);
+    });
+  }
+
+  return agent;
 };
 
 // Create actor with proper interface
@@ -42,7 +59,7 @@ export const createActor = async <T>(
   canisterId: string,
   idlFactory: any,
   identity?: Identity
-): Promise<Actor<T>> => {
+): Promise<T> => {
   const agent = createAgent(identity);
 
   // Fetch root key for local development
@@ -85,11 +102,7 @@ export const getCanisterActors = async (identity?: Identity) => {
 
 // Error handling for IC calls
 export class ICAgentError extends Error {
-  constructor(
-    message: string,
-    public readonly code?: string,
-    public readonly details?: any
-  ) {
+  constructor(message: string, public readonly code?: string, public readonly details?: any) {
     super(message);
     this.name = 'ICAgentError';
   }
@@ -113,9 +126,5 @@ export const handleICError = (error: any): ICAgentError => {
     return new ICAgentError('Network error', 'NETWORK', error);
   }
 
-  return new ICAgentError(
-    error.message || 'Unknown Internet Computer error',
-    'UNKNOWN',
-    error
-  );
+  return new ICAgentError(error.message || 'Unknown Internet Computer error', 'UNKNOWN', error);
 };

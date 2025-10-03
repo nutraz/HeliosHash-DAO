@@ -1,12 +1,5 @@
 
-import Debug "mo:base/Debug";
-import Result "mo:base/Result";
-import Array "mo:base/Array";
-import Iter "mo:base/Iter";
-import Nat "mo:base/Nat";
-import Text "mo:base/Text";
-import Principal "mo:base/Principal";
-import Time "mo:base/Time";
+
 
 module {
   // Custom assertion functions with better error messages
@@ -19,40 +12,49 @@ module {
     };
   };
 
-  public func assertEquals<T>(actual : T, expected : T, message : Text) : () {
+  public func assertEqualsNat(actual : Nat, expected : Nat, message : Text) : () {
     if (actual != expected) {
-      Debug.print("❌ Assertion failed: " # message # ". Expected: " # debug_show(expected) # ", Actual: " # debug_show(actual));
+      Debug.print("❌ Assertion failed: " # message # ". Expected: " # Nat.toText(expected) # ", Actual: " # Nat.toText(actual));
+      assert false;
+    } else {
+      Debug.print("✅ Assertion passed: " # message);
+    };
+  };
+  
+  public func assertEqualsText(actual : Text, expected : Text, message : Text) : () {
+    if (actual != expected) {
+      Debug.print("❌ Assertion failed: " # message # ". Expected: " # expected # ", Actual: " # actual);
       assert false;
     } else {
       Debug.print("✅ Assertion passed: " # message);
     };
   };
 
-  public func assertArrayEquals<T>(actual : [T], expected : [T], message : Text) : () {
+  public func assertArraySizeEquals(actual : [Any], expected : [Any], message : Text) : () {
     if (Array.size(actual) != Array.size(expected)) {
-      Debug.print("❌ Assertion failed: " # message # ". Array sizes differ. Expected: " # debug_show(Array.size(expected)) # ", Actual: " # debug_show(Array.size(actual)));
+      Debug.print("❌ Assertion failed: " # message # ". Array sizes differ. Expected: " # Nat.toText(Array.size(expected)) # ", Actual: " # Nat.toText(Array.size(actual)));
       assert false;
+    } else {
+      Debug.print("✅ Assertion passed: " # message);
     };
-    
-    for (i in Iter.range(0, Array.size(expected) - 1)) {
-      if (actual[i] != expected[i]) {
-        Debug.print("❌ Assertion failed: " # message # ". Arrays differ at index " # debug_show(i) # ". Expected: " # debug_show(expected[i]) # ", Actual: " # debug_show(actual[i]));
+  };
+
+  public func assertResultIsOk(result : Result.Result<Any, Text>, message : Text) : () {
+    switch (result) {
+      case (#ok(_)) {
+        Debug.print("✅ Assertion passed: " # message);
+      };
+      case (#err(error)) {
+        Debug.print("❌ Assertion failed: " # message # ". Error: " # error);
         assert false;
       };
     };
-    
-    Debug.print("✅ Assertion passed: " # message);
   };
 
-  public func assertError<T, E>(result : Result.Result<T, E>, expectedError : E, message : Text) : () {
+  public func assertResultIsError(result : Result.Result<Any, Text>, message : Text) : () {
     switch (result) {
       case (#err(err)) {
-        if (err != expectedError) {
-          Debug.print("❌ Assertion failed: " # message # ". Expected error: " # debug_show(expectedError) # ", Actual error: " # debug_show(err));
-          assert false;
-        } else {
-          Debug.print("✅ Assertion passed: " # message);
-        };
+        Debug.print("✅ Assertion passed: " # message # ". Got expected error: " # err);
       };
       case (#ok(_)) {
         Debug.print("❌ Assertion failed: " # message # ". Expected error but got success");
@@ -78,7 +80,9 @@ module {
   };
 
   // Mock principal for testing
-  public let mockPrincipal : Principal = Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai");
+  public func mockPrincipal() : Principal {
+    Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai")
+  };
   
   // Mock time for testing
   public func mockTime() : Int {

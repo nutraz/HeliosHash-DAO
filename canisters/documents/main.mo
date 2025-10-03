@@ -1,11 +1,5 @@
-import Time "mo:base/Time";
-import Array "mo:base/Array";
-import Map "mo:base/HashMap";
-import Iter "mo:base/Iter";
-import Principal "mo:base/Principal";
-import Result "mo:base/Result";
-import Text "mo:base/Text";
-import Blob "mo:base/Blob";
+
+
 
 persistent actor Documents {
     // Data Types
@@ -126,17 +120,17 @@ persistent actor Documents {
     };
 
     // Stable storage
-    stable var workflowCounter: Nat = 0;
-    stable var documentEntries: [(Text, Document)] = [];
-    stable var workflowEntries: [(Nat, DocumentWorkflow)] = [];
-    stable var shareEntries: [(Text, DocumentShare)] = []; // key: documentId_principal
-    stable var versionEntries: [(Text, [DocumentVersion])] = []; // key: documentId
+    private var workflowCounter: Nat = 0;
+    private var documentEntries: [(Text, Document)] = [];
+    private var workflowEntries: [(Nat, DocumentWorkflow)] = [];
+    private var shareEntries: [(Text, DocumentShare)] = []; // key: documentId_principal
+    private var versionEntries: [(Text, [DocumentVersion])] = []; // key: documentId
 
     // In-memory maps
-    var documents = Map.fromIter<Text, Document>(documentEntries.vals(), 10, Text.hash, Text.equal);
-    var workflows = Map.fromIter<Nat, DocumentWorkflow>(workflowEntries.vals(), 10, func(n: Nat): Nat32 { Nat32.fromNat(n % 100000) }, func(a: Nat, b: Nat): Bool { a == b });
-    var shares = Map.fromIter<Text, DocumentShare>(shareEntries.vals(), 10, Text.hash, Text.equal);
-    var versions = Map.fromIter<Text, [DocumentVersion]>(versionEntries.vals(), 10, Text.hash, Text.equal);
+    private transient var documents = HashMap.fromIter<Text, Document>(documentEntries.vals(), 10, Text.equal, Text.hash);
+    private transient var workflows = HashMap.fromIter<Nat, DocumentWorkflow>(workflowEntries.vals(), 10, Nat.equal, func(n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
+    private transient var shares = HashMap.fromIter<Text, DocumentShare>(shareEntries.vals(), 10, Text.equal, Text.hash);
+    private transient var versions = HashMap.fromIter<Text, [DocumentVersion]>(versionEntries.vals(), 10, Text.equal, Text.hash);
 
     // System functions for upgrades
     system func preupgrade() {
@@ -353,9 +347,8 @@ persistent actor Documents {
         workflowCounter += 1;
         let workflowId = workflowCounter;
 
-        let workflowSteps = Array.mapEntries<Text, WorkflowStep>(
-            steps,
-            func(i: Nat, stepName: Text): WorkflowStep {
+        let workflowSteps = Array.tabulate<WorkflowStep>(steps.size(), func(i: Nat): WorkflowStep {
+            let stepName = steps[i];
                 {
                     id = i;
                     name = stepName;
@@ -412,9 +405,8 @@ persistent actor Documents {
                 };
 
                 // Update step
-                let updatedSteps = Array.mapEntries<WorkflowStep, WorkflowStep>(
-                    workflow.steps,
-                    func(i: Nat, s: WorkflowStep): WorkflowStep {
+                let updatedSteps = Array.tabulate<WorkflowStep>(workflow.steps.size(), func(i: Nat): WorkflowStep {
+                    let s = workflow.steps[i];
                         if (i == stepId) {
                             {
                                 s with
@@ -503,7 +495,7 @@ persistent actor Documents {
     };
 
     public query ({ caller }) func searchDocuments(
-        query: Text,
+        searchQuery: Text,
         documentType: ?DocumentType,
         tags: ?[Text]
     ): async [Document] {
@@ -513,9 +505,9 @@ persistent actor Documents {
                 return false;
             };
 
-            let nameMatch = Text.contains(doc.name, #text query);
+            let nameMatch = Text.contains(doc.name, #text searchQuery);
             let descMatch = switch (doc.description) {
-                case (?desc) Text.contains(desc, #text query);
+                case (?desc) Text.contains(desc, #text searchQuery);
                 case (null) false;
             };
 

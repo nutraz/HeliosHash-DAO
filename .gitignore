@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+coverage/
 
 # next.js
 /.next/
@@ -19,6 +20,7 @@
 
 # production
 /build
+dist/
 
 # misc
 .DS_Store
@@ -47,3 +49,50 @@ test
 prompt
 
 server.log
+dev_server.log
+dev_output.log
+*.log
+
+# test artifacts and dfx cache
+test-results/
+.dfx/
+playwright-report/
+coverage/
+
+# Development and build artifacts
+.next/
+dist/
+build/
+out/
+
+# Package manager artifacts
+package-lock.json
+yarn.lock
+
+# Environment and config
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDEs and editors
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+*.tar
+*.gz
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

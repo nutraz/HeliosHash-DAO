@@ -1,5 +1,5 @@
-import { NextAuthOptions } from 'next-auth';
 import { authService } from '@/services/authService';
+import { NextAuthOptions } from 'next-auth';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -83,7 +83,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token.principal = user.id;
-        token.name = user.name;
+        token.name = user.name ?? '';
       }
       return token;
     },

@@ -1,12 +1,12 @@
 // API Service Layer for HeliosHash DAO
 // Connects frontend components with Internet Computer canisters
 
-import { createActor, getCanisterActors, handleICError } from '@/lib/ic-agent';
-import { Principal } from '@dfinity/principal';
+import { getCanisterActors } from '@/lib/canister-actors';
 
-const API_BASE = process.env.NODE_ENV === 'production'
-  ? 'https://your-domain.com/api'
-  : 'http://localhost:3000/api';
+const API_BASE =
+  process.env.NODE_ENV === 'production'
+    ? 'https://your-domain.com/api'
+    : 'http://localhost:3000/api';
 
 interface ApiResponse<T> {
   success: boolean;
@@ -40,23 +40,51 @@ export interface ProjectsStats {
 }
 
 export const projectsApi = {
-  async getAll(): Promise<ApiResponse<{ projects: SolarProject[]; } & ProjectsStats>> {
+  async getAll(): Promise<ApiResponse<{ projects: SolarProject[] } & ProjectsStats>> {
     try {
-      // Try to get from canister first
-      const canisterActors = await getCanisterActors();
-      if (canisterActors.hhdao) {
-        // This would call the actual canister method
-        // For now, fall back to API route
-      }
+      // Get projects from canister
+      const actors = await getCanisterActors();
+      const projectsData = await actors.hhdao.getProjects();
 
-      // Fallback to API route
-      const response = await fetch(`${API_BASE}/projects`);
-      return await response.json();
+      // Transform canister data to frontend format
+      const projects: SolarProject[] = projectsData.map((project) => ({
+        id: Number(project.id),
+        name: project.name,
+        location: project.location,
+        capacity: Number(project.capacity),
+        status:
+          'Planning' in project.status
+            ? 'Planning'
+            : 'Construction' in project.status
+            ? 'Construction'
+            : 'Operational' in project.status
+            ? 'Operational'
+            : 'Maintenance',
+        owner: project.owner.toString(),
+        createdAt: Number(project.createdAt),
+        governmentApprovals: project.governmentApprovals,
+        telemetryId: project.telemetryId[0] || undefined,
+        description: project.description,
+        estimatedCost: Number(project.estimatedCost),
+        completionDate: project.completionDate[0] ? Number(project.completionDate[0]) : undefined,
+      }));
+
+      const stats: ProjectsStats = {
+        totalProjects: projects.length,
+        operationalProjects: projects.filter((p) => p.status === 'Operational').length,
+        totalCapacity: projects.reduce((acc, p) => acc + p.capacity, 0),
+        totalInvestment: projects.reduce((acc, p) => acc + p.estimatedCost, 0),
+      };
+
+      return {
+        success: true,
+        data: { projects, ...stats },
+      };
     } catch (error) {
       return {
         success: false,
         error: 'Failed to fetch solar projects',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
   },
@@ -72,17 +100,17 @@ export const projectsApi = {
       const response = await fetch(`${API_BASE}/projects`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(project)
+        body: JSON.stringify(project),
       });
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to create solar project',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
-  }
+  },
 };
 
 // DAO Governance API
@@ -118,14 +146,14 @@ export const governanceApi = {
       const params = new URLSearchParams();
       if (filters?.status) params.append('status', filters.status);
       if (filters?.type) params.append('type', filters.type);
-      
+
       const response = await fetch(`${API_BASE}/dao/proposals?${params}`);
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to fetch proposals',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
   },
@@ -141,41 +169,46 @@ export const governanceApi = {
       const response = await fetch(`${API_BASE}/dao/proposals`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(proposal)
+        body: JSON.stringify(proposal),
       });
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to create proposal',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
   },
 
-  async vote(proposalId: number, vote: boolean): Promise<ApiResponse<{
-    proposalId: number;
-    userVote: boolean;
-    votesFor: number;
-    votesAgainst: number;
-    hasVoted: boolean;
-    votingPower: number;
-  }>> {
+  async vote(
+    proposalId: number,
+    vote: boolean
+  ): Promise<
+    ApiResponse<{
+      proposalId: number;
+      userVote: boolean;
+      votesFor: number;
+      votesAgainst: number;
+      hasVoted: boolean;
+      votingPower: number;
+    }>
+  > {
     try {
       const response = await fetch(`${API_BASE}/dao/vote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ proposalId, vote })
+        body: JSON.stringify({ proposalId, vote }),
       });
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to cast vote',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
-  }
+  },
 };
 
 // NFT Marketplace API
@@ -228,43 +261,48 @@ export const nftApi = {
       if (filters?.forSale !== undefined) params.append('forSale', filters.forSale.toString());
       if (filters?.tier) params.append('tier', filters.tier);
       if (filters?.owner) params.append('owner', filters.owner);
-      
+
       const response = await fetch(`${API_BASE}/nft?${params}`);
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to fetch NFTs',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
   },
 
-  async purchase(nftId: number, buyerPrincipal: string): Promise<ApiResponse<{
-    nftId: number;
-    transactionId: string;
-    price: number;
-    previousOwner: string;
-    newOwner: string;
-  }>> {
+  async purchase(
+    nftId: number,
+    buyerPrincipal: string
+  ): Promise<
+    ApiResponse<{
+      nftId: number;
+      transactionId: string;
+      price: number;
+      previousOwner: string;
+      newOwner: string;
+    }>
+  > {
     try {
       const response = await fetch(`${API_BASE}/nft`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nftId, buyerPrincipal })
+        body: JSON.stringify({ nftId, buyerPrincipal }),
       });
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to purchase NFT',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
-  }
+  },
 };
 
-// ICP Cycles Management API  
+// ICP Cycles Management API
 export interface CycleInfo {
   canister: string;
   cycles: string; // bigint as string
@@ -290,29 +328,34 @@ export const cyclesApi = {
       return {
         success: false,
         error: 'Failed to fetch cycle information',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
   },
 
-  async topUp(canister: string, amount: string): Promise<ApiResponse<{
-    message: string;
-    transactionId: string;
-    newBalance: string;
-  }>> {
+  async topUp(
+    canister: string,
+    amount: string
+  ): Promise<
+    ApiResponse<{
+      message: string;
+      transactionId: string;
+      newBalance: string;
+    }>
+  > {
     try {
       const response = await fetch(`${API_BASE}/cycles`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ canister, amount })
+        body: JSON.stringify({ canister, amount }),
       });
       return await response.json();
     } catch (error) {
       return {
         success: false,
         error: 'Failed to top up cycles',
-        details: error instanceof Error ? error.message : 'Network error'
+        details: error instanceof Error ? error.message : 'Network error',
       };
     }
-  }
+  },
 };

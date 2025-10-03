@@ -1,0 +1,303 @@
+// HeliosHash DAO Core Governance Canister
+// Philosophy: Collaboration over competition, community consensus (≥60%), human-centered stewardship
+
+
+
+persistent actor DAO {
+
+    // === Types ===
+
+    public type ProposalId = Nat;
+    
+    public type Member = {
+        id : Principal;
+        joinedAt : Time.Time;
+        votingPower : Nat;
+    };
+    
+    public type ProposalCategory = {
+        #Energy;       // Solar projects, infrastructure
+        #Governance;   // DAO rules, constitution
+        #Treasury;     // Fund allocation
+        #Community;    // Community initiatives
+        #Dispute;      // Integration with dispute resolution
+    };
+    
+    public type Proposal = {
+        id : ProposalId;
+        title : Text;
+        description : Text;
+        category : ProposalCategory;
+        proposer : Principal;
+        createdAt : Time.Time;
+        votesFor : Nat;
+        votesAgainst : Nat;
+        finalized : Bool;
+        approved : Bool;
+    };
+    
+    public type Vote = { 
+        proposalId : ProposalId; 
+        voter : Principal; 
+        approve : Bool;
+        timestamp : Time.Time;
+    };
+
+    // === State ===
+
+    private var nextProposalId : ProposalId = 0;
+    private var adminPrincipal : Principal = Principal.fromText("rrkah-fqaaa-aaaaa-aaaaq-cai"); // Replace with your principal
+    
+    private transient let proposals = HashMap.HashMap<ProposalId, Proposal>(10, Nat.equal, func(n: Nat) : Hash.Hash { 
+        Nat32.fromNat(n % 1000000) // Simple hash for proposal IDs
+    });
+    private transient let votes = HashMap.HashMap<Text, Vote>(20, Text.equal, Text.hash);
+    private transient let members = HashMap.HashMap<Principal, Member>(10, Principal.equal, Principal.hash);
+
+    // === Helpers ===
+
+    private func isAdmin(caller : Principal) : Bool {
+        Principal.equal(caller, adminPrincipal)
+    };
+
+    private func isMember(caller : Principal) : Bool {
+        switch (members.get(caller)) {
+            case (?_) { true };
+            case null { false };
+        }
+    };
+
+    private func getMemberCount() : Nat {
+        members.size()
+    };
+
+    private func getVoteKey(proposalId : ProposalId, voter : Principal) : Text {
+        Nat.toText(proposalId) # "_" # Principal.toText(voter)
+    };
+
+    private func hasVoted(proposalId : ProposalId, voter : Principal) : Bool {
+        let key = getVoteKey(proposalId, voter);
+        switch (votes.get(key)) {
+            case (?_) { true };
+            case null { false };
+        }
+    };
+
+    private func isApproved(proposal : Proposal) : Bool {
+        let totalMembers = getMemberCount();
+        if (totalMembers == 0) { return false };
+        
+        // Community consensus: ≥60% approval threshold
+        let threshold = (totalMembers * 60) / 100;
+        proposal.votesFor >= threshold
+    };
+
+    // === Public Interface ===
+
+    // Join the DAO as a new member
+    public shared(msg) func join() : async Result.Result<Member, Text> {
+        let caller = msg.caller;
+        
+        if (Principal.isAnonymous(caller)) {
+            return #err("Anonymous principals cannot join the DAO");
+        };
+
+        switch (members.get(caller)) {
+            case (?existingMember) {
+                #err("Already a member since " # Int.toText(existingMember.joinedAt))
+            };
+            case null {
+                let newMember : Member = {
+                    id = caller;
+                    joinedAt = Time.now();
+                    votingPower = 1; // Equal voting power - democratic principle
+                };
+                members.put(caller, newMember);
+                #ok(newMember)
+            };
+        }
+    };
+
+    // Create a new proposal (members only)
+    public shared(msg) func createProposal(
+        title : Text, 
+        description : Text,
+        category : ProposalCategory
+    ) : async Result.Result<ProposalId, Text> {
+        let caller = msg.caller;
+        
+        if (not isMember(caller)) {
+            return #err("Only DAO members can create proposals");
+        };
+
+        if (Text.size(title) == 0 or Text.size(description) == 0) {
+            return #err("Title and description cannot be empty");
+        };
+
+        let id = nextProposalId;
+        nextProposalId += 1;
+        
+        let proposal : Proposal = {
+            id = id;
+            title = title;
+            description = description;
+            category = category;
+            proposer = caller;
+            createdAt = Time.now();
+            votesFor = 0;
+            votesAgainst = 0;
+            finalized = false;
+            approved = false;
+        };
+        
+        proposals.put(id, proposal);
+        #ok(id)
+    };
+
+    // Vote on a proposal (members only)
+    public shared(msg) func vote(proposalId : ProposalId, approve : Bool) : async Result.Result<Text, Text> {
+        let caller = msg.caller;
+        
+        if (not isMember(caller)) {
+            return #err("Only DAO members can vote");
+        };
+
+        switch (proposals.get(proposalId)) {
+            case null { 
+                #err("Proposal not found") 
+            };
+            case (?proposal) {
+                if (proposal.finalized) {
+                    return #err("Proposal already finalized");
+                };
+
+                if (hasVoted(proposalId, caller)) {
+                    return #err("You have already voted on this proposal");
+                };
+
+                // Record the vote
+                let voteRecord : Vote = {
+                    proposalId = proposalId;
+                    voter = caller;
+                    approve = approve;
+                    timestamp = Time.now();
+                };
+                
+                let voteKey = getVoteKey(proposalId, caller);
+                votes.put(voteKey, voteRecord);
+
+                // Update proposal vote counts
+                let updatedProposal = if (approve) {
+                    { proposal with votesFor = proposal.votesFor + 1 }
+                } else {
+                    { proposal with votesAgainst = proposal.votesAgainst + 1 }
+                };
+
+                proposals.put(proposalId, updatedProposal);
+                #ok("Vote recorded successfully")
+            };
+        }
+    };
+
+    // Finalize a proposal (admin only for now, can be democratized later)
+    public shared(msg) func finalizeProposal(proposalId : ProposalId) : async Result.Result<Bool, Text> {
+        let caller = msg.caller;
+        
+        if (not isAdmin(caller)) {
+            return #err("Only admin can finalize proposals (governance feature coming)");
+        };
+
+        switch (proposals.get(proposalId)) {
+            case null { 
+                #err("Proposal not found") 
+            };
+            case (?proposal) {
+                if (proposal.finalized) {
+                    return #err("Proposal already finalized");
+                };
+
+                let approved = isApproved(proposal);
+                let finalizedProposal = {
+                    proposal with
+                    finalized = true;
+                    approved = approved;
+                };
+
+                proposals.put(proposalId, finalizedProposal);
+                #ok(approved)
+            };
+        }
+    };
+
+    // === Query Functions ===
+
+    public query func getProposal(id : ProposalId) : async ?Proposal {
+        proposals.get(id)
+    };
+
+    public query func getAllProposals() : async [Proposal] {
+        Iter.toArray(proposals.vals())
+    };
+
+    public query func getMember(principal : Principal) : async ?Member {
+        members.get(principal)
+    };
+
+    public query func getAllMembers() : async [Member] {
+        Iter.toArray(members.vals())
+    };
+
+    public query func getMemberCountQuery() : async Nat {
+        getMemberCount()
+    };
+
+    public query func getVoteCount(proposalId : ProposalId) : async Nat {
+        var count = 0;
+        for ((key, _) in votes.entries()) {
+            let parts = Text.split(key, #char '_');
+            switch (parts.next()) {
+                case (?idText) {
+                    switch (Nat.fromText(idText)) {
+                        case (?id) {
+                            if (id == proposalId) { count += 1; };
+                        };
+                        case null {};
+                    };
+                };
+                case null {};
+            };
+        };
+        count
+    };
+
+    // Get voting status for a member on a specific proposal
+    public query func hasVotedQuery(proposalId : ProposalId, voter : Principal) : async Bool {
+        hasVoted(proposalId, voter)
+    };
+
+    // DAO health metrics
+    public query func getDAOStats() : async {
+        totalMembers : Nat;
+        totalProposals : Nat;
+        activeProposals : Nat;
+        approvedProposals : Nat;
+    } {
+        var activeCount = 0;
+        var approvedCount = 0;
+        
+        for (proposal in proposals.vals()) {
+            if (not proposal.finalized) {
+                activeCount += 1;
+            } else if (proposal.approved) {
+                approvedCount += 1;
+            };
+        };
+
+        {
+            totalMembers = getMemberCount();
+            totalProposals = proposals.size();
+            activeProposals = activeCount;
+            approvedProposals = approvedCount;
+        }
+    };
+}

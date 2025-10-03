@@ -376,3 +376,5 @@ dfx deploy                 # Deploy to local IC replica
 _"From disconnected valleys to futuristic communities - HHDAO × 1WP × OWP tokens = Sustainable transformation"_
 
 ```
+
+```

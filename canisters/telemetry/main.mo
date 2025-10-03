@@ -1,5 +1,6 @@
 
 
+
 persistent actor Telemetry {
     // Data Types
     public type DeviceType = {

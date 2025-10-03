@@ -4,6 +4,7 @@
 
 
 
+
 persistent actor DAO {
   // === Versioning & Governance Parameters ===
   var schemaVersion : Nat = 1; // increment when structural changes occur

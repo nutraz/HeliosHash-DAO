@@ -1,7 +1,6 @@
 // Refactored Treasury canister delegating core logic to ledger.mo (pure module)
 
 
-
 persistent actor Treasury {
   // Re-export selected types for external interface compatibility
   public type TxId = Ledger.TxId;

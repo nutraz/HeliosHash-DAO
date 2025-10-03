@@ -1,0 +1,100 @@
+{
+  "timestamp": "2025-10-03T22:13:39.453Z",
+  "testType": "HHDAO_PROXIMITY_TEST",
+  "currentLocation": {
+    "lat": null,
+    "lng": null
+  },
+  "proximityResults": [
+    {
+      "name": "Urgam Valley Solar Pilot Site",
+      "lat": 23.7337,
+      "lng": 68.8093,
+      "type": "primary_site",
+      "status": "active",
+      "description": "Main solar installation and community hub",
+      "distance": null,
+      "isNear": false
+    },
+    {
+      "name": "Delhi Technology Hub",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "type": "partner_node",
+      "status": "active",
+      "description": "Primary partner coordination center",
+      "distance": null,
+      "isNear": false
+    },
+    {
+      "name": "Delhi Solar Distribution Center",
+      "lat": 28.5355,
+      "lng": 77.091,
+      "type": "distribution",
+      "status": "active",
+      "description": "Equipment and logistics hub",
+      "distance": null,
+      "isNear": false
+    },
+    {
+      "name": "Delhi Research Institute",
+      "lat": 28.6692,
+      "lng": 77.2315,
+      "type": "research_node",
+      "status": "active",
+      "description": "Solar technology research and development",
+      "distance": null,
+      "isNear": false
+    },
+    {
+      "name": "IC Zurich Node",
+      "lat": 47.3769,
+      "lng": 8.5417,
+      "type": "blockchain_node",
+      "status": "active",
+      "description": "Primary Internet Computer infrastructure",
+      "distance": null,
+      "isNear": false
+    },
+    {
+      "name": "IC San Francisco Node",
+      "lat": 37.7749,
+      "lng": -122.4194,
+      "type": "blockchain_node",
+      "status": "active",
+      "description": "Secondary IC infrastructure",
+      "distance": null,
+      "isNear": false
+    }
+  ],
+  "analysis": {
+    "nearNodes": 0,
+    "totalNodes": 6,
+    "closestNode": {
+      "name": "Urgam Valley Solar Pilot Site",
+      "lat": 23.7337,
+      "lng": 68.8093,
+      "type": "primary_site",
+      "status": "active",
+      "description": "Main solar installation and community hub",
+      "distance": null,
+      "isNear": false
+    },
+    "averageDistance": null,
+    "estimatedLatency": null,
+    "isInIndia": false,
+    "recommendations": [
+      {
+        "type": "DAO_PARTICIPATION",
+        "priority": "MEDIUM",
+        "action": "Participate in HHDAO governance and proposals",
+        "benefit": "Shape the future of solar DAO development"
+      }
+    ]
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "tester": "nutraazz",
+    "network": "HHDAO_IC_NETWORK"
+  }
+}

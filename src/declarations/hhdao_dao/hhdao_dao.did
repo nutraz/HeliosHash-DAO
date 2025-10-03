@@ -1,0 +1,49 @@
+type Time = int;
+type ProposalId = nat;
+type Proposal = 
+ record {
+   approved: bool;
+   category: ContributionType;
+   createdAt: Time;
+   description: text;
+   finalized: bool;
+   id: ProposalId;
+   proposer: MemberId;
+   title: text;
+   votesAgainst: nat;
+   votesFor: nat;
+ };
+type MemberId = principal;
+type Member = 
+ record {
+   contributionScore: nat;
+   id: MemberId;
+   joinedAt: Time;
+ };
+type ContributionType = 
+ variant {
+   CommunityCare;
+   DisputeResolution;
+   Mentorship;
+   Other: text;
+   PanelMaintenance;
+   Teaching;
+ };
+service : {
+  createProposal: (title: text, description: text, category:
+   ContributionType) -> (ProposalId);
+  finalizeProposal: (proposalId: ProposalId) -> ();
+  getAllMembers: () -> (vec Member) query;
+  getAllProposals: () -> (vec Proposal) query;
+  getApprovalThreshold: () -> (nat) query;
+  getMember: (id: MemberId) -> (opt Member) query;
+  getMemberCount: () -> (nat) query;
+  getProposal: (id: ProposalId) -> (opt Proposal) query;
+  getVoteCount: (proposalId: ProposalId) -> (opt record {
+                                                   nat;
+                                                   nat;
+                                                 }) query;
+  hasVotedQuery: (proposalId: ProposalId, memberId: MemberId) -> (bool) query;
+  join: () -> ();
+  vote: (proposalId: ProposalId, approve: bool) -> ();
+}

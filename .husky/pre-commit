@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit checks..."
+pnpm lint --max-warnings=0 || exit 1
+pnpm test:run --run --silent || exit 1
+pnpm scan:currency || echo "(currency scan non-blocking)"
+
+npx lint-staged

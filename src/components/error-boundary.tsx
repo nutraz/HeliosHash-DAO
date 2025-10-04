@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -64,46 +65,49 @@ interface DefaultErrorFallbackProps {
 }
 
 const DefaultErrorFallback: React.FC<DefaultErrorFallbackProps> = ({ error, resetError }) => {
+  const router = useRouter();
+
   const handleReload = () => {
-    window.location.reload();
+    if (typeof window !== 'undefined') {
+      window.location.reload();
+    }
   };
 
   const handleGoHome = () => {
-    window.location.href = '/';
+    router.push('/');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10">
-            <AlertTriangle className="h-6 w-6 text-destructive" />
+    <div className='min-h-screen flex items-center justify-center bg-background p-4'>
+      <Card className='w-full max-w-md'>
+        <CardHeader className='text-center'>
+          <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10'>
+            <AlertTriangle className='h-6 w-6 text-destructive' />
           </div>
-          <CardTitle className="text-xl">Something went wrong</CardTitle>
+          <CardTitle className='text-xl'>Something went wrong</CardTitle>
           <CardDescription>
-            An unexpected error occurred. Please try again or contact support if the problem persists.
+            An unexpected error occurred. Please try again or contact support if the problem
+            persists.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className='space-y-4'>
           {error && process.env.NODE_ENV === 'development' && (
-            <div className="rounded-md bg-muted p-3">
-              <p className="text-sm font-mono text-muted-foreground break-all">
-                {error.message}
-              </p>
+            <div className='rounded-md bg-muted p-3'>
+              <p className='text-sm font-mono text-muted-foreground break-all'>{error.message}</p>
             </div>
           )}
 
-          <div className="flex flex-col gap-2">
-            <Button onClick={resetError} className="w-full">
-              <RefreshCw className="mr-2 h-4 w-4" />
+          <div className='flex flex-col gap-2'>
+            <Button onClick={resetError} className='w-full'>
+              <RefreshCw className='mr-2 h-4 w-4' />
               Try Again
             </Button>
-            <Button variant="outline" onClick={handleReload} className="w-full">
-              <RefreshCw className="mr-2 h-4 w-4" />
+            <Button variant='outline' onClick={handleReload} className='w-full'>
+              <RefreshCw className='mr-2 h-4 w-4' />
               Reload Page
             </Button>
-            <Button variant="ghost" onClick={handleGoHome} className="w-full">
-              <Home className="mr-2 h-4 w-4" />
+            <Button variant='ghost' onClick={handleGoHome} className='w-full'>
+              <Home className='mr-2 h-4 w-4' />
               Go Home
             </Button>
           </div>

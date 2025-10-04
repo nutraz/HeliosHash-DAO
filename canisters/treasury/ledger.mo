@@ -2,6 +2,7 @@
 // Decimals: 8
 
 
+
 module {
   public type TxId = Nat;
   public type Amount = Nat;

@@ -1,10 +1,5 @@
 'use client';
 
-import JobBoard from '@/components/community/opportunities/JobBoard';
-import { ValidationOpportunities } from '@/components/community/ValidationOpportunities';
-import { ValidationSummary } from '@/components/community/ValidationSummary';
-import DisputeResolution from '@/components/DisputeResolution';
-import GovernanceDashboard from '@/components/GovernanceDashboard';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -45,8 +40,46 @@ import {
   Vote,
   Zap,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+
+const JobBoard = dynamic(() => import('@/components/community/opportunities/JobBoard'), {
+  ssr: false,
+  loading: () => <div className='animate-pulse bg-gray-200 h-48 rounded-lg'></div>,
+});
+
+const ValidationOpportunities = dynamic(
+  () =>
+    import('@/components/community/ValidationOpportunities').then((mod) => ({
+      default: mod.ValidationOpportunities,
+    })),
+  {
+    ssr: false,
+    loading: () => <div className='animate-pulse bg-gray-200 h-32 rounded-lg'></div>,
+  }
+);
+
+const ValidationSummary = dynamic(
+  () =>
+    import('@/components/community/ValidationSummary').then((mod) => ({
+      default: mod.ValidationSummary,
+    })),
+  {
+    ssr: false,
+    loading: () => <div className='animate-pulse bg-gray-200 h-32 rounded-lg'></div>,
+  }
+);
+
+const DisputeResolution = dynamic(() => import('@/components/DisputeResolution'), {
+  ssr: false,
+  loading: () => <div className='animate-pulse bg-gray-200 h-32 rounded-lg'></div>,
+});
+
+const GovernanceDashboard = dynamic(() => import('@/components/GovernanceDashboard'), {
+  ssr: false,
+  loading: () => <div className='animate-pulse bg-gray-200 h-48 rounded-lg'></div>,
+});
 
 interface CommunityPost {
   id: string;

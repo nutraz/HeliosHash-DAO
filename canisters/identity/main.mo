@@ -1,5 +1,6 @@
 
 
+
 persistent actor Identity {
     // Data Types
     public type Role = {

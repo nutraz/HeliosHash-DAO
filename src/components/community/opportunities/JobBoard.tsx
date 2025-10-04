@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import JobFiltersPanel from './filters/JobFiltersPanel';
 import JobCard from './JobCard';
@@ -191,6 +192,7 @@ const MOCK_JOBS: JobPosting[] = [
 ];
 
 export default function JobBoard() {
+  const router = useRouter();
   const [jobs, setJobs] = useState<JobPosting[]>(MOCK_JOBS);
   const [filteredJobs, setFilteredJobs] = useState<JobPosting[]>(MOCK_JOBS);
   const [filters, setFilters] = useState<JobFilters>({});
@@ -856,7 +858,7 @@ export default function JobBoard() {
                     </p>
                   </div>
                   <Button
-                    onClick={() => (window.location.href = '/auth/login')}
+                    onClick={() => router.push('/auth/login')}
                     className='bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg hover:shadow-xl transition-all duration-300'
                     size='lg'
                   >

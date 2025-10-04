@@ -17,11 +17,13 @@ import {
   User,
   Users,
 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { ValidationSessionCard } from './ValidationSessionCard';
 
 export function ValidationSessions() {
   const { user } = useAuth();
+  const router = useRouter();
   const [sessions, setSessions] = useState<ValidationSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -273,7 +275,7 @@ export function ValidationSessions() {
               variant='outline'
               onClick={() => {
                 // Navigate to validation opportunities
-                window.location.href = '/community#opportunities';
+                router.push('/community#opportunities');
               }}
               className='border-green-500 text-green-400 hover:bg-green-500/20'
             >

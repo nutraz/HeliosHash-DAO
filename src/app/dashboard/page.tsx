@@ -218,6 +218,15 @@ export default function DashboardPage() {
                     <Button
                       variant='ghost'
                       size='sm'
+                      onClick={() => router.push('/compliance')}
+                      className='w-full justify-start text-left'
+                    >
+                      <Shield className='w-4 h-4 mr-2' />
+                      🇮🇳 India Compliance
+                    </Button>
+                    <Button
+                      variant='ghost'
+                      size='sm'
                       onClick={() => router.push('/settings')}
                       className='w-full justify-start text-left'
                     >

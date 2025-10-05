@@ -28,10 +28,59 @@ persistent actor DAO {
     #Other : Text;
   };
 
+  public type DisputeStatus = {
+    #Pending;
+    #InArbitration;
+    #Resolved;
+    #Appealed;
+  };
+
+  public type DisputeEvidence = {
+    submitter : Principal;
+    evidenceHash : Text;
+    description : Text;
+    timestamp : Time.Time;
+  };
+
+  public type Dispute = {
+    id : Nat;
+    proposalId : ProposalId;
+    challenger : Principal;
+    reason : Text;
+    status : DisputeStatus;
+    jurors : [Principal];
+    evidence : [DisputeEvidence];
+    ruling : ?{winner : Principal; reasoning : Text};
+    createdAt : Time.Time;
+    resolvedAt : ?Time.Time;
+    appealDeadline : ?Time.Time;
+  };
+
+  public type JurorApplication = {
+    juror : Principal;
+    stake : Nat;
+    experience : Text;
+    appliedAt : Time.Time;
+    approved : Bool;
+  };
+
+  public type GenderIdentity = {
+    #Female;
+    #Male;
+    #NonBinary;
+    #PreferNotToSay;
+  };
+
   public type Member = {
     id : MemberId;
     joinedAt : Time.Time;
     contributionScore : Nat;
+    gender : ?GenderIdentity;
+    isVerified : Bool;
+    mentorshipStatus : ?{ 
+      isMentor : Bool; 
+      specialization : Text 
+    };
   };
 
   public type Proposal = {
@@ -73,6 +122,13 @@ persistent actor DAO {
   private var votes : [Vote] = [];
   // Future optimization: replace linear votes array with HashMap for O(1) lookups
   // private transient var voteMap = HashMap.HashMap<(ProposalId, MemberId), Bool>(10, func(a, b) { a == b }, func (key : (ProposalId, MemberId)) : Nat32 { Nat32.fromNat((key.0 * 31 + key.1)) });
+  
+  // Dispute resolution system
+  private var nextDisputeId : Nat = 0;
+  private var disputes : [Dispute] = [];
+  private var jurorApplications : [JurorApplication] = [];
+  private var approvedJurors : [Principal] = [];
+  private var disputeFee : Nat = 1000; // Base fee for raising disputes (OWP tokens)
 
   // === Helpers ===
 
@@ -199,6 +255,9 @@ persistent actor DAO {
         id = caller;
         joinedAt = Time.now();
         contributionScore = 0;
+        gender = null;
+        isVerified = false;
+        mentorshipStatus = null;
       });
     };
   };
@@ -336,6 +395,105 @@ persistent actor DAO {
 
   // === Query Functions ===
 
+  // === Women's Participation Quotas ===
+  
+  var womenQuotaBps : Nat = 3300; // 33% minimum women's participation
+  
+  public shared ({ caller }) func updateGenderIdentity(gender : GenderIdentity) : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Authentication required");
+    };
+    
+    switch (findMember(caller)) {
+      case (?member) {
+        let updatedMember = {
+          member with 
+          gender = ?gender;
+          isVerified = member.isVerified or (gender == #Female); // Auto-verify female members
+        };
+        updateMember(caller, updatedMember);
+        #ok()
+      };
+      case null { #err("Member not found") };
+    };
+  };
+
+  public shared ({ caller }) func registerMentorship(specialization : Text, isMentor : Bool) : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Authentication required");
+    };
+    
+    switch (findMember(caller)) {
+      case (?member) {
+        let updatedMember = {
+          member with 
+          mentorshipStatus = ?{ isMentor = isMentor; specialization = specialization };
+          contributionScore = member.contributionScore + (if (isMentor) 50 else 25);
+        };
+        updateMember(caller, updatedMember);
+        #ok()
+      };
+      case null { #err("Member not found") };
+    };
+  };
+
+  public query func getWomenParticipationStats() : async { 
+    totalMembers : Nat; 
+    womenMembers : Nat; 
+    womenPercentage : Nat; 
+    quotaMet : Bool;
+    mentorshipPrograms : Nat;
+  } {
+    var totalMembers = 0;
+    var womenMembers = 0;
+    var mentorshipPrograms = 0;
+    
+    for (member in members.vals()) {
+      totalMembers += 1;
+      switch (member.gender) {
+        case (?#Female) { 
+          womenMembers += 1;
+        };
+        case _ {};
+      };
+      switch (member.mentorshipStatus) {
+        case (?_) { mentorshipPrograms += 1; };
+        case null {};
+      };
+    };
+    
+    let womenPercentage = if (totalMembers > 0) {
+      (womenMembers * 10000) / totalMembers // basis points
+    } else { 0 };
+    
+    {
+      totalMembers = totalMembers;
+      womenMembers = womenMembers;
+      womenPercentage = womenPercentage;
+      quotaMet = womenPercentage >= womenQuotaBps;
+      mentorshipPrograms = mentorshipPrograms;
+    }
+  };
+
+  public shared ({ caller = _ }) func proposeQuotaUpdate(newQuotaBps : Nat) : async Result.Result<ProposalId, Text> {
+    if (newQuotaBps > 5000) { // Maximum 50%
+      return #err("Quota cannot exceed 50%");
+    };
+    
+    try {
+      let proposalId = await createProposal(
+        "Update Women's Participation Quota to " # Nat.toText(newQuotaBps / 100) # "%",
+        "Adjust the minimum women's participation requirement for DAO governance. New quota: " # Nat.toText(newQuotaBps) # " basis points.",
+        #Other("quota_update")
+      );
+      #ok(proposalId)
+    } catch (e) {
+      #err(Error.message(e))
+    };
+  };
+
+  // === Getters and Stats ===
+
   public query func getProposal(id : ProposalId) : async ?Proposal {
     findProposal(id)
   };
@@ -388,6 +546,266 @@ persistent actor DAO {
       activeCount = active;
       nextId = nextProposalId;
     }
+  };
+
+  // === Dispute Resolution System ===
+
+  public shared({ caller }) func raiseDispute(proposalId : ProposalId, reason : Text) : async Result.Result<Nat, Text> {
+    if (not hasMember(caller)) { return #err("Not a member") };
+    
+    // Find the proposal
+    let proposalOpt = Array.find<Proposal>(proposals, func(p) { p.id == proposalId });
+    switch (proposalOpt) {
+      case (null) { return #err("Proposal not found") };
+      case (?proposal) {
+        // Check if proposal is finalized
+        if (proposal.status != #Passed) {
+          return #err("Can only dispute passed proposals")
+        };
+        
+        // Check if caller has sufficient stake (contribution score)
+        let memberOpt = Array.find<Member>(members, func(m) { Principal.equal(m.id, caller) });
+        switch (memberOpt) {
+          case (null) { return #err("Member not found") };
+          case (?member) {
+            if (member.contributionScore < disputeFee) {
+              return #err("Insufficient contribution score to raise dispute")
+            };
+          };
+        };
+        
+        // Create new dispute
+        let dispute : Dispute = {
+          id = nextDisputeId;
+          proposalId = proposalId;
+          challenger = caller;
+          reason = reason;
+          status = #Pending;
+          jurors = [];
+          evidence = [];
+          ruling = null;
+          createdAt = Time.now();
+          resolvedAt = null;
+          appealDeadline = null;
+        };
+        
+        disputes := Array.append(disputes, [dispute]);
+        nextDisputeId += 1;
+        
+        #ok(dispute.id)
+      };
+    }
+  };
+
+  public shared({ caller }) func applyAsJuror(experience : Text, stake : Nat) : async Result.Result<(), Text> {
+    if (not hasMember(caller)) { return #err("Not a member") };
+    
+    // Check if already applied
+    let existingApp = Array.find<JurorApplication>(jurorApplications, func(app) { 
+      Principal.equal(app.juror, caller) 
+    });
+    
+    switch (existingApp) {
+      case (?_) { return #err("Already applied as juror") };
+      case (null) {
+        let application : JurorApplication = {
+          juror = caller;
+          stake = stake;
+          experience = experience;
+          appliedAt = Time.now();
+          approved = false;
+        };
+        
+        jurorApplications := Array.append(jurorApplications, [application]);
+        #ok(())
+      };
+    }
+  };
+
+  public shared({ caller }) func approveJuror(jurorPrincipal : Principal) : async Result.Result<(), Text> {
+    if (not _isAdmin(caller)) { return #err("Admin access required") };
+    
+    // Find and approve the application
+    let updatedApps = Array.map<JurorApplication, JurorApplication>(jurorApplications, func(app) {
+      if (Principal.equal(app.juror, jurorPrincipal)) {
+        { app with approved = true }
+      } else {
+        app
+      }
+    });
+    
+    jurorApplications := updatedApps;
+    
+    // Add to approved jurors if not already there
+    let alreadyApproved = Array.find<Principal>(approvedJurors, func(j) { 
+      Principal.equal(j, jurorPrincipal) 
+    });
+    
+    switch (alreadyApproved) {
+      case (?_) { #ok(()) };
+      case (null) {
+        approvedJurors := Array.append(approvedJurors, [jurorPrincipal]);
+        #ok(())
+      };
+    }
+  };
+
+  public shared({ caller }) func assignJurors(disputeId : Nat, jurors : [Principal]) : async Result.Result<(), Text> {
+    if (not _isAdmin(caller)) { return #err("Admin access required") };
+    
+    // Validate jurors are approved
+    for (juror in jurors.vals()) {
+      let isApproved = Array.find<Principal>(approvedJurors, func(j) { 
+        Principal.equal(j, juror) 
+      });
+      switch (isApproved) {
+        case (null) { return #err("Juror not approved: " # Principal.toText(juror)) };
+        case (?_) { /* continue */ };
+      };
+    };
+    
+    // Update dispute with jurors
+    let updatedDisputes = Array.map<Dispute, Dispute>(disputes, func(dispute) {
+      if (dispute.id == disputeId) {
+        { dispute with 
+          jurors = jurors;
+          status = #InArbitration;
+        }
+      } else {
+        dispute
+      }
+    });
+    
+    disputes := updatedDisputes;
+    #ok(())
+  };
+
+  public shared({ caller }) func submitEvidence(disputeId : Nat, evidenceHash : Text, description : Text) : async Result.Result<(), Text> {
+    if (not hasMember(caller)) { return #err("Not a member") };
+    
+    // Find dispute
+    let disputeOpt = Array.find<Dispute>(disputes, func(d) { d.id == disputeId });
+    switch (disputeOpt) {
+      case (null) { return #err("Dispute not found") };
+      case (?dispute) {
+        if (dispute.status != #InArbitration) {
+          return #err("Dispute not in arbitration phase")
+        };
+        
+        let evidence : DisputeEvidence = {
+          submitter = caller;
+          evidenceHash = evidenceHash;
+          description = description;
+          timestamp = Time.now();
+        };
+        
+        // Update dispute with new evidence
+        let updatedDisputes = Array.map<Dispute, Dispute>(disputes, func(d) {
+          if (d.id == disputeId) {
+            { d with evidence = Array.append(d.evidence, [evidence]) }
+          } else {
+            d
+          }
+        });
+        
+        disputes := updatedDisputes;
+        #ok(())
+      };
+    }
+  };
+
+  public shared({ caller }) func resolveDispute(disputeId : Nat, winner : Principal, reasoning : Text) : async Result.Result<(), Text> {
+    // Only assigned jurors can resolve disputes
+    let disputeOpt = Array.find<Dispute>(disputes, func(d) { d.id == disputeId });
+    switch (disputeOpt) {
+      case (null) { return #err("Dispute not found") };
+      case (?dispute) {
+        // Check if caller is assigned juror
+        let isJuror = Array.find<Principal>(dispute.jurors, func(j) { 
+          Principal.equal(j, caller) 
+        });
+        switch (isJuror) {
+          case (null) { return #err("Not an assigned juror") };
+          case (?_) {
+            if (dispute.status != #InArbitration) {
+              return #err("Dispute not in arbitration phase")
+            };
+            
+            let ruling = { winner = winner; reasoning = reasoning };
+            
+            // Update dispute
+            let updatedDisputes = Array.map<Dispute, Dispute>(disputes, func(d) {
+              if (d.id == disputeId) {
+                { d with 
+                  status = #Resolved;
+                  ruling = ?ruling;
+                  resolvedAt = ?Time.now();
+                  appealDeadline = ?(Time.now() + (3 * 24 * 60 * 60 * 1_000_000_000)); // 3 days to appeal
+                }
+              } else {
+                d
+              }
+            });
+            
+            disputes := updatedDisputes;
+            #ok(())
+          };
+        };
+      };
+    }
+  };
+
+  public shared({ caller }) func appealDispute(disputeId : Nat, _reason : Text) : async Result.Result<(), Text> {
+    if (not hasMember(caller)) { return #err("Not a member") };
+    
+    let disputeOpt = Array.find<Dispute>(disputes, func(d) { d.id == disputeId });
+    switch (disputeOpt) {
+      case (null) { return #err("Dispute not found") };
+      case (?dispute) {
+        if (dispute.status != #Resolved) {
+          return #err("Can only appeal resolved disputes")
+        };
+        
+        // Check if still within appeal deadline
+        switch (dispute.appealDeadline) {
+          case (null) { return #err("No appeal deadline set") };
+          case (?deadline) {
+            if (Time.now() > deadline) {
+              return #err("Appeal deadline has passed")
+            };
+          };
+        };
+        
+        // Update dispute status to appealed
+        let updatedDisputes = Array.map<Dispute, Dispute>(disputes, func(d) {
+          if (d.id == disputeId) {
+            { d with status = #Appealed }
+          } else {
+            d
+          }
+        });
+        
+        disputes := updatedDisputes;
+        #ok(())
+      };
+    }
+  };
+
+  // Query functions for dispute system
+  public query func getDisputes() : async [Dispute] {
+    disputes
+  };
+
+  public query func getDispute(disputeId : Nat) : async ?Dispute {
+    Array.find<Dispute>(disputes, func(d) { d.id == disputeId })
+  };
+
+  public query func getJurorApplications() : async [JurorApplication] {
+    jurorApplications
+  };
+
+  public query func getApprovedJurors() : async [Principal] {
+    approvedJurors
   };
 
   // === Treasury Registration Helper ===

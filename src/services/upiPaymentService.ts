@@ -1,7 +1,8 @@
 'use client';
 
-// import Razorpay from 'razorpay'; // Will be loaded dynamically
-// import { TransFiSDK } from '@transfi/sdk'; // Commented out for now as we'll use simulation
+import { Principal } from '@dfinity/principal';
+import { OWP_TOKEN_DECIMALS } from '@/types/owp-token';
+import { owpTokenService } from './owpTokenService';
 
 export interface UPIPaymentRequest {
   amount: number; // Amount in INR
@@ -262,21 +263,24 @@ class UPIPaymentService {
         transactionReference,
       });
 
-      // Simulate token minting delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const principal = Principal.fromText(recipientPrincipal);
+      const amountInSmallestUnit = BigInt(Math.round(amount * (10 ** OWP_TOKEN_DECIMALS)));
 
-      // In production, this would call the ICP canister:
-      // const result = await owpLedgerActor.mint({
-      //   to: { owner: Principal.fromText(recipientPrincipal), subaccount: [] },
-      //   amount: BigInt(amount * 1_000_000), // Convert to micro-tokens
-      //   memo: [],
-      //   created_at_time: [],
-      // });
+      const result = await owpTokenService.mint(principal, amountInSmallestUnit);
 
-      return {
-        success: true,
-        tokenAmount: amount,
-      };
+      if (result && 'ok' in result) {
+        return {
+          success: true,
+          tokenAmount: amount,
+        };
+      } else {
+        const error = result && 'err' in result ? JSON.stringify(result.err) : 'Unknown error';
+        console.error('OWP token minting failed:', error);
+        return {
+          success: false,
+          error: `Failed to mint OWP tokens: ${error}`,
+        };
+      }
     } catch (error) {
       console.error('OWP token minting failed:', error);
       return {

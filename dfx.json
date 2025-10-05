@@ -36,16 +36,21 @@
       "main": "canisters/dao/gender_incentives.mo",
       "type": "motoko"
     },
+    "owp_token": {
+      "main": "canisters/owp_token/main.mo",
+      "type": "motoko"
+    },
+    "owp_token_test": {
+        "main": "canisters/owp_token/main.test.mo",
+        "type": "motoko",
+        "dependencies": ["owp_token"]
+    },
     "community_badges": {
       "main": "canisters/nft/main.mo",
       "type": "motoko"
     },
     "hhdao_dispute_resolution": {
       "main": "canisters/dispute-resolution/main.mo",
-      "type": "motoko"
-    },
-    "hhdao_treasury": {
-      "main": "canisters/treasury/main.mo",
       "type": "motoko"
     },
     "hhdao_meeting_management": {

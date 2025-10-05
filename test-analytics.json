@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "categories": {
+      "mock": {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "browsers": {}
+      }
+    },
+    "browsers": {},
+    "timestamp": "2025-10-05T13:34:10.829Z"
+  },
+  "reports": {
+    "smoke": [],
+    "integration": [],
+    "performance": [],
+    "security": [],
+    "canisters": [],
+    "mock": [
+      {
+        "category": "mock",
+        "browser": "unknown",
+        "summary": {
+          "suites": [
+            {
+              "tests": [
+                {
+                  "title": "Sample test",
+                  "status": "passed"
+                }
+              ]
+            }
+          ],
+          "timestamp": "2024-01-01T00:00:00Z"
+        },
+        "results": {},
+        "isCanister": false,
+        "dirPath": "test-results/mock",
+        "timestamp": "2024-01-01T00:00:00Z"
+      }
+    ]
+  },
+  "timestamp": "2025-10-05T13:34:10.956Z"
+}

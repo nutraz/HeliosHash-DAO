@@ -3,6 +3,19 @@
 
 
 
+import HashMap "mo:base/HashMap";
+import Time "mo:base/Time";
+import Principal "mo:base/Principal";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Text "mo:base/Text";
+import Float "mo:base/Float";
+import Iter "mo:base/Iter";
+import Array "mo:base/Array";
+import Result "mo:base/Result";
+import Buffer "mo:base/Buffer";
+import Option "mo:base/Option";
+
 persistent actor MeetingManagement {
 
   // Types for Meeting Management

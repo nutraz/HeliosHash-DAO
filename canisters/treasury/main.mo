@@ -1,3 +1,5 @@
+import Ledger "./ledger.mo";
+
 // Refactored Treasury canister delegating core logic to ledger.mo (pure module)
 
 

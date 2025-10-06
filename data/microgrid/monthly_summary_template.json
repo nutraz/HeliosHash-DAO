@@ -1,0 +1,28 @@
+{
+  "month": "2025-10",
+  "capacityKW": 50,
+  "totalProductionKWh": 6850,
+  "averageDailyKWh": 228,
+  "capacityFactor": 0.19,
+  "gridExportKWh": 1280,
+  "revenueINR": 45600,
+  "breakdown": {
+    "tier1_grid": 28400,
+    "tier1_agricultural": 8200,
+    "tier2_computing": 7000,
+    "tier3_speculative": 2000
+  },
+  "technicalMetrics": {
+    "peakProductionKW": 47.2,
+    "averageProductionKW": 9.5,
+    "sunnyDaysKWh": 245,
+    "cloudyDaysKWh": 195,
+    "rainyDaysKWh": 85
+  },
+  "impactMetrics": {
+    "householdsServed": 30,
+    "co2OffsetKg": 3425,
+    "treesEquivalent": 15,
+    "gridReliefHours": 180
+  }
+}

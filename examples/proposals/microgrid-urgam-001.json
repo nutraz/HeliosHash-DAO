@@ -1,8 +1,8 @@
 {
-  "idempotencyKey": "microgrid-urgam-001",
-  "title": "Fund Microgrid #1 – Urgam Valley (5 kW)",
-  "description": "Install a 5 kW solar microgrid in Urgam Valley to power 12 households, a village learning room, and 2 productive-use appliances. Includes local training and telemetry for impact tracking.",
-  "capacityKW": 5,
+  "idempotencyKey": "microgrid-pilot-001",
+  "title": "50kW Solar Microgrid - Phase 1 Pilot",
+  "description": "Deploy 50kW solar microgrid with co-ownership model for Urgam Valley pilot project. Includes 30kW guaranteed services (grid feed-in, agriculture), 15kW edge computing, and 5kW speculative computing.",
+  "capacityKW": 50,
   "location": {
     "village": "Urgam Valley",
     "district": "Chamoli",
@@ -11,8 +11,8 @@
     "lon": 79.5667
   },
   "budget": {
-    "capexINR": 425000,
-    "owpRewardAtomic": 500000000
+    "capexINR": 5000000,
+    "owpRewardAtomic": 500000000000
   },
   "milestones": [
     { "name": "Site Verification", "expectedDate": "2025-10-10", "rewardPortionBps": 2000 },
@@ -20,12 +20,12 @@
     { "name": "Commissioned", "expectedDate": "2025-10-24", "rewardPortionBps": 5000 }
   ],
   "impact": {
-    "households": 12,
-    "jobsSupported": 3,
-    "estAnnualKWh": 8212.5
+    "households": 120,
+    "jobsSupported": 15,
+    "estAnnualKWh": 82125
   },
   "localization": {
-    "hiSummary": "5 kW सौर माइक्रोग्रिड – 12 घरों और सामुदायिक उपयोग के लिए",
-    "guSummary": "5 kW સોલાર માઇક્રોગ્રિડ – 12 ઘરો અને સમુદાય માટે"
+    "hiSummary": "50 kW सौर माइक्रोग्रिड – 120 घरों और सामुदायिक उपयोग के लिए",
+    "guSummary": "50 kW સોલાર માઇક્રોગ્રિડ – 120 ઘરો અને સમુદાય માટે"
   }
 }

@@ -1,8 +1,8 @@
-# Feature Specification: 5kW Rooftop Solar Co-Ownership MVP
+# Feature Specification: 50kW Rooftop Solar Co-Ownership MVP
 
 **Status**: Reality Check
 **Timeline**: 30 days
-**Budget**: ₹3L max (including my own investment)
+**Budget**: ₹50L max (including my own investment)
 
 ## User Scenarios & Testing
 

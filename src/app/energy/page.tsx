@@ -96,19 +96,19 @@ export default function EnergyPage() {
             <div className='flex justify-between items-center'>
               <span className='text-sm text-gray-300'>Daily Target</span>
               <span className='font-semibold text-white'>
-                {dailyGeneration.toFixed(1)} / 25 kWh
+                {dailyGeneration.toFixed(1)} / 225 kWh
               </span>
             </div>
-            <Progress value={(dailyGeneration / 25) * 100} className='h-2' />
+            <Progress value={(dailyGeneration / 225) * 100} className='h-2' />
           </div>
         </CardContent>
       </Card>
 
       {/* Energy Sources */}
       <div className='grid grid-cols-2 gap-4 mb-4'>
-        <ActionCard icon='☀️' title='Solar Panels' description='12 panels • 3.6kW capacity' />
+        <ActionCard icon='☀️' title='Solar Panels' description='125 panels • 50kW capacity' />
 
-        <ActionCard icon={Battery} title='Battery Storage' description='15kWh • 73% charged' />
+        <ActionCard icon={Battery} title='Battery Storage' description='100kWh • 73% charged' />
 
         <ActionCard icon={Home} title='Home Usage' description='1.2kW • Real-time' />
 

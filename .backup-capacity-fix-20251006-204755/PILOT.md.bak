@@ -45,7 +45,7 @@ Key Fields:
 - idempotencyKey
 - title
 - description (local language snippet optional)
-- capacityKW: 50
+- capacityKW: 5
 - location: { village, district, state, lat, lon }
 - budget: { capexINR, owpRewardAtomic }
 - milestones: [ { name, expectedDate, rewardPortionBps } ]

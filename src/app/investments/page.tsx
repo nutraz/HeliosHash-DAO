@@ -56,7 +56,7 @@ export default function InvestmentsPage() {
     <div className='max-w-6xl mx-auto p-6 space-y-6'>
       {/* Header */}
       <div className='text-center space-y-2'>
-        <h1 className='text-4xl font-bold text-gray-900'>5kW Solar Co-Ownership MVP</h1>
+        <h1 className='text-4xl font-bold text-gray-900'>50kW Solar Co-Ownership MVP</h1>
         <p className='text-lg text-gray-600'>Reality check: 30-day validation with real money</p>
         <Badge variant='outline' className='text-sm'>
           {investments.length} Co-owners | ₹{totalInvestment.toLocaleString('en-IN')} Total
@@ -175,7 +175,7 @@ export default function InvestmentsPage() {
               <div className='space-y-2'>
                 <div className='flex justify-between'>
                   <span>System Size</span>
-                  <span className='font-bold'>5kW</span>
+                  <span className='font-bold'>50kW</span>
                 </div>
                 <div className='flex justify-between'>
                   <span>Installation Status</span>

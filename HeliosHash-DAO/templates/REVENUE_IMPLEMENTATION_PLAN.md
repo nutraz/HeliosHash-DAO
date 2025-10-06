@@ -2,6 +2,17 @@
 
 **Urgam Valley Solar Pilot - Practical Deployment Strategy**
 
+## Total System Capacity: 50kW
+
+This implementation plan is based on a **50kW solar microgrid** deployment with the following capacity allocation:
+- **Guaranteed Services (Tier 1)**: 30kW - Grid feed-in, agricultural services, community facilities
+- **Edge Computing (Tier 2)**: 15kW - Micro data center, AI services, CDN cache  
+- **Speculative Computing (Tier 3)**: 5kW - Bitcoin mining, rendering, proof-of-work projects
+
+**Daily Production Target**: 200-250 kWh  
+**Annual Revenue Target**: ₹7-10 lakh  
+**Investment**: ₹50 lakh capex
+
 ## Project Setup Using HeliosHash-DAO Structure
 
 ### Phase 1: Foundation Setup (Weeks 1-4)

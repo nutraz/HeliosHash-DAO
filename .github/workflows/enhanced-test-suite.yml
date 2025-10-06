@@ -331,7 +331,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: 📥 Download All Test Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           path: all-test-results/
 
@@ -389,7 +389,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 📥 Download Performance Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: test-reports-performance-chromium
           path: performance-results/
@@ -418,7 +418,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 📥 Download Security Test Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: test-reports-security-chromium
           path: security-results/

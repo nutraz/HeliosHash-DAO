@@ -138,7 +138,7 @@
     "react-day-picker": "^9.11.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.63.0",
-    "react-i18next": "^13.5.0",
+    "react-i18next": "^15.7.4",
     "react-leaflet": "^5.0.0",
     "react-markdown": "^10.1.0",
     "react-resizable-panels": "^3.0.6",

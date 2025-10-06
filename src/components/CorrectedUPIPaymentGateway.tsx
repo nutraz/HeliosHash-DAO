@@ -308,8 +308,8 @@ const CorrectedUPIPaymentGateway = () => {
                       step > index + 1
                         ? 'bg-green-500 text-white'
                         : step === index + 1
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-200 text-gray-500'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-gray-200 text-gray-500'
                     }`}
                   >
                     {step > index + 1 ? <CheckCircle className='w-5 h-5' /> : index + 1}
@@ -864,8 +864,8 @@ const CorrectedUPIPaymentGateway = () => {
                     step.status === 'success'
                       ? 'bg-green-50 border-green-200'
                       : step.status === 'error'
-                      ? 'bg-red-50 border-red-200'
-                      : 'bg-blue-50 border-blue-200'
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-blue-50 border-blue-200'
                   }`}
                 >
                   <div className='flex-shrink-0'>

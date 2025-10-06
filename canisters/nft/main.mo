@@ -3,7 +3,7 @@
 
 
 
-actor CommunityBadges {
+persistent actor CommunityBadges {
   
   // === Types ===
   
@@ -54,13 +54,31 @@ actor CommunityBadges {
   };
   
   // === State ===
-  
-  private stable var nextBadgeId : BadgeId = 1;
-  private stable var nextTemplateId : BadgeId = 1;
-  
-  private var badgeTemplates = HashMap.HashMap<BadgeId, BadgeTemplate>(10, Nat.equal, func(n: Nat) : Nat32 { Nat.hash(n) });
-  private var memberBadges = HashMap.HashMap<MemberId, [Badge]>(100, Principal.equal, Principal.hash);
-  private var badgeAchievements = HashMap.HashMap<BadgeId, [Achievement]>(100, Nat.equal, func(n: Nat) : Nat32 { Nat.hash(n) });
+
+  // 'stable' is implicit for top-level mutable vars; removed redundant keywords
+  private var nextBadgeId : BadgeId = 1;
+  private var nextTemplateId : BadgeId = 1;
+
+  // Custom hash function for Nat (replacement for deprecated Hash.hash)
+  private func natHash(n: Nat) : Nat32 {
+    let hash = Int.abs(n);
+    var h : Nat32 = 0;
+    var remaining = hash;
+
+    // FNV-1a like hash
+    while (remaining > 0) {
+      let byte = Nat32.fromNat(remaining % 256);
+      h := (h ^ byte) *% 0x01000193;  // FNV prime
+      remaining := remaining / 256;
+    };
+
+    // Ensure non-zero for better distribution
+    if (h == 0) { 1 } else { h }
+  };
+
+  private transient var badgeTemplates = HashMap.HashMap<BadgeId, BadgeTemplate>(10, Nat.equal, natHash);
+  private transient var memberBadges = HashMap.HashMap<MemberId, [Badge]>(100, Principal.equal, Principal.hash);
+  private transient var badgeAchievements = HashMap.HashMap<BadgeId, [Achievement]>(100, Nat.equal, natHash);
   
   // === Initialization ===
   
@@ -346,7 +364,7 @@ actor CommunityBadges {
   
   // === Badge Earning Automation ===
   
-  public shared({ caller }) func checkAndAwardBadges(member: MemberId, action: Text, metadata: Text) : async [Badge] {
+  public shared({ caller = _ }) func checkAndAwardBadges(member: MemberId, action: Text, metadata: Text) : async [Badge] {
     // Auto-award badges based on actions
     // This would be called by other canisters when members perform actions
     

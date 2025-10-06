@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 interface User {
   id: string;
@@ -8,12 +8,12 @@ interface User {
   name: string;
   role: string;
   walletAddress?: string;
-  authenticationMethod: "internet-identity" | "wallet" | "email";
+  authenticationMethod: 'internet-identity' | 'wallet' | 'email';
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (method: "internet-identity" | "wallet" | "email", credentials?: any) => Promise<void>;
+  login: (method: 'internet-identity' | 'wallet' | 'email', credentials?: any) => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   isAuthenticated: boolean;
@@ -27,68 +27,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check for existing session on mount
-    const savedUser = localStorage.getItem("helioshash_user");
+    const savedUser = localStorage.getItem('helioshash_user');
     if (savedUser) {
       try {
         setUser(JSON.parse(savedUser));
       } catch (error) {
-        console.error("Error parsing saved user:", error);
-        localStorage.removeItem("helioshash_user");
+        console.error('Error parsing saved user:', error);
+        localStorage.removeItem('helioshash_user');
       }
     }
     setIsLoading(false);
   }, []);
 
-  const login = async (method: "internet-identity" | "wallet" | "email", credentials?: any) => {
+  const login = async (method: 'internet-identity' | 'wallet' | 'email', credentials?: any) => {
     setIsLoading(true);
-    
+
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       let newUser: User;
-      
+
       switch (method) {
-        case "internet-identity":
+        case 'internet-identity':
           newUser = {
-            id: "ii_" + Math.random().toString(36).substr(2, 9),
-            email: "user@internetidentity.org",
-            name: "Internet Identity User",
-            role: "member",
-            authenticationMethod: "internet-identity"
+            id: 'ii_' + Math.random().toString(36).substr(2, 9),
+            email: 'user@internetidentity.org',
+            name: 'Internet Identity User',
+            role: 'member',
+            authenticationMethod: 'internet-identity',
           };
           break;
-          
-        case "wallet":
+
+        case 'wallet':
           newUser = {
-            id: "wallet_" + Math.random().toString(36).substr(2, 9),
-            email: "user@wallet.org",
-            name: "Wallet User",
-            role: "member",
-            walletAddress: "0x" + Math.random().toString(16).substr(2, 40),
-            authenticationMethod: "wallet"
+            id: 'wallet_' + Math.random().toString(36).substr(2, 9),
+            email: 'user@wallet.org',
+            name: 'Wallet User',
+            role: 'member',
+            walletAddress: '0x' + Math.random().toString(16).substr(2, 40),
+            authenticationMethod: 'wallet',
           };
           break;
-          
-        case "email":
+
+        case 'email':
           newUser = {
-            id: "email_" + Math.random().toString(36).substr(2, 9),
+            id: 'email_' + Math.random().toString(36).substr(2, 9),
             email: credentials.email,
-            name: credentials.email.split("@")[0],
-            role: "member",
-            authenticationMethod: "email"
+            name: credentials.email.split('@')[0],
+            role: 'member',
+            authenticationMethod: 'email',
           };
           break;
-          
+
         default:
-          throw new Error("Invalid authentication method");
+          throw new Error('Invalid authentication method');
       }
-      
+
       setUser(newUser);
-      localStorage.setItem("helioshash_user", JSON.stringify(newUser));
-      
+      localStorage.setItem('helioshash_user', JSON.stringify(newUser));
     } catch (error) {
-      console.error("Login error:", error);
+      console.error('Login error:', error);
       throw error;
     } finally {
       setIsLoading(false);
@@ -97,7 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("helioshash_user");
+    localStorage.removeItem('helioshash_user');
   };
 
   const value: AuthContextType = {
@@ -105,20 +104,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     login,
     logout,
     isLoading,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 }

@@ -28,15 +28,15 @@ export const NFTMarketplace = ({ userBalance = 0, onPurchaseNFT }: NFTMarketplac
         const projectBenefits: ProjectBenefitAlias | undefined = nft.projectBenefits
           ? nft.projectBenefits
           : nft.projectBenefit
-          ? {
-              solarCapacityKW: nft.projectBenefit.solarCapacityContribution,
-              jobsCreated: nft.projectBenefit.communityJobsSupported,
-              carbonOffsetTons: nft.projectBenefit.carbonOffsetGenerated,
-              villagesImpacted: nft.projectBenefit.villagesImpacted,
-              directFundingUSD: nft.projectBenefit.directFunding,
-              owpTokensGenerated: nft.projectBenefit.owpTokensGenerated,
-            }
-          : undefined;
+            ? {
+                solarCapacityKW: nft.projectBenefit.solarCapacityContribution,
+                jobsCreated: nft.projectBenefit.communityJobsSupported,
+                carbonOffsetTons: nft.projectBenefit.carbonOffsetGenerated,
+                villagesImpacted: nft.projectBenefit.villagesImpacted,
+                directFundingUSD: nft.projectBenefit.directFunding,
+                owpTokensGenerated: nft.projectBenefit.owpTokensGenerated,
+              }
+            : undefined;
 
         return {
           ...nft,
@@ -178,12 +178,12 @@ export const NFTMarketplace = ({ userBalance = 0, onPurchaseNFT }: NFTMarketplac
                     nft.tier === 'founder'
                       ? 'bg-purple-500 text-white'
                       : nft.tier === 'platinum'
-                      ? 'bg-gray-400 text-black'
-                      : nft.tier === 'gold'
-                      ? 'bg-yellow-500 text-black'
-                      : nft.tier === 'silver'
-                      ? 'bg-gray-300 text-black'
-                      : 'bg-orange-600 text-white'
+                        ? 'bg-gray-400 text-black'
+                        : nft.tier === 'gold'
+                          ? 'bg-yellow-500 text-black'
+                          : nft.tier === 'silver'
+                            ? 'bg-gray-300 text-black'
+                            : 'bg-orange-600 text-white'
                   }`}
                 >
                   {nft.tier.toUpperCase()}

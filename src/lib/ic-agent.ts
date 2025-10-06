@@ -102,7 +102,11 @@ export const getCanisterActors = async (identity?: Identity) => {
 
 // Error handling for IC calls
 export class ICAgentError extends Error {
-  constructor(message: string, public readonly code?: string, public readonly details?: any) {
+  constructor(
+    message: string,
+    public readonly code?: string,
+    public readonly details?: any
+  ) {
     super(message);
     this.name = 'ICAgentError';
   }

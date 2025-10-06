@@ -180,8 +180,8 @@ const VoiceOnboardingFlow = () => {
                     getLang() === 'hi'
                       ? 'अपना नाम लिखें...'
                       : getLang() === 'grw'
-                      ? 'अपणु नाम लिखो...'
-                      : 'Type your name...'
+                        ? 'अपणु नाम लिखो...'
+                        : 'Type your name...'
                   }
                   className='w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-lg'
                 />
@@ -209,13 +209,13 @@ const VoiceOnboardingFlow = () => {
                       ? getLang() === 'hi'
                         ? 'सुन रहे हैं...'
                         : getLang() === 'grw'
-                        ? 'सुणन लागड़ा...'
-                        : 'Listening...'
+                          ? 'सुणन लागड़ा...'
+                          : 'Listening...'
                       : getLang() === 'hi'
-                      ? 'बोलने के लिए टैप करें'
-                      : getLang() === 'grw'
-                      ? 'बोलन खनु दबाओ'
-                      : 'Tap to speak'}
+                        ? 'बोलने के लिए टैप करें'
+                        : getLang() === 'grw'
+                          ? 'बोलन खनु दबाओ'
+                          : 'Tap to speak'}
                   </p>
                 </button>
               </div>
@@ -263,8 +263,8 @@ const VoiceOnboardingFlow = () => {
                       {getLang() === 'hi'
                         ? '🎁 विशेष लाभ'
                         : getLang() === 'grw'
-                        ? '🎁 विशेष लाभ'
-                        : '🎁 Special Benefits'}
+                          ? '🎁 विशेष लाभ'
+                          : '🎁 Special Benefits'}
                     </div>
                     <ul className='text-xs text-pink-700 space-y-1 text-left'>
                       <li>• 20% {getLang() === 'hi' ? 'बोनस टोकन' : 'Bonus Tokens'}</li>
@@ -294,8 +294,8 @@ const VoiceOnboardingFlow = () => {
                       {getLang() === 'hi'
                         ? 'मानक लाभ'
                         : getLang() === 'grw'
-                        ? 'मानक लाभ'
-                        : 'Standard Benefits'}
+                          ? 'मानक लाभ'
+                          : 'Standard Benefits'}
                     </div>
                   </div>
                 </button>
@@ -348,8 +348,8 @@ const VoiceOnboardingFlow = () => {
                   {getLang() === 'hi'
                     ? '🎉 स्वागत है!'
                     : getLang() === 'grw'
-                    ? '🎉 स्वागत छ!'
-                    : '🎉 Welcome!'}
+                      ? '🎉 स्वागत छ!'
+                      : '🎉 Welcome!'}
                 </h2>
                 <p className='text-xl text-gray-600'>{userInput || 'Community Member'}</p>
               </div>
@@ -361,8 +361,8 @@ const VoiceOnboardingFlow = () => {
                     {getLang() === 'hi'
                       ? 'आपके विशेष लाभ'
                       : getLang() === 'grw'
-                      ? 'तुमरा विशेष लाभ'
-                      : 'Your Special Benefits'}
+                        ? 'तुमरा विशेष लाभ'
+                        : 'Your Special Benefits'}
                   </h3>
                   <div className='space-y-3'>
                     <div className='flex items-start gap-3 bg-white p-4 rounded-lg'>
@@ -430,8 +430,8 @@ const VoiceOnboardingFlow = () => {
                   {getLang() === 'hi'
                     ? '🌱 अगले कदम'
                     : getLang() === 'grw'
-                    ? '🌱 अगला कदम'
-                    : '🌱 Next Steps'}
+                      ? '🌱 अगला कदम'
+                      : '🌱 Next Steps'}
                 </h3>
                 <ul className='space-y-2 text-gray-700'>
                   <li className='flex items-center gap-2'>
@@ -456,8 +456,8 @@ const VoiceOnboardingFlow = () => {
                 {getLang() === 'hi'
                   ? '🚀 डैशबोर्ड पर जाएं'
                   : getLang() === 'grw'
-                  ? '🚀 डैशबोर्ड मा जाओ'
-                  : '🚀 Go to Dashboard'}
+                    ? '🚀 डैशबोर्ड मा जाओ'
+                    : '🚀 Go to Dashboard'}
               </button>
             </div>
           )}
@@ -478,8 +478,8 @@ const VoiceOnboardingFlow = () => {
               {getLang() === 'hi'
                 ? 'आवाज़ मार्गदर्शन'
                 : getLang() === 'grw'
-                ? 'आवाज मार्गदर्शन'
-                : 'Voice Guide'}
+                  ? 'आवाज मार्गदर्शन'
+                  : 'Voice Guide'}
             </span>
           </button>
 
@@ -494,8 +494,8 @@ const VoiceOnboardingFlow = () => {
             {getLang() === 'hi'
               ? '🌿 बघपत → उर्गम घाटी पायलट | सौर-संचालित समुदाय शासन'
               : getLang() === 'grw'
-              ? '🌿 बघपत → उर्गम घाटी पायलट | सौर-संचालित समुदाय'
-              : '🌿 Baghpat → Urgam Valley Pilot | Solar-Powered Community Governance'}
+                ? '🌿 बघपत → उर्गम घाटी पायलट | सौर-संचालित समुदाय'
+                : '🌿 Baghpat → Urgam Valley Pilot | Solar-Powered Community Governance'}
           </p>
         </div>
       </div>

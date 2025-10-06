@@ -243,8 +243,8 @@ export const ProjectManagement = ({
                   index === currentStep
                     ? 'bg-yellow-500 text-black'
                     : index < currentStep
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-600 text-gray-300'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-600 text-gray-300'
                 }`}
               >
                 {index < currentStep ? '✓' : index + 1}

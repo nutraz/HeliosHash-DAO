@@ -79,7 +79,10 @@ export interface Proposal {
   };
 }
 export class HHDAOError extends Error {
-  constructor(message: string, public cause?: string) {
+  constructor(
+    message: string,
+    public cause?: string
+  ) {
     super(message);
     this.name = 'HHDAOError';
   }

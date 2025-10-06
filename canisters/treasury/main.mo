@@ -1,6 +1,8 @@
 // Refactored Treasury canister delegating core logic to ledger.mo (pure module)
-
-
+import Time "mo:base/Time";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Ledger "ledger";
 
 persistent actor Treasury {
   // Re-export selected types for external interface compatibility

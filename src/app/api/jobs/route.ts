@@ -28,9 +28,14 @@ What We Offer:
       'Physical fitness for rooftop work and equipment handling',
       'Attention to detail and safety consciousness',
       'Local resident of Gujarat preferred',
-      'Valid driver\'s license preferred'
+      "Valid driver's license preferred",
     ],
-    skills: ['Solar Panel Installation', 'Electrical Wiring', 'Safety Protocols', 'Equipment Maintenance'],
+    skills: [
+      'Solar Panel Installation',
+      'Electrical Wiring',
+      'Safety Protocols',
+      'Equipment Maintenance',
+    ],
     poster: 'dao-admin',
     posterName: 'HeliosHash DAO',
     posterAvatar: '/logo.svg',
@@ -43,12 +48,18 @@ What We Offer:
     urgency: 'High',
     experienceLevel: 'Entry',
     workType: 'FullTime',
-    benefits: ['Health Insurance', 'Training Provided', 'Equipment Supplied', 'Transportation Allowance'],
+    benefits: [
+      'Health Insurance',
+      'Training Provided',
+      'Equipment Supplied',
+      'Transportation Allowance',
+    ],
     companyInfo: {
       name: 'HeliosHash DAO',
-      description: 'Decentralized solar energy infrastructure organization focused on community-driven renewable energy projects.',
-      website: 'https://helioshash.org'
-    }
+      description:
+        'Decentralized solar energy infrastructure organization focused on community-driven renewable energy projects.',
+      website: 'https://helioshash.org',
+    },
   },
   {
     id: '2',
@@ -75,7 +86,7 @@ Technical Requirements:
       'Proficiency in Motoko or Rust programming',
       'Understanding of DeFi protocols and smart contract security',
       'Experience with Internet Computer ecosystem',
-      'Strong problem-solving and analytical skills'
+      'Strong problem-solving and analytical skills',
     ],
     skills: ['Motoko', 'Smart Contracts', 'Internet Computer', 'DeFi', 'Web3', 'Rust'],
     poster: 'tech-lead',
@@ -91,8 +102,8 @@ Technical Requirements:
     companyInfo: {
       name: 'HeliosHash DAO',
       description: 'Decentralized solar energy infrastructure organization',
-      website: 'https://helioshash.org'
-    }
+      website: 'https://helioshash.org',
+    },
   },
   {
     id: '3',
@@ -120,9 +131,14 @@ Impact Areas:
       'Experience in community engagement or social work',
       'Understanding of rural development challenges',
       'Local network in Gujarat preferred',
-      'Bachelor\'s degree in relevant field'
+      "Bachelor's degree in relevant field",
     ],
-    skills: ['Community Engagement', 'Stakeholder Relations', 'Public Speaking', 'Project Management'],
+    skills: [
+      'Community Engagement',
+      'Stakeholder Relations',
+      'Public Speaking',
+      'Project Management',
+    ],
     poster: 'community-manager',
     posterName: 'Community Team',
     status: 'Active',
@@ -136,8 +152,8 @@ Impact Areas:
     companyInfo: {
       name: 'HeliosHash DAO',
       description: 'Decentralized solar energy infrastructure organization',
-      website: 'https://helioshash.org'
-    }
+      website: 'https://helioshash.org',
+    },
   },
   {
     id: '4',
@@ -159,9 +175,14 @@ Key Responsibilities:
       'Knowledge of ASIC hardware and troubleshooting',
       'Understanding of electrical systems and power management',
       'Ability to work in shift rotations including nights/weekends',
-      'Strong attention to detail for monitoring systems'
+      'Strong attention to detail for monitoring systems',
     ],
-    skills: ['ASIC Mining', 'Hardware Troubleshooting', 'Power Management', 'Data Center Operations'],
+    skills: [
+      'ASIC Mining',
+      'Hardware Troubleshooting',
+      'Power Management',
+      'Data Center Operations',
+    ],
     poster: 'mining-team',
     posterName: 'Mining Operations',
     status: 'Active',
@@ -171,7 +192,7 @@ Key Responsibilities:
     urgency: 'High',
     experienceLevel: 'Mid',
     workType: 'FullTime',
-    benefits: ['Shift Allowance', 'Technical Training', 'Performance Bonuses', 'Equipment Access']
+    benefits: ['Shift Allowance', 'Technical Training', 'Performance Bonuses', 'Equipment Access'],
   },
   {
     id: '5',
@@ -193,7 +214,7 @@ Key Responsibilities:
       'Strong digital literacy and computer skills',
       'Patience and ability to work with diverse age groups',
       'Fluency in local languages (Gujarati, Hindi)',
-      'Passion for community development'
+      'Passion for community development',
     ],
     skills: ['Digital Literacy', 'Adult Education', 'Blockchain Education', 'Community Training'],
     poster: 'education-team',
@@ -205,14 +226,19 @@ Key Responsibilities:
     urgency: 'Medium',
     experienceLevel: 'Entry',
     workType: 'PartTime',
-    benefits: ['Flexible Schedule', 'Community Impact', 'Training Materials Provided', 'Skill Development']
-  }
+    benefits: [
+      'Flexible Schedule',
+      'Community Impact',
+      'Training Materials Provided',
+      'Skill Development',
+    ],
+  },
 ];
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    
+
     // Parse query parameters
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -234,78 +260,77 @@ export async function GET(request: NextRequest) {
     // Apply filters
     if (category) {
       const categories = category.split(',');
-      filteredJobs = filteredJobs.filter(job => categories.includes(job.category));
+      filteredJobs = filteredJobs.filter((job) => categories.includes(job.category));
     }
 
     if (location) {
       const locations = location.split(',');
-      filteredJobs = filteredJobs.filter(job => locations.includes(job.location.type));
+      filteredJobs = filteredJobs.filter((job) => locations.includes(job.location.type));
     }
 
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredJobs = filteredJobs.filter(job =>
-        job.title.toLowerCase().includes(searchLower) ||
-        job.description.toLowerCase().includes(searchLower) ||
-        job.skills.some(skill => skill.toLowerCase().includes(searchLower)) ||
-        job.category.toLowerCase().includes(searchLower)
+      filteredJobs = filteredJobs.filter(
+        (job) =>
+          job.title.toLowerCase().includes(searchLower) ||
+          job.description.toLowerCase().includes(searchLower) ||
+          job.skills.some((skill) => skill.toLowerCase().includes(searchLower)) ||
+          job.category.toLowerCase().includes(searchLower)
       );
     }
 
     if (featured) {
-      filteredJobs = filteredJobs.filter(job => job.featured);
+      filteredJobs = filteredJobs.filter((job) => job.featured);
     }
 
     if (experienceLevel) {
       const levels = experienceLevel.split(',');
-      filteredJobs = filteredJobs.filter(job => 
-        job.experienceLevel && levels.includes(job.experienceLevel)
+      filteredJobs = filteredJobs.filter(
+        (job) => job.experienceLevel && levels.includes(job.experienceLevel)
       );
     }
 
     if (workType) {
       const types = workType.split(',');
-      filteredJobs = filteredJobs.filter(job => 
-        job.workType && types.includes(job.workType)
-      );
+      filteredJobs = filteredJobs.filter((job) => job.workType && types.includes(job.workType));
     }
 
     if (urgency) {
       const urgencyLevels = urgency.split(',');
-      filteredJobs = filteredJobs.filter(job => 
-        job.urgency && urgencyLevels.includes(job.urgency)
+      filteredJobs = filteredJobs.filter(
+        (job) => job.urgency && urgencyLevels.includes(job.urgency)
       );
     }
 
     if (minCompensation) {
       const min = parseFloat(minCompensation);
-      filteredJobs = filteredJobs.filter(job => job.compensation.amount >= min);
+      filteredJobs = filteredJobs.filter((job) => job.compensation.amount >= min);
     }
 
     if (maxCompensation) {
       const max = parseFloat(maxCompensation);
-      filteredJobs = filteredJobs.filter(job => job.compensation.amount <= max);
+      filteredJobs = filteredJobs.filter((job) => job.compensation.amount <= max);
     }
 
     // Posted date filter
     if (posted && posted !== 'All') {
       const now = Date.now();
       let timeLimit = 0;
-      
+
       switch (posted) {
         case 'Today':
-          timeLimit = now - (24 * 60 * 60 * 1000);
+          timeLimit = now - 24 * 60 * 60 * 1000;
           break;
         case 'Week':
-          timeLimit = now - (7 * 24 * 60 * 60 * 1000);
+          timeLimit = now - 7 * 24 * 60 * 60 * 1000;
           break;
         case 'Month':
-          timeLimit = now - (30 * 24 * 60 * 60 * 1000);
+          timeLimit = now - 30 * 24 * 60 * 60 * 1000;
           break;
       }
-      
+
       if (timeLimit > 0) {
-        filteredJobs = filteredJobs.filter(job => job.created >= timeLimit);
+        filteredJobs = filteredJobs.filter((job) => job.created >= timeLimit);
       }
     }
 
@@ -348,23 +373,20 @@ export async function GET(request: NextRequest) {
       total: filteredJobs.length,
       page,
       limit,
-      hasMore: endIndex < filteredJobs.length
+      hasMore: endIndex < filteredJobs.length,
     };
 
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error fetching jobs:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch jobs' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 });
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const jobData = await request.json();
-    
+
     // In a real app, validate the data and save to database
     const newJob: JobPosting = {
       id: `job-${Date.now()}`,
@@ -372,7 +394,7 @@ export async function POST(request: NextRequest) {
       created: Date.now(),
       status: 'Active' as const,
       applicants: [],
-      applicationCount: 0
+      applicationCount: 0,
     };
 
     // Add to mock database (in real app, save to IC canister or database)
@@ -381,9 +403,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(newJob, { status: 201 });
   } catch (error) {
     console.error('Error creating job:', error);
-    return NextResponse.json(
-      { error: 'Failed to create job' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to create job' }, { status: 500 });
   }
 }

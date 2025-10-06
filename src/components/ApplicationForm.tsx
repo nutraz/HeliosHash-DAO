@@ -446,10 +446,10 @@ export function ApplicationForm({ onSubmit, onCancel, initialType }: Application
             'High' in formData.priority
               ? 'High'
               : 'Medium' in formData.priority
-              ? 'Medium'
-              : 'Low' in formData.priority
-              ? 'Low'
-              : 'Urgent'
+                ? 'Medium'
+                : 'Low' in formData.priority
+                  ? 'Low'
+                  : 'Urgent'
           }
           onChange={(e) => {
             const priorityMap: Record<string, ApplicationPriority> = {
@@ -948,10 +948,10 @@ export function ApplicationForm({ onSubmit, onCancel, initialType }: Application
                   {'High' in formData.priority
                     ? 'High'
                     : 'Medium' in formData.priority
-                    ? 'Medium'
-                    : 'Low' in formData.priority
-                    ? 'Low'
-                    : 'Urgent'}
+                      ? 'Medium'
+                      : 'Low' in formData.priority
+                        ? 'Low'
+                        : 'Urgent'}
                 </div>
               </div>
             </div>
@@ -1079,8 +1079,8 @@ export function ApplicationForm({ onSubmit, onCancel, initialType }: Application
                       isActive
                         ? 'bg-blue-500 text-white'
                         : isCompleted
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-600 text-gray-300'
+                          ? 'bg-green-500 text-white'
+                          : 'bg-gray-600 text-gray-300'
                     }`}
                   >
                     <IconComponent className='w-4 h-4' />

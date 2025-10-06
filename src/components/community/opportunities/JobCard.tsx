@@ -141,8 +141,8 @@ export default function JobCard({ job, onClick, className }: JobCardProps) {
               {job.location.type === 'OnSite'
                 ? job.location.location
                 : job.location.type === 'Remote'
-                ? 'Remote'
-                : `Hybrid • ${job.location.location}`}
+                  ? 'Remote'
+                  : `Hybrid • ${job.location.location}`}
             </div>
 
             <div className='flex items-center gap-1 text-green-600 font-medium'>

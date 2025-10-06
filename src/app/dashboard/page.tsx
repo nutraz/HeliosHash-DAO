@@ -291,8 +291,8 @@ export default function DashboardPage() {
             case 'community':
               router.push('/community');
               break;
-            case 'partners':
-              router.push('/partners');
+            case 'payment':
+              router.push('/payment');
               break;
             case 'rewards':
               router.push('/rewards');

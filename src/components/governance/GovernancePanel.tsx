@@ -76,7 +76,6 @@ export const GovernancePanel: React.FC<GovernancePanelProps> = ({
         const data = await GovernanceService.getProposals(projectId);
         if (!cancelled) setProposals(data);
       } catch (e) {
-        // eslint-disable-next-line no-console
         console.error('Failed to load proposals', e);
       } finally {
         if (!cancelled) setLoading(false);

@@ -14,9 +14,11 @@ pnpm dev
 ## 📲 Access Options
 
 ### 1. **React Mobile App** (Full Features)
+
 ```
 http://localhost:3000/mobile
 ```
+
 - Complete React implementation
 - Real-time data updates
 - Swipe navigation
@@ -24,9 +26,11 @@ http://localhost:3000/mobile
 - Canister integration ready
 
 ### 2. **Standalone Demo** (No Dependencies)
+
 ```
 open mobile-demo.html
 ```
+
 - Pure HTML/CSS/JavaScript
 - No build process required
 - Perfect for quick demos
@@ -35,6 +39,7 @@ open mobile-demo.html
 ## 🎯 Features
 
 ### 🏠 **Home Dashboard**
+
 - ⚡ Real-time energy generation (847.3 kWh)
 - 🌍 Carbon savings tracking (234.7kg CO₂)
 - 💰 Earnings display ($156.82)
@@ -43,6 +48,7 @@ open mobile-demo.html
 - 📱 Recent activity feed
 
 ### ⚡ **Mining Center**
+
 - 🔄 Start/Stop mining controls
 - 📊 Real-time metrics dashboard
 - 🌡️ Temperature monitoring (42°C)
@@ -51,6 +57,7 @@ open mobile-demo.html
 - 🔧 Device status monitoring
 
 ### 👥 **Community Hub**
+
 - 📰 Social activity feed
 - 🗳️ DAO proposal voting
 - 🏆 Energy generation leaderboard
@@ -59,6 +66,7 @@ open mobile-demo.html
 - 📊 Community statistics
 
 ### 🎁 **Rewards Center**
+
 - 🌟 Level 8 progression (15,847 points)
 - 🏆 Achievement system (23 unlocked)
 - 🛒 Reward marketplace
@@ -67,6 +75,7 @@ open mobile-demo.html
 - ⚡ Performance boosters
 
 ### 💰 **Solar Wallet**
+
 - 💎 Portfolio overview ($4,521.80)
 - 🌞 HHDAO tokens (2,847.5)
 - 🔷 ICP balance (15.23)
@@ -77,12 +86,14 @@ open mobile-demo.html
 ## 🎨 Design System
 
 ### **Colors**
+
 - **Primary**: Solar Orange (#ff8c00)
 - **Background**: Deep Space (#010409, #0D1117)
 - **Success**: Green Energy (#27ae60)
 - **Text**: GitHub Dark (#c9d1d9, #8b949e)
 
 ### **Components**
+
 - **Phone Container**: 375x812px (iPhone 13)
 - **Status Bar**: Live time + battery indicators
 - **Bottom Navigation**: 5-tab system
@@ -91,6 +102,7 @@ open mobile-demo.html
 - **Buttons**: Gradient backgrounds + haptic feedback
 
 ### **Animations**
+
 - **Page Transitions**: Smooth slide effects
 - **Swipe Navigation**: Touch-friendly gestures
 - **Loading States**: Shimmer animations
@@ -100,6 +112,7 @@ open mobile-demo.html
 ## 🛠️ Technical Stack
 
 ### **Frontend**
+
 - ⚛️ React 18.3.1 + TypeScript
 - 🎨 Custom CSS with animations
 - 📱 Mobile-first responsive design
@@ -107,6 +120,7 @@ open mobile-demo.html
 - 🔄 Real-time data simulation
 
 ### **Backend Integration** (Ready)
+
 ```typescript
 import { hhdao } from '../declarations/hhdao';
 import { hhdao_dao } from '../declarations/hhdao_dao';
@@ -115,6 +129,7 @@ import { hhdao_telemetry } from '../declarations/hhdao_telemetry';
 ```
 
 ### **File Structure**
+
 ```
 src/mobile/
 ├── MobileApp.tsx           # Main container
@@ -130,17 +145,20 @@ src/mobile/
 ## 📱 Usage Examples
 
 ### Navigation
+
 - **Swipe Left/Right**: Switch between pages
 - **Tap Bottom Icons**: Direct navigation
 - **Swipe Indicators**: Current page dots
 
 ### Interactions
+
 - **Tap Cards**: Hover effects + actions
 - **Achievement System**: Auto-popup notifications
 - **Real-time Updates**: Live data every 3 seconds
 - **Touch Feedback**: Visual response to taps
 
 ### Responsive Behavior
+
 ```css
 /* Auto-adapts to screen size */
 @media (max-width: 395px) {
@@ -155,6 +173,7 @@ src/mobile/
 ## 🔗 Integration Guide
 
 ### 1. **Connect to Canisters**
+
 ```typescript
 // In each page component
 useEffect(() => {
@@ -168,6 +187,7 @@ useEffect(() => {
 ```
 
 ### 2. **Add Authentication**
+
 ```typescript
 import { useAuthContext } from '../hooks/useAuthContext';
 
@@ -175,6 +195,7 @@ const { isAuthenticated, principal } = useAuthContext();
 ```
 
 ### 3. **Real-time Updates**
+
 ```typescript
 // Replace simulation with canister calls
 const updateMetrics = async () => {
@@ -198,11 +219,13 @@ const updateMetrics = async () => {
 ### Common Issues
 
 **Vite not found:**
+
 ```bash
 pnpm install
 ```
 
 **React errors:**
+
 ```bash
 # Clear cache and reinstall
 rm -rf node_modules/.vite
@@ -210,6 +233,7 @@ pnpm install
 ```
 
 **Mobile app not loading:**
+
 ```bash
 # Check route
 http://localhost:3000/mobile

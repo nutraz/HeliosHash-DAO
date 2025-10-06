@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -98,7 +98,7 @@
   --input: oklch(0.25 0 0);
   --ring: oklch(0.65 0.18 60);
   --chart-1: oklch(0.65 0.18 60);
-  --chart-2: oklch(0.55 0.20 120);
+  --chart-2: oklch(0.55 0.2 120);
   --chart-3: oklch(0.75 0.15 180);
   --chart-4: oklch(0.58 0.18 240);
   --chart-5: oklch(0.62 0.16 300);
@@ -116,20 +116,20 @@
   * {
     @apply border-border outline-ring/50;
   }
-  
+
   /* Force gradient backgrounds */
   :root {
     background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f8fafc 100%) !important;
     background-attachment: fixed !important;
     background-size: cover !important;
   }
-  
+
   .dark {
     background: linear-gradient(135deg, #0a1929 0%, #001e3c 50%, #0a1929 100%) !important;
     background-attachment: fixed !important;
     background-size: cover !important;
   }
-  
+
   body {
     @apply text-foreground antialiased;
     background: transparent !important;
@@ -137,7 +137,7 @@
     background-size: cover !important;
     min-height: 100vh;
   }
-  
+
   html {
     background-attachment: fixed !important;
     background-size: cover !important;
@@ -151,11 +151,11 @@
     backdrop-filter: blur(10px);
     background: rgba(var(--card), 0.8);
   }
-  
+
   .minimal-button {
     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
   }
-  
+
   .minimal-text {
     @apply leading-relaxed tracking-tight;
   }
@@ -165,29 +165,34 @@
     background-color: oklch(0.65 0.18 60);
     color: oklch(0.11 0 0);
   }
-  
+
   .india-white {
     background-color: oklch(1 0 0);
     color: oklch(0.11 0 0);
   }
-  
+
   .india-green {
     background-color: oklch(0.45 0.18 120);
     color: oklch(0.98 0 0);
   }
-  
+
   .india-saffron-text {
     color: oklch(0.65 0.18 60);
   }
-  
+
   .india-green-text {
     color: oklch(0.45 0.18 120);
   }
-  
+
   .india-gradient {
-    background: linear-gradient(135deg, oklch(0.65 0.18 60) 0%, oklch(1 0 0) 50%, oklch(0.45 0.18 120) 100%);
+    background: linear-gradient(
+      135deg,
+      oklch(0.65 0.18 60) 0%,
+      oklch(1 0 0) 50%,
+      oklch(0.45 0.18 120) 100%
+    );
   }
-  
+
   .india-border {
     border-color: oklch(0.65 0.18 60);
   }
@@ -205,7 +210,7 @@
     position: relative;
     overflow: hidden;
   }
-  
+
   .gradient-overlay::before {
     content: '';
     position: absolute;
@@ -213,7 +218,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(10, 25, 41, 0.1) 0%, rgba(0, 30, 60, 0.1) 50%, rgba(10, 25, 41, 0.1) 100%);
+    background: linear-gradient(
+      135deg,
+      rgba(10, 25, 41, 0.1) 0%,
+      rgba(0, 30, 60, 0.1) 50%,
+      rgba(10, 25, 41, 0.1) 100%
+    );
     pointer-events: none;
   }
 
@@ -224,9 +234,15 @@
   }
 
   @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
   }
 
   /* Force gradient backgrounds on main containers */
@@ -236,7 +252,7 @@
     background-size: cover !important;
     min-height: 100vh;
   }
-  
+
   .dark .gradient-bg {
     background: linear-gradient(135deg, #0a1929 0%, #001e3c 50%, #0a1929 100%) !important;
     background-attachment: fixed !important;
@@ -269,12 +285,14 @@
 
 .job-card-hover:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 /* Gradient text animations */
 .gradient-text {
-  background: linear-gradient(270deg, #3B82F6, #8B5CF6, #10B981, #F59E0B);
+  background: linear-gradient(270deg, #3b82f6, #8b5cf6, #10b981, #f59e0b);
   background-size: 800% 800%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -300,10 +318,13 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     box-shadow: 0 0 5px rgba(59, 130, 246, 0.3);
   }
   50% {
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), 0 0 30px rgba(59, 130, 246, 0.4);
+    box-shadow:
+      0 0 20px rgba(59, 130, 246, 0.6),
+      0 0 30px rgba(59, 130, 246, 0.4);
   }
 }

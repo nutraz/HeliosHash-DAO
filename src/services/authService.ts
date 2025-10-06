@@ -1,24 +1,5 @@
-// Mock types for DFINITY packages
-type AuthClient = {
-  login: (options?: any) => Promise<void>;
-  logout: () => Promise<void>;
-  isAuthenticated: () => Promise<boolean>;
-  getIdentity: () => any;
-};
-
-type Principal = {
-  toText: () => string;
-};
-
-// Mock AuthClient for demo mode
-const AuthClient = {
-  create: async (): Promise<AuthClient> => ({
-    login: async () => {},
-    logout: async () => {},
-    isAuthenticated: async () => false,
-    getIdentity: () => ({ getPrincipal: () => ({ toText: () => 'demo-principal' }) })
-  })
-};
+// Real DFINITY AuthClient imports
+import { AuthClient } from '@dfinity/auth-client';
 
 export interface User {
   principal: string;
@@ -45,14 +26,14 @@ class AuthService {
   async initialize(): Promise<void> {
     try {
       this.authClient = await AuthClient.create();
-      
+
       // Check if user is already authenticated
       const isAuthenticated = await this.authClient.isAuthenticated();
-      
+
       if (isAuthenticated) {
         const identity = this.authClient.getIdentity();
         const principal = identity.getPrincipal().toString();
-        
+
         // Mock user data - in production, fetch from canister
         this.user = {
           principal,
@@ -60,9 +41,9 @@ class AuthService {
           identity,
           membershipTier: 'Silver',
           joinedAt: Date.now() - 86400000 * 30, // 30 days ago
-          votingPower: 3
+          votingPower: 3,
         };
-        
+
         this.notifyListeners();
       }
     } catch (error) {
@@ -73,8 +54,9 @@ class AuthService {
   async login(): Promise<{ success: boolean; error?: string }> {
     try {
       // For development or demo mode, simulate login without Internet Identity
-      const isDemoMode = process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
-      
+      const isDemoMode =
+        process.env.NODE_ENV === 'development' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
+
       if (isDemoMode) {
         return this.simulateDevLogin();
       }
@@ -91,13 +73,13 @@ class AuthService {
         try {
           this.authClient!.login({
             // Internet Identity provider
-            identityProvider: "https://identity.ic0.app/",
-            
+            identityProvider: 'https://identity.ic0.app/',
+
             onSuccess: async () => {
               try {
                 const identity = this.authClient!.getIdentity();
                 const principal = identity.getPrincipal().toString();
-                
+
                 // In production, this would call the identity canister to get user data
                 this.user = {
                   principal,
@@ -105,9 +87,9 @@ class AuthService {
                   identity,
                   membershipTier: 'Silver',
                   joinedAt: Date.now(),
-                  votingPower: 1
+                  votingPower: 1,
                 };
-                
+
                 this.notifyListeners();
                 resolve({ success: true });
               } catch (err) {
@@ -115,14 +97,14 @@ class AuthService {
                 resolve({ success: false, error: 'Authentication processing failed' });
               }
             },
-            
+
             onError: (error?: string) => {
               // Don't log errors for user-cancelled authentications
               if (error && !error.includes('UserInterrupt')) {
                 console.warn('Internet Identity login failed:', error);
               }
               resolve({ success: false, error: error || 'Internet Identity login cancelled' });
-            }
+            },
           });
         } catch (loginError) {
           console.error('Login initiation failed:', loginError);
@@ -131,9 +113,9 @@ class AuthService {
       });
     } catch (error) {
       console.error('Login method error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Login failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Login failed',
       };
     }
   }
@@ -141,7 +123,7 @@ class AuthService {
   private async simulateDevLogin(): Promise<{ success: boolean; error?: string }> {
     try {
       console.log('🚀 HeliosHash DAO: Running in demo mode - Internet Identity bypassed');
-      
+
       // Simulate successful login for development
       this.user = {
         principal: 'dev-user-principal-' + Date.now(),
@@ -151,19 +133,19 @@ class AuthService {
         joinedAt: Date.now(),
         votingPower: 1,
         walletAddress: '0x1234...5678',
-        nftBalance: 3
+        nftBalance: 3,
       };
-      
+
       this.notifyListeners();
-      
+
       // Add a small delay to simulate authentication time
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       return { success: true };
     } catch (error) {
-      return { 
-        success: false, 
-        error: 'Development login simulation failed' 
+      return {
+        success: false,
+        error: 'Development login simulation failed',
       };
     }
   }
@@ -177,48 +159,52 @@ class AuthService {
       await this.authClient.logout();
       this.user = null;
       this.notifyListeners();
-      
+
       return { success: true };
     } catch (error) {
       console.error('Logout error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Logout failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Logout failed',
       };
     }
   }
 
   // Mock wallet connections for demo purposes
-  async connectWallet(walletType: 'plug' | 'stoic' | 'nfid' | 'bitfinity'): Promise<{ success: boolean; error?: string }> {
+  async connectWallet(
+    walletType: 'plug' | 'stoic' | 'nfid' | 'bitfinity'
+  ): Promise<{ success: boolean; error?: string }> {
     try {
       // Simulate wallet connection
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // Mock principal based on wallet type
       const mockPrincipals = {
         plug: 'rdmx6-jaaaa-aaaah-qdrpq-cai',
         stoic: 'rrkah-fqaaa-aaaah-qdrqa-cai',
         nfid: 'ryjl3-tyaaa-aaaah-qdrra-cai',
-        bitfinity: 'r7inp-6aaaa-aaaah-qdrsa-cai'
+        bitfinity: 'r7inp-6aaaa-aaaah-qdrsa-cai',
       };
-      
+
       this.user = {
         principal: mockPrincipals[walletType],
         isAuthenticated: true,
         membershipTier: walletType === 'plug' ? 'Gold' : 'Silver',
         joinedAt: Date.now(),
         votingPower: walletType === 'plug' ? 5 : 3,
-        walletAddress: `${mockPrincipals[walletType].slice(0, 8)}...${mockPrincipals[walletType].slice(-8)}`,
-        nftBalance: walletType === 'plug' ? 5 : 3
+        walletAddress: `${mockPrincipals[walletType].slice(0, 8)}...${mockPrincipals[
+          walletType
+        ].slice(-8)}`,
+        nftBalance: walletType === 'plug' ? 5 : 3,
       };
-      
+
       this.notifyListeners();
       return { success: true };
     } catch (error) {
       console.error('Wallet connection error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Wallet connection failed' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Wallet connection failed',
       };
     }
   }
@@ -233,7 +219,7 @@ class AuthService {
 
   subscribe(listener: (user: User | null) => void): () => void {
     this.listeners.push(listener);
-    
+
     // Return unsubscribe function
     return () => {
       const index = this.listeners.indexOf(listener);
@@ -244,7 +230,7 @@ class AuthService {
   }
 
   private notifyListeners(): void {
-    this.listeners.forEach(listener => listener(this.user));
+    this.listeners.forEach((listener) => listener(this.user));
   }
 
   // Join DAO - creates membership NFT and sets up user profile
@@ -255,20 +241,20 @@ class AuthService {
       }
 
       // In production, this would call the DAO canister
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate processing
 
       // Mock membership NFT creation
       const membershipNFT = {
         id: Math.floor(Math.random() * 10000),
-        name: "HeliosHash DAO Membership",
+        name: 'HeliosHash DAO Membership',
         tier: 'Bronze',
         votingPower: 1,
         benefits: [
           'Participate in governance voting',
           'Access to community forums',
           'Solar project updates',
-          'Basic energy trading rights'
-        ]
+          'Basic energy trading rights',
+        ],
       };
 
       // Update user with DAO membership
@@ -282,9 +268,9 @@ class AuthService {
       return { success: true, membershipNFT };
     } catch (error) {
       console.error('Join DAO error:', error);
-      return { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Failed to join DAO' 
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Failed to join DAO',
       };
     }
   }

@@ -1,23 +1,36 @@
-# HeliosHash DAO Fix Plan
+# HeliosHash DAO Repository Fixes - TODO List
 
-## Step 1: Fix import statements
-- [ ] Fix `import Map "mo:base/HashMap";` to `import HashMap "mo:base/HashMap";` in canisters/documents/main.mo
-- [ ] Fix `import Map "mo:base/HashMap";` to `import HashMap "mo:base/HashMap";` in canisters/identity/main.mo
-- [ ] Add `import HashMap "mo:base/HashMap";` and change Map.HashMap to HashMap.HashMap in canisters/dispute-resolution/main.mo
+## Phase 1: Replace Deprecated Hash.hash Usage
 
-## Step 2: Remove 'stable' keyword from var declarations
-- [ ] Remove 'stable' from all var declarations in canisters/dao/main.mo
-- [ ] Remove 'stable' from all var declarations in canisters/telemetry/main.mo
-- [ ] Remove 'stable' from all var declarations in canisters/identity/main.mo
-- [ ] Remove 'stable' from all var declarations in canisters/documents/main.mo
+- [ ] canisters/micro_grants/src/enhanced_main.mo - Replace Hash.hash with custom natHash
+- [ ] canisters/micro_grants/src/main.mo - Replace Hash.hash with custom natHash
+- [ ] canisters/compute/main.mo - Replace Hash.hash with custom natHash
+- [ ] canisters/telemetry/main.mo - Replace Hash.hash with custom natHash
 
-## Step 3: Fix hash function return types
-- [ ] Fix votes HashMap hash func to return Nat32 in canisters/dao/main.mo
-- [ ] Fix disputes and arbitrators HashMap hash funcs to return Nat32 in canisters/dispute-resolution/main.mo
+## Phase 2: Fix Type Inconsistencies
 
-## Step 4: Remove unused imports
-- [ ] Remove unused Blob import in canisters/documents/main.mo
+- [ ] canisters/micro_grants/src/main.mo - Standardize on GrantApplicationV2 type
+- [ ] canisters/micro_grants/src/enhanced_main.mo - Ensure consistent type usage
 
-## Step 5: Build and verify
-- [ ] Run `dfx build` to compile canisters and generate .did files
-- [ ] Verify no compilation errors remain
+## Phase 3: Remove Deprecated Imports
+
+- [ ] Remove unused Hash imports from canisters that no longer need them
+- [ ] Update import statements across affected files
+
+## Phase 4: Add Custom Hash Functions
+
+- [ ] Add natHash function to canisters missing it (compute, telemetry)
+- [ ] Ensure all canisters follow hhdao/src/lib.mo pattern
+
+## Phase 5: Verification & Testing
+
+- [ ] Verify all canisters compile successfully
+- [ ] Check Web3 compliance and ICP best practices
+- [ ] Run integration tests
+- [ ] Update documentation if needed
+
+## Progress Tracking
+
+- Started: $(date)
+- Last Updated: $(date)
+- Completed: 0/15 tasks

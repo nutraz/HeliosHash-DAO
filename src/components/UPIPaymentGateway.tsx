@@ -42,6 +42,7 @@ interface KYCLevel {
 const UPIPaymentGateway = () => {
   const [step, setStep] = useState(1); // 1: Tier Selection, 2: Gender & KYC, 3: Payment, 4: Processing, 5: Success
   const [selectedTier, setSelectedTier] = useState<number>(7); // Default to Tier 7 (most affordable)
+  const [amount, setAmount] = useState<string>(''); // Missing amount state
   const [gender, setGender] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -57,6 +58,7 @@ const UPIPaymentGateway = () => {
   // 1WP Tier System (Aligned with existing contract)
   const usdToINRRate = 83.2;
   const usdcToOwpRate = 100; // 1 USDC = 100 OWP
+  const owpToINRRate = usdToINRRate / usdcToOwpRate; // OWP to INR rate
 
   const tierSystem = [
     { tier: 1, priceUSDC: 3162.5, baseOWP: 316250, voteWeight: 64, targetMembers: 95 },
@@ -93,6 +95,25 @@ const UPIPaymentGateway = () => {
   // Get tier information
   const getTierInfo = (tier: number) => {
     return tierSystem.find((t) => t.tier === tier) || tierSystem[6]; // Default to Tier 7
+  };
+
+  // Calculate tokens for custom amount
+  const calculateTokens = (amountINR: number) => {
+    const amountUSDC = amountINR / usdToINRRate;
+    const tokens = amountUSDC * usdcToOwpRate;
+    const fees = {
+      razorpay: Math.max(2, amountINR * 0.02),
+      transfi: amountINR * 0.01,
+      network: 0.1,
+    };
+    const totalFees = fees.razorpay + fees.transfi + fees.network;
+
+    return {
+      tokens,
+      amountUSDC,
+      totalFees,
+      fees,
+    };
   };
 
   // Calculate tokens including women's bonus
@@ -221,8 +242,8 @@ const UPIPaymentGateway = () => {
                     step > index + 1
                       ? 'bg-green-500 text-white'
                       : step === index + 1
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-200 text-gray-500'
+                        ? 'bg-blue-500 text-white'
+                        : 'bg-gray-200 text-gray-500'
                   }`}
                 >
                   {step > index + 1 ? <CheckCircle className='w-5 h-5' /> : index + 1}
@@ -619,8 +640,8 @@ const UPIPaymentGateway = () => {
                     step.status === 'success'
                       ? 'bg-green-50 border-green-200'
                       : step.status === 'error'
-                      ? 'bg-red-50 border-red-200'
-                      : 'bg-blue-50 border-blue-200'
+                        ? 'bg-red-50 border-red-200'
+                        : 'bg-blue-50 border-blue-200'
                   }`}
                 >
                   <div className='flex-shrink-0'>

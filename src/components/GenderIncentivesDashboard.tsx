@@ -360,10 +360,10 @@ const GenderIncentivesDashboard = () => {
                     index === 0
                       ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200'
                       : index === 1
-                      ? 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'
-                      : index === 2
-                      ? 'bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200'
-                      : 'bg-gray-50 border-gray-200'
+                        ? 'bg-gradient-to-r from-gray-50 to-slate-50 border-gray-200'
+                        : index === 2
+                          ? 'bg-gradient-to-r from-orange-50 to-yellow-50 border-orange-200'
+                          : 'bg-gray-50 border-gray-200'
                   }`}
                 >
                   <div className='flex items-center gap-4'>
@@ -372,10 +372,10 @@ const GenderIncentivesDashboard = () => {
                         index === 0
                           ? 'bg-yellow-400 text-yellow-900'
                           : index === 1
-                          ? 'bg-gray-400 text-gray-900'
-                          : index === 2
-                          ? 'bg-orange-400 text-orange-900'
-                          : 'bg-gray-300 text-gray-700'
+                            ? 'bg-gray-400 text-gray-900'
+                            : index === 2
+                              ? 'bg-orange-400 text-orange-900'
+                              : 'bg-gray-300 text-gray-700'
                       }`}
                     >
                       {index + 1}

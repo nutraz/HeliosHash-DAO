@@ -1,16 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 interface DAOProposal {
   id: string;
   title: string;
   description: string;
-  category: "governance" | "technical" | "financial" | "community" | "development";
+  category: 'governance' | 'technical' | 'financial' | 'community' | 'development';
   proposer: {
     id: string;
     name: string;
     role: string;
   };
-  status: "draft" | "active" | "voting" | "passed" | "rejected" | "executed";
+  status: 'draft' | 'active' | 'voting' | 'passed' | 'rejected' | 'executed';
   voting: {
     startDate: string;
     endDate: string;
@@ -19,7 +19,7 @@ interface DAOProposal {
     votesAgainst: number;
     votesAbstain: number;
     totalVotes: number;
-    userVote?: "for" | "against" | "abstain";
+    userVote?: 'for' | 'against' | 'abstain';
   };
   execution: {
     executor?: string;
@@ -52,174 +52,176 @@ export async function GET() {
     // Simulate DAO proposals data
     const proposals: DAOProposal[] = [
       {
-        id: "proposal_001",
-        title: "Expand Solar Operations to Tamil Nadu",
-        description: "Proposal to establish new solar infrastructure in Tamil Nadu with an initial investment of ₹5 Crore. The project aims to add 25MW of solar capacity and create approximately 150 jobs in the region.",
-        category: "development",
+        id: 'proposal_001',
+        title: 'Expand Solar Operations to Tamil Nadu',
+        description:
+          'Proposal to establish new solar infrastructure in Tamil Nadu with an initial investment of ₹5 Crore. The project aims to add 25MW of solar capacity and create approximately 150 jobs in the region.',
+        category: 'development',
         proposer: {
-          id: "user_001",
-          name: "Rajesh Kumar",
-          role: "DAO Council Member"
+          id: 'user_001',
+          name: 'Rajesh Kumar',
+          role: 'DAO Council Member',
         },
-        status: "voting",
+        status: 'voting',
         voting: {
-          startDate: "2023-12-01T00:00:00Z",
-          endDate: "2023-12-15T23:59:59Z",
+          startDate: '2023-12-01T00:00:00Z',
+          endDate: '2023-12-15T23:59:59Z',
           quorum: 10,
           votesFor: 847,
           votesAgainst: 123,
           votesAbstain: 45,
-          totalVotes: 1015
+          totalVotes: 1015,
         },
         budget: {
           amount: 50000000,
-          currency: "INR",
-          description: "Initial investment for land acquisition and equipment"
+          currency: 'INR',
+          description: 'Initial investment for land acquisition and equipment',
         },
-        tags: ["expansion", "tamil-nadu", "solar-infrastructure"],
+        tags: ['expansion', 'tamil-nadu', 'solar-infrastructure'],
         attachments: [
           {
-            name: "Feasibility Study.pdf",
-            url: "/attachments/feasibility-tamil-nadu.pdf",
-            type: "application/pdf",
-            size: 2048576
+            name: 'Feasibility Study.pdf',
+            url: '/attachments/feasibility-tamil-nadu.pdf',
+            type: 'application/pdf',
+            size: 2048576,
           },
           {
-            name: "Budget Breakdown.xlsx",
-            url: "/attachments/budget-tamil-nadu.xlsx",
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            size: 1048576
-          }
+            name: 'Budget Breakdown.xlsx',
+            url: '/attachments/budget-tamil-nadu.xlsx',
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            size: 1048576,
+          },
         ],
         discussion: {
           comments: 23,
           views: 456,
-          lastActivity: "2023-12-10T14:30:00Z"
+          lastActivity: '2023-12-10T14:30:00Z',
         },
         execution: {
           executor: undefined,
           executionDate: undefined,
-          result: undefined
+          result: undefined,
         },
-        createdAt: "2023-11-25T10:00:00Z",
-        updatedAt: "2023-12-10T14:30:00Z"
+        createdAt: '2023-11-25T10:00:00Z',
+        updatedAt: '2023-12-10T14:30:00Z',
       },
       {
-        id: "proposal_002",
-        title: "Increase Mining Rewards by 15%",
-        description: "Proposal to adjust the mining reward distribution to incentivize more miners to join the HeliosHash network. The increase will be funded by the DAO treasury and is expected to attract new participants.",
-        category: "financial",
+        id: 'proposal_002',
+        title: 'Increase Mining Rewards by 15%',
+        description:
+          'Proposal to adjust the mining reward distribution to incentivize more miners to join the HeliosHash network. The increase will be funded by the DAO treasury and is expected to attract new participants.',
+        category: 'financial',
         proposer: {
-          id: "user_002",
-          name: "Priya Sharma",
-          role: "Mining Committee"
+          id: 'user_002',
+          name: 'Priya Sharma',
+          role: 'Mining Committee',
         },
-        status: "active",
+        status: 'active',
         voting: {
-          startDate: "2023-12-05T00:00:00Z",
-          endDate: "2023-12-20T23:59:59Z",
+          startDate: '2023-12-05T00:00:00Z',
+          endDate: '2023-12-20T23:59:59Z',
           quorum: 15,
           votesFor: 654,
           votesAgainst: 89,
           votesAbstain: 23,
-          totalVotes: 766
+          totalVotes: 766,
         },
         budget: {
           amount: 25000000,
-          currency: "INR",
-          description: "Monthly reward pool increase"
+          currency: 'INR',
+          description: 'Monthly reward pool increase',
         },
-        tags: ["mining", "rewards", "incentives"],
+        tags: ['mining', 'rewards', 'incentives'],
         attachments: [
           {
-            name: "Reward Analysis.pdf",
-            url: "/attachments/reward-analysis.pdf",
-            type: "application/pdf",
-            size: 1536000
-          }
+            name: 'Reward Analysis.pdf',
+            url: '/attachments/reward-analysis.pdf',
+            type: 'application/pdf',
+            size: 1536000,
+          },
         ],
         discussion: {
           comments: 45,
           views: 789,
-          lastActivity: "2023-12-11T09:15:00Z"
+          lastActivity: '2023-12-11T09:15:00Z',
         },
         execution: {
           executor: undefined,
           executionDate: undefined,
-          result: undefined
+          result: undefined,
         },
-        createdAt: "2023-11-30T14:00:00Z",
-        updatedAt: "2023-12-11T09:15:00Z"
+        createdAt: '2023-11-30T14:00:00Z',
+        updatedAt: '2023-12-11T09:15:00Z',
       },
       {
-        id: "proposal_003",
-        title: "Community Education Program",
-        description: "Launch a comprehensive educational initiative to teach solar technology and blockchain concepts in rural areas across India. The program will include workshops, online courses, and hands-on training.",
-        category: "community",
+        id: 'proposal_003',
+        title: 'Community Education Program',
+        description:
+          'Launch a comprehensive educational initiative to teach solar technology and blockchain concepts in rural areas across India. The program will include workshops, online courses, and hands-on training.',
+        category: 'community',
         proposer: {
-          id: "user_003",
-          name: "Amit Patel",
-          role: "Education Team Lead"
+          id: 'user_003',
+          name: 'Amit Patel',
+          role: 'Education Team Lead',
         },
-        status: "passed",
+        status: 'passed',
         voting: {
-          startDate: "2023-11-01T00:00:00Z",
-          endDate: "2023-11-15T23:59:59Z",
+          startDate: '2023-11-01T00:00:00Z',
+          endDate: '2023-11-15T23:59:59Z',
           quorum: 10,
           votesFor: 1203,
           votesAgainst: 45,
           votesAbstain: 12,
-          totalVotes: 1260
+          totalVotes: 1260,
         },
         execution: {
-          executor: "Education Team",
-          executionDate: "2023-12-01T00:00:00Z",
-          result: "Program successfully launched in 5 states"
+          executor: 'Education Team',
+          executionDate: '2023-12-01T00:00:00Z',
+          result: 'Program successfully launched in 5 states',
         },
         budget: {
           amount: 15000000,
-          currency: "INR",
-          description: "Education program funding for 6 months"
+          currency: 'INR',
+          description: 'Education program funding for 6 months',
         },
-        tags: ["education", "community", "rural-development"],
+        tags: ['education', 'community', 'rural-development'],
         attachments: [
           {
-            name: "Program Curriculum.pdf",
-            url: "/attachments/education-curriculum.pdf",
-            type: "application/pdf",
-            size: 3072000
+            name: 'Program Curriculum.pdf',
+            url: '/attachments/education-curriculum.pdf',
+            type: 'application/pdf',
+            size: 3072000,
           },
           {
-            name: "Implementation Plan.docx",
-            url: "/attachments/implementation-plan.docx",
-            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            size: 512000
-          }
+            name: 'Implementation Plan.docx',
+            url: '/attachments/implementation-plan.docx',
+            type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            size: 512000,
+          },
         ],
         discussion: {
           comments: 67,
           views: 1234,
-          lastActivity: "2023-12-01T16:00:00Z"
+          lastActivity: '2023-12-01T16:00:00Z',
         },
-        createdAt: "2023-10-25T09:00:00Z",
-        updatedAt: "2023-12-01T16:00:00Z"
-      }
+        createdAt: '2023-10-25T09:00:00Z',
+        updatedAt: '2023-12-01T16:00:00Z',
+      },
     ];
 
     return NextResponse.json({
       success: true,
       data: proposals,
       count: proposals.length,
-      message: "DAO proposals retrieved successfully"
+      message: 'DAO proposals retrieved successfully',
     });
-
   } catch (error) {
-    console.error("Error fetching DAO proposals:", error);
+    console.error('Error fetching DAO proposals:', error);
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to fetch DAO proposals",
-        message: "Internal server error"
+        error: 'Failed to fetch DAO proposals',
+        message: 'Internal server error',
       },
       { status: 500 }
     );
@@ -229,23 +231,15 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      title,
-      description,
-      category,
-      proposerId,
-      budget,
-      votingPeriod,
-      attachments
-    } = body;
+    const { title, description, category, proposerId, budget, votingPeriod, attachments } = body;
 
     // Validate required fields
     if (!title || !description || !category || !proposerId || !votingPeriod) {
       return NextResponse.json(
         {
           success: false,
-          error: "Missing required fields",
-          message: "Please provide all required proposal information"
+          error: 'Missing required fields',
+          message: 'Please provide all required proposal information',
         },
         { status: 400 }
       );
@@ -259,10 +253,10 @@ export async function POST(request: Request) {
       category,
       proposer: {
         id: proposerId,
-        name: "Current User", // In real app, fetch from user context
-        role: "DAO Member"
+        name: 'Current User', // In real app, fetch from user context
+        role: 'DAO Member',
       },
-      status: "draft",
+      status: 'draft',
       voting: {
         startDate: votingPeriod.startDate,
         endDate: votingPeriod.endDate,
@@ -270,37 +264,38 @@ export async function POST(request: Request) {
         votesFor: 0,
         votesAgainst: 0,
         votesAbstain: 0,
-        totalVotes: 0
+        totalVotes: 0,
       },
-      budget: budget ? {
-        amount: budget.amount,
-        currency: budget.currency || "INR",
-        description: budget.description
-      } : undefined,
+      budget: budget
+        ? {
+            amount: budget.amount,
+            currency: budget.currency || 'INR',
+            description: budget.description,
+          }
+        : undefined,
       tags: [],
       attachments: attachments || [],
       discussion: {
         comments: 0,
         views: 0,
-        lastActivity: new Date().toISOString()
+        lastActivity: new Date().toISOString(),
       },
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     };
 
     return NextResponse.json({
       success: true,
       data: newProposal,
-      message: "DAO proposal created successfully"
+      message: 'DAO proposal created successfully',
     });
-
   } catch (error) {
-    console.error("Error creating DAO proposal:", error);
+    console.error('Error creating DAO proposal:', error);
     return NextResponse.json(
       {
         success: false,
-        error: "Failed to create DAO proposal",
-        message: "Internal server error"
+        error: 'Failed to create DAO proposal',
+        message: 'Internal server error',
       },
       { status: 500 }
     );

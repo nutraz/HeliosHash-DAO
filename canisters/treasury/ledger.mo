@@ -1,5 +1,7 @@
 // Pure ledger logic module for OWP token
 // Decimals: 8
+// Minimal module used by treasury canister
+// Added missing base library imports for Time, Principal, Result, Iter, Array, HashMap
 
 
 

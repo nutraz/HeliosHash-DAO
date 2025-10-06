@@ -223,8 +223,8 @@ const PrivacyDashboard = ({ userId }: { userId: string }) => {
                 ? 'सहमति दी गई'
                 : 'Consent Given'
               : language === 'hi'
-              ? 'सहमति नहीं दी गई'
-              : 'No Consent'}
+                ? 'सहमति नहीं दी गई'
+                : 'No Consent'}
           </p>
           <p className='text-xs text-gray-500 mt-1'>
             {language === 'hi' ? 'स्तर' : 'Level'}: {dashboardData.consentLevel}
@@ -248,8 +248,8 @@ const PrivacyDashboard = ({ userId }: { userId: string }) => {
                 ? 'संग्रहीत और एन्क्रिप्टेड'
                 : 'Stored & Encrypted'
               : language === 'hi'
-              ? 'संग्रहीत नहीं'
-              : 'Not Stored'}
+                ? 'संग्रहीत नहीं'
+                : 'Not Stored'}
           </p>
           {dashboardData.accessCount !== undefined && (
             <p className='text-xs text-gray-500 mt-1'>
@@ -291,8 +291,8 @@ const PrivacyDashboard = ({ userId }: { userId: string }) => {
                 ? 'सक्रिय'
                 : 'Active'
               : language === 'hi'
-              ? 'निष्क्रिय'
-              : 'Inactive'}
+                ? 'निष्क्रिय'
+                : 'Inactive'}
           </p>
           <p className='text-xs text-gray-500 mt-1'>
             {language === 'hi' ? '20% महिला बोनस' : "20% Women's Bonus"}
@@ -351,8 +351,8 @@ const PrivacyDashboard = ({ userId }: { userId: string }) => {
                     ? 'जानकारी बदलें'
                     : 'Update Information'
                   : language === 'hi'
-                  ? 'जानकारी जोड़ें'
-                  : 'Add Information'}
+                    ? 'जानकारी जोड़ें'
+                    : 'Add Information'}
               </button>
             </div>
           )}

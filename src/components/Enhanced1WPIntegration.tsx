@@ -581,8 +581,8 @@ const Enhanced1WPIntegration = () => {
                           ? 'खरीदा गया'
                           : 'Purchased'
                         : language === 'hi'
-                        ? 'खरीदें'
-                        : 'Purchase'}
+                          ? 'खरीदें'
+                          : 'Purchase'}
                     </button>
                   </div>
                 ))}

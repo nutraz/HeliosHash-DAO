@@ -1,5 +1,7 @@
 // Comprehensive Integration Test Suite for Canister Communication
 // This file tests cross-canister interactions, health monitoring, and error propagation
+// Added necessary base library imports for Debug, Time, Principal, Result, Buffer, Iter, Nat, Int, Float
+
 
 
 

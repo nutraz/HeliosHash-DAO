@@ -307,8 +307,8 @@ export default function MiningPage() {
                             miner.status === 'active'
                               ? 'bg-green-500'
                               : miner.status === 'maintenance'
-                              ? 'bg-yellow-500'
-                              : 'bg-red-500'
+                                ? 'bg-yellow-500'
+                                : 'bg-red-500'
                           }`}
                         ></div>
                       </div>

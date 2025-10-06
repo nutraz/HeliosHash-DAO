@@ -1,114 +1,1225 @@
 
-
 # HeliosHash DAO (HHDAO) Copilot Instructions
 
 ## Project Overview
-HeliosHash DAO is a **solar energy infrastructure DAO** built on Internet Computer (IC) with Motoko canisters and React frontend. Part of the One World Project ecosystem focused on India-specific solar projects and community governance.
 
-**Tech Stack**: Motoko (backend), React + Vite + TypeScript (frontend), DFX (IC deployment), Playwright/Vitest (testing)
+HeliosHash DAO is a solar energy infrastructure DAO for India, built on Internet Computer (IC) with Motoko canisters and a Next.js/React frontend. It is part of the One World Project ecosystem, focused on decentralized solar projects and community governance.
 
-**Key Features**: Solar project management, DAO governance with proposals/voting, membership NFTs, basic auth system
-
+**Tech Stack:** Motoko (backend), Next.js + React + TypeScript (frontend), DFX (IC deployment), Playwright/Vitest (testing), pnpm (package manager)
 
 ## Architecture & Key Components
 
 ### Canisters (Motoko)
-- **`canisters/hhdao/`**: Main business logic - projects, proposals, NFTs
-  - `src/main.mo`: Actor entrypoint with all public methods
-  - `src/lib.mo`: Core data types and business logic
-  - `test/`: Motoko tests using custom TestUtils
-- **`canisters/dao/`**: DAO governance (proposals, voting)
-- **`canisters/identity/`**: User identity management
-- **`canisters/telemetry/`**: Solar infrastructure data (stub)
-- **`canisters/documents/`**: Document workflows (stub)
+- `canisters/hhdao/`: Main business logic (projects, proposals, NFTs, applications)
+  - `src/main.mo`: Actor entrypoint, inter-canister calls
+  - `src/lib.mo`: Core types (Project, Proposal, NFT, MembershipTier, Application)
+  - `test/`: Motoko tests using custom `TestUtils`
+- `canisters/dao/`: DAO governance (proposals, voting, dispute resolution)
+- `canisters/identity/`: User identity, roles, KYC, profile
+- `canisters/telemetry/`: Solar device data, metrics
+- `canisters/documents/`: Document work
 
-### Frontend (React + Vite)
-- **`src/components/`**: Core UI components (Dashboard, SolarProjects, Governance, etc.)
-- **`src/declarations/`**: Auto-generated TypeScript bindings for canisters
-- **`src/hooks/`**: Custom React hooks (useAuth, useAuthContext)
-- **`src/services/`**: API services (currently basic authService with in-memory storage)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+flows, access control
+
+### Frontend (Next.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ + React)
+- `src/components/`: UI components (JobBoard, Dashboard, Governance, etc.)
+- `src/app/`: Next.js App Router pages (community, dashboard, mining, etc.)
+- `src/hooks/`: Custom React hooks (`useAuthContext` for localStorage-based auth)
+- `src/services/`: API services (authService, canister integration)
+- `src/declarations/`: Auto-generated TypeScript bindings for canisters
 
 ## Developer Workflows
 
-### Commands (package.json)
+### Common Commands (see `package.json`)
 ```bash
-pnpm dev                    # Start development server
-pnpm build                  # Build frontend (tsc + vite build) 
-pnpm test:run              # Unit tests (Vitest)
-pnpm test:e2e              # E2E tests (Playwright)
-pnpm test:canister         # Motoko tests via canisters/test-runner/run-tests.sh
-pnpm test:all              # All tests
-dfx deploy                 # Deploy canisters to local IC
-./deploy.sh                # Custom deployment script
+pnpm dev            # Start dev server (localhost:3001)
+pnpm build          # Production build
+pnpm test:run       # Unit tests (Vitest)
+pnpm test:e2e       # E2E tests (Playwright)
+pnpm test:canister  # Motoko canister tests (custom runner)
+pnpm test:all       # Run all tests
+dfx deploy          # Deploy canisters to local IC
+./deploy.sh         # Custom deployment script
+node mobile_hhdao_server.js  # Mobile E2E server
+python3 launch_pilot.py      # Pilot automation
 ```
 
-### Canister Development
-- Use `dfx deploy hhdao_dao` to deploy specific canisters
-- Motoko tests use custom framework in `canisters/test-runner/`
-- Test files end with `.test.mo` and use `TestUtils` helper
-- Auto-generated TypeScript declarations in `src/declarations/`
-
-## Conventions & Patterns
-
-### Motoko Patterns
-```motoko
-// Standard canister structure (canisters/hhdao/src/main.mo)
-import HHDAOLib "lib";
-import Principal "mo:base/Principal";
-
-actor {
-  private let state = HHDAOLib.HHDAOState();
-  
-  public shared ({ caller }) func createProject(...) : async Project {
-    state.createProject(..., caller)
-  };
-}
-```
+### Canister & Test Patterns
+- Motoko tests: `canisters/test-runner/run-tests.sh` compiles and runs `.test.mo` files using `TestUtils` assertions
+- Canister methods delegate to lib modules for business logic
+- Inter-canister calls use injected principals for modularity
 
 ### Frontend Patterns
-- **Components**: Use TypeScript, functional components with hooks
-- **Auth**: Custom context provider in `hooks/useAuthContext.ts` with localStorage
-- **Canister Integration**: Import from `src/declarations/[canister_name]/`
-- **Routing**: React Router with routes in `App.tsx`
-- **Styling**: Tailwind CSS with gradient backgrounds
+- Components: TypeScript, functional, hooks-based
+- Auth: LocalStorage simulation via `useAuthContext.ts` (not production-ready)
+- Canister integration: Import actors from `src/declarations/`
+- Routing: Next.js App Router
+- Styling: Tailwind CSS, Shadcn/UI, gradient backgrounds
 
 ### Testing Patterns
-- **Motoko**: Custom test framework with `TestUtils.assertTrue()`, `TestUtils.printTestResult()`
-- **Frontend**: Vitest for unit tests, Playwright for E2E
-- **E2E**: Mock wallet connections using `page.addInitScript()`
+- Unit: Vitest for frontend, custom Motoko for backend
+- E2E: Playwright (browser, mobile, QR flows)
+- Manual: See `MANUAL_TESTING_GUIDE.md`
 
 ## Integration Points
 
-### IC/DFX Integration
-- `dfx.json` defines 5 canisters: hhdao, hhdao_frontend, hhdao_dao, hhdao_identity, hhdao_telemetry, hhdao_documents
-- Auto-generated TypeScript bindings create Actor interfaces
-- Environment variables: `process.env.CANISTER_ID_HHDAO_*`
+- `dfx.json`: Defines all canisters and dependencies
+- TypeScript actors auto-generated for canister calls
+- Environment: `process.env.CANISTER_ID_HHDAO_*` for canister IDs
+- `/api/status`: Health endpoint for monitoring
 
-### Data Flow
-1. Frontend components call canister methods via generated actors
-2. Motoko actors delegate to lib modules for business logic
-3. State managed in-memory (no persistent storage patterns visible)
-4. Auth handled client-side with localStorage (basic implementation)
+## Key Files & Directories
+- `canisters/hhdao/src/lib.mo`: Core types and business logic
+- `canisters/hhdao/test/hhdao.test.mo`: Motoko unit tests
+- `canisters/test-runner/run-tests.sh`: Motoko test runner
+- `src/hooks/useAuthContext.ts`: Auth context pattern
+- `src/services/authService.ts`: Auth service (DFINITY AuthClient)
+- `src/app/community/`: Job board platform
+- `src/components/community/opportunities/`: Job board UI
+- `package.json`: All dev/test/build commands
+- `dfx.json`: Canister config
 
-### External Dependencies
-- **@dfinity/**: IC agent, candid, principal for canister communication
-- **Framer Motion**: Animations in components
-- **React Router**: Client-side routing
-- **Tailwind**: Utility-first CSS
+## Project-Specific Conventions
+- Feature branches: `feature/your-feature-name`
+- Commits: `type(scope): description`
+- All new features require tests and documentation
+- Use `TestUtils` for Motoko assertions
+- Use Playwright tags for test categories (`@smoke`, `@integration`, etc.)
 
-## Key Files to Understand
-- `canisters/hhdao/src/lib.mo`: Core data types (Project, Proposal, NFT, MembershipTier)
-- `src/App.tsx`: Main routing and layout
-- `src/components/Dashboard.tsx`: Main dashboard with status and navigation
-- `dfx.json`: Canister configuration and dependencies
-- `canisters/test-runner/run-tests.sh`: Custom Motoko test runner
-
-## Current Limitations
-- Auth is basic in-memory simulation (not production-ready)
-- Many features in documentation don't exist in code yet
-- Government integration, account safety, and advanced features are aspirational
-- Simple data models without persistence patterns
+## Limitations & Warnings
+- Auth is simulated (localStorage/mock); not production-ready
+- Many features in docs are aspirational, not implemented
+- No persistent storage patterns; state is in-memory
 
 ---
 
-*Focus on the actual implemented patterns above. Many advanced features mentioned in documentation are not yet implemented.*
+_Focus on real, implemented patterns. Ignore aspirational features unless code exists._

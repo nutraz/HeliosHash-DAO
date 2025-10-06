@@ -412,15 +412,15 @@ function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
                           'Verified' in doc.verificationStatus
                             ? 'text-green-400'
                             : 'Rejected' in doc.verificationStatus
-                            ? 'text-red-400'
-                            : 'text-yellow-400'
+                              ? 'text-red-400'
+                              : 'text-yellow-400'
                         }`}
                       >
                         {'Verified' in doc.verificationStatus
                           ? 'Verified'
                           : 'Rejected' in doc.verificationStatus
-                          ? 'Rejected'
-                          : 'Pending'}
+                            ? 'Rejected'
+                            : 'Pending'}
                       </Badge>
                     </div>
                   ))}

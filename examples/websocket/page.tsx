@@ -11,7 +11,7 @@ type Message = {
   text: string;
   senderId: string;
   timestamp: string;
-}
+};
 
 export default function SocketDemo() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -35,7 +35,7 @@ export default function SocketDemo() {
     });
 
     socketInstance.on('message', (msg: Message) => {
-      setMessages(prev => [...prev, msg]);
+      setMessages((prev) => [...prev, msg]);
     });
 
     return () => {
@@ -45,15 +45,18 @@ export default function SocketDemo() {
 
   const sendMessage = () => {
     if (socket && inputMessage.trim()) {
-      setMessages(prev => [...prev, {
-        text: inputMessage.trim(),
-        senderId: socket.id || 'user',
-        timestamp: new Date().toISOString()
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          text: inputMessage.trim(),
+          senderId: socket.id || 'user',
+          timestamp: new Date().toISOString(),
+        },
+      ]);
       socket.emit('message', {
         text: inputMessage.trim(),
         senderId: socket.id || 'user',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
       setInputMessage('');
     }
@@ -66,32 +69,32 @@ export default function SocketDemo() {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
+    <div className='container mx-auto p-4 max-w-2xl'>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className='flex items-center justify-between'>
             WebSocket Demo
-            <span className={`text-sm px-2 py-1 rounded ${isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            <span
+              className={`text-sm px-2 py-1 rounded ${isConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+            >
               {isConnected ? 'Connected' : 'Disconnected'}
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <ScrollArea className="h-80 w-full border rounded-md p-4">
-            <div className="space-y-2">
+        <CardContent className='space-y-4'>
+          <ScrollArea className='h-80 w-full border rounded-md p-4'>
+            <div className='space-y-2'>
               {messages.length === 0 ? (
-                <p className="text-gray-500 text-center">No messages yet</p>
+                <p className='text-gray-500 text-center'>No messages yet</p>
               ) : (
                 messages.map((msg, index) => (
-                  <div key={index} className="border-b pb-2 last:border-b-0">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-700">
-                          {msg.senderId}
-                        </p>
-                        <p className="text-gray-900">{msg.text}</p>
+                  <div key={index} className='border-b pb-2 last:border-b-0'>
+                    <div className='flex justify-between items-start'>
+                      <div className='flex-1'>
+                        <p className='text-sm font-medium text-gray-700'>{msg.senderId}</p>
+                        <p className='text-gray-900'>{msg.text}</p>
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className='text-xs text-gray-500'>
                         {new Date(msg.timestamp).toLocaleTimeString()}
                       </span>
                     </div>
@@ -101,19 +104,16 @@ export default function SocketDemo() {
             </div>
           </ScrollArea>
 
-          <div className="flex space-x-2">
+          <div className='flex space-x-2'>
             <Input
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
+              placeholder='Type a message...'
               disabled={!isConnected}
-              className="flex-1"
+              className='flex-1'
             />
-            <Button 
-              onClick={sendMessage} 
-              disabled={!isConnected || !inputMessage.trim()}
-            >
+            <Button onClick={sendMessage} disabled={!isConnected || !inputMessage.trim()}>
               Send
             </Button>
           </div>

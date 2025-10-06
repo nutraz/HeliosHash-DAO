@@ -107,8 +107,8 @@ class PerformanceAnalyzer {
     const browser = filename.includes('firefox')
       ? 'firefox'
       : filename.includes('webkit')
-      ? 'webkit'
-      : 'chromium';
+        ? 'webkit'
+        : 'chromium';
 
     // Mock performance data (in real scenario, would come from Playwright traces)
     const mockMetrics = this.generateMockMetrics(testName);

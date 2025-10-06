@@ -1,7 +1,16 @@
 // HeliosHash DAO Dispute Resolution Canister
 // Philosophy: Collaborative conflict resolution, community mediation, restorative justice
 
-
+import HashMap "mo:base/HashMap";
+import Hash "mo:base/Hash";
+import Iter "mo:base/Iter";
+import Principal "mo:base/Principal";
+import Time "mo:base/Time";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
 
 persistent actor DisputeResolution {
 

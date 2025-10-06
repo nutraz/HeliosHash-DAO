@@ -1,7 +1,17 @@
 // HeliosHash DAO Meeting Management Canister
 // Inspired by Hyprnote's local-first approach for DAO governance meetings
 
-
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
+import Principal "mo:base/Principal";
+import Time "mo:base/Time";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Buffer "mo:base/Buffer";
+import Option "mo:base/Option";
+import Array "mo:base/Array";
 
 persistent actor MeetingManagement {
 

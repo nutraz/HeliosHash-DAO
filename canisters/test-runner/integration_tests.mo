@@ -1,5 +1,5 @@
 // Integration tests for canister-to-canister communication and system health
-
+// Added minimal imports for Debug, Principal, Result
 
 
 // Mock canister interfaces for testing

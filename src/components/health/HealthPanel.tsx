@@ -78,10 +78,10 @@ export function HealthPanel() {
           const latencyColor = !c.reachable
             ? 'text-red-400'
             : latency < 200
-            ? 'text-emerald-400'
-            : latency < 800
-            ? 'text-amber-300'
-            : 'text-red-400';
+              ? 'text-emerald-400'
+              : latency < 800
+                ? 'text-amber-300'
+                : 'text-red-400';
           const conflict = c.conflict;
           const conflictTooltip = conflict
             ? (c.meta?.conflicts || []).map((alt: any) => `${alt.source}: ${alt.id}`).join('\n') ||

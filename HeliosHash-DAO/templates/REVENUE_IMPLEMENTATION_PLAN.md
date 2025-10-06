@@ -20,7 +20,6 @@ git checkout -b feature/revenue-portfolio-system
 #### Week 2: Core Canister Development
 
 1. **Revenue Management Canister** (`canisters/hhdao_revenue/`)
-
    - Implement `RevenueStream` types for all three tiers
    - Add `recordRevenue()` and `calculateTierCompliance()` functions
    - Integration with existing treasury canister
@@ -33,7 +32,6 @@ git checkout -b feature/revenue-portfolio-system
 #### Week 3: Frontend Integration
 
 1. **Revenue Dashboard** (`src/app/revenue/`)
-
    - Real-time revenue tracking by tier
    - Community impact metrics display
    - Energy surplus visualization
@@ -60,7 +58,6 @@ dfx deploy --all
 #### Cold Storage Pilot Implementation
 
 1. **Hardware Setup** (Week 5)
-
    - Solar-powered refrigeration units (2kW capacity)
    - Temperature/humidity monitoring sensors
    - IoT gateway for real-time data collection
@@ -93,7 +90,6 @@ dfx deploy --all
 #### Irrigation Services Network (Week 6-8)
 
 1. **Solar Pump Deployment**
-
    - Install 3 solar irrigation systems within 5km radius
    - Remote monitoring and automated scheduling
    - Water usage optimization algorithms
@@ -108,7 +104,6 @@ dfx deploy --all
 #### Micro Data Center Setup
 
 1. **Infrastructure** (Week 9)
-
    - Edge computing servers (10kW total capacity)
    - Cooling systems powered by excess solar
    - Network connectivity optimization for valley geography
@@ -131,7 +126,6 @@ dfx deploy --all
    ```
 
 3. **CDN for Valley** (Week 11)
-
    - Local cache for streaming services
    - Bandwidth optimization for remote location
    - Revenue sharing with service providers
@@ -169,7 +163,6 @@ dfx deploy --all
    ```
 
 2. **Render Farm Services** (Week 14)
-
    - Partnership with Dehradun creative studios
    - 3D rendering queue management system
    - Revenue optimization algorithms
@@ -209,13 +202,11 @@ dfx deploy --all
    ```
 
 2. **Impact Measurement Dashboard** (Week 18)
-
    - Real-time environmental impact tracking
    - Economic multiplier calculations
    - Community benefit visualization
 
 3. **Profit Distribution System** (Week 19)
-
    - Automated quarterly profit sharing
    - Community development fund allocation
    - Transparent financial reporting
@@ -304,13 +295,11 @@ dfx deploy --all
 ## Next Steps
 
 1. **Community Presentation** (Week 1)
-
    - Present revenue framework to Urgam Valley residents
    - Collect feedback and incorporate suggestions
    - Establish community partnership agreements
 
 2. **Technical Preparation** (Week 2)
-
    - Finalize hardware requirements and suppliers
    - Complete regulatory approvals with UERC
    - Set up development infrastructure

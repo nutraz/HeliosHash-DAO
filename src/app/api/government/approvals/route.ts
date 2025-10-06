@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 // Government Approval Workflow Types
 export interface ApprovalWorkflow {
@@ -9,7 +9,14 @@ export interface ApprovalWorkflow {
   approvalType: string;
   priority: 'Low' | 'Medium' | 'High' | 'Urgent';
   currentStage: string;
-  overallStatus: 'Not Started' | 'In Progress' | 'Under Review' | 'Approved' | 'Rejected' | 'On Hold' | 'Conditional';
+  overallStatus:
+    | 'Not Started'
+    | 'In Progress'
+    | 'Under Review'
+    | 'Approved'
+    | 'Rejected'
+    | 'On Hold'
+    | 'Conditional';
   submittedDate: number;
   targetCompletionDate: number;
   actualCompletionDate?: number;
@@ -178,279 +185,314 @@ export interface Department {
 // Mock Departments Data
 const mockDepartments: Department[] = [
   {
-    id: "DEPT001",
-    name: "Gujarat Energy Development Agency (GEDA)",
+    id: 'DEPT001',
+    name: 'Gujarat Energy Development Agency (GEDA)',
     jurisdiction: {
-      state: "Gujarat",
-      districts: ["Kachchh", "Ahmedabad", "Surat", "Vadodara", "Rajkot"]
+      state: 'Gujarat',
+      districts: ['Kachchh', 'Ahmedabad', 'Surat', 'Vadodara', 'Rajkot'],
     },
     approvalTypes: [
       {
-        type: "Solar Project Technical Approval",
-        description: "Technical feasibility and safety approval for solar installations",
+        type: 'Solar Project Technical Approval',
+        description: 'Technical feasibility and safety approval for solar installations',
         typicalDuration: 15,
         fees: 5000,
-        requiredDocuments: ["Technical Design", "Site Plan", "Safety Assessment", "Equipment Specifications"]
+        requiredDocuments: [
+          'Technical Design',
+          'Site Plan',
+          'Safety Assessment',
+          'Equipment Specifications',
+        ],
       },
       {
-        type: "Grid Connection Permission",
-        description: "Permission to connect solar installation to electricity grid",
+        type: 'Grid Connection Permission',
+        description: 'Permission to connect solar installation to electricity grid',
         typicalDuration: 21,
         fees: 10000,
-        requiredDocuments: ["Technical Approval", "Electrical Design", "Safety Certificate", "Insurance Coverage"]
-      }
+        requiredDocuments: [
+          'Technical Approval',
+          'Electrical Design',
+          'Safety Certificate',
+          'Insurance Coverage',
+        ],
+      },
     ],
     contactInfo: {
-      headOfficer: "Shri R.K. Singh, IAS",
-      address: "4th Floor, Block No. 11-12, Udyog Bhavan, Gandhinagar - 382010",
-      phone: "+91-79-23977200",
-      email: "info@geda.gujarat.gov.in",
-      website: "https://geda.gujarat.gov.in",
-      workingHours: "10:00 AM - 6:00 PM (Mon-Fri)"
+      headOfficer: 'Shri R.K. Singh, IAS',
+      address: '4th Floor, Block No. 11-12, Udyog Bhavan, Gandhinagar - 382010',
+      phone: '+91-79-23977200',
+      email: 'info@geda.gujarat.gov.in',
+      website: 'https://geda.gujarat.gov.in',
+      workingHours: '10:00 AM - 6:00 PM (Mon-Fri)',
     },
     slaTargets: {
       acknowledgment: 24,
       initialReview: 7,
-      finalApproval: 15
-    }
+      finalApproval: 15,
+    },
   },
   {
-    id: "DEPT002",
-    name: "District Collector Office - Kachchh",
+    id: 'DEPT002',
+    name: 'District Collector Office - Kachchh',
     jurisdiction: {
-      state: "Gujarat",
-      districts: ["Kachchh"],
-      tehsils: ["Bhuj", "Anjar", "Gandhidham", "Mandvi", "Nakhatrana"]
+      state: 'Gujarat',
+      districts: ['Kachchh'],
+      tehsils: ['Bhuj', 'Anjar', 'Gandhidham', 'Mandvi', 'Nakhatrana'],
     },
     approvalTypes: [
       {
-        type: "Land Use Change Permission",
-        description: "Permission to change land use classification for solar projects",
+        type: 'Land Use Change Permission',
+        description: 'Permission to change land use classification for solar projects',
         typicalDuration: 30,
         fees: 25000,
-        requiredDocuments: ["Land Records", "Survey Map", "NOC from Village Panchayat", "Environmental Assessment"]
+        requiredDocuments: [
+          'Land Records',
+          'Survey Map',
+          'NOC from Village Panchayat',
+          'Environmental Assessment',
+        ],
       },
       {
-        type: "Construction Permission",
-        description: "Permission for construction activities related to solar installation",
+        type: 'Construction Permission',
+        description: 'Permission for construction activities related to solar installation',
         typicalDuration: 14,
         fees: 15000,
-        requiredDocuments: ["Building Plan", "Structural Design", "Safety Plan", "Land Use Approval"]
-      }
+        requiredDocuments: [
+          'Building Plan',
+          'Structural Design',
+          'Safety Plan',
+          'Land Use Approval',
+        ],
+      },
     ],
     contactInfo: {
-      headOfficer: "Shri A.B. Patel, IAS",
-      address: "Collector Office, Bhuj, Kachchh - 370001",
-      phone: "+91-2832-220011",
-      email: "collector-kachchh@gujarat.gov.in",
-      workingHours: "10:30 AM - 6:00 PM (Mon-Fri)"
+      headOfficer: 'Shri A.B. Patel, IAS',
+      address: 'Collector Office, Bhuj, Kachchh - 370001',
+      phone: '+91-2832-220011',
+      email: 'collector-kachchh@gujarat.gov.in',
+      workingHours: '10:30 AM - 6:00 PM (Mon-Fri)',
     },
     slaTargets: {
       acknowledgment: 48,
       initialReview: 10,
-      finalApproval: 30
-    }
+      finalApproval: 30,
+    },
   },
   {
-    id: "DEPT003",
-    name: "Gujarat Pollution Control Board (GPCB)",
+    id: 'DEPT003',
+    name: 'Gujarat Pollution Control Board (GPCB)',
     jurisdiction: {
-      state: "Gujarat",
-      districts: ["All Districts"]
+      state: 'Gujarat',
+      districts: ['All Districts'],
     },
     approvalTypes: [
       {
-        type: "Environmental Clearance",
-        description: "Environmental impact assessment and clearance for solar projects",
+        type: 'Environmental Clearance',
+        description: 'Environmental impact assessment and clearance for solar projects',
         typicalDuration: 45,
         fees: 50000,
-        requiredDocuments: ["Environmental Impact Assessment", "Site Survey", "Water Impact Study", "Waste Management Plan"]
+        requiredDocuments: [
+          'Environmental Impact Assessment',
+          'Site Survey',
+          'Water Impact Study',
+          'Waste Management Plan',
+        ],
       },
       {
-        type: "Consent to Establish",
-        description: "Consent for establishing solar power plant",
+        type: 'Consent to Establish',
+        description: 'Consent for establishing solar power plant',
         typicalDuration: 21,
         fees: 20000,
-        requiredDocuments: ["Project Report", "Environmental Clearance", "Layout Plan", "Pollution Control Measures"]
-      }
+        requiredDocuments: [
+          'Project Report',
+          'Environmental Clearance',
+          'Layout Plan',
+          'Pollution Control Measures',
+        ],
+      },
     ],
     contactInfo: {
-      headOfficer: "Shri M.N. Reddy, IFS",
-      address: "Paryavaran Bhavan, CHH Road, Sector-10A, Gandhinagar - 382010",
-      phone: "+91-79-23251013",
-      email: "info@gpcb.gov.in",
-      website: "https://gpcb.gov.in",
-      workingHours: "10:00 AM - 5:30 PM (Mon-Fri)"
+      headOfficer: 'Shri M.N. Reddy, IFS',
+      address: 'Paryavaran Bhavan, CHH Road, Sector-10A, Gandhinagar - 382010',
+      phone: '+91-79-23251013',
+      email: 'info@gpcb.gov.in',
+      website: 'https://gpcb.gov.in',
+      workingHours: '10:00 AM - 5:30 PM (Mon-Fri)',
     },
     slaTargets: {
       acknowledgment: 72,
       initialReview: 14,
-      finalApproval: 45
-    }
-  }
+      finalApproval: 45,
+    },
+  },
 ];
 
 // Mock Approval Workflows Data
 const mockWorkflows: ApprovalWorkflow[] = [
   {
-    id: "APPR001",
-    applicationId: "APP001",
-    departmentId: "DEPT001",
-    departmentName: "Gujarat Energy Development Agency (GEDA)",
-    approvalType: "Solar Project Technical Approval",
-    priority: "High",
-    currentStage: "Technical Review",
-    overallStatus: "In Progress",
+    id: 'APPR001',
+    applicationId: 'APP001',
+    departmentId: 'DEPT001',
+    departmentName: 'Gujarat Energy Development Agency (GEDA)',
+    approvalType: 'Solar Project Technical Approval',
+    priority: 'High',
+    currentStage: 'Technical Review',
+    overallStatus: 'In Progress',
     submittedDate: Date.now() - 86400000 * 10,
     targetCompletionDate: Date.now() + 86400000 * 5,
     assignedOfficer: {
-      id: "OFF001",
-      name: "Dr. Suresh Kumar",
-      designation: "Senior Technical Officer",
-      department: "GEDA",
+      id: 'OFF001',
+      name: 'Dr. Suresh Kumar',
+      designation: 'Senior Technical Officer',
+      department: 'GEDA',
       contactInfo: {
-        email: "suresh.kumar@geda.gujarat.gov.in",
-        phone: "+91-79-23977250",
-        officeAddress: "Technical Wing, GEDA, Gandhinagar"
-      }
+        email: 'suresh.kumar@geda.gujarat.gov.in',
+        phone: '+91-79-23977250',
+        officeAddress: 'Technical Wing, GEDA, Gandhinagar',
+      },
     },
     requiredDocuments: [
       {
-        id: "DOC001",
-        name: "Technical Design Report",
-        type: "Technical",
+        id: 'DOC001',
+        name: 'Technical Design Report',
+        type: 'Technical',
         mandatory: true,
-        description: "Detailed technical design and specifications of solar installation",
-        format: ["PDF"],
+        description: 'Detailed technical design and specifications of solar installation',
+        format: ['PDF'],
         maxSize: 10,
-        issuingAuthority: "Certified Engineer"
+        issuingAuthority: 'Certified Engineer',
       },
       {
-        id: "DOC002",
-        name: "Site Layout Plan",
-        type: "Technical",
+        id: 'DOC002',
+        name: 'Site Layout Plan',
+        type: 'Technical',
         mandatory: true,
-        description: "Detailed site layout showing solar panel placement and infrastructure",
-        format: ["PDF", "CAD"],
+        description: 'Detailed site layout showing solar panel placement and infrastructure',
+        format: ['PDF', 'CAD'],
         maxSize: 5,
-        issuingAuthority: "Licensed Surveyor"
-      }
+        issuingAuthority: 'Licensed Surveyor',
+      },
     ],
     submittedDocuments: [
       {
-        id: "SDOC001",
-        requiredDocumentId: "DOC001",
-        fileName: "technical_design_report_v2.pdf",
-        fileUrl: "/documents/technical_design_report_v2.pdf",
+        id: 'SDOC001',
+        requiredDocumentId: 'DOC001',
+        fileName: 'technical_design_report_v2.pdf',
+        fileUrl: '/documents/technical_design_report_v2.pdf',
         uploadDate: Date.now() - 86400000 * 8,
-        uploadedBy: "APP001",
-        verificationStatus: "Verified",
-        verifiedBy: "Dr. Suresh Kumar",
+        uploadedBy: 'APP001',
+        verificationStatus: 'Verified',
+        verifiedBy: 'Dr. Suresh Kumar',
         verificationDate: Date.now() - 86400000 * 5,
-        verificationNotes: "Technical specifications meet GEDA standards"
-      }
+        verificationNotes: 'Technical specifications meet GEDA standards',
+      },
     ],
     approvalStages: [
       {
-        id: "STAGE001",
+        id: 'STAGE001',
         stageNumber: 1,
-        stageName: "Document Verification",
-        description: "Initial document completeness and format check",
-        status: "Completed",
+        stageName: 'Document Verification',
+        description: 'Initial document completeness and format check',
+        status: 'Completed',
         startDate: Date.now() - 86400000 * 10,
         endDate: Date.now() - 86400000 * 8,
         estimatedDuration: 2,
         actualDuration: 2,
-        responsibleOfficer: "Document Verification Officer",
-        requiredActions: ["Check document completeness", "Verify formats", "Initial screening"],
-        completedActions: ["Check document completeness", "Verify formats", "Initial screening"],
-        dependencies: []
+        responsibleOfficer: 'Document Verification Officer',
+        requiredActions: ['Check document completeness', 'Verify formats', 'Initial screening'],
+        completedActions: ['Check document completeness', 'Verify formats', 'Initial screening'],
+        dependencies: [],
       },
       {
-        id: "STAGE002",
+        id: 'STAGE002',
         stageNumber: 2,
-        stageName: "Technical Review",
-        description: "Technical evaluation of solar system design and specifications",
-        status: "In Progress",
+        stageName: 'Technical Review',
+        description: 'Technical evaluation of solar system design and specifications',
+        status: 'In Progress',
         startDate: Date.now() - 86400000 * 8,
         estimatedDuration: 7,
-        responsibleOfficer: "Dr. Suresh Kumar",
-        requiredActions: ["Review technical specifications", "Validate design calculations", "Safety assessment"],
-        completedActions: ["Review technical specifications"],
-        dependencies: ["STAGE001"]
-      }
+        responsibleOfficer: 'Dr. Suresh Kumar',
+        requiredActions: [
+          'Review technical specifications',
+          'Validate design calculations',
+          'Safety assessment',
+        ],
+        completedActions: ['Review technical specifications'],
+        dependencies: ['STAGE001'],
+      },
     ],
     conditions: [
       {
-        id: "COND001",
-        condition: "Install lightning protection system as per IS 2309",
-        type: "Safety",
+        id: 'COND001',
+        condition: 'Install lightning protection system as per IS 2309',
+        type: 'Safety',
         mandatory: true,
-        status: "Pending",
-        evidenceRequired: "Lightning protection system installation certificate",
-        dueDate: Date.now() + 86400000 * 30
-      }
+        status: 'Pending',
+        evidenceRequired: 'Lightning protection system installation certificate',
+        dueDate: Date.now() + 86400000 * 30,
+      },
     ],
     fees: {
       applicationFee: 2000,
       processingFee: 2500,
       inspectionFee: 500,
       totalPaid: 5000,
-      paymentStatus: "Complete",
+      paymentStatus: 'Complete',
       paymentHistory: [
         {
-          id: "PAY001",
+          id: 'PAY001',
           amount: 5000,
-          feeType: "Total Application Fees",
-          paymentMethod: "Online",
-          transactionId: "TXN123456789",
+          feeType: 'Total Application Fees',
+          paymentMethod: 'Online',
+          transactionId: 'TXN123456789',
           paymentDate: Date.now() - 86400000 * 10,
-          status: "Successful",
-          receiptNumber: "GEDA/2024/001234"
-        }
-      ]
+          status: 'Successful',
+          receiptNumber: 'GEDA/2024/001234',
+        },
+      ],
     },
     inspections: [
       {
-        id: "INSP001",
-        type: "Site Visit",
+        id: 'INSP001',
+        type: 'Site Visit',
         scheduledDate: Date.now() + 86400000 * 3,
-        status: "Scheduled",
+        status: 'Scheduled',
         inspector: {
-          name: "Eng. Pradeep Shah",
-          designation: "Field Inspector",
-          department: "GEDA",
-          licenseNumber: "GEDA/INSP/2024/045"
+          name: 'Eng. Pradeep Shah',
+          designation: 'Field Inspector',
+          department: 'GEDA',
+          licenseNumber: 'GEDA/INSP/2024/045',
         },
         findings: [],
         recommendations: [],
         photosVideos: [],
-        nextActions: ["Conduct site inspection", "Prepare inspection report"]
-      }
+        nextActions: ['Conduct site inspection', 'Prepare inspection report'],
+      },
     ],
     communications: [
       {
-        id: "COMM001",
+        id: 'COMM001',
         date: Date.now() - 86400000 * 5,
-        type: "Email",
-        from: "suresh.kumar@geda.gujarat.gov.in",
-        to: "rajesh.patel@email.com",
-        subject: "Technical Design Approved - Conditions Apply",
-        content: "Your technical design has been approved subject to installation of lightning protection system.",
-        attachments: ["approval_conditions.pdf"],
-        priority: "Medium",
-        status: "Delivered",
+        type: 'Email',
+        from: 'suresh.kumar@geda.gujarat.gov.in',
+        to: 'rajesh.patel@email.com',
+        subject: 'Technical Design Approved - Conditions Apply',
+        content:
+          'Your technical design has been approved subject to installation of lightning protection system.',
+        attachments: ['approval_conditions.pdf'],
+        priority: 'Medium',
+        status: 'Delivered',
         actionRequired: true,
-        dueDate: Date.now() + 86400000 * 30
-      }
+        dueDate: Date.now() + 86400000 * 30,
+      },
     ],
     legalReferences: [
-      "Gujarat Solar Policy 2021",
-      "Central Electricity Authority (Technical Standards) Regulations",
-      "IS 2309:1989 - Lightning Protection Code"
+      'Gujarat Solar Policy 2021',
+      'Central Electricity Authority (Technical Standards) Regulations',
+      'IS 2309:1989 - Lightning Protection Code',
     ],
-    relatedApprovals: ["APPR002", "APPR003"]
-  }
+    relatedApprovals: ['APPR002', 'APPR003'],
+  },
 ];
 
 // GET - Fetch approval workflows based on user role and filters
@@ -468,51 +510,47 @@ export async function GET(request: NextRequest) {
 
     // Role-based filtering
     if (userRole === 'applicant' && applicationId) {
-      filteredWorkflows = filteredWorkflows.filter(workflow => 
-        workflow.applicationId === applicationId
+      filteredWorkflows = filteredWorkflows.filter(
+        (workflow) => workflow.applicationId === applicationId
       );
     } else if (userRole === 'government' && departmentId) {
-      filteredWorkflows = filteredWorkflows.filter(workflow => 
-        workflow.departmentId === departmentId
+      filteredWorkflows = filteredWorkflows.filter(
+        (workflow) => workflow.departmentId === departmentId
       );
     } else if (userRole === 'officer' && userId) {
-      filteredWorkflows = filteredWorkflows.filter(workflow => 
-        workflow.assignedOfficer.id === userId
+      filteredWorkflows = filteredWorkflows.filter(
+        (workflow) => workflow.assignedOfficer.id === userId
       );
     }
 
     // Apply additional filters
     if (status) {
-      filteredWorkflows = filteredWorkflows.filter(workflow => 
-        workflow.overallStatus === status
-      );
+      filteredWorkflows = filteredWorkflows.filter((workflow) => workflow.overallStatus === status);
     }
 
     if (priority) {
-      filteredWorkflows = filteredWorkflows.filter(workflow => 
-        workflow.priority === priority
-      );
+      filteredWorkflows = filteredWorkflows.filter((workflow) => workflow.priority === priority);
     }
 
     // Calculate statistics
     const stats = {
       totalWorkflows: filteredWorkflows.length,
       byStatus: {
-        notStarted: filteredWorkflows.filter(w => w.overallStatus === 'Not Started').length,
-        inProgress: filteredWorkflows.filter(w => w.overallStatus === 'In Progress').length,
-        underReview: filteredWorkflows.filter(w => w.overallStatus === 'Under Review').length,
-        approved: filteredWorkflows.filter(w => w.overallStatus === 'Approved').length,
-        rejected: filteredWorkflows.filter(w => w.overallStatus === 'Rejected').length,
-        onHold: filteredWorkflows.filter(w => w.overallStatus === 'On Hold').length
+        notStarted: filteredWorkflows.filter((w) => w.overallStatus === 'Not Started').length,
+        inProgress: filteredWorkflows.filter((w) => w.overallStatus === 'In Progress').length,
+        underReview: filteredWorkflows.filter((w) => w.overallStatus === 'Under Review').length,
+        approved: filteredWorkflows.filter((w) => w.overallStatus === 'Approved').length,
+        rejected: filteredWorkflows.filter((w) => w.overallStatus === 'Rejected').length,
+        onHold: filteredWorkflows.filter((w) => w.overallStatus === 'On Hold').length,
       },
       byPriority: {
-        low: filteredWorkflows.filter(w => w.priority === 'Low').length,
-        medium: filteredWorkflows.filter(w => w.priority === 'Medium').length,
-        high: filteredWorkflows.filter(w => w.priority === 'High').length,
-        urgent: filteredWorkflows.filter(w => w.priority === 'Urgent').length
+        low: filteredWorkflows.filter((w) => w.priority === 'Low').length,
+        medium: filteredWorkflows.filter((w) => w.priority === 'Medium').length,
+        high: filteredWorkflows.filter((w) => w.priority === 'High').length,
+        urgent: filteredWorkflows.filter((w) => w.priority === 'Urgent').length,
       },
       avgProcessingTime: 15, // days - would be calculated from actual data
-      slaCompliance: 85 // percentage - would be calculated from actual data
+      slaCompliance: 85, // percentage - would be calculated from actual data
     };
 
     return NextResponse.json({
@@ -520,17 +558,16 @@ export async function GET(request: NextRequest) {
       data: {
         workflows: filteredWorkflows,
         departments: mockDepartments,
-        stats
-      }
+        stats,
+      },
     });
-
   } catch (error) {
-    console.error("Government approvals fetch error:", error);
+    console.error('Government approvals fetch error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: "Failed to fetch government approvals",
-        details: error instanceof Error ? error.message : "Unknown error"
+      {
+        success: false,
+        error: 'Failed to fetch government approvals',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -541,10 +578,10 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const workflowData = await request.json();
-    
+
     if (!workflowData.applicationId || !workflowData.departmentId || !workflowData.approvalType) {
       return NextResponse.json(
-        { success: false, error: "Application ID, department ID, and approval type are required" },
+        { success: false, error: 'Application ID, department ID, and approval type are required' },
         { status: 400 }
       );
     }
@@ -553,42 +590,41 @@ export async function POST(request: NextRequest) {
     const newWorkflow: Partial<ApprovalWorkflow> = {
       id: `APPR${String(Date.now()).slice(-6)}`,
       ...workflowData,
-      overallStatus: "Not Started",
-      currentStage: "Document Submission",
+      overallStatus: 'Not Started',
+      currentStage: 'Document Submission',
       submittedDate: Date.now(),
       targetCompletionDate: Date.now() + 86400000 * 30, // 30 days default
       approvalStages: [
         {
-          id: "STAGE001",
+          id: 'STAGE001',
           stageNumber: 1,
-          stageName: "Document Submission",
-          description: "Submit all required documents",
-          status: "In Progress",
+          stageName: 'Document Submission',
+          description: 'Submit all required documents',
+          status: 'In Progress',
           startDate: Date.now(),
           estimatedDuration: 3,
-          responsibleOfficer: "Applicant",
-          requiredActions: ["Upload required documents", "Pay application fees"],
+          responsibleOfficer: 'Applicant',
+          requiredActions: ['Upload required documents', 'Pay application fees'],
           completedActions: [],
-          dependencies: []
-        }
+          dependencies: [],
+        },
       ],
       communications: [],
-      inspections: []
+      inspections: [],
     };
 
     return NextResponse.json({
       success: true,
       data: newWorkflow,
-      message: "Government approval workflow initiated successfully"
+      message: 'Government approval workflow initiated successfully',
     });
-
   } catch (error) {
-    console.error("Government approval workflow creation error:", error);
+    console.error('Government approval workflow creation error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: "Failed to create government approval workflow",
-        details: error instanceof Error ? error.message : "Unknown error"
+      {
+        success: false,
+        error: 'Failed to create government approval workflow',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

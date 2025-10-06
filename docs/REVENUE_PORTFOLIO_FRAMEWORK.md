@@ -24,19 +24,16 @@ _Foundation layer providing stable cash flow and community services_
 #### Agricultural Services Hub
 
 - **Cold Storage**: Solar-powered cold chain for apple harvest and herb preservation
-
   - Target: Valley's apple orchards and medicinal herb farmers
   - Revenue: ₹20,000-50,000/month during harvest season
   - Equipment: Solar refrigeration units, controlled atmosphere storage
 
 - **Irrigation Services**: Solar pump rental and maintenance
-
   - Target: 15+ farms within 5km radius of Urgam
   - Revenue: ₹15,000-30,000/month during growing season
   - Model: Equipment lease + maintenance contracts
 
 - **Drying Facilities**: Solar dehydration for fruits, herbs, and vegetables
-
   - Target: Value-addition for local produce (apples → dried chips)
   - Revenue: ₹15,000-25,000/month
   - Equipment: Solar dryers, packaging facilities
@@ -50,25 +47,21 @@ _Stable technology services with growing demand_
 #### Micro Data Center Operations
 
 - **AI Inference Services**:
-
   - Crop analysis and yield prediction for local farmers
   - Soil health monitoring via satellite data processing
   - Revenue: ₹10,000-25,000/month
 
 - **Content Delivery Network (CDN)**:
-
   - Local cache for streaming services (Netflix, YouTube, etc.)
   - Reduces bandwidth costs for valley residents
   - Revenue: ₹8,000-15,000/month from service provider partnerships
 
 - **Decentralized Storage**:
-
   - Backup services for local businesses and government
   - Integration with Filecoin/Arweave networks
   - Revenue: ₹12,000-20,000/month
 
 - **IoT Gateway Hub**:
-
   - Central processing for valley-wide sensor network
   - Weather monitoring, landslide early warning systems
   - Revenue: ₹5,000-10,000/month from government contracts
@@ -82,18 +75,15 @@ _Opportunistic revenue during energy surplus periods_
 #### Dynamic Computing Services
 
 - **Bitcoin Mining**: Only during peak solar production and grid surplus
-
   - Adaptive scheduling based on energy availability
   - Revenue: ₹5,000-30,000/month (highly variable)
 
 - **Proof of Useful Work**:
-
   - Folding@home for medical research
   - Climate modeling computations
   - Revenue: ₹2,000-8,000/month + social impact credits
 
 - **Render Farms**:
-
   - 3D rendering services for Dehradun/Delhi studios
   - Video processing for local content creators
   - Revenue: ₹8,000-20,000/month

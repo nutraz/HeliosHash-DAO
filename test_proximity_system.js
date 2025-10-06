@@ -345,8 +345,8 @@ async function runProximityTest() {
         analysis.estimatedLatency < 100
           ? '🟢 EXCELLENT'
           : analysis.estimatedLatency < 200
-          ? '🟡 GOOD'
-          : '🔴 ACCEPTABLE'
+            ? '🟡 GOOD'
+            : '🔴 ACCEPTABLE'
       }`
     );
 

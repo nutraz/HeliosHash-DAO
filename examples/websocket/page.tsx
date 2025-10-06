@@ -13,6 +13,14 @@ type Message = {
   timestamp: string;
 };
 
+/**
+ * Renders a WebSocket chat UI that displays connection status, message history, and an input for sending messages.
+ *
+ * The component connects to a Socket.IO endpoint at `/api/socketio`, maintains local message state, and provides controls
+ * to send messages and view incoming messages with timestamps.
+ *
+ * @returns A React element containing the chat interface with connection status, message list, and input controls.
+ */
 export default function SocketDemo() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');

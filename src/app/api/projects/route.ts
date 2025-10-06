@@ -45,6 +45,11 @@ interface SolarProject {
   updatedAt: string;
 }
 
+/**
+ * Retrieve a list of sample solar project records.
+ *
+ * @returns An object with `success`, `data` (array of `SolarProject`), `count`, and `message` when successful; on failure an error object with `success`, `error`, and `message` and HTTP status 500.
+ */
 export async function GET() {
   try {
     // Simulate solar projects data
@@ -187,6 +192,17 @@ export async function GET() {
   }
 }
 
+/**
+ * Handle POST requests to create a new solar project proposal.
+ *
+ * Validates that `name`, `description`, `location`, `capacity`, `budget`, and `applicantId` are present in the request body,
+ * constructs a new project object (including generated `id`, `status: 'proposed'`, initialized stakeholders/approvals/documents, and timestamps),
+ * and returns the created project.
+ *
+ * @returns On success: an object with `success: true`, `data` containing the created project, and a `message`.  
+ * On validation failure: `success: false`, `error: 'Missing required fields'`, `message: 'Please provide all required project information'` with HTTP status 400.  
+ * On internal error: `success: false`, `error: 'Failed to create project'`, `message: 'Internal server error'` with HTTP status 500.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

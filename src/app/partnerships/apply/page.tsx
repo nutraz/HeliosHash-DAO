@@ -19,6 +19,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
+/**
+ * Render the multi-step partnership application page for land partners.
+ *
+ * Manages form state, per-step validation and navigation, file uploads, optional services selection,
+ * and submission flow that redirects to the partnerships listing on success.
+ *
+ * @returns The JSX element for the partnership application page
+ */
 export default function PartnershipApplicationPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);

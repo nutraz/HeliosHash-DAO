@@ -177,6 +177,11 @@ const investmentTiers = [
   },
 ];
 
+/**
+ * Renders the "Investment Hub" client page that lets users browse and filter investment opportunities, access an ROI calculator placeholder, view a portfolio summary, and explore investor tiers.
+ *
+ * @returns The React element for the Investment Hub page, including tabs for Opportunities, ROI Calculator, My Portfolio, and Investor Tiers with corresponding UI and filtering controls.
+ */
 export default function ContributePage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('opportunities');

@@ -264,7 +264,7 @@ class UPIPaymentService {
       });
 
       const principal = Principal.fromText(recipientPrincipal);
-      const amountInSmallestUnit = BigInt(Math.round(amount * (10 ** OWP_TOKEN_DECIMALS)));
+      const amountInSmallestUnit = BigInt(Math.round(amount * 10 ** OWP_TOKEN_DECIMALS));
 
       const result = await owpTokenService.mint(principal, amountInSmallestUnit);
 

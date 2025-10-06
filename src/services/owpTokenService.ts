@@ -1,29 +1,13 @@
-import { Actor, HttpAgent } from "@dfinity/agent";
-import { Principal } from "@dfinity/principal";
-import { idlFactory as owpTokenIdlFactory } from "../../../.dfx/local/canisters/owp_token/service.did";
-import { _SERVICE as OWPTokenService } from "../../../.dfx/local/canisters/owp_token/service.did.d";
+// Mock OWP Token Service for MVP (canister not deployed)
+import { Principal } from '@dfinity/principal';
 
-const canisterId = process.env.NEXT_PUBLIC_OWP_TOKEN_CANISTER_ID;
-
-const getAgent = () => {
-  const agent = new HttpAgent({ host: process.env.NEXT_PUBLIC_IC_HOST });
-  // Fetch root key for local development
-  if (process.env.NODE_ENV !== "production") {
-    agent.fetchRootKey().catch(err => {
-      console.warn("Unable to fetch root key. Check to ensure that your local replica is running");
-      console.error(err);
-    });
-  }
-  return agent;
-};
-
-const getActor = () => {
-  const agent = getAgent();
-  return Actor.createActor<OWPTokenService>(owpTokenIdlFactory, {
-    agent,
-    canisterId,
-  });
-};
+// Mock actor for MVP
+const getActor = () => ({
+  mint: async (_to: Principal, _amount: bigint) => ({ Ok: 'Mock mint' }),
+  transfer: async (_to: Principal, _amount: bigint) => ({ Ok: 'Mock transfer' }),
+  getBalanceOf: async (_principal: Principal) => BigInt(1000000),
+  getTotalSupply: async () => BigInt(10000000),
+});
 
 export const owpTokenService = {
   getBalance: async (principal: Principal): Promise<bigint> => {

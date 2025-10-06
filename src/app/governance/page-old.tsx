@@ -8,6 +8,13 @@ import { ArrowLeft, CheckCircle, Heart, Users, Vote } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+/**
+ * Renders the DAO governance page with a header, tabbed sections, and summary cards for proposals, voting power, and recent activity.
+ *
+ * The component includes a back navigation control, three tabs ("Proposals", "Women's Participation", "Members"), a list of active proposals with actions, and sidebar cards showing the user's voting power and recent activity.
+ *
+ * @returns A React element representing the governance interface with tabbed content, proposal entries, voting power breakdown, and recent activity items.
+ */
 export default function GovernancePage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('proposals');

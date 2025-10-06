@@ -322,7 +322,12 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch land records with role-based filtering
+/**
+ * Retrieves land records filtered by role and query parameters and returns matching records with an aggregated summary.
+ *
+ * @param request - Incoming request whose query parameters may include `userRole` (`landowner`, `government`, `surveyor`, `admin`), `userId`, `village`, `district`, `ownerName`, `surveyNumber`, and `solarSuitable` (set to `true` to filter high solar potential).
+ * @returns JSON object containing `landRecords` (the filtered list of records) and `summary` (aggregated statistics: `totalRecords`, `totalArea`, `verifiedRecords`, `solarSuitableRecords`, `totalSolarPotential`, `byOwnershipType`, and `byLandClass`).
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -427,7 +432,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create or update land record
+/**
+ * Creates a new land record from the request body after validating required fields.
+ *
+ * Validates that `surveyNumber`, `village`, `district`, and `ownerDetails.name` are present.
+ *
+ * @returns A JSON HTTP response where `data` contains the created `LandRecord` and `success: true` on success.
+ *          On validation failure returns a 400 response with `success: false` and an `error` message.
+ *          On internal failure returns a 500 response with `success: false`, an `error` message, and optional `details`.
+ */
 export async function POST(request: NextRequest) {
   try {
     const recordData = await request.json();

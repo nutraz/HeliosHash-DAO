@@ -32,6 +32,12 @@ interface VoteHistory {
   transactionHash: string;
 }
 
+/**
+ * Records a vote for a proposal from the JSON body of the incoming HTTP request.
+ *
+ * @param request - HTTP request whose JSON body must follow `VoteRequest`: contains `proposalId`, `vote` ('for' | 'against' | 'abstain'), and `userId`; optional `votingPower` (defaults to 1) and `comment` are allowed.
+ * @returns A `VoteResponse` describing the result. On success, includes `success: true`, a generated `voteId`, and updated `currentVotes`. On validation failure responds with `success: false` and an error message (HTTP 400). On unexpected errors responds with `success: false` and an internal error message (HTTP 500).
+ */
 export async function POST(request: Request) {
   try {
     const body: VoteRequest = await request.json();
@@ -111,6 +117,16 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * Serve voting-related data based on query parameters in the request URL.
+ *
+ * @param request - Incoming HTTP request whose URL search params control the response: `userId` returns that user's vote history, `proposalId` returns details for that proposal, and absence of both returns general voting statistics.
+ * @returns A JSON object with `success` and `data` fields whose shape depends on the query:
+ * - If `userId` is provided: `data` is an array of `VoteHistory` entries and `count` is the number of entries.
+ * - If `proposalId` is provided: `data` is an object with proposal voting details (totals, breakdown, quorum, distribution, time remaining, and user vote status).
+ * - If neither is provided: `data` is an object with general voting statistics (totals, participation, and trends).
+ * On error, returns a JSON object with `success: false`, `error`, and `message`, and an HTTP 500 status.
+ */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -211,7 +227,21 @@ export async function GET(request: Request) {
   }
 }
 
-// Endpoint to check if a user has voted on a specific proposal
+/**
+ * Check whether a specific user has cast a vote on a given proposal.
+ *
+ * Expects `proposalId` and `userId` as URL query parameters and returns the user's vote status.
+ *
+ * @param request - Incoming HTTP request. Required query parameters: `proposalId`, `userId`.
+ * @returns On success, an object with `success: true` and `data` containing:
+ * - `hasVoted` (`boolean`) — whether the user has voted,
+ * - `vote` (`'for' | 'against' | 'abstain' | null`) — the user's vote or `null` if not voted,
+ * - `votingPower` (`number`) — the voting power associated with the vote,
+ * - `timestamp` (`string | null`) — ISO timestamp when the vote was recorded or `null` if not voted.
+ *
+ * On client error (missing query parameters) returns `success: false` with HTTP 400 and an `error` and `message`.
+ * On internal failure returns `success: false` with HTTP 500 and an `error` and `message`.
+ */
 export async function PUT(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

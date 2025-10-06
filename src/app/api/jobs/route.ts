@@ -235,6 +235,16 @@ Key Responsibilities:
   },
 ];
 
+/**
+ * Retrieve a filtered, sorted, and paginated list of job postings based on URL query parameters.
+ *
+ * Supports filtering by category, location, search (title/description/skills/category), featured,
+ * experience level, work type, urgency, compensation range, and posted timeframe (Today/Week/Month).
+ * Results can be sorted by `compensation`, `applications`, `deadline`, or `created` in `asc` or `desc` order,
+ * and are paginated via `page` and `limit`.
+ *
+ * @returns A JobListResponse object containing the matching `jobs`, the `total` number of matches, current `page`, `limit`, and `hasMore` flag.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -383,6 +393,12 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Create a new job posting from the request body and add it to the in-memory mock database.
+ *
+ * @param request - Incoming NextRequest whose JSON body provides the job fields used to construct the new job posting
+ * @returns The created `JobPosting` object as the response body; returns a JSON error object on failure. Successful creation is returned with HTTP status 201, failures return HTTP status 500.
+ */
 export async function POST(request: NextRequest) {
   try {
     const jobData = await request.json();

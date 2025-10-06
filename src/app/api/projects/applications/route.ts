@@ -238,7 +238,18 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch applications based on user role and access level
+/**
+ * Fetches project applications filtered by requester role and optional query parameters.
+ *
+ * Accepts query parameters `userRole` ('applicant' | 'government' | 'investor' | 'admin'), `userId`,
+ * `status`, and `projectType` to filter returned applications. Also computes aggregate statistics
+ * for the filtered result and includes land records when the requester role is `applicant`.
+ *
+ * @param request - The incoming NextRequest whose URL query provides `userRole`, `userId`, `status`, and `projectType`.
+ * @returns An object with `success`, and on success a `data` object containing:
+ *          `applications` (array of ProjectApplication), `landRecords` (array of LandRecord, present only for applicants),
+ *          and `stats` (aggregation: totalApplications, byStatus, byProjectType, totalCapacity, totalInvestment).
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -316,7 +327,19 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create new application or update existing one
+/**
+ * Create a new project application or update an existing one from the request payload.
+ *
+ * Validates that `projectName`, `projectType`, and `landRecordId` are present in the request body,
+ * then constructs and returns a new ProjectApplication object initialized with default status,
+ * current stage, timeline, and empty government approvals.
+ *
+ * @param request - The incoming HTTP request whose JSON body contains the application fields.
+ *   Required body fields: `projectName`, `projectType`, `landRecordId`.
+ * @returns On success: a JSON response containing `{ success: true, data: ProjectApplication, message: string }`.
+ *   On client error (missing fields): `{ success: false, error: string }` with HTTP 400.
+ *   On server error: `{ success: false, error: string, details: string }` with HTTP 500.
+ */
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();

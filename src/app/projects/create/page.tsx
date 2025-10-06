@@ -29,6 +29,16 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 
+/**
+ * Render the Create Solar Project page with a five-step project creation form.
+ *
+ * Renders a multi-step UI (Basic Info, Technical, Land & Legal, Financial, Review)
+ * that collects project details, tracks progress, validates each step, supports
+ * file upload for land documents, and simulates submission before redirecting to
+ * `/projects?created=true`.
+ *
+ * @returns The React element for the Create Project page.
+ */
 export default function CreateProjectPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);

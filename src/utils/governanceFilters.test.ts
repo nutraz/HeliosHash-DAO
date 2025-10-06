@@ -1,5 +1,5 @@
-import { Proposal } from '@/types/governance';
 import { describe, expect, it } from 'vitest';
+import { Proposal } from '../types/governance';
 import { filterAndSortProposals, MultiFilterOptions } from './governanceFilters';
 
 function makeProposal(overrides: Partial<Proposal>): Proposal {

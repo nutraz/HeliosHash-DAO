@@ -334,10 +334,10 @@ export const AgriculturalLandDashboard: React.FC<AgriculturalLandDashboardProps>
               pilotReport.pilotReadiness.status === 'EXCELLENT'
                 ? 'border-green-500 bg-green-50'
                 : pilotReport.pilotReadiness.status === 'READY'
-                ? 'border-blue-500 bg-blue-50'
-                : pilotReport.pilotReadiness.status === 'PARTIALLY_READY'
-                ? 'border-yellow-500 bg-yellow-50'
-                : 'border-red-500 bg-red-50'
+                  ? 'border-blue-500 bg-blue-50'
+                  : pilotReport.pilotReadiness.status === 'PARTIALLY_READY'
+                    ? 'border-yellow-500 bg-yellow-50'
+                    : 'border-red-500 bg-red-50'
             }`}
           >
             <h3 className='font-semibold mb-2'>Pilot Readiness</h3>

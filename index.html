@@ -1,1364 +1,1625 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HeliosHash DAO - Modern Dark Theme</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>"
+    />
     <style>
-        :root {
-            --background-gradient: linear-gradient(135deg, #0D1117 0%, #161B22 100%);
-            --phone-background: #010409;
-            --screen-background: linear-gradient(135deg, #0D1117 0%, #161B22 100%);
-            --text-primary: #c9d1d9;
-            --text-secondary: #8b949e;
-            --accent-primary: #58a6ff;
-            --accent-secondary: #1f6feb;
-            --card-background: rgba(33, 38, 45, 0.8);
-            --border-color: rgba(240, 246, 252, 0.1);
-            --success-color: #3fb950;
-            --danger-color: #f85149;
-            --warning-color: #d29922;
-            --pulse-color: #58a6ff;
-            --header-gradient: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--background-gradient);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        .phone-container {
-            width: 375px;
-            height: 812px;
-            margin: 20px auto;
-            background: var(--phone-background);
-            border-radius: 30px;
-            padding: 10px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .screen {
-            width: 100%;
-            height: 100%;
-            background: var(--screen-background);
-            border-radius: 25px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px 5px;
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--screen-background);
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-            z-index: 1;
-        }
-
-        .page.active {
-            opacity: 1;
-            transform: translateX(0);
-            z-index: 10;
-        }
-
-        .header {
-            padding: 20px;
-            background: var(--header-gradient);
-            color: var(--text-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg); }
-        }
-
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            color: var(--phone-background);
-            font-weight: bold;
-        }
-
-        .user-info h2 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .level-badge {
-            background: var(--card-background);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            display: inline-block;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .stat-card {
-            background: var(--card-background);
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-        }
-
-        .stat-value {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-
-        .stat-label {
-            font-size: 10px;
-            opacity: 0.8;
-        }
-
-        .main-content {
-            padding: 20px;
-            height: calc(100% - 200px);
-            overflow-y: auto;
-        }
-
-        .energy-visualization {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .energy-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: conic-gradient(var(--accent-primary) 0deg 216deg, var(--card-background) 216deg 360deg);
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .energy-circle::before {
-            content: '';
-            position: absolute;
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: #161B22; /* A shade from the background */
-        }
-
-        .energy-text {
-            position: absolute;
-            text-align: center;
-            color: var(--text-primary);
-            font-weight: bold;
-        }
-
-        .energy-value {
-            font-size: 20px;
-            line-height: 1;
-        }
-
-        .energy-unit {
-            font-size: 10px;
-            opacity: 0.7;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .action-card {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 20px;
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .action-card:hover {
-            transform: translateY(-2px);
-            background: rgba(56, 139, 253, 0.2);
-        }
-
-        .action-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-            transform: translate(15px, -15px);
-        }
-
-        .action-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .action-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .action-desc {
-            font-size: 11px;
-            opacity: 0.8;
-        }
-
-        .rewards-section {
-            background: var(--card-background);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .rewards-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .rewards-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        .hh-balance {
-            background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .reward-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-primary);
-        }
-
-        .reward-item:last-child {
-            border-bottom: none;
-        }
-
-        .reward-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .reward-info {
-            flex: 1;
-        }
-
-        .reward-name {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 3px;
-        }
-
-        .reward-desc {
-            font-size: 11px;
-            opacity: 0.7;
-        }
-
-        .reward-cost {
-            background: var(--accent-secondary);
-            color: var(--text-primary);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--phone-background);
-            padding: 15px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            transition: color 0.2s ease;
-            color: var(--text-secondary);
-        }
-
-        .nav-item.active {
-            color: var(--accent-primary);
-        }
-
-        .nav-icon {
-            font-size: 20px;
-        }
-
-        .nav-label {
-            font-size: 10px;
-        }
-
-        .floating-action {
-            position: absolute;
-            bottom: 80px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: var(--header-gradient);
-            color: var(--text-primary);
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: transform 0.2s ease;
-            z-index: 50;
-        }
-
-        .floating-action:hover {
-            transform: scale(1.1);
-        }
-
-        .mission-card {
-            background: var(--card-background);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .mission-progress {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
-            border-radius: 3px;
-            transition: width 1s ease;
-        }
-
-        .tab-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            border-radius: 10px;
-            background: var(--card-background);
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tab.active {
-            background: var(--header-gradient);
-            color: var(--text-primary);
-        }
-
-        .notification-dot {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            width: 8px;
-            height: 8px;
-            background: var(--danger-color);
-            border-radius: 50%;
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(88, 166, 255, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(88, 166, 255, 0); }
-        }
-
-        .achievement-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            background: linear-gradient(135deg, var(--accent-primary), var(--warning-color));
-            color: var(--phone-background);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        .achievement-popup.show {
-            transform: translate(-50%, -50%) scale(1);
-        }
-
-        .page-transition {
-            transform: translateX(-100%);
-        }
-
-        .loading-spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid var(--text-primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      :root {
+        --background-gradient: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        --phone-background: #010409;
+        --screen-background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+        --text-primary: #c9d1d9;
+        --text-secondary: #8b949e;
+        --accent-primary: #58a6ff;
+        --accent-secondary: #1f6feb;
+        --card-background: rgba(33, 38, 45, 0.8);
+        --border-color: rgba(240, 246, 252, 0.1);
+        --success-color: #3fb950;
+        --danger-color: #f85149;
+        --warning-color: #d29922;
+        --pulse-color: #58a6ff;
+        --header-gradient: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        background: var(--background-gradient);
+        min-height: 100vh;
+        overflow-x: hidden;
+      }
+
+      .phone-container {
+        width: 375px;
+        height: 812px;
+        margin: 20px auto;
+        background: var(--phone-background);
+        border-radius: 30px;
+        padding: 10px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        position: relative;
+      }
+
+      .screen {
+        width: 100%;
+        height: 100%;
+        background: var(--screen-background);
+        border-radius: 25px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .status-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px 5px;
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .page {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--screen-background);
+        opacity: 0;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        z-index: 1;
+      }
+
+      .page.active {
+        opacity: 1;
+        transform: translateX(0);
+        z-index: 10;
+      }
+
+      .header {
+        padding: 20px;
+        background: var(--header-gradient);
+        color: var(--text-primary);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+        animation: shimmer 3s infinite;
+      }
+
+      @keyframes shimmer {
+        0%,
+        100% {
+          transform: rotate(0deg);
+        }
+        50% {
+          transform: rotate(180deg);
+        }
+      }
+
+      .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: var(--phone-background);
+        font-weight: bold;
+      }
+
+      .user-info h2 {
+        font-size: 18px;
+        margin-bottom: 5px;
+      }
+
+      .level-badge {
+        background: var(--card-background);
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        display: inline-block;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 15px;
+      }
+
+      .stat-card {
+        background: var(--card-background);
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        backdrop-filter: blur(10px);
+      }
+
+      .stat-value {
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 2px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+        opacity: 0.8;
+      }
+
+      .main-content {
+        padding: 20px;
+        height: calc(100% - 200px);
+        overflow-y: auto;
+      }
+
+      .energy-visualization {
+        background: var(--card-background);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .energy-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        background: conic-gradient(
+          var(--accent-primary) 0deg 216deg,
+          var(--card-background) 216deg 360deg
+        );
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .energy-circle::before {
+        content: '';
+        position: absolute;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: #161b22; /* A shade from the background */
+      }
+
+      .energy-text {
+        position: absolute;
+        text-align: center;
+        color: var(--text-primary);
+        font-weight: bold;
+      }
+
+      .energy-value {
+        font-size: 20px;
+        line-height: 1;
+      }
+
+      .energy-unit {
+        font-size: 10px;
+        opacity: 0.7;
+      }
+
+      .action-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      .action-card {
+        background: var(--card-background);
+        border-radius: 15px;
+        padding: 20px;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+      }
+
+      .action-card:hover {
+        transform: translateY(-2px);
+        background: rgba(56, 139, 253, 0.2);
+      }
+
+      .action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+        transform: translate(15px, -15px);
+      }
+
+      .action-icon {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .action-title {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .action-desc {
+        font-size: 11px;
+        opacity: 0.8;
+      }
+
+      .rewards-section {
+        background: var(--card-background);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .rewards-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+      }
+
+      .rewards-title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .hh-balance {
+        background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .reward-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+      }
+
+      .reward-item:last-child {
+        border-bottom: none;
+      }
+
+      .reward-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+
+      .reward-info {
+        flex: 1;
+      }
+
+      .reward-name {
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 3px;
+      }
+
+      .reward-desc {
+        font-size: 11px;
+        opacity: 0.7;
+      }
+
+      .reward-cost {
+        background: var(--accent-secondary);
+        color: var(--text-primary);
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 11px;
+        font-weight: 500;
+      }
+
+      .bottom-nav {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--phone-background);
+        padding: 15px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        z-index: 100;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+        transition: color 0.2s ease;
+        color: var(--text-secondary);
+      }
+
+      .nav-item.active {
+        color: var(--accent-primary);
+      }
+
+      .nav-icon {
+        font-size: 20px;
+      }
+
+      .nav-label {
+        font-size: 10px;
+      }
+
+      .floating-action {
+        position: absolute;
+        bottom: 80px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--header-gradient);
+        color: var(--text-primary);
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+        z-index: 50;
+      }
+
+      .floating-action:hover {
+        transform: scale(1.1);
+      }
+
+      .mission-card {
+        background: var(--card-background);
+        border: 1px solid var(--border-color);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 15px;
+        color: var(--text-primary);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mission-progress {
+        width: 100%;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        margin: 10px 0;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent-secondary), var(--accent-primary));
+        border-radius: 3px;
+        transition: width 1s ease;
+      }
+
+      .tab-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .tab {
+        flex: 1;
+        padding: 12px;
+        text-align: center;
+        border-radius: 10px;
+        background: var(--card-background);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .tab.active {
+        background: var(--header-gradient);
+        color: var(--text-primary);
+      }
+
+      .notification-dot {
+        position: absolute;
+        top: -2px;
+        right: -2px;
+        width: 8px;
+        height: 8px;
+        background: var(--danger-color);
+        border-radius: 50%;
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(88, 166, 255, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(88, 166, 255, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(88, 166, 255, 0);
+        }
+      }
+
+      .achievement-popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        background: linear-gradient(135deg, var(--accent-primary), var(--warning-color));
+        color: var(--phone-background);
+        padding: 30px;
+        border-radius: 20px;
+        text-align: center;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+      }
+
+      .achievement-popup.show {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .page-transition {
+        transform: translateX(-100%);
+      }
+
+      .loading-spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid var(--text-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="phone-container">
-        <div class="screen">
-            <div class="status-bar">
-                <span>9:41</span>
-                <span>📶 🔋</span>
-            </div>
-
-            <!-- Home Page -->
-            <div class="page active" id="home">
-                <div class="header">
-                    <div class="profile-section">
-                        <div class="avatar">⚡</div>
-                        <div class="user-info">
-                            <h2>Welcome, Raj!</h2>
-                            <span class="level-badge">Solar Pioneer • Level 3</span>
-                        </div>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value">2.4kW</div>
-                            <div class="stat-label">Generated</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">450</div>
-                            <div class="stat-label">HH Tokens</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">₹1,250</div>
-                            <div class="stat-label">Earned</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="main-content">
-                    <div class="energy-visualization">
-                        <div class="energy-circle">
-                            <div class="energy-text">
-                                <div class="energy-value">73%</div>
-                                <div class="energy-unit">ACTIVE</div>
-                            </div>
-                        </div>
-                        <div style="text-align: center; color: white;">
-                            <p style="margin: 5px 0;">Urgam Valley Grid Status</p>
-                            <p style="font-size: 12px; opacity: 0.8;">12 nodes contributing • Real-time</p>
-                        </div>
-                    </div>
-
-                    <div class="action-grid">
-                        <div class="action-card" onclick="navigateTo('mining')">
-                            <div class="action-icon">⛏️</div>
-                            <div class="action-title">Mining Hub</div>
-                            <div class="action-desc">Monitor your ASIC performance</div>
-                        </div>
-                        <div class="action-card" onclick="navigateTo('energy')">
-                            <div class="action-icon">🔋</div>
-                            <div class="action-title">Energy Grid</div>
-                            <div class="action-desc">Track solar generation</div>
-                        </div>
-                        <div class="action-card" onclick="navigateTo('community')">
-                            <div class="action-icon">🏘️</div>
-                            <div class="action-title">Community</div>
-                            <div class="action-desc">Connect with neighbors</div>
-                        </div>
-                        <div class="action-card pulse" onclick="showAchievement()">
-                            <div class="action-icon">🎯</div>
-                            <div class="action-title">Missions</div>
-                            <div class="action-desc">Complete daily tasks</div>
-                            <div class="notification-dot"></div>
-                        </div>
-                    </div>
-
-                    <div class="mission-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <h3 style="font-size: 16px; margin-bottom: 5px;">Daily Challenge</h3>
-                                <p style="font-size: 12px; opacity: 0.8;">Generate 3kW of solar energy</p>
-                            </div>
-                            <div style="text-align: right;">
-                                <div style="font-size: 14px; font-weight: bold;">+50 HH</div>
-                                <div style="font-size: 11px; opacity: 0.7;">2.1/3.0 kW</div>
-                            </div>
-                        </div>
-                        <div class="mission-progress">
-                            <div class="progress-fill" style="width: 70%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="floating-action" onclick="navigateTo('scan')">
-                    📱
-                </div>
-            </div>
-
-            <!-- Rewards Page -->
-            <div class="page" id="rewards">
-                <div class="header">
-                    <h2 style="margin-bottom: 10px;">Reward Store</h2>
-                    <div class="hh-balance">💰 450 HH Tokens</div>
-                </div>
-
-                <div class="main-content">
-                    <div class="tab-container">
-                        <div class="tab active">🛍️ Shop</div>
-                        <div class="tab">✈️ Travel</div>
-                        <div class="tab">🎮 Digital</div>
-                    </div>
-
-                    <div class="rewards-section">
-                        <div class="reward-item">
-                            <div class="reward-icon" style="background: linear-gradient(45deg, #e74c3c, #c0392b);">🛒</div>
-                            <div class="reward-info">
-                                <div class="reward-name">BigBasket Voucher</div>
-                                <div class="reward-desc">₹500 grocery shopping voucher</div>
-                            </div>
-                            <div class="reward-cost">200 HH</div>
-                        </div>
-
-                        <div class="reward-item">
-                            <div class="reward-icon" style="background: linear-gradient(45deg, #3498db, #2980b9);">🚗</div>
-                            <div class="reward-info">
-                                <div class="reward-name">Ola Rides Credit</div>
-                                <div class="reward-desc">₹300 ride credit for local transport</div>
-                            </div>
-                            <div class="reward-cost">150 HH</div>
-                        </div>
-
-                        <div class="reward-item">
-                            <div class="reward-icon" style="background: linear-gradient(45deg, #e67e22, #d35400);">☕</div>
-                            <div class="reward-info">
-                                <div class="reward-name">Café Coffee Day</div>
-                                <div class="reward-desc">Free coffee and snacks combo</div>
-                            </div>
-                            <div class="reward-cost">80 HH</div>
-                        </div>
-
-                        <div class="reward-item">
-                            <div class="reward-icon" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">🎵</div>
-                            <div class="reward-info">
-                                <div class="reward-name">Spotify Premium</div>
-                                <div class="reward-desc">1 month premium subscription</div>
-                            </div>
-                            <div class="reward-cost">120 HH</div>
-                        </div>
-
-                        <div class="reward-item">
-                            <div class="reward-icon" style="background: linear-gradient(45deg, #27ae60, #229954);">✈️</div>
-                            <div class="reward-info">
-                                <div class="reward-name">GoIbibo Travel Voucher</div>
-                                <div class="reward-desc">₹2000 discount on domestic flights</div>
-                            </div>
-                            <div class="reward-cost">800 HH</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mining Page -->
-            <div class="page" id="mining">
-                <div class="header">
-                    <h2 style="margin-bottom: 10px;">Mining Dashboard</h2>
-                    <p style="font-size: 12px; opacity: 0.8;">Immersed ASIC Performance</p>
-                </div>
-
-                <div class="main-content">
-                    <div class="stats-grid" style="margin-bottom: 20px;">
-                        <div class="stat-card" style="background: #2a2a3e; color: white;">
-                            <div class="stat-value" style="color: #4ecdc4;">2.4 TH/s</div>
-                            <div class="stat-label">Hash Rate</div>
-                        </div>
-                        <div class="stat-card" style="background: #2a2a3e; color: white;">
-                            <div class="stat-value" style="color: #ffd700;">45°C</div>
-                            <div class="stat-label">Temperature</div>
-                        </div>
-                        <div class="stat-card" style="background: #2a2a3e; color: white;">
-                            <div class="stat-value" style="color: #ff6b6b;">95%</div>
-                            <div class="stat-label">Efficiency</div>
-                        </div>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3 style="margin-bottom: 10px;">Heat Recovery System</h3>
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                            <div>
-                                <p style="font-size: 12px; opacity: 0.8;">Hot Water Generated</p>
-                                <p style="font-size: 18px; font-weight: bold;">125 Liters</p>
-                            </div>
-                            <div>
-                                <p style="font-size: 12px; opacity: 0.8;">Community Saved</p>
-                                <p style="font-size: 18px; font-weight: bold;">₹450</p>
-                            </div>
-                        </div>
-                        <div class="mission-progress">
-                            <div class="progress-fill" style="width: 85%"></div>
-                        </div>
-                    </div>
-
-                    <div class="action-grid">
-                        <div class="action-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
-                            <div class="action-icon">📊</div>
-                            <div class="action-title">Analytics</div>
-                            <div class="action-desc">Detailed performance metrics</div>
-                        </div>
-                        <div class="action-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
-                            <div class="action-icon">⚙️</div>
-                            <div class="action-title">Settings</div>
-                            <div class="action-desc">Configure mining parameters</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Community Page -->
-            <div class="page" id="community">
-                <div class="header">
-                    <h2 style="margin-bottom: 10px;">Urgam Valley Community</h2>
-                    <p style="font-size: 12px; opacity: 0.8;">47 Active Members • 12 Online</p>
-                </div>
-
-                <div class="main-content">
-                    <div class="tab-container">
-                        <div class="tab active">🏘️ Feed</div>
-                        <div class="tab">🗳️ Vote</div>
-                        <div class="tab">💬 Chat</div>
-                    </div>
-
-                    <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; margin-bottom: 15px; color: white;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <div class="avatar" style="width: 35px; height: 35px; font-size: 14px;">🌱</div>
-                            <div>
-                                <p style="font-size: 14px; font-weight: 500;">Priya Sharma</p>
-                                <p style="font-size: 11px; opacity: 0.7;">2 hours ago</p>
-                            </div>
-                        </div>
-                        <p style="font-size: 13px; margin-bottom: 10px;">Just installed my rooftop solar panel! Contributing 1.2kW to our community grid. Excited to be part of the green revolution! 🌞⚡</p>
-                        <div style="display: flex; gap: 15px; font-size: 12px;">
-                            <span>❤️ 23</span>
-                            <span>💬 8</span>
-                            <span>🔄 Share</span>
-                        </div>
-                    </div>
-
-                    <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; margin-bottom: 15px; color: white;">
-                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-                            <div class="avatar" style="width: 35px; height: 35px; font-size: 14px;">⚡</div>
-                            <div>
-                                <p style="font-size: 14px; font-weight: 500;">Community Grid</p>
-                                <p style="font-size: 11px; opacity: 0.7;">System Update</p>
-                            </div>
-                        </div>
-                        <p style="font-size: 13px; margin-bottom: 10px;">🎉 Milestone achieved! Our community has generated 50MWh of clean energy this month. That's enough to power 150 homes!</p>
-                        <div style="background: rgba(76, 205, 196, 0.2); padding: 10px; border-radius: 8px;">
-                            <p style="font-size: 11px;">Next Goal: 75MWh • Reward: Special NFT Badge</p>
-                        </div>
-                    </div>
-
-                    <div class="mission-card">
-                        <h4 style="margin-bottom: 10px;">🗳️ Active Proposal</h4>
-                        <p style="font-size: 13px; margin-bottom: 10px;">Install EV charging station using excess solar energy</p>
-                        <div style="display: flex; gap: 10px;">
-                            <button style="flex: 1; padding: 8px; border: none; border-radius: 5px; background: #27ae60; color: white; font-size: 12px;">✓ Yes (34)</button>
-                            <button style="flex: 1; padding: 8px; border: none; border-radius: 5px; background: #e74c3c; color: white; font-size: 12px;">✗ No (12)</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Wallet Page -->
-            <div class="page" id="wallet">
-                <div class="header">
-                    <h2 style="margin-bottom: 10px;">HeliosHash Wallet</h2>
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value">450</div>
-                            <div class="stat-label">HH Tokens</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">₹12,450</div>
-                            <div class="stat-label">INR Value</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value">+15.2%</div>
-                            <div class="stat-label">24h Change</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="main-content">
-                    <div class="tab-container">
-                        <div class="tab active" onclick="switchWalletTab('balance')">💰 Balance</div>
-                        <div class="tab" onclick="switchWalletTab('remit')">🌍 Remit</div>
-                        <div class="tab" onclick="switchWalletTab('stake')">🔒 Stake</div>
-                        <div class="tab" onclick="switchWalletTab('invest')">📈 Invest</div>
-                    </div>
-
-                    <!-- Balance Tab -->
-                    <div id="balance-content">
-                        <div class="action-grid" style="margin-bottom: 20px;">
-                            <div class="action-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
-                                <div class="action-icon">💸</div>
-                                <div class="action-title">Send Money</div>
-                                <div class="action-desc">To wallet or bank account</div>
-                            </div>
-                            <div class="action-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
-                                <div class="action-icon">💳</div>
-                                <div class="action-title">Add Funds</div>
-                                <div class="action-desc">UPI, card, or crypto</div>
-                            </div>
-                        </div>
-
-                        <div class="rewards-section">
-                            <div class="rewards-header">
-                                <div class="rewards-title">Recent Transactions</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #27ae60, #229954);">⚡</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">Energy Generation Reward</div>
-                                    <div class="reward-desc">Solar power - 2.4 kWh generated</div>
-                                </div>
-                                <div style="color: #27ae60; font-weight: bold;">+24 HH</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #e67e22, #d35400);">🛒</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">BigBasket Voucher</div>
-                                    <div class="reward-desc">Grocery shopping redemption</div>
-                                </div>
-                                <div style="color: #e74c3c; font-weight: bold;">-80 HH</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">⛏️</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">Mining Rewards</div>
-                                    <div class="reward-desc">ASIC mining - 4 hours active</div>
-                                </div>
-                                <div style="color: #27ae60; font-weight: bold;">+18 HH</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Remittance Tab -->
-                    <div id="remit-content" style="display: none;">
-                        <div class="mission-card">
-                            <h3 style="margin-bottom: 15px;">🌍 International Remittance</h3>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">Exchange Rate</p>
-                                    <p style="font-size: 18px; font-weight: bold;">1 HH = $0.035</p>
-                                </div>
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">Network Fee</p>
-                                    <p style="font-size: 18px; font-weight: bold;">0.5%</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="rewards-section">
-                            <div class="rewards-header">
-                                <div class="rewards-title">Send Money Abroad</div>
-                            </div>
-
-                            <div style="padding: 15px 0;">
-                                <div style="margin-bottom: 15px;">
-                                    <label style="color: white; font-size: 12px; margin-bottom: 5px; display: block;">Recipient Country</label>
-                                    <select style="width: 100%; padding: 10px; border: none; border-radius: 8px; background: #1a1a2e; color: white;">
-                                        <option>🇺🇸 United States</option>
-                                        <option>🇨🇦 Canada</option>
-                                        <option>🇬🇧 United Kingdom</option>
-                                        <option>🇦🇪 UAE</option>
-                                        <option>🇸🇬 Singapore</option>
-                                        <option>🇦🇺 Australia</option>
-                                    </select>
-                                </div>
-
-                                <div style="margin-bottom: 15px;">
-                                    <label style="color: white; font-size: 12px; margin-bottom: 5px; display: block;">Amount to Send</label>
-                                    <div style="display: flex; gap: 10px;">
-                                        <input type="number" placeholder="0" style="flex: 1; padding: 10px; border: none; border-radius: 8px; background: #1a1a2e; color: white;">
-                                        <select style="padding: 10px; border: none; border-radius: 8px; background: #1a1a2e; color: white;">
-                                            <option>HH</option>
-                                            <option>INR</option>
-                                            <option>USD</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="action-grid">
-                                    <div class="action-card" style="background: linear-gradient(135deg, #3498db, #2980b9);">
-                                        <div class="action-icon">🏦</div>
-                                        <div class="action-title">Bank Transfer</div>
-                                        <div class="action-desc">1-3 business days</div>
-                                    </div>
-                                    <div class="action-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
-                                        <div class="action-icon">💳</div>
-                                        <div class="action-title">Instant Transfer</div>
-                                        <div class="action-desc">Within minutes</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; color: white;">
-                            <h4 style="margin-bottom: 10px;">🏆 Recent Remittances</h4>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-                                <span style="font-size: 12px;">To: Priya (USA) • $150</span>
-                                <span style="font-size: 11px; color: #27ae60;">✅ Completed</span>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 0;">
-                                <span style="font-size: 12px;">To: Raj (Canada) • $200</span>
-                                <span style="font-size: 11px; color: #f39c12;">⏳ Processing</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Staking Tab -->
-                    <div id="stake-content" style="display: none;">
-                        <div class="mission-card">
-                            <h3 style="margin-bottom: 15px;">🔒 HH Token Staking</h3>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">Currently Staked</p>
-                                    <p style="font-size: 18px; font-weight: bold;">180 HH</p>
-                                </div>
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">APY</p>
-                                    <p style="font-size: 18px; font-weight: bold; color: #27ae60;">12.5%</p>
-                                </div>
-                            </div>
-                            <div class="mission-progress">
-                                <div class="progress-fill" style="width: 40%"></div>
-                            </div>
-                            <p style="font-size: 11px; opacity: 0.7; text-align: center; margin-top: 5px;">Lock period: 180 days remaining</p>
-                        </div>
-
-                        <div class="action-grid" style="margin-bottom: 20px;">
-                            <div class="action-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
-                                <div class="action-icon">➕</div>
-                                <div class="action-title">Stake More</div>
-                                <div class="action-desc">Increase your rewards</div>
-                            </div>
-                            <div class="action-card" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
-                                <div class="action-icon">📊</div>
-                                <div class="action-title">Rewards</div>
-                                <div class="action-desc">Claim earned tokens</div>
-                            </div>
-                        </div>
-
-                        <div class="rewards-section">
-                            <div class="rewards-header">
-                                <div class="rewards-title">Staking Pools</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #27ae60, #229954);">⚡</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">Energy Pool</div>
-                                    <div class="reward-desc">Stake to support grid expansion</div>
-                                </div>
-                                <div class="reward-cost" style="background: #27ae60;">12.5% APY</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #3498db, #2980b9);">🏘️</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">Community Pool</div>
-                                    <div class="reward-desc">Fund local development projects</div>
-                                </div>
-                                <div class="reward-cost" style="background: #3498db;">15.2% APY</div>
-                            </div>
-
-                            <div class="reward-item">
-                                <div class="reward-icon" style="background: linear-gradient(45deg, #9b59b6, #8e44ad);">⛏️</div>
-                                <div class="reward-info">
-                                    <div class="reward-name">Mining Pool</div>
-                                    <div class="reward-desc">Support mining infrastructure</div>
-                                </div>
-                                <div class="reward-cost" style="background: #9b59b6;">18.7% APY</div>
-                            </div>
-                        </div>
-
-                        <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; color: white;">
-                            <h4 style="margin-bottom: 10px;">💡 Staking Benefits</h4>
-                            <div style="font-size: 12px; line-height: 1.5;">
-                                ✅ Passive income from token rewards<br>
-                                ✅ Governance voting power<br>
-                                ✅ Early access to new features<br>
-                                ✅ Reduced transaction fees<br>
-                                ✅ Community project funding rights
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Investment Tab -->
-                    <div id="invest-content" style="display: none;">
-                        <div class="mission-card">
-                            <h3 style="margin-bottom: 15px;">📈 Investment Portfolio</h3>
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">Total Invested</p>
-                                    <p style="font-size: 18px; font-weight: bold;">₹8,500</p>
-                                </div>
-                                <div>
-                                    <p style="font-size: 12px; opacity: 0.8;">Current Value</p>
-                                    <p style="font-size: 18px; font-weight: bold; color: #27ae60;">₹9,750</p>
-                                </div>
-                            </div>
-                            <div class="mission-progress">
-                                <div class="progress-fill" style="width: 65%"></div>
-                            </div>
-                            <p style="font-size: 11px; opacity: 0.7; text-align: center; margin-top: 5px;">Portfolio performance: +14.7% (30 days)</p>
-                        </div>
-
-                        <div class="tab-container" style="margin-bottom: 15px;">
-                            <div class="tab active" onclick="switchInvestTab('projects')">🏗️ Projects</div>
-                            <div class="tab" onclick="switchInvestTab('equity')">📊 Equity</div>
-                        </div>
-
-                        <!-- Investment Projects -->
-                        <div id="projects-content">
-                            <div class="rewards-section">
-                                <div class="rewards-header">
-                                    <div class="rewards-title">Active Investments</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #f39c12, #e67e22);">🏗️</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">Urgam School Solar Project</div>
-                                        <div class="reward-desc">Your investment: ₹2,000 • ROI: 18%</div>
-                                    </div>
-                                    <div style="color: #27ae60; font-size: 11px; font-weight: bold;">+₹360</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #3498db, #2980b9);">💧</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">Water Purification Plant</div>
-                                        <div class="reward-desc">Your investment: ₹3,000 • ROI: 15%</div>
-                                    </div>
-                                    <div style="color: #27ae60; font-size: 11px; font-weight: bold;">+₹450</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #27ae60, #229954);">⚡</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">Community Microgrid</div>
-                                        <div class="reward-desc">Your investment: ₹3,500 • ROI: 22%</div>
-                                    </div>
-                                    <div style="color: #27ae60; font-size: 11px; font-weight: bold;">+₹770</div>
-                                </div>
-                            </div>
-
-                            <div class="action-grid">
-                                <div class="action-card" style="background: linear-gradient(135deg, #27ae60, #229954);">
-                                    <div class="action-icon">💰</div>
-                                    <div class="action-title">New Projects</div>
-                                    <div class="action-desc">Explore investment opportunities</div>
-                                </div>
-                                <div class="action-card" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
-                                    <div class="action-icon">📤</div>
-                                    <div class="action-title">Withdraw</div>
-                                    <div class="action-desc">Cash out profits</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Equity Investments -->
-                        <div id="equity-content" style="display: none;">
-                            <div class="rewards-section">
-                                <div class="rewards-header">
-                                    <div class="rewards-title">1WP Network Investments</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #667eea, #764ba2);">🌍</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">ClimateAI Solutions</div>
-                                        <div class="reward-desc">Early stage • Clean tech</div>
-                                    </div>
-                                    <div class="reward-cost" style="background: #667eea;">Invest</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #4ecdc4, #44a08d);">🏥</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">HealthChain Records</div>
-                                        <div class="reward-desc">Pre-seed • HealthTech</div>
-                                    </div>
-                                    <div class="reward-cost" style="background: #4ecdc4;">Invest</div>
-                                </div>
-
-                                <div class="reward-item">
-                                    <div class="reward-icon" style="background: linear-gradient(45deg, #ff6b6b, #ee5a52);">🎓</div>
-                                    <div class="reward-info">
-                                        <div class="reward-name">EduToken Learning Platform</div>
-                                        <div class="reward-desc">Seed • EdTech</div>
-                                    </div>
-                                    <div class="reward-cost" style="background: #ff6b6b;">Invest</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Scan Page (Placeholder) -->
-            <div class="page" id="scan">
-                <div class="header">
-                    <h2 style="margin-bottom: 10px;">Scan QR Code</h2>
-                </div>
-                <div class="main-content" style="display: flex; align-items: center; justify-content: center;">
-                    <p style="color: var(--text-primary); text-align: center;">QR Code scanner functionality to be implemented here.</p>
-                </div>
-            </div>
-
-            <!-- Energy Page (Placeholder) -->
-            <div class="page" id="energy">
-                 <div class="header">
-                    <h2 style="margin-bottom: 10px;">Energy Grid</h2>
-                </div>
-                <div class="main-content" style="display: flex; align-items: center; justify-content: center;">
-                    <p style="color: var(--text-primary); text-align: center;">Detailed energy grid statistics to be implemented here.</p>
-                </div>
-            </div>
-
-            <!-- Bottom Navigation -->
-            <div class="bottom-nav">
-                <div class="nav-item active" onclick="navigateTo('home')">
-                    <div class="nav-icon">🏠</div>
-                    <div class="nav-label">Home</div>
-                </div>
-                <div class="nav-item" onclick="navigateTo('mining')">
-                    <div class="nav-icon">⛏️</div>
-                    <div class="nav-label">Mining</div>
-                </div>
-                <div class="nav-item" onclick="navigateTo('community')">
-                    <div class="nav-icon">👥</div>
-                    <div class="nav-label">Community</div>
-                </div>
-                <div class="nav-item" onclick="navigateTo('rewards')">
-                    <div class="nav-icon">🎁</div>
-                    <div class="nav-label">Rewards</div>
-                    <div class="notification-dot"></div>
-                </div>
-                <div class="nav-item" onclick="navigateTo('wallet')">
-                    <div class="nav-icon">💳</div>
-                    <div class="nav-label">Wallet</div>
-                </div>
-            </div>
+      <div class="screen">
+        <div class="status-bar">
+          <span>9:41</span>
+          <span>📶 🔋</span>
         </div>
+
+        <!-- Home Page -->
+        <div class="page active" id="home">
+          <div class="header">
+            <div class="profile-section">
+              <div class="avatar">⚡</div>
+              <div class="user-info">
+                <h2>Welcome, Raj!</h2>
+                <span class="level-badge">Solar Pioneer • Level 3</span>
+              </div>
+            </div>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value">2.4kW</div>
+                <div class="stat-label">Generated</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">450</div>
+                <div class="stat-label">HH Tokens</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">₹1,250</div>
+                <div class="stat-label">Earned</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="main-content">
+            <div class="energy-visualization">
+              <div class="energy-circle">
+                <div class="energy-text">
+                  <div class="energy-value">73%</div>
+                  <div class="energy-unit">ACTIVE</div>
+                </div>
+              </div>
+              <div style="text-align: center; color: white">
+                <p style="margin: 5px 0">Urgam Valley Grid Status</p>
+                <p style="font-size: 12px; opacity: 0.8">12 nodes contributing • Real-time</p>
+              </div>
+            </div>
+
+            <div class="action-grid">
+              <div class="action-card" onclick="navigateTo('mining')">
+                <div class="action-icon">⛏️</div>
+                <div class="action-title">Mining Hub</div>
+                <div class="action-desc">Monitor your ASIC performance</div>
+              </div>
+              <div class="action-card" onclick="navigateTo('energy')">
+                <div class="action-icon">🔋</div>
+                <div class="action-title">Energy Grid</div>
+                <div class="action-desc">Track solar generation</div>
+              </div>
+              <div class="action-card" onclick="navigateTo('community')">
+                <div class="action-icon">🏘️</div>
+                <div class="action-title">Community</div>
+                <div class="action-desc">Connect with neighbors</div>
+              </div>
+              <div class="action-card pulse" onclick="showAchievement()">
+                <div class="action-icon">🎯</div>
+                <div class="action-title">Missions</div>
+                <div class="action-desc">Complete daily tasks</div>
+                <div class="notification-dot"></div>
+              </div>
+            </div>
+
+            <div class="mission-card">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <div>
+                  <h3 style="font-size: 16px; margin-bottom: 5px">Daily Challenge</h3>
+                  <p style="font-size: 12px; opacity: 0.8">Generate 3kW of solar energy</p>
+                </div>
+                <div style="text-align: right">
+                  <div style="font-size: 14px; font-weight: bold">+50 HH</div>
+                  <div style="font-size: 11px; opacity: 0.7">2.1/3.0 kW</div>
+                </div>
+              </div>
+              <div class="mission-progress">
+                <div class="progress-fill" style="width: 70%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="floating-action" onclick="navigateTo('scan')">📱</div>
+        </div>
+
+        <!-- Rewards Page -->
+        <div class="page" id="rewards">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">Reward Store</h2>
+            <div class="hh-balance">💰 450 HH Tokens</div>
+          </div>
+
+          <div class="main-content">
+            <div class="tab-container">
+              <div class="tab active">🛍️ Shop</div>
+              <div class="tab">✈️ Travel</div>
+              <div class="tab">🎮 Digital</div>
+            </div>
+
+            <div class="rewards-section">
+              <div class="reward-item">
+                <div
+                  class="reward-icon"
+                  style="background: linear-gradient(45deg, #e74c3c, #c0392b)"
+                >
+                  🛒
+                </div>
+                <div class="reward-info">
+                  <div class="reward-name">BigBasket Voucher</div>
+                  <div class="reward-desc">₹500 grocery shopping voucher</div>
+                </div>
+                <div class="reward-cost">200 HH</div>
+              </div>
+
+              <div class="reward-item">
+                <div
+                  class="reward-icon"
+                  style="background: linear-gradient(45deg, #3498db, #2980b9)"
+                >
+                  🚗
+                </div>
+                <div class="reward-info">
+                  <div class="reward-name">Ola Rides Credit</div>
+                  <div class="reward-desc">₹300 ride credit for local transport</div>
+                </div>
+                <div class="reward-cost">150 HH</div>
+              </div>
+
+              <div class="reward-item">
+                <div
+                  class="reward-icon"
+                  style="background: linear-gradient(45deg, #e67e22, #d35400)"
+                >
+                  ☕
+                </div>
+                <div class="reward-info">
+                  <div class="reward-name">Café Coffee Day</div>
+                  <div class="reward-desc">Free coffee and snacks combo</div>
+                </div>
+                <div class="reward-cost">80 HH</div>
+              </div>
+
+              <div class="reward-item">
+                <div
+                  class="reward-icon"
+                  style="background: linear-gradient(45deg, #9b59b6, #8e44ad)"
+                >
+                  🎵
+                </div>
+                <div class="reward-info">
+                  <div class="reward-name">Spotify Premium</div>
+                  <div class="reward-desc">1 month premium subscription</div>
+                </div>
+                <div class="reward-cost">120 HH</div>
+              </div>
+
+              <div class="reward-item">
+                <div
+                  class="reward-icon"
+                  style="background: linear-gradient(45deg, #27ae60, #229954)"
+                >
+                  ✈️
+                </div>
+                <div class="reward-info">
+                  <div class="reward-name">GoIbibo Travel Voucher</div>
+                  <div class="reward-desc">₹2000 discount on domestic flights</div>
+                </div>
+                <div class="reward-cost">800 HH</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mining Page -->
+        <div class="page" id="mining">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">Mining Dashboard</h2>
+            <p style="font-size: 12px; opacity: 0.8">Immersed ASIC Performance</p>
+          </div>
+
+          <div class="main-content">
+            <div class="stats-grid" style="margin-bottom: 20px">
+              <div class="stat-card" style="background: #2a2a3e; color: white">
+                <div class="stat-value" style="color: #4ecdc4">2.4 TH/s</div>
+                <div class="stat-label">Hash Rate</div>
+              </div>
+              <div class="stat-card" style="background: #2a2a3e; color: white">
+                <div class="stat-value" style="color: #ffd700">45°C</div>
+                <div class="stat-label">Temperature</div>
+              </div>
+              <div class="stat-card" style="background: #2a2a3e; color: white">
+                <div class="stat-value" style="color: #ff6b6b">95%</div>
+                <div class="stat-label">Efficiency</div>
+              </div>
+            </div>
+
+            <div class="mission-card">
+              <h3 style="margin-bottom: 10px">Heat Recovery System</h3>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+                <div>
+                  <p style="font-size: 12px; opacity: 0.8">Hot Water Generated</p>
+                  <p style="font-size: 18px; font-weight: bold">125 Liters</p>
+                </div>
+                <div>
+                  <p style="font-size: 12px; opacity: 0.8">Community Saved</p>
+                  <p style="font-size: 18px; font-weight: bold">₹450</p>
+                </div>
+              </div>
+              <div class="mission-progress">
+                <div class="progress-fill" style="width: 85%"></div>
+              </div>
+            </div>
+
+            <div class="action-grid">
+              <div
+                class="action-card"
+                style="background: linear-gradient(135deg, #27ae60, #229954)"
+              >
+                <div class="action-icon">📊</div>
+                <div class="action-title">Analytics</div>
+                <div class="action-desc">Detailed performance metrics</div>
+              </div>
+              <div
+                class="action-card"
+                style="background: linear-gradient(135deg, #e74c3c, #c0392b)"
+              >
+                <div class="action-icon">⚙️</div>
+                <div class="action-title">Settings</div>
+                <div class="action-desc">Configure mining parameters</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Community Page -->
+        <div class="page" id="community">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">Urgam Valley Community</h2>
+            <p style="font-size: 12px; opacity: 0.8">47 Active Members • 12 Online</p>
+          </div>
+
+          <div class="main-content">
+            <div class="tab-container">
+              <div class="tab active">🏘️ Feed</div>
+              <div class="tab">🗳️ Vote</div>
+              <div class="tab">💬 Chat</div>
+            </div>
+
+            <div
+              style="
+                background: #2a2a3e;
+                border-radius: 15px;
+                padding: 15px;
+                margin-bottom: 15px;
+                color: white;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px">
+                <div class="avatar" style="width: 35px; height: 35px; font-size: 14px">🌱</div>
+                <div>
+                  <p style="font-size: 14px; font-weight: 500">Priya Sharma</p>
+                  <p style="font-size: 11px; opacity: 0.7">2 hours ago</p>
+                </div>
+              </div>
+              <p style="font-size: 13px; margin-bottom: 10px">
+                Just installed my rooftop solar panel! Contributing 1.2kW to our community grid.
+                Excited to be part of the green revolution! 🌞⚡
+              </p>
+              <div style="display: flex; gap: 15px; font-size: 12px">
+                <span>❤️ 23</span>
+                <span>💬 8</span>
+                <span>🔄 Share</span>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: #2a2a3e;
+                border-radius: 15px;
+                padding: 15px;
+                margin-bottom: 15px;
+                color: white;
+              "
+            >
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px">
+                <div class="avatar" style="width: 35px; height: 35px; font-size: 14px">⚡</div>
+                <div>
+                  <p style="font-size: 14px; font-weight: 500">Community Grid</p>
+                  <p style="font-size: 11px; opacity: 0.7">System Update</p>
+                </div>
+              </div>
+              <p style="font-size: 13px; margin-bottom: 10px">
+                🎉 Milestone achieved! Our community has generated 50MWh of clean energy this month.
+                That's enough to power 150 homes!
+              </p>
+              <div style="background: rgba(76, 205, 196, 0.2); padding: 10px; border-radius: 8px">
+                <p style="font-size: 11px">Next Goal: 75MWh • Reward: Special NFT Badge</p>
+              </div>
+            </div>
+
+            <div class="mission-card">
+              <h4 style="margin-bottom: 10px">🗳️ Active Proposal</h4>
+              <p style="font-size: 13px; margin-bottom: 10px">
+                Install EV charging station using excess solar energy
+              </p>
+              <div style="display: flex; gap: 10px">
+                <button
+                  style="
+                    flex: 1;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 5px;
+                    background: #27ae60;
+                    color: white;
+                    font-size: 12px;
+                  "
+                >
+                  ✓ Yes (34)
+                </button>
+                <button
+                  style="
+                    flex: 1;
+                    padding: 8px;
+                    border: none;
+                    border-radius: 5px;
+                    background: #e74c3c;
+                    color: white;
+                    font-size: 12px;
+                  "
+                >
+                  ✗ No (12)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wallet Page -->
+        <div class="page" id="wallet">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">HeliosHash Wallet</h2>
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-value">450</div>
+                <div class="stat-label">HH Tokens</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">₹12,450</div>
+                <div class="stat-label">INR Value</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-value">+15.2%</div>
+                <div class="stat-label">24h Change</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="main-content">
+            <div class="tab-container">
+              <div class="tab active" onclick="switchWalletTab('balance')">💰 Balance</div>
+              <div class="tab" onclick="switchWalletTab('remit')">🌍 Remit</div>
+              <div class="tab" onclick="switchWalletTab('stake')">🔒 Stake</div>
+              <div class="tab" onclick="switchWalletTab('invest')">📈 Invest</div>
+            </div>
+
+            <!-- Balance Tab -->
+            <div id="balance-content">
+              <div class="action-grid" style="margin-bottom: 20px">
+                <div
+                  class="action-card"
+                  style="background: linear-gradient(135deg, #27ae60, #229954)"
+                >
+                  <div class="action-icon">💸</div>
+                  <div class="action-title">Send Money</div>
+                  <div class="action-desc">To wallet or bank account</div>
+                </div>
+                <div
+                  class="action-card"
+                  style="background: linear-gradient(135deg, #3498db, #2980b9)"
+                >
+                  <div class="action-icon">💳</div>
+                  <div class="action-title">Add Funds</div>
+                  <div class="action-desc">UPI, card, or crypto</div>
+                </div>
+              </div>
+
+              <div class="rewards-section">
+                <div class="rewards-header">
+                  <div class="rewards-title">Recent Transactions</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #27ae60, #229954)"
+                  >
+                    ⚡
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">Energy Generation Reward</div>
+                    <div class="reward-desc">Solar power - 2.4 kWh generated</div>
+                  </div>
+                  <div style="color: #27ae60; font-weight: bold">+24 HH</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #e67e22, #d35400)"
+                  >
+                    🛒
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">BigBasket Voucher</div>
+                    <div class="reward-desc">Grocery shopping redemption</div>
+                  </div>
+                  <div style="color: #e74c3c; font-weight: bold">-80 HH</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #9b59b6, #8e44ad)"
+                  >
+                    ⛏️
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">Mining Rewards</div>
+                    <div class="reward-desc">ASIC mining - 4 hours active</div>
+                  </div>
+                  <div style="color: #27ae60; font-weight: bold">+18 HH</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Remittance Tab -->
+            <div id="remit-content" style="display: none">
+              <div class="mission-card">
+                <h3 style="margin-bottom: 15px">🌍 International Remittance</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">Exchange Rate</p>
+                    <p style="font-size: 18px; font-weight: bold">1 HH = $0.035</p>
+                  </div>
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">Network Fee</p>
+                    <p style="font-size: 18px; font-weight: bold">0.5%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="rewards-section">
+                <div class="rewards-header">
+                  <div class="rewards-title">Send Money Abroad</div>
+                </div>
+
+                <div style="padding: 15px 0">
+                  <div style="margin-bottom: 15px">
+                    <label style="color: white; font-size: 12px; margin-bottom: 5px; display: block"
+                      >Recipient Country</label
+                    >
+                    <select
+                      style="
+                        width: 100%;
+                        padding: 10px;
+                        border: none;
+                        border-radius: 8px;
+                        background: #1a1a2e;
+                        color: white;
+                      "
+                    >
+                      <option>🇺🇸 United States</option>
+                      <option>🇨🇦 Canada</option>
+                      <option>🇬🇧 United Kingdom</option>
+                      <option>🇦🇪 UAE</option>
+                      <option>🇸🇬 Singapore</option>
+                      <option>🇦🇺 Australia</option>
+                    </select>
+                  </div>
+
+                  <div style="margin-bottom: 15px">
+                    <label style="color: white; font-size: 12px; margin-bottom: 5px; display: block"
+                      >Amount to Send</label
+                    >
+                    <div style="display: flex; gap: 10px">
+                      <input
+                        type="number"
+                        placeholder="0"
+                        style="
+                          flex: 1;
+                          padding: 10px;
+                          border: none;
+                          border-radius: 8px;
+                          background: #1a1a2e;
+                          color: white;
+                        "
+                      />
+                      <select
+                        style="
+                          padding: 10px;
+                          border: none;
+                          border-radius: 8px;
+                          background: #1a1a2e;
+                          color: white;
+                        "
+                      >
+                        <option>HH</option>
+                        <option>INR</option>
+                        <option>USD</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="action-grid">
+                    <div
+                      class="action-card"
+                      style="background: linear-gradient(135deg, #3498db, #2980b9)"
+                    >
+                      <div class="action-icon">🏦</div>
+                      <div class="action-title">Bank Transfer</div>
+                      <div class="action-desc">1-3 business days</div>
+                    </div>
+                    <div
+                      class="action-card"
+                      style="background: linear-gradient(135deg, #e74c3c, #c0392b)"
+                    >
+                      <div class="action-icon">💳</div>
+                      <div class="action-title">Instant Transfer</div>
+                      <div class="action-desc">Within minutes</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; color: white">
+                <h4 style="margin-bottom: 10px">🏆 Recent Remittances</h4>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                  "
+                >
+                  <span style="font-size: 12px">To: Priya (USA) • $150</span>
+                  <span style="font-size: 11px; color: #27ae60">✅ Completed</span>
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 0;
+                  "
+                >
+                  <span style="font-size: 12px">To: Raj (Canada) • $200</span>
+                  <span style="font-size: 11px; color: #f39c12">⏳ Processing</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Staking Tab -->
+            <div id="stake-content" style="display: none">
+              <div class="mission-card">
+                <h3 style="margin-bottom: 15px">🔒 HH Token Staking</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">Currently Staked</p>
+                    <p style="font-size: 18px; font-weight: bold">180 HH</p>
+                  </div>
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">APY</p>
+                    <p style="font-size: 18px; font-weight: bold; color: #27ae60">12.5%</p>
+                  </div>
+                </div>
+                <div class="mission-progress">
+                  <div class="progress-fill" style="width: 40%"></div>
+                </div>
+                <p style="font-size: 11px; opacity: 0.7; text-align: center; margin-top: 5px">
+                  Lock period: 180 days remaining
+                </p>
+              </div>
+
+              <div class="action-grid" style="margin-bottom: 20px">
+                <div
+                  class="action-card"
+                  style="background: linear-gradient(135deg, #27ae60, #229954)"
+                >
+                  <div class="action-icon">➕</div>
+                  <div class="action-title">Stake More</div>
+                  <div class="action-desc">Increase your rewards</div>
+                </div>
+                <div
+                  class="action-card"
+                  style="background: linear-gradient(135deg, #f39c12, #e67e22)"
+                >
+                  <div class="action-icon">📊</div>
+                  <div class="action-title">Rewards</div>
+                  <div class="action-desc">Claim earned tokens</div>
+                </div>
+              </div>
+
+              <div class="rewards-section">
+                <div class="rewards-header">
+                  <div class="rewards-title">Staking Pools</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #27ae60, #229954)"
+                  >
+                    ⚡
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">Energy Pool</div>
+                    <div class="reward-desc">Stake to support grid expansion</div>
+                  </div>
+                  <div class="reward-cost" style="background: #27ae60">12.5% APY</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #3498db, #2980b9)"
+                  >
+                    🏘️
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">Community Pool</div>
+                    <div class="reward-desc">Fund local development projects</div>
+                  </div>
+                  <div class="reward-cost" style="background: #3498db">15.2% APY</div>
+                </div>
+
+                <div class="reward-item">
+                  <div
+                    class="reward-icon"
+                    style="background: linear-gradient(45deg, #9b59b6, #8e44ad)"
+                  >
+                    ⛏️
+                  </div>
+                  <div class="reward-info">
+                    <div class="reward-name">Mining Pool</div>
+                    <div class="reward-desc">Support mining infrastructure</div>
+                  </div>
+                  <div class="reward-cost" style="background: #9b59b6">18.7% APY</div>
+                </div>
+              </div>
+
+              <div style="background: #2a2a3e; border-radius: 15px; padding: 15px; color: white">
+                <h4 style="margin-bottom: 10px">💡 Staking Benefits</h4>
+                <div style="font-size: 12px; line-height: 1.5">
+                  ✅ Passive income from token rewards<br />
+                  ✅ Governance voting power<br />
+                  ✅ Early access to new features<br />
+                  ✅ Reduced transaction fees<br />
+                  ✅ Community project funding rights
+                </div>
+              </div>
+            </div>
+
+            <!-- Investment Tab -->
+            <div id="invest-content" style="display: none">
+              <div class="mission-card">
+                <h3 style="margin-bottom: 15px">📈 Investment Portfolio</h3>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px">
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">Total Invested</p>
+                    <p style="font-size: 18px; font-weight: bold">₹8,500</p>
+                  </div>
+                  <div>
+                    <p style="font-size: 12px; opacity: 0.8">Current Value</p>
+                    <p style="font-size: 18px; font-weight: bold; color: #27ae60">₹9,750</p>
+                  </div>
+                </div>
+                <div class="mission-progress">
+                  <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <p style="font-size: 11px; opacity: 0.7; text-align: center; margin-top: 5px">
+                  Portfolio performance: +14.7% (30 days)
+                </p>
+              </div>
+
+              <div class="tab-container" style="margin-bottom: 15px">
+                <div class="tab active" onclick="switchInvestTab('projects')">🏗️ Projects</div>
+                <div class="tab" onclick="switchInvestTab('equity')">📊 Equity</div>
+              </div>
+
+              <!-- Investment Projects -->
+              <div id="projects-content">
+                <div class="rewards-section">
+                  <div class="rewards-header">
+                    <div class="rewards-title">Active Investments</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #f39c12, #e67e22)"
+                    >
+                      🏗️
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">Urgam School Solar Project</div>
+                      <div class="reward-desc">Your investment: ₹2,000 • ROI: 18%</div>
+                    </div>
+                    <div style="color: #27ae60; font-size: 11px; font-weight: bold">+₹360</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #3498db, #2980b9)"
+                    >
+                      💧
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">Water Purification Plant</div>
+                      <div class="reward-desc">Your investment: ₹3,000 • ROI: 15%</div>
+                    </div>
+                    <div style="color: #27ae60; font-size: 11px; font-weight: bold">+₹450</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #27ae60, #229954)"
+                    >
+                      ⚡
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">Community Microgrid</div>
+                      <div class="reward-desc">Your investment: ₹3,500 • ROI: 22%</div>
+                    </div>
+                    <div style="color: #27ae60; font-size: 11px; font-weight: bold">+₹770</div>
+                  </div>
+                </div>
+
+                <div class="action-grid">
+                  <div
+                    class="action-card"
+                    style="background: linear-gradient(135deg, #27ae60, #229954)"
+                  >
+                    <div class="action-icon">💰</div>
+                    <div class="action-title">New Projects</div>
+                    <div class="action-desc">Explore investment opportunities</div>
+                  </div>
+                  <div
+                    class="action-card"
+                    style="background: linear-gradient(135deg, #e74c3c, #c0392b)"
+                  >
+                    <div class="action-icon">📤</div>
+                    <div class="action-title">Withdraw</div>
+                    <div class="action-desc">Cash out profits</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Equity Investments -->
+              <div id="equity-content" style="display: none">
+                <div class="rewards-section">
+                  <div class="rewards-header">
+                    <div class="rewards-title">1WP Network Investments</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #667eea, #764ba2)"
+                    >
+                      🌍
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">ClimateAI Solutions</div>
+                      <div class="reward-desc">Early stage • Clean tech</div>
+                    </div>
+                    <div class="reward-cost" style="background: #667eea">Invest</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #4ecdc4, #44a08d)"
+                    >
+                      🏥
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">HealthChain Records</div>
+                      <div class="reward-desc">Pre-seed • HealthTech</div>
+                    </div>
+                    <div class="reward-cost" style="background: #4ecdc4">Invest</div>
+                  </div>
+
+                  <div class="reward-item">
+                    <div
+                      class="reward-icon"
+                      style="background: linear-gradient(45deg, #ff6b6b, #ee5a52)"
+                    >
+                      🎓
+                    </div>
+                    <div class="reward-info">
+                      <div class="reward-name">EduToken Learning Platform</div>
+                      <div class="reward-desc">Seed • EdTech</div>
+                    </div>
+                    <div class="reward-cost" style="background: #ff6b6b">Invest</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Scan Page (Placeholder) -->
+        <div class="page" id="scan">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">Scan QR Code</h2>
+          </div>
+          <div
+            class="main-content"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            <p style="color: var(--text-primary); text-align: center">
+              QR Code scanner functionality to be implemented here.
+            </p>
+          </div>
+        </div>
+
+        <!-- Energy Page (Placeholder) -->
+        <div class="page" id="energy">
+          <div class="header">
+            <h2 style="margin-bottom: 10px">Energy Grid</h2>
+          </div>
+          <div
+            class="main-content"
+            style="display: flex; align-items: center; justify-content: center"
+          >
+            <p style="color: var(--text-primary); text-align: center">
+              Detailed energy grid statistics to be implemented here.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+          <div class="nav-item active" onclick="navigateTo('home')">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Home</div>
+          </div>
+          <div class="nav-item" onclick="navigateTo('mining')">
+            <div class="nav-icon">⛏️</div>
+            <div class="nav-label">Mining</div>
+          </div>
+          <div class="nav-item" onclick="navigateTo('community')">
+            <div class="nav-icon">👥</div>
+            <div class="nav-label">Community</div>
+          </div>
+          <div class="nav-item" onclick="navigateTo('rewards')">
+            <div class="nav-icon">🎁</div>
+            <div class="nav-label">Rewards</div>
+            <div class="notification-dot"></div>
+          </div>
+          <div class="nav-item" onclick="navigateTo('wallet')">
+            <div class="nav-icon">💳</div>
+            <div class="nav-label">Wallet</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Achievement Popup -->
     <div class="achievement-popup" id="achievementPopup">
-        <div style="font-size: 48px; margin-bottom: 15px;">🏆</div>
-        <h3 style="margin-bottom: 10px;">Achievement Unlocked!</h3>
-        <p style="font-size: 14px; margin-bottom: 15px;">Solar Pioneer Level 3</p>
-        <p style="font-size: 12px; opacity: 0.8;">You've generated 10kWh of clean energy!</p>
-        <button onclick="closeAchievement()" style="margin-top: 20px; padding: 10px 20px; border: none; border-radius: 20px; background: white; color: #ff8c00; font-weight: bold;">Awesome!</button>
+      <div style="font-size: 48px; margin-bottom: 15px">🏆</div>
+      <h3 style="margin-bottom: 10px">Achievement Unlocked!</h3>
+      <p style="font-size: 14px; margin-bottom: 15px">Solar Pioneer Level 3</p>
+      <p style="font-size: 12px; opacity: 0.8">You've generated 10kWh of clean energy!</p>
+      <button
+        onclick="closeAchievement()"
+        style="
+          margin-top: 20px;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 20px;
+          background: white;
+          color: #ff8c00;
+          font-weight: bold;
+        "
+      >
+        Awesome!
+      </button>
     </div>
 
     <script>
-        let currentPage = 'home';
+      let currentPage = 'home';
 
-        function navigateTo(pageId) {
-            // Check if pages exist before manipulating
-            const currentPageEl = document.getElementById(currentPage);
-            const newPageEl = document.getElementById(pageId);
+      function navigateTo(pageId) {
+        // Check if pages exist before manipulating
+        const currentPageEl = document.getElementById(currentPage);
+        const newPageEl = document.getElementById(pageId);
 
-            if (!currentPageEl || !newPageEl) {
-                console.warn(`Page ${pageId} or ${currentPage} not found`);
-                return;
-            }
-
-            // Hide ALL pages first
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-                page.style.zIndex = '1';
-            });
-
-            // Show new page with higher z-index
-            newPageEl.classList.add('active');
-            newPageEl.style.zIndex = '10';
-
-            // Update navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Find and activate corresponding nav item
-            const navItems = document.querySelectorAll('.nav-item');
-            const pageMapping = {
-                'home': 0,
-                'mining': 1,
-                'community': 2,
-                'rewards': 3,
-                'wallet': 4
-            };
-
-            if (pageMapping[pageId] !== undefined) {
-                navItems[pageMapping[pageId]].classList.add('active');
-            }
-
-            currentPage = pageId;
-
-            // Add page transition effect
-            setTimeout(() => {
-                updatePageContent(pageId);
-            }, 150);
+        if (!currentPageEl || !newPageEl) {
+          console.warn(`Page ${pageId} or ${currentPage} not found`);
+          return;
         }
 
-        function updatePageContent(pageId) {
-            // Dynamic content updates based on page
-            if (pageId === 'rewards') {
-                animateRewards();
-            } else if (pageId === 'mining') {
-                updateMiningStats();
-            }
-        }
-
-        function animateRewards() {
-            const rewardItems = document.querySelectorAll('.reward-item');
-            rewardItems.forEach((item, index) => {
-                item.style.opacity = '0';
-                item.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    item.style.transition = 'all 0.3s ease';
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        }
-
-        function updateMiningStats() {
-            // Simulate real-time mining data updates
-            const hashRate = document.querySelector('.stat-value');
-            let currentValue = 2.4;
-
-            setInterval(() => {
-                currentValue += (Math.random() - 0.5) * 0.1;
-                if (hashRate) {
-                    hashRate.textContent = `${currentValue.toFixed(1)} TH/s`;
-                }
-            }, 3000);
-        }
-
-        function showAchievement() {
-            document.getElementById('achievementPopup').classList.add('show');
-
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                closeAchievement();
-            }, 3000);
-        }
-
-        function closeAchievement() {
-            document.getElementById('achievementPopup').classList.remove('show');
-        }
-
-        function switchWalletTab(tabName) {
-            // Hide all wallet content
-            const contents = ['balance-content', 'remit-content', 'stake-content', 'invest-content'];
-            contents.forEach(content => {
-                const element = document.getElementById(content);
-                if (element) element.style.display = 'none';
-            });
-
-            // Show selected content
-            const selectedContent = document.getElementById(tabName + '-content');
-            if (selectedContent) selectedContent.style.display = 'block';
-        }
-
-        function switchInvestTab(tabName) {
-            // Hide all investment content
-            const contents = ['projects-content', 'equity-content'];
-            contents.forEach(content => {
-                const element = document.getElementById(content);
-                if (element) element.style.display = 'none';
-            });
-
-            // Show selected content
-            const selectedContent = document.getElementById(tabName + '-content');
-            if (selectedContent) selectedContent.style.display = 'block';
-        }
-
-        // Simulate real-time energy data updates
-        function updateEnergyVisualization() {
-            const energyValue = document.querySelector('.energy-value');
-            const progressFill = document.querySelector('.progress-fill');
-
-            setInterval(() => {
-                const newValue = Math.floor(Math.random() * 20) + 65;
-                const newProgress = Math.floor(Math.random() * 30) + 60;
-
-                if (energyValue) energyValue.textContent = `${newValue}%`;
-                if (progressFill) progressFill.style.width = `${newProgress}%`;
-            }, 5000);
-        }
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            updateEnergyVisualization();
-
-            // Add click handlers for tabs
-            document.querySelectorAll('.tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
-
-            // Add click handlers for action cards with haptic feedback simulation
-            document.querySelectorAll('.action-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                });
-            });
-
-            // Add loading states for buttons
-            document.querySelectorAll('button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const originalText = this.textContent;
-                    this.innerHTML = '<div class="loading-spinner"></div>';
-
-                    setTimeout(() => {
-                        this.textContent = originalText;
-                    }, 1500);
-                });
-            });
-
-            // Simulate notifications
-            setTimeout(() => {
-                showNotification('🌞 Solar panel efficiency improved by 5%!');
-            }, 10000);
+        // Hide ALL pages first
+        document.querySelectorAll('.page').forEach((page) => {
+          page.classList.remove('active');
+          page.style.zIndex = '1';
         });
 
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
+        // Show new page with higher z-index
+        newPageEl.classList.add('active');
+        newPageEl.style.zIndex = '10';
+
+        // Update navigation
+        document.querySelectorAll('.nav-item').forEach((item) => {
+          item.classList.remove('active');
+        });
+
+        // Find and activate corresponding nav item
+        const navItems = document.querySelectorAll('.nav-item');
+        const pageMapping = {
+          home: 0,
+          mining: 1,
+          community: 2,
+          rewards: 3,
+          wallet: 4,
+        };
+
+        if (pageMapping[pageId] !== undefined) {
+          navItems[pageMapping[pageId]].classList.add('active');
+        }
+
+        currentPage = pageId;
+
+        // Add page transition effect
+        setTimeout(() => {
+          updatePageContent(pageId);
+        }, 150);
+      }
+
+      function updatePageContent(pageId) {
+        // Dynamic content updates based on page
+        if (pageId === 'rewards') {
+          animateRewards();
+        } else if (pageId === 'mining') {
+          updateMiningStats();
+        }
+      }
+
+      function animateRewards() {
+        const rewardItems = document.querySelectorAll('.reward-item');
+        rewardItems.forEach((item, index) => {
+          item.style.opacity = '0';
+          item.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            item.style.transition = 'all 0.3s ease';
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+          }, index * 100);
+        });
+      }
+
+      function updateMiningStats() {
+        // Simulate real-time mining data updates
+        const hashRate = document.querySelector('.stat-value');
+        let currentValue = 2.4;
+
+        setInterval(() => {
+          currentValue += (Math.random() - 0.5) * 0.1;
+          if (hashRate) {
+            hashRate.textContent = `${currentValue.toFixed(1)} TH/s`;
+          }
+        }, 3000);
+      }
+
+      function showAchievement() {
+        document.getElementById('achievementPopup').classList.add('show');
+
+        // Auto close after 3 seconds
+        setTimeout(() => {
+          closeAchievement();
+        }, 3000);
+      }
+
+      function closeAchievement() {
+        document.getElementById('achievementPopup').classList.remove('show');
+      }
+
+      function switchWalletTab(tabName) {
+        // Hide all wallet content
+        const contents = ['balance-content', 'remit-content', 'stake-content', 'invest-content'];
+        contents.forEach((content) => {
+          const element = document.getElementById(content);
+          if (element) element.style.display = 'none';
+        });
+
+        // Show selected content
+        const selectedContent = document.getElementById(tabName + '-content');
+        if (selectedContent) selectedContent.style.display = 'block';
+      }
+
+      function switchInvestTab(tabName) {
+        // Hide all investment content
+        const contents = ['projects-content', 'equity-content'];
+        contents.forEach((content) => {
+          const element = document.getElementById(content);
+          if (element) element.style.display = 'none';
+        });
+
+        // Show selected content
+        const selectedContent = document.getElementById(tabName + '-content');
+        if (selectedContent) selectedContent.style.display = 'block';
+      }
+
+      // Simulate real-time energy data updates
+      function updateEnergyVisualization() {
+        const energyValue = document.querySelector('.energy-value');
+        const progressFill = document.querySelector('.progress-fill');
+
+        setInterval(() => {
+          const newValue = Math.floor(Math.random() * 20) + 65;
+          const newProgress = Math.floor(Math.random() * 30) + 60;
+
+          if (energyValue) energyValue.textContent = `${newValue}%`;
+          if (progressFill) progressFill.style.width = `${newProgress}%`;
+        }, 5000);
+      }
+
+      // Initialize app
+      document.addEventListener('DOMContentLoaded', function () {
+        updateEnergyVisualization();
+
+        // Add click handlers for tabs
+        document.querySelectorAll('.tab').forEach((tab) => {
+          tab.addEventListener('click', function () {
+            document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+            this.classList.add('active');
+          });
+        });
+
+        // Add click handlers for action cards with haptic feedback simulation
+        document.querySelectorAll('.action-card').forEach((card) => {
+          card.addEventListener('click', function () {
+            this.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              this.style.transform = '';
+            }, 150);
+          });
+        });
+
+        // Add loading states for buttons
+        document.querySelectorAll('button').forEach((button) => {
+          button.addEventListener('click', function () {
+            const originalText = this.textContent;
+            this.innerHTML = '<div class="loading-spinner"></div>';
+
+            setTimeout(() => {
+              this.textContent = originalText;
+            }, 1500);
+          });
+        });
+
+        // Simulate notifications
+        setTimeout(() => {
+          showNotification('🌞 Solar panel efficiency improved by 5%!');
+        }, 10000);
+      });
+
+      function showNotification(message) {
+        const notification = document.createElement('div');
+        notification.style.cssText = `
                 position: fixed;
                 top: 60px;
                 left: 50%;
@@ -1373,20 +1634,20 @@
                 animation: slideDown 0.3s ease;
             `;
 
-            notification.textContent = message;
-            document.body.appendChild(notification);
+        notification.textContent = message;
+        document.body.appendChild(notification);
 
-            setTimeout(() => {
-                notification.style.animation = 'slideUp 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 4000);
-        }
+        setTimeout(() => {
+          notification.style.animation = 'slideUp 0.3s ease';
+          setTimeout(() => {
+            document.body.removeChild(notification);
+          }, 300);
+        }, 4000);
+      }
 
-        // Add CSS animations
-        const style = document.createElement('style');
-        style.textContent = `
+      // Add CSS animations
+      const style = document.createElement('style');
+      style.textContent = `
             @keyframes slideDown {
                 from { transform: translateX(-50%) translateY(-100%); }
                 to { transform: translateX(-50%) translateY(0); }
@@ -1409,43 +1670,43 @@
                 transition: all 0.2s ease;
             }
         `;
-        document.head.appendChild(style);
+      document.head.appendChild(style);
 
-        // Add swipe gesture support for mobile
-        let startX = null;
-        let startY = null;
+      // Add swipe gesture support for mobile
+      let startX = null;
+      let startY = null;
 
-        document.addEventListener('touchstart', function(e) {
-            startX = e.touches[0].clientX;
-            startY = e.touches[0].clientY;
-        });
+      document.addEventListener('touchstart', function (e) {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
 
-        document.addEventListener('touchend', function(e) {
-            if (!startX || !startY) return;
+      document.addEventListener('touchend', function (e) {
+        if (!startX || !startY) return;
 
-            const endX = e.changedTouches[0].clientX;
-            const endY = e.changedTouches[0].clientY;
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
 
-            const diffX = startX - endX;
-            const diffY = startY - endY;
+        const diffX = startX - endX;
+        const diffY = startY - endY;
 
-            // Horizontal swipe detection
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
-                const pages = ['home', 'mining', 'community', 'rewards', 'wallet'];
-                const currentIndex = pages.indexOf(currentPage);
+        // Horizontal swipe detection
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 50) {
+          const pages = ['home', 'mining', 'community', 'rewards', 'wallet'];
+          const currentIndex = pages.indexOf(currentPage);
 
-                if (diffX > 0 && currentIndex < pages.length - 1) {
-                    // Swipe left - next page
-                    navigateTo(pages[currentIndex + 1]);
-                } else if (diffX < 0 && currentIndex > 0) {
-                    // Swipe right - previous page
-                    navigateTo(pages[currentIndex - 1]);
-                }
-            }
+          if (diffX > 0 && currentIndex < pages.length - 1) {
+            // Swipe left - next page
+            navigateTo(pages[currentIndex + 1]);
+          } else if (diffX < 0 && currentIndex > 0) {
+            // Swipe right - previous page
+            navigateTo(pages[currentIndex - 1]);
+          }
+        }
 
-            startX = null;
-            startY = null;
-        });
+        startX = null;
+        startY = null;
+      });
     </script>
-</body>
+  </body>
 </html>

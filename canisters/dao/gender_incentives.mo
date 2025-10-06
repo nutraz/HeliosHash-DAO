@@ -6,6 +6,8 @@
 
 
 
+
+
 actor GenderIncentives {
     
     // ==================== TYPE DEFINITIONS ====================
@@ -536,7 +538,7 @@ actor GenderIncentives {
                 let hasBadge = Array.find<Text>(
                     member.nftBadges,
                     func(b: Text) : Bool { 
-                        Text.contains(b, #text badgeTemplate.badgeId)
+                        Text.contains(b, badgeTemplate.badgeId)
                     }
                 );
                 

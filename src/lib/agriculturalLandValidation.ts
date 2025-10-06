@@ -645,10 +645,13 @@ export class AgriculturalLandValidationService {
       (land) => land.encumbranceStatus === 'CLEAR' && land.revenuePaid && land.totalArea >= 1
     ).length;
 
-    const soilTypes = validatedLands.reduce((acc, land) => {
-      acc[land.soilType] = (acc[land.soilType] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
+    const soilTypes = validatedLands.reduce(
+      (acc, land) => {
+        acc[land.soilType] = (acc[land.soilType] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>
+    );
 
     const irrigatedArea = validatedLands.reduce((sum, land) => sum + land.irrigatedArea, 0);
     const irrigationCoverage = totalArea > 0 ? (irrigatedArea / totalArea) * 100 : 0;

@@ -194,14 +194,14 @@ export class LocalGovernanceService {
       age < 26
         ? '18-25'
         : age < 36
-        ? '26-35'
-        : age < 46
-        ? '36-45'
-        : age < 56
-        ? '46-55'
-        : age < 66
-        ? '56-65'
-        : '65+';
+          ? '26-35'
+          : age < 46
+            ? '36-45'
+            : age < 56
+              ? '46-55'
+              : age < 66
+                ? '56-65'
+                : '65+';
 
     return {
       maskedAadhaar,

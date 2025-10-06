@@ -23,9 +23,9 @@
       "      </CardContent>",
       "    </Card>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "HeliosHash DAO React component with UI card"
+    "description": "HeliosHash DAO React component with UI card",
   },
 
   "hhdao_canister_hook": {
@@ -58,9 +58,9 @@
       "    loading,",
       "    error",
       "  };",
-      "}"
+      "}",
     ],
-    "description": "HeliosHash DAO canister interaction hook"
+    "description": "HeliosHash DAO canister interaction hook",
   },
 
   "hhdao_job_board_types": {
@@ -97,9 +97,9 @@
       "  | 'Active'",
       "  | 'Closed'",
       "  | 'Filled'",
-      "  | 'Cancelled';"
+      "  | 'Cancelled';",
     ],
-    "description": "HeliosHash DAO Job Board TypeScript interfaces"
+    "description": "HeliosHash DAO Job Board TypeScript interfaces",
   },
 
   "hhdao_solar_project_card": {
@@ -152,9 +152,9 @@
       "      </CardContent>",
       "    </Card>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "HeliosHash DAO Solar Project Card Component"
+    "description": "HeliosHash DAO Solar Project Card Component",
   },
 
   "hhdao_dao_proposal_form": {
@@ -214,9 +214,9 @@
       "      </form>",
       "    </Form>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "HeliosHash DAO Proposal Form with validation"
+    "description": "HeliosHash DAO Proposal Form with validation",
   },
 
   "hhdao_1wp_integration": {
@@ -301,9 +301,9 @@
       "      </CardContent>",
       "    </Card>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "One World Project integration component for global network status"
+    "description": "One World Project integration component for global network status",
   },
 
   "hhdao_rural_energy_dashboard": {
@@ -385,8 +385,8 @@
       "      </Card>",
       "    </div>",
       "  );",
-      "}"
+      "}",
     ],
-    "description": "Rural energy dashboard for Urgam Valley solar microgrid monitoring"
-  }
+    "description": "Rural energy dashboard for Urgam Valley solar microgrid monitoring",
+  },
 }

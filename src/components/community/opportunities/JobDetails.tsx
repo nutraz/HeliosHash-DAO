@@ -178,8 +178,8 @@ export default function JobDetails({ job, onBack, onApply, className }: JobDetai
                       {job.location.type === 'OnSite'
                         ? job.location.location
                         : job.location.type === 'Remote'
-                        ? 'Remote'
-                        : `Hybrid`}
+                          ? 'Remote'
+                          : `Hybrid`}
                     </p>
                   </div>
                 </div>

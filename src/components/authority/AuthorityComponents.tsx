@@ -114,10 +114,10 @@ export const IoTSensorCard = ({
                 thresholdStatus === 'critical'
                   ? 'text-red-400'
                   : thresholdStatus === 'high'
-                  ? 'text-orange-400'
-                  : thresholdStatus === 'low'
-                  ? 'text-yellow-400'
-                  : 'text-green-400'
+                    ? 'text-orange-400'
+                    : thresholdStatus === 'low'
+                      ? 'text-yellow-400'
+                      : 'text-green-400'
               }`}
             >
               {sensor.lastReading.value.toFixed(1)}
@@ -130,8 +130,8 @@ export const IoTSensorCard = ({
                 thresholdStatus === 'critical'
                   ? 'text-red-400'
                   : thresholdStatus === 'high'
-                  ? 'text-orange-400'
-                  : 'text-yellow-400'
+                    ? 'text-orange-400'
+                    : 'text-yellow-400'
               }`}
             />
           )}

@@ -1,9 +1,11 @@
-
-
 // Chain Fusion imports for ckBTC integration
 // Note: These would be actual imports in production
-// import CKBTC "mo:ckbtc/ckbtc"; 
+// import CKBTC "mo:ckbtc/ckbtc";
 // import AICompute "canister:ai-service";
+
+// Added missing base imports
+
+
 
 persistent actor Compute {
   
@@ -34,8 +36,26 @@ persistent actor Compute {
   private var currentMode: ComputeMode = #Bitcoin;
   private var computeStatsEntries: [(Principal, ComputeStats)] = [];
   private var pivotHistoryEntries: [(Nat, PivotDecision)] = [];
+
+  // Custom hash function for Nat (replacement for deprecated Hash.hash)
+  private func natHash(n: Nat) : Nat32 {
+    let hash = Int.abs(n);
+    var h : Nat32 = 0;
+    var remaining = hash;
+
+    // FNV-1a like hash
+    while (remaining > 0) {
+      let byte = Nat32.fromNat(remaining % 256);
+      h := (h ^ byte) *% 0x01000193;  // FNV prime
+      remaining := remaining / 256;
+    };
+
+    // Ensure non-zero for better distribution
+    if (h == 0) { 1 } else { h }
+  };
+
   private transient var computeStats = HashMap.fromIter<Principal, ComputeStats>(computeStatsEntries.vals(), 10, Principal.equal, Principal.hash);
-  private transient var pivotHistory = HashMap.fromIter<Nat, PivotDecision>(pivotHistoryEntries.vals(), 10, Nat.equal, Hash.hash);
+  private transient var pivotHistory = HashMap.fromIter<Nat, PivotDecision>(pivotHistoryEntries.vals(), 10, Nat.equal, natHash);
   
   private transient var pivotCounter: Nat = 0;
 

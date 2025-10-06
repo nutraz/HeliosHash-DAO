@@ -91,8 +91,8 @@ export default function NFTPage() {
                       nft.rarity === 'Legendary'
                         ? 'default'
                         : nft.rarity === 'Epic'
-                        ? 'secondary'
-                        : 'outline'
+                          ? 'secondary'
+                          : 'outline'
                     }
                   >
                     {nft.rarity}

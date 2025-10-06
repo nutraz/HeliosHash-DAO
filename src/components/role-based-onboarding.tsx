@@ -239,8 +239,8 @@ export const RoleBasedOnboarding = ({ onComplete, onCancel }: RoleBasedOnboardin
                   index === currentStep
                     ? 'bg-yellow-500 text-black'
                     : index < currentStep
-                    ? 'bg-green-500 text-white'
-                    : 'bg-gray-600 text-gray-300'
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-600 text-gray-300'
                 }`}
               >
                 {index < currentStep ? <Check className='w-5 h-5' /> : index + 1}

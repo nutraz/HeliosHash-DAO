@@ -226,7 +226,6 @@ public query func getWomenLeaderboard() : async [(Text, Nat)] {
 ### ✅ Completed Components
 
 1. **Core Canister Implementation**
-
    - Gender-based member registration and tracking
    - Automated bonus calculation and distribution
    - Micro-grant application and approval workflow
@@ -234,7 +233,6 @@ public query func getWomenLeaderboard() : async [(Text, Nat)] {
    - Mentorship program with stipend distribution
 
 2. **Frontend Dashboard**
-
    - Comprehensive statistics and analytics display
    - Interactive micro-grant application form
    - Real-time leaderboard with bonus tracking

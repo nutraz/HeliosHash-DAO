@@ -12,6 +12,14 @@ const nextConfig: NextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // Force all routes to be dynamic to prevent useContext issues during static generation
+  experimental: {
+    cacheComponents: false,
+  },
+
+  // Disable static optimization to prevent prerendering issues
+  output: 'standalone',
+
   // Mobile development configuration
   async rewrites() {
     return [
@@ -25,10 +33,13 @@ const nextConfig: NextConfig = {
   // Configure allowed origins for mobile development
   allowedDevOrigins: [
     '192.168.29.210:3001',
+    '192.168.29.210:3003',
     '192.168.29.210:3005',
     '127.0.0.1:3001',
+    '127.0.0.1:3003',
     '127.0.0.1:3005',
     'localhost:3001',
+    'localhost:3003',
     'localhost:3005',
   ],
 

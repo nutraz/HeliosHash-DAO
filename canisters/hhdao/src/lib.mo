@@ -1,14 +1,7 @@
 
-import Result "mo:base/Result";
-import Time "mo:base/Time";
-import Principal "mo:base/Principal";
-import Text "mo:base/Text";
-import Array "mo:base/Array";
-import HashMap "mo:base/HashMap";
-import Nat "mo:base/Nat";
-import Nat32 "mo:base/Nat32";
-import Iter "mo:base/Iter";
-import Hash "mo:base/Hash";
+
+
+
 
 module {
   public type ProjectStatus = {
@@ -373,7 +366,7 @@ module {
 
     // Application Management System
     private var nextApplicationId : Nat = 1;
-    private var applications = HashMap.HashMap<Nat, Application>(10, Nat.equal, Hash.hash);
+    private var applications = HashMap.HashMap<Nat, Application>(10, Nat.equal, natHash);
 
     public func submitApplication(
       applicationType : ApplicationType,

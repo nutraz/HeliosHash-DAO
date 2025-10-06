@@ -7,6 +7,9 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 
+// Force dynamic rendering to prevent useContext errors during static generation
+export const dynamic = 'force-dynamic';
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -68,6 +71,10 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
+                {/* MVP Simulation Banner - informs testers no real funds */}
+                <div className='w-full bg-amber-500/90 dark:bg-amber-600 text-black dark:text-white text-sm md:text-[13px] tracking-wide px-3 py-2 text-center font-medium shadow-sm z-50'>
+                  <strong>MVP Simulation – No Real Funds or Wallets Active</strong>
+                </div>
                 {children}
                 <Toaster />
               </ThemeProvider>

@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
   { id: 'home', icon: '🏠', label: 'Home' },
   { id: 'mining', icon: '⛏️', label: 'Mining' },
   { id: 'community', icon: '👥', label: 'Community' },
-  { id: 'nft', icon: '🏔️', label: 'UrgamU NFT' },
+  { id: 'payment', icon: '💰', label: 'Payment' },
   { id: 'rewards', icon: '🎁', label: 'Rewards', hasNotification: true },
   { id: 'wallet', icon: '💳', label: 'Wallet' },
 ];

@@ -33,7 +33,7 @@ function loadDfxIds(): Record<string, string> {
     const network = (typeof process !== 'undefined' && process.env.DFX_NETWORK) || 'local';
     const path = `.dfx/${network}/canister_ids.json`;
     // dynamic require via eval to avoid bundler complaints in browser
-    // eslint-disable-next-line no-eval
+
     const req = (0, eval)('require');
     const json = req(path);
     const flat: Record<string, string> = {};

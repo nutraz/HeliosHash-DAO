@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
@@ -7,40 +7,37 @@ jest.mock('next/navigation', () => ({
       push: jest.fn(),
       replace: jest.fn(),
       prefetch: jest.fn(),
-    }
+    };
   },
   useSearchParams() {
-    return new URLSearchParams()
+    return new URLSearchParams();
   },
   usePathname() {
-    return ''
+    return '';
   },
-}))
+}));
 
 // Mock environment variables
-process.env.NEXT_PUBLIC_IC_NETWORK = 'local'
-process.env.NEXT_PUBLIC_IC_HOST = 'http://127.0.0.1:8000'
-process.env.NEXTAUTH_SECRET = 'test-secret'
-process.env.NEXTAUTH_URL = 'http://localhost:3000'
-process.env.NODE_ENV = 'test'
+process.env.NEXT_PUBLIC_IC_NETWORK = 'local';
+process.env.NEXT_PUBLIC_IC_HOST = 'http://127.0.0.1:8000';
+process.env.NEXTAUTH_SECRET = 'test-secret';
+process.env.NEXTAUTH_URL = 'http://localhost:3000';
+process.env.NODE_ENV = 'test';
 
 // Global test utilities
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 
 // Mock console methods for cleaner test output
-const originalConsoleError = console.error
+const originalConsoleError = console.error;
 beforeAll(() => {
   console.error = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('Warning: ReactDOM.render is deprecated')
-    ) {
-      return
+    if (typeof args[0] === 'string' && args[0].includes('Warning: ReactDOM.render is deprecated')) {
+      return;
     }
-    originalConsoleError(...args)
-  }
-})
+    originalConsoleError(...args);
+  };
+});
 
 afterAll(() => {
-  console.error = originalConsoleError
-})
+  console.error = originalConsoleError;
+});

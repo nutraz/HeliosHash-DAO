@@ -3,7 +3,7 @@
   "mo_actor": {
     "prefix": "actor",
     "body": ["actor ${1:ActorName} {", "    $2", "}"],
-    "description": "Create a Motoko actor"
+    "description": "Create a Motoko actor",
   },
 
   "mo_public_func": {
@@ -11,9 +11,9 @@
     "body": [
       "public func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
       "    $4",
-      "};"
+      "};",
     ],
-    "description": "Create a public Motoko function"
+    "description": "Create a public Motoko function",
   },
 
   "mo_shared_func": {
@@ -21,9 +21,9 @@
     "body": [
       "public shared ({ caller }) func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
       "    $4",
-      "};"
+      "};",
     ],
-    "description": "Create a shared Motoko function with caller"
+    "description": "Create a shared Motoko function with caller",
   },
 
   "mo_query_func": {
@@ -31,47 +31,47 @@
     "body": [
       "public query func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
       "    $4",
-      "};"
+      "};",
     ],
-    "description": "Create a query Motoko function"
+    "description": "Create a query Motoko function",
   },
 
   "mo_import_base": {
     "prefix": "impbase",
     "body": ["import ${1:Module} \"mo:base/${2:ModuleName}\";"],
-    "description": "Import Motoko base library"
+    "description": "Import Motoko base library",
   },
 
   "mo_import_local": {
     "prefix": "implocal",
     "body": ["import ${1:Module} \"${2:path}\";"],
-    "description": "Import local Motoko module"
+    "description": "Import local Motoko module",
   },
 
   "mo_result_type": {
     "prefix": "result",
     "body": ["Result.Result<${1:OkType}, ${2:ErrorType}>"],
-    "description": "Motoko Result type"
+    "description": "Motoko Result type",
   },
 
   "mo_option_type": {
     "prefix": "option",
     "body": ["?${1:Type}"],
-    "description": "Motoko Option type"
+    "description": "Motoko Option type",
   },
 
   "mo_hashmap": {
     "prefix": "hashmap",
     "body": [
-      "private stable var ${1:mapName} = HashMap.HashMap<${2:KeyType}, ${3:ValueType}>(${4:0}, ${5:KeyType}.equal, ${6:KeyType}.hash);"
+      "private stable var ${1:mapName} = HashMap.HashMap<${2:KeyType}, ${3:ValueType}>(${4:0}, ${5:KeyType}.equal, ${6:KeyType}.hash);",
     ],
-    "description": "Create a HashMap"
+    "description": "Create a HashMap",
   },
 
   "mo_stable_var": {
     "prefix": "stable",
     "body": ["private stable var ${1:varName} : ${2:Type} = ${3:defaultValue};"],
-    "description": "Create a stable variable"
+    "description": "Create a stable variable",
   },
 
   "mo_dao_proposal": {
@@ -88,9 +88,9 @@
       "    };",
       "    ",
       "    $1",
-      "};"
+      "};",
     ],
-    "description": "HeliosHash DAO proposal creation pattern"
+    "description": "HeliosHash DAO proposal creation pattern",
   },
 
   "mo_solar_project": {
@@ -117,8 +117,8 @@
       "    };",
       "    ",
       "    $1",
-      "};"
+      "};",
     ],
-    "description": "HeliosHash solar project creation pattern"
-  }
+    "description": "HeliosHash solar project creation pattern",
+  },
 }

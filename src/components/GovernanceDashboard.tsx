@@ -4,6 +4,27 @@
 
 'use client';
 
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Plus } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import type { MembershipInfo, Proposal, ProposalStats } from '../services/daoService';
 import { daoService, HHDAOError, HHDAOService } from '../services/daoService';
@@ -19,6 +40,13 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
   const [membership, setMembership] = useState<MembershipInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showCreateProposal, setShowCreateProposal] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [newProposal, setNewProposal] = useState({
+    title: '',
+    description: '',
+    type: 'solar' as 'solar' | 'mining' | 'infrastructure' | 'education' | 'other',
+  });
 
   useEffect(() => {
     loadDashboardData();
@@ -66,6 +94,42 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
     } catch (err) {
       const errorMessage = err instanceof HHDAOError ? err.message : 'Failed to join DAO';
       setError(errorMessage);
+    }
+  };
+
+  const handleCreateProposal = async () => {
+    if (!newProposal.title.trim() || !newProposal.description.trim()) {
+      alert('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      setCreating(true);
+      setError(null);
+
+      await daoService.createProposal({
+        title: newProposal.title,
+        description: newProposal.description,
+        category: { [newProposal.type]: null } as any, // Convert string to ContributionType variant
+      });
+
+      // Reset form and close dialog
+      setNewProposal({
+        title: '',
+        description: '',
+        type: 'solar',
+      });
+      setShowCreateProposal(false);
+
+      // Reload proposals
+      await loadDashboardData();
+
+      alert('Proposal created successfully!');
+    } catch (err) {
+      const errorMessage = err instanceof HHDAOError ? err.message : 'Failed to create proposal';
+      setError(errorMessage);
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -178,9 +242,91 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
         <div className='flex items-center justify-between mb-6'>
           <h2 className='text-2xl font-bold text-gray-900'>Community Proposals</h2>
           {membership?.isMember && (
-            <button className='bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition-colors'>
-              + Create Proposal
-            </button>
+            <Dialog open={showCreateProposal} onOpenChange={setShowCreateProposal}>
+              <DialogTrigger asChild>
+                <Button
+                  data-testid='create-proposal-button'
+                  className='bg-orange-500 hover:bg-orange-600 text-white'
+                >
+                  <Plus className='w-4 h-4 mr-2' />
+                  Create Proposal
+                </Button>
+              </DialogTrigger>
+              <DialogContent className='sm:max-w-[500px]'>
+                <DialogHeader>
+                  <DialogTitle>Create New Proposal</DialogTitle>
+                  <DialogDescription>
+                    Submit a proposal for community consideration. All proposals require 60%
+                    approval to pass.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className='grid gap-4 py-4'>
+                  <div className='grid gap-2'>
+                    <Label htmlFor='title'>Title *</Label>
+                    <Input
+                      id='title'
+                      placeholder='Enter proposal title'
+                      value={newProposal.title}
+                      onChange={(e) =>
+                        setNewProposal((prev) => ({ ...prev, title: e.target.value }))
+                      }
+                      required
+                    />
+                  </div>
+                  <div className='grid gap-2'>
+                    <Label htmlFor='type'>Category</Label>
+                    <Select
+                      value={newProposal.type}
+                      onValueChange={(
+                        value: 'solar' | 'mining' | 'infrastructure' | 'education' | 'other'
+                      ) => setNewProposal((prev) => ({ ...prev, type: value }))}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder='Select proposal type' />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value='solar'>Solar Energy</SelectItem>
+                        <SelectItem value='mining'>Mining</SelectItem>
+                        <SelectItem value='infrastructure'>Infrastructure</SelectItem>
+                        <SelectItem value='education'>Education</SelectItem>
+                        <SelectItem value='other'>Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className='grid gap-2'>
+                    <Label htmlFor='description'>Description *</Label>
+                    <Textarea
+                      id='description'
+                      placeholder='Describe your proposal in detail...'
+                      value={newProposal.description}
+                      onChange={(e) =>
+                        setNewProposal((prev) => ({ ...prev, description: e.target.value }))
+                      }
+                      rows={4}
+                      required
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    variant='outline'
+                    onClick={() => setShowCreateProposal(false)}
+                    disabled={creating}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleCreateProposal}
+                    disabled={
+                      creating || !newProposal.title.trim() || !newProposal.description.trim()
+                    }
+                    className='bg-orange-500 hover:bg-orange-600'
+                  >
+                    {creating ? 'Creating...' : 'Create Proposal'}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           )}
         </div>
 
@@ -190,7 +336,7 @@ export const GovernanceDashboard: React.FC<GovernanceDashboardProps> = ({ classN
             <p className='text-gray-600'>Be the first to create a proposal for the community!</p>
           </div>
         ) : (
-          <div className='proposals-grid space-y-4'>
+          <div data-testid='dao-proposals-list' className='proposals-grid space-y-4'>
             {proposals.map((proposal) => (
               <ProposalCard
                 key={proposal.id.toString()}

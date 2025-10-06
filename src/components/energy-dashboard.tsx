@@ -242,10 +242,10 @@ export const EnergyDashboard = ({ project, className }: EnergyDashboardProps) =>
               {energyData.efficiency_percent > 80
                 ? 'Excellent'
                 : energyData.efficiency_percent > 60
-                ? 'Good'
-                : energyData.efficiency_percent > 40
-                ? 'Fair'
-                : 'Poor'}
+                  ? 'Good'
+                  : energyData.efficiency_percent > 40
+                    ? 'Fair'
+                    : 'Poor'}
             </div>
           </div>
         </div>

@@ -136,10 +136,13 @@ class TelemetryService {
 
   private handleReconnect(): void {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
-      setTimeout(() => {
-        this.reconnectAttempts++;
-        this.initializeConnection();
-      }, Math.pow(2, this.reconnectAttempts) * 1000);
+      setTimeout(
+        () => {
+          this.reconnectAttempts++;
+          this.initializeConnection();
+        },
+        Math.pow(2, this.reconnectAttempts) * 1000
+      );
     }
   }
 

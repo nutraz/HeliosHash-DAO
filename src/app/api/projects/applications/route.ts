@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 // Land Records & Project Application Types
 export interface LandRecord {
@@ -115,61 +115,62 @@ export interface Stakeholder {
 // Mock data
 const mockApplications: ProjectApplication[] = [
   {
-    id: "APP001",
-    applicantId: "user_123",
-    applicantName: "Rajesh Kumar",
-    applicantType: "Individual",
-    projectType: "Rooftop Solar",
-    landRecordId: "LAND001",
-    projectName: "Residential Solar Installation - Ward 3",
-    description: "5kW rooftop solar installation for residential cluster covering 15 households in Ward 3, Urgam Valley",
+    id: 'APP001',
+    applicantId: 'user_123',
+    applicantName: 'Rajesh Kumar',
+    applicantType: 'Individual',
+    projectType: 'Rooftop Solar',
+    landRecordId: 'LAND001',
+    projectName: 'Residential Solar Installation - Ward 3',
+    description:
+      '5kW rooftop solar installation for residential cluster covering 15 households in Ward 3, Urgam Valley',
     capacity: 5,
     estimatedCost: 350000,
     estimatedDuration: 2,
     expectedGeneration: 7500,
     beneficiaries: 15,
     applicationDate: Date.now() - 86400000 * 15,
-    status: "Under Review",
-    currentStage: "Technical Evaluation",
+    status: 'Under Review',
+    currentStage: 'Technical Evaluation',
     documents: {
-      landDocuments: ["ownership_cert.pdf", "survey_map.pdf"],
-      technicalSpecs: ["solar_design.pdf", "load_calculation.pdf"],
-      financialDocs: ["cost_estimate.pdf", "funding_plan.pdf"]
+      landDocuments: ['ownership_cert.pdf', 'survey_map.pdf'],
+      technicalSpecs: ['solar_design.pdf', 'load_calculation.pdf'],
+      financialDocs: ['cost_estimate.pdf', 'funding_plan.pdf'],
     },
     governmentApprovals: [
       {
-        id: "GOV001",
-        department: "Rural Development",
-        approvalType: "Installation Permit",
-        status: "Approved",
+        id: 'GOV001',
+        department: 'Rural Development',
+        approvalType: 'Installation Permit',
+        status: 'Approved',
         submittedDate: Date.now() - 86400000 * 10,
         approvedDate: Date.now() - 86400000 * 5,
         validUntil: Date.now() + 86400000 * 365,
-        documents: ["permit_letter.pdf"],
-        officerName: "Suresh Patel",
-        remarks: "Approved with standard safety conditions"
-      }
+        documents: ['permit_letter.pdf'],
+        officerName: 'Suresh Patel',
+        remarks: 'Approved with standard safety conditions',
+      },
     ],
     timeline: [
       {
-        id: "T1",
-        stage: "Application Submission",
-        description: "Submit complete application with documents",
+        id: 'T1',
+        stage: 'Application Submission',
+        description: 'Submit complete application with documents',
         startDate: Date.now() - 86400000 * 15,
         endDate: Date.now() - 86400000 * 15,
-        status: "Completed",
+        status: 'Completed',
         dependencies: [],
-        responsible: "Applicant"
+        responsible: 'Applicant',
       },
       {
-        id: "T2",
-        stage: "Technical Review",
-        description: "Technical evaluation by DAO engineering team",
+        id: 'T2',
+        stage: 'Technical Review',
+        description: 'Technical evaluation by DAO engineering team',
         startDate: Date.now() - 86400000 * 12,
-        status: "In Progress",
-        dependencies: ["T1"],
-        responsible: "DAO Technical Committee"
-      }
+        status: 'In Progress',
+        dependencies: ['T1'],
+        responsible: 'DAO Technical Committee',
+      },
     ],
     budget: {
       totalCost: 350000,
@@ -178,63 +179,63 @@ const mockApplications: ProjectApplication[] = [
         installation: 50000,
         landPreparation: 20000,
         permits: 15000,
-        miscellaneous: 15000
+        miscellaneous: 15000,
       },
       fundingSources: {
         daoFunding: 200000,
         governmentGrants: 100000,
         privateFunding: 0,
-        communityContribution: 50000
+        communityContribution: 50000,
       },
       disbursement: [
         {
-          stage: "Equipment Purchase",
+          stage: 'Equipment Purchase',
           amount: 250000,
-          status: "Pending"
+          status: 'Pending',
         },
         {
-          stage: "Installation",
+          stage: 'Installation',
           amount: 100000,
-          status: "Pending"
-        }
-      ]
+          status: 'Pending',
+        },
+      ],
     },
     stakeholders: [
       {
-        id: "STK001",
-        name: "HeliosHash DAO",
-        role: "Investor",
-        contribution: "Primary funding and technical support",
-        contactInfo: { email: "support@helioshash.dao" },
-        joinedDate: Date.now() - 86400000 * 15
-      }
-    ]
-  }
+        id: 'STK001',
+        name: 'HeliosHash DAO',
+        role: 'Investor',
+        contribution: 'Primary funding and technical support',
+        contactInfo: { email: 'support@helioshash.dao' },
+        joinedDate: Date.now() - 86400000 * 15,
+      },
+    ],
+  },
 ];
 
 const mockLandRecords: LandRecord[] = [
   {
-    id: "LAND001",
-    surveyNumber: "123/4A",
-    village: "Urgam",
-    district: "Kachchh",
-    state: "Gujarat",
+    id: 'LAND001',
+    surveyNumber: '123/4A',
+    village: 'Urgam',
+    district: 'Kachchh',
+    state: 'Gujarat',
     area: 2.5,
-    ownerName: "Rajesh Kumar",
-    ownershipType: "Individual",
-    landUse: "Residential",
+    ownerName: 'Rajesh Kumar',
+    ownershipType: 'Individual',
+    landUse: 'Residential',
     coordinates: {
       latitude: 23.2599,
-      longitude: 69.6667
+      longitude: 69.6667,
     },
-    soilType: "Sandy",
+    soilType: 'Sandy',
     waterAccess: true,
     roadAccess: true,
     gridConnection: true,
     registrationDate: Date.now() - 86400000 * 365,
-    documents: ["title_deed.pdf", "survey_map.pdf", "mutation_cert.pdf"],
-    verified: true
-  }
+    documents: ['title_deed.pdf', 'survey_map.pdf', 'mutation_cert.pdf'],
+    verified: true,
+  },
 ];
 
 // GET - Fetch applications based on user role and access level
@@ -250,46 +251,48 @@ export async function GET(request: NextRequest) {
 
     // Role-based filtering
     if (userRole === 'applicant' && userId) {
-      filteredApplications = filteredApplications.filter(app => app.applicantId === userId);
+      filteredApplications = filteredApplications.filter((app) => app.applicantId === userId);
     } else if (userRole === 'government') {
       // Government sees all applications requiring approvals
-      filteredApplications = filteredApplications.filter(app => 
-        app.status === 'Submitted' || app.status === 'Under Review'
+      filteredApplications = filteredApplications.filter(
+        (app) => app.status === 'Submitted' || app.status === 'Under Review'
       );
     } else if (userRole === 'investor') {
       // Investors see approved projects and those seeking funding
-      filteredApplications = filteredApplications.filter(app => 
-        app.status === 'Approved' || app.currentStage === 'Funding'
+      filteredApplications = filteredApplications.filter(
+        (app) => app.status === 'Approved' || app.currentStage === 'Funding'
       );
     }
 
     // Additional filters
     if (status) {
-      filteredApplications = filteredApplications.filter(app => app.status === status);
+      filteredApplications = filteredApplications.filter((app) => app.status === status);
     }
 
     if (projectType) {
-      filteredApplications = filteredApplications.filter(app => app.projectType === projectType);
+      filteredApplications = filteredApplications.filter((app) => app.projectType === projectType);
     }
 
     // Calculate statistics
     const stats = {
       totalApplications: filteredApplications.length,
       byStatus: {
-        draft: filteredApplications.filter(app => app.status === 'Draft').length,
-        submitted: filteredApplications.filter(app => app.status === 'Submitted').length,
-        underReview: filteredApplications.filter(app => app.status === 'Under Review').length,
-        approved: filteredApplications.filter(app => app.status === 'Approved').length,
-        rejected: filteredApplications.filter(app => app.status === 'Rejected').length
+        draft: filteredApplications.filter((app) => app.status === 'Draft').length,
+        submitted: filteredApplications.filter((app) => app.status === 'Submitted').length,
+        underReview: filteredApplications.filter((app) => app.status === 'Under Review').length,
+        approved: filteredApplications.filter((app) => app.status === 'Approved').length,
+        rejected: filteredApplications.filter((app) => app.status === 'Rejected').length,
       },
       byProjectType: {
-        solarFarm: filteredApplications.filter(app => app.projectType === 'Solar Farm').length,
-        rooftopSolar: filteredApplications.filter(app => app.projectType === 'Rooftop Solar').length,
-        microgrid: filteredApplications.filter(app => app.projectType === 'Microgrid').length,
-        storageSystem: filteredApplications.filter(app => app.projectType === 'Storage System').length
+        solarFarm: filteredApplications.filter((app) => app.projectType === 'Solar Farm').length,
+        rooftopSolar: filteredApplications.filter((app) => app.projectType === 'Rooftop Solar')
+          .length,
+        microgrid: filteredApplications.filter((app) => app.projectType === 'Microgrid').length,
+        storageSystem: filteredApplications.filter((app) => app.projectType === 'Storage System')
+          .length,
       },
       totalCapacity: filteredApplications.reduce((sum, app) => sum + app.capacity, 0),
-      totalInvestment: filteredApplications.reduce((sum, app) => sum + app.estimatedCost, 0)
+      totalInvestment: filteredApplications.reduce((sum, app) => sum + app.estimatedCost, 0),
     };
 
     return NextResponse.json({
@@ -297,17 +300,16 @@ export async function GET(request: NextRequest) {
       data: {
         applications: filteredApplications,
         landRecords: userRole === 'applicant' ? mockLandRecords : [],
-        stats
-      }
+        stats,
+      },
     });
-
   } catch (error) {
-    console.error("Project applications fetch error:", error);
+    console.error('Project applications fetch error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: "Failed to fetch project applications",
-        details: error instanceof Error ? error.message : "Unknown error"
+      {
+        success: false,
+        error: 'Failed to fetch project applications',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );
@@ -318,10 +320,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();
-    
-    if (!applicationData.projectName || !applicationData.projectType || !applicationData.landRecordId) {
+
+    if (
+      !applicationData.projectName ||
+      !applicationData.projectType ||
+      !applicationData.landRecordId
+    ) {
       return NextResponse.json(
-        { success: false, error: "Project name, type, and land record ID are required" },
+        { success: false, error: 'Project name, type, and land record ID are required' },
         { status: 400 }
       );
     }
@@ -331,35 +337,34 @@ export async function POST(request: NextRequest) {
       id: `APP${String(Date.now()).slice(-6)}`,
       ...applicationData,
       applicationDate: Date.now(),
-      status: "Draft",
-      currentStage: "Application Preparation",
+      status: 'Draft',
+      currentStage: 'Application Preparation',
       governmentApprovals: [],
       timeline: [
         {
-          id: "T1",
-          stage: "Application Preparation",
-          description: "Prepare and submit complete application",
+          id: 'T1',
+          stage: 'Application Preparation',
+          description: 'Prepare and submit complete application',
           startDate: Date.now(),
-          status: "In Progress",
+          status: 'In Progress',
           dependencies: [],
-          responsible: "Applicant"
-        }
-      ]
+          responsible: 'Applicant',
+        },
+      ],
     };
 
     return NextResponse.json({
       success: true,
       data: newApplication,
-      message: "Project application created successfully"
+      message: 'Project application created successfully',
     });
-
   } catch (error) {
-    console.error("Project application creation error:", error);
+    console.error('Project application creation error:', error);
     return NextResponse.json(
-      { 
-        success: false, 
-        error: "Failed to create project application",
-        details: error instanceof Error ? error.message : "Unknown error"
+      {
+        success: false,
+        error: 'Failed to create project application',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
       { status: 500 }
     );

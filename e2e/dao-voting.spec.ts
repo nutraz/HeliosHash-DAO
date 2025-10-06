@@ -16,11 +16,7 @@ async function openGovernanceTab(page: Page) {
 }
 
 test.describe('DAO Governance (Proposals) - Skeleton', () => {
-test('lists existing proposals with status + vote counts', async ({
-    page,
-  }: {
-    page: Page;
-  }) => {
+  test('lists existing proposals with status + vote counts', async ({ page }: { page: Page }) => {
     await openGovernanceTab(page);
     // Expect proposals list container
     const list = page.getByTestId('dao-proposals-list');

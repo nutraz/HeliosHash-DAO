@@ -622,8 +622,8 @@ export const CommunityHub = ({
                         contributor.verification_status === 'verified'
                           ? 'bg-green-500 text-white'
                           : contributor.verification_status === 'pending'
-                          ? 'bg-yellow-500 text-black'
-                          : 'bg-gray-500 text-white'
+                            ? 'bg-yellow-500 text-black'
+                            : 'bg-gray-500 text-white'
                       }`}
                     >
                       {contributor.verification_status.toUpperCase()}

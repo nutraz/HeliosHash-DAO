@@ -1,50 +1,104 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# HeliosHash DAO Constitution
+
+_Decentralized Autonomous Organization for Sustainable Solar Energy Infrastructure_
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Community-First Governance
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+The DAO prioritizes local community benefit over profit maximization. All decisions must demonstrate positive impact for Urgam Valley residents through transparent voting mechanisms and benefit-sharing protocols.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Revenue Diversification Strategy
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+Financial sustainability through tiered revenue portfolio: 60-70% guaranteed revenue (grid feed-in, agricultural services), 20-30% edge computing services, 10-20% speculative mining/computing during energy surplus periods.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Environmental Stewardship (NON-NEGOTIABLE)
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+All DAO activities must contribute to carbon negativity and ecosystem preservation. Solar installations must integrate agrovoltaic principles supporting local agriculture and biodiversity. Environmental impact tracking mandatory for all operations.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Transparent Operations
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Real-time financial tracking via blockchain infrastructure. All revenue streams, expenses, and profit distributions visible to community members. Smart contracts ensure automated execution of approved proposals and benefit-sharing agreements.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Adaptive Technology Integration
 
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+Services dynamically allocated based on energy availability and community needs. Edge computing resources prioritize local agricultural AI services over external mining. Emergency community services (early warning systems) take precedence over profit-generating activities.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### VI. Skills & Economic Development
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+DAO operations must create local employment (8-12 positions minimum) and provide technical skills training. Economic multiplier target: every ₹1 earned generates ₹2.5 in local economic activity through supply chains and service utilization.
+
+### VII. Democratic Governance & Consensus
+
+Major decisions require >66% community approval through OWP token voting. Revenue allocation changes need >75% consensus. Emergency decisions (natural disasters, grid failures) can be executed by elected emergency council with 48-hour community ratification requirement.
+
+## Revenue Portfolio Management
+
+### Tier 1 - Guaranteed Revenue (60-70% allocation)
+
+- **Grid Feed-in**: UERC-compliant net metering with ₹4-6/kWh returns
+- **Agricultural Services**: Cold storage, irrigation pumps, drying facilities for local farmers
+- **Community Priority**: These services cannot be discontinued without 90-day notice and alternative provision
+
+### Tier 2 - Edge Computing (20-30% allocation)
+
+- **Local-First**: Valley residents get priority bandwidth and processing power
+- **Agricultural AI**: Crop analysis and yield prediction for community farmers
+- **Emergency Services**: IoT sensors for landslide/weather early warning systems
+
+### Tier 3 - Speculative Operations (10-20% allocation)
+
+- **Energy Surplus Only**: Mining/rendering only during peak solar production
+- **Community Override**: Computing resources can be redirected for emergency community needs
+- **Profit Sharing**: 60% reinvestment, 25% community development fund, 15% operational reserves
+
+## Technical Infrastructure Standards
+
+### Internet Computer Integration
+
+- **Motoko Canisters**: Revenue tracking, governance voting, service scheduling
+- **Decentralized Identity**: Community member authentication and role management
+- **Smart Contracts**: Automated revenue distribution and service level agreements
+- **Data Sovereignty**: Community owns all data generated by local sensors and services
+
+### Security & Resilience
+
+- **Multi-signature governance**: 3-of-5 community leaders required for major changes
+- **Backup Systems**: Solar + battery systems ensure 72-hour autonomous operation
+- **Disaster Recovery**: Distributed backup of community data across multiple IC nodes
+- **Privacy Protection**: Personal data never leaves valley without explicit consent
+
+## Governance Framework
+
+### Amendment Process
+
+Constitution changes require:
+
+1. **Proposal Phase**: 7-day community discussion period
+2. **Technical Review**: Impact assessment on existing operations
+3. **Voting Phase**: 14-day voting window with >75% approval threshold
+4. **Implementation**: 30-day transition period with rollback capability
+
+### Emergency Protocols
+
+- **Natural Disasters**: Emergency council can redirect 100% resources to community safety
+- **Grid Failures**: Automatic switch to community-priority energy distribution
+- **Technical Failures**: 48-hour manual override authority for technical coordinators
+- **Post-Emergency Review**: All emergency actions require community ratification within 1 week
+
+### Compliance & Accountability
+
+- **Monthly Transparency Reports**: Financial performance, environmental impact, community metrics
+- **Annual Community Assembly**: In-person gathering for strategy review and leadership elections
+- **External Audits**: Yearly third-party review of financial and environmental claims
+- **Conflict Resolution**: Community mediator system for disputes, escalation to broader One World Project network
+
+### Success Metrics & KPIs
+
+- **Financial**: Revenue diversification within target ranges, positive ROI for community
+- **Environmental**: Carbon negativity, biodiversity preservation, water conservation
+- **Social**: >50% active DAO participation, local employment targets met
+- **Technical**: >99% uptime for critical services, <24hr response for emergency needs
+
+**Version**: 1.0 | **Ratified**: October 5, 2025 | **Next Review**: January 2026
+_Supersedes all conflicting policies. Development guided by Revenue Portfolio Framework and Urgam Valley Community Needs Assessment._

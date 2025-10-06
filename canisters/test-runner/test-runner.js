@@ -63,7 +63,7 @@ const importObject = {
         }
       }
     },
-    
+
     // Canister functions
     canister_self_size: () => icState.canisterId.length,
     canister_self_copy: (dst, offset, size) => {
@@ -77,7 +77,7 @@ const importObject = {
         }
       }
     },
-    
+
     // Debug and error functions
     debug_print: (str, len) => {
       const memory = new Uint8Array(instance.exports.memory.buffer, str, len);
@@ -87,16 +87,25 @@ const importObject = {
       const memory = new Uint8Array(instance.exports.memory.buffer, str, len);
       throw new Error(new TextDecoder().decode(memory));
     },
-    
+
     // Call functions (for inter-canister calls)
-    call_new: (callee_src, callee_len, name_src, name_len, reply_fun, reply_env, reject_fun, reject_env) => {
+    call_new: (
+      callee_src,
+      callee_len,
+      name_src,
+      name_len,
+      reply_fun,
+      reply_env,
+      reject_fun,
+      reject_env
+    ) => {
       const memory = new Uint8Array(instance.exports.memory.buffer);
       const calleeBytes = new Uint8Array(memory.buffer, callee_src, callee_len);
       const nameBytes = new Uint8Array(memory.buffer, name_src, name_len);
-      
+
       const callee = new TextDecoder().decode(calleeBytes);
       const name = new TextDecoder().decode(nameBytes);
-      
+
       const callId = icState.nextCallId++;
       icState.callStack.push({
         id: callId,
@@ -108,14 +117,14 @@ const importObject = {
         rejectEnv,
         args: new Uint8Array(0),
       });
-      
+
       return callId;
     },
     call_data_append: (callId, src, len) => {
       const memory = new Uint8Array(instance.exports.memory.buffer);
       const data = new Uint8Array(memory.buffer, src, len);
-      
-      const call = icState.callStack.find(c => c.id === callId);
+
+      const call = icState.callStack.find((c) => c.id === callId);
       if (call) {
         const newArgs = new Uint8Array(call.args.length + len);
         newArgs.set(call.args);
@@ -124,28 +133,28 @@ const importObject = {
       }
     },
     call_perform: (callId) => {
-      const call = icState.callStack.find(c => c.id === callId);
+      const call = icState.callStack.find((c) => c.id === callId);
       if (call) {
         // For testing, we'll immediately "reply" with a success response
         // In a real test runner, you might want to customize this behavior
         const replyData = new TextEncoder().encode(JSON.stringify({ success: true }));
-        
+
         // Simulate the reply callback
         const memory = new Uint8Array(instance.exports.memory.buffer);
         const replyBuffer = new Uint8Array(memory.buffer, call.replyEnv, replyData.length);
         replyBuffer.set(replyData);
-        
+
         // Call the reply function
         instance.exports[call.replyFun](call.replyEnv, replyData.length);
-        
+
         // Remove the call from the stack
-        icState.callStack = icState.callStack.filter(c => c.id !== callId);
-        
+        icState.callStack = icState.callStack.filter((c) => c.id !== callId);
+
         return 0; // Success
       }
       return 1; // Call not found
     },
-    
+
     // Stable memory functions
     stable_size: () => icState.stableMemory.byteLength / 65536, // Return size in 64KB pages
     stable_grow: (newPages) => {
@@ -160,7 +169,7 @@ const importObject = {
       const memory = new Uint8Array(instance.exports.memory.buffer);
       const data = new Uint8Array(memory.buffer, src, len);
       const stableMemory = new Uint8Array(icState.stableMemory);
-      
+
       // Ensure stable memory is large enough
       if (offset + len > stableMemory.length) {
         const newSize = offset + len;
@@ -168,7 +177,7 @@ const importObject = {
         new Uint8Array(newBuffer).set(stableMemory);
         icState.stableMemory = newBuffer;
       }
-      
+
       // Write the data
       const updatedStableMemory = new Uint8Array(icState.stableMemory);
       updatedStableMemory.set(data, offset);
@@ -176,7 +185,7 @@ const importObject = {
     stable_read: (dst, offset, len) => {
       const memory = new Uint8Array(instance.exports.memory.buffer);
       const stableMemory = new Uint8Array(icState.stableMemory);
-      
+
       for (let i = 0; i < len; i++) {
         if (offset + i < stableMemory.length) {
           memory[dst + i] = stableMemory[offset + i];
@@ -185,7 +194,7 @@ const importObject = {
         }
       }
     },
-    
+
     // System functions
     time: () => {
       // Return current time in nanoseconds since Unix epoch
@@ -206,14 +215,14 @@ const importObject = {
     },
     raw_rand: (dst, len) => {
       const memory = new Uint8Array(instance.exports.memory.buffer);
-      
+
       // Simple deterministic pseudo-random number generator for testing
       for (let i = 0; i < len; i++) {
         icState.randSeed = (icState.randSeed * 1103515245 + 12345) & 0x7fffffff;
-        memory[dst + i] = (icState.randSeed >> (i % 8)) & 0xff;
+        memory[dst + i] = (icState.randSeed >> i % 8) & 0xff;
       }
     },
-    
+
     // Additional IC0 functions that might be needed
     msg_reject: (src, len) => {
       const memory = new Uint8Array(instance.exports.memory.buffer);
@@ -230,24 +239,24 @@ const importObject = {
 
 // Compile and instantiate the WASM module
 WebAssembly.compile(wasmBuffer)
-  .then(module => WebAssembly.instantiate(module, importObject))
-  .then(instance => {
+  .then((module) => WebAssembly.instantiate(module, importObject))
+  .then((instance) => {
     // Store instance for use in trap function
     global.instance = instance;
-    
+
     // Run the tests
-    console.log("=== Starting HHDAO Canister Tests ===");
-    
+    console.log('=== Starting HHDAO Canister Tests ===');
+
     try {
       // Call the test function
       instance.exports.run();
-      console.log("=== Tests Completed Successfully ===");
+      console.log('=== Tests Completed Successfully ===');
     } catch (error) {
-      console.error("Test execution failed:", error);
+      console.error('Test execution failed:', error);
       process.exit(1);
     }
   })
-  .catch(error => {
-    console.error("Error instantiating WASM module:", error);
+  .catch((error) => {
+    console.error('Error instantiating WASM module:', error);
     process.exit(1);
   });

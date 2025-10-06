@@ -1,6 +1,7 @@
 
 
 
+
 persistent actor Documents {
     // Data Types
     public type DocumentType = {

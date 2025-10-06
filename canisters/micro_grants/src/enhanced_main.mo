@@ -164,7 +164,7 @@ actor MicroGrantSystemEnhanced {
   private stable var stableErrorLog : [(Int, ErrorCode)] = [];
 
   // Runtime state (rebuilt from stable memory on upgrade)
-  private var applications = HashMap.HashMap<GrantId, GrantApplicationV2>(10, Int.equal, natHash);
+  private var applications = HashMap.HashMap<GrantId, GrantApplicationV2>(10, Nat.equal, natHash);
   private var trustees = HashMap.HashMap<UserId, TrusteeV2>(10, Principal.equal, Principal.hash);
   private var budget : BudgetAllocationV2 = stableBudget;
   private var nextGrantId : GrantId = stableNextGrantId;
@@ -184,9 +184,21 @@ actor MicroGrantSystemEnhanced {
     warningCount = 0;
   };
 
-  // Custom hash function for Nat
-  private func natHash(n: Nat) : Hash.Hash {
-    Hash.hash(Int.abs(n))
+  // Custom hash function for Nat (replacement for deprecated Hash.hash)
+  private func natHash(n: Nat) : Nat32 {
+    let hash = Int.abs(n);
+    var h : Nat32 = 0;
+    var remaining = hash;
+
+    // FNV-1a like hash
+    while (remaining > 0) {
+      let byte = Nat32.fromNat(remaining % 256);
+      h := (h ^ byte) *% 0x01000193;  // FNV prime
+      remaining := remaining / 256;
+    };
+
+    // Ensure non-zero for better distribution
+    if (h == 0) { 1 } else { h }
   };
 
   // Error logging and handling

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -24,7 +24,7 @@ export function CyclesDashboard() {
   const fetchCyclesData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const response = await cyclesApi.getStatus();
       if (response.success && response.data) {
@@ -76,7 +76,7 @@ export function CyclesDashboard() {
     const cyclesNum = BigInt(cycles);
     const trillion = BigInt(1_000_000_000_000);
     const billion = BigInt(1_000_000_000);
-    
+
     if (cyclesNum >= trillion) {
       return `${(Number(cyclesNum) / Number(trillion)).toFixed(2)}T`;
     } else if (cyclesNum >= billion) {
@@ -88,19 +88,27 @@ export function CyclesDashboard() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy': return <CheckCircle className="w-4 h-4 text-green-500" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'critical': return <XCircle className="w-4 h-4 text-red-500" />;
-      default: return null;
+      case 'healthy':
+        return <CheckCircle className='w-4 h-4 text-green-500' />;
+      case 'warning':
+        return <AlertTriangle className='w-4 h-4 text-yellow-500' />;
+      case 'critical':
+        return <XCircle className='w-4 h-4 text-red-500' />;
+      default:
+        return null;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'healthy': return 'bg-green-500/20 text-green-400 border-green-500/30';
-      case 'warning': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
-      case 'critical': return 'bg-red-500/20 text-red-400 border-red-500/30';
-      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+      case 'healthy':
+        return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'warning':
+        return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'critical':
+        return 'bg-red-500/20 text-red-400 border-red-500/30';
+      default:
+        return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
     }
   };
 
@@ -112,11 +120,11 @@ export function CyclesDashboard() {
 
   if (loading && !cyclesData) {
     return (
-      <div className="space-y-6">
-        <Card className="card-readable">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-center space-x-2">
-              <RefreshCw className="w-4 h-4 animate-spin" />
+      <div className='space-y-6'>
+        <Card className='card-readable'>
+          <CardContent className='p-6'>
+            <div className='flex items-center justify-center space-x-2'>
+              <RefreshCw className='w-4 h-4 animate-spin' />
               <span>Loading cycles data...</span>
             </div>
           </CardContent>
@@ -128,15 +136,10 @@ export function CyclesDashboard() {
   if (error && !cyclesData) {
     return (
       <Alert>
-        <AlertTriangle className="h-4 w-4" />
+        <AlertTriangle className='h-4 w-4' />
         <AlertDescription>
           {error}
-          <Button 
-            onClick={fetchCyclesData} 
-            variant="outline" 
-            size="sm" 
-            className="ml-2"
-          >
+          <Button onClick={fetchCyclesData} variant='outline' size='sm' className='ml-2'>
             Retry
           </Button>
         </AlertDescription>
@@ -145,22 +148,22 @@ export function CyclesDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className='space-y-6'>
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className='flex justify-between items-center'>
         <div>
-          <h1 className="text-3xl font-bold text-white">Cycles Management</h1>
-          <p className="text-gray-400 mt-2">Monitor and manage ICP cycles across all canisters</p>
+          <h1 className='text-3xl font-bold text-white'>Cycles Management</h1>
+          <p className='text-gray-400 mt-2'>Monitor and manage ICP cycles across all canisters</p>
         </div>
-        <Button onClick={fetchCyclesData} variant="outline" className="gap-2">
-          <RefreshCw className={cn("w-4 h-4", loading && "animate-spin")} />
+        <Button onClick={fetchCyclesData} variant='outline' className='gap-2'>
+          <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
           Refresh
         </Button>
       </div>
 
       {error && (
         <Alert>
-          <AlertTriangle className="h-4 w-4" />
+          <AlertTriangle className='h-4 w-4' />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -168,14 +171,14 @@ export function CyclesDashboard() {
       {cyclesData && (
         <>
           {/* Overview Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="card-readable">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <Zap className="w-8 h-8 text-blue-400" />
+          <div className='grid grid-cols-1 md:grid-cols-4 gap-6'>
+            <Card className='card-readable'>
+              <CardContent className='p-4'>
+                <div className='flex items-center space-x-3'>
+                  <Zap className='w-8 h-8 text-blue-400' />
                   <div>
-                    <p className="text-sm text-gray-400">Total Cycles</p>
-                    <p className="text-xl font-bold text-white">
+                    <p className='text-sm text-gray-400'>Total Cycles</p>
+                    <p className='text-xl font-bold text-white'>
                       {formatCycles(cyclesData.totalCycles)}
                     </p>
                   </div>
@@ -183,82 +186,82 @@ export function CyclesDashboard() {
               </CardContent>
             </Card>
 
-            <Card className="card-readable">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-8 h-8 text-green-400" />
+            <Card className='card-readable'>
+              <CardContent className='p-4'>
+                <div className='flex items-center space-x-3'>
+                  <CheckCircle className='w-8 h-8 text-green-400' />
                   <div>
-                    <p className="text-sm text-gray-400">Healthy Canisters</p>
-                    <p className="text-xl font-bold text-white">{cyclesData.healthyCount}</p>
+                    <p className='text-sm text-gray-400'>Healthy Canisters</p>
+                    <p className='text-xl font-bold text-white'>{cyclesData.healthyCount}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="card-readable">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <AlertTriangle className="w-8 h-8 text-yellow-400" />
+            <Card className='card-readable'>
+              <CardContent className='p-4'>
+                <div className='flex items-center space-x-3'>
+                  <AlertTriangle className='w-8 h-8 text-yellow-400' />
                   <div>
-                    <p className="text-sm text-gray-400">Warning</p>
-                    <p className="text-xl font-bold text-white">{cyclesData.warningCount}</p>
+                    <p className='text-sm text-gray-400'>Warning</p>
+                    <p className='text-xl font-bold text-white'>{cyclesData.warningCount}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="card-readable">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <XCircle className="w-8 h-8 text-red-400" />
+            <Card className='card-readable'>
+              <CardContent className='p-4'>
+                <div className='flex items-center space-x-3'>
+                  <XCircle className='w-8 h-8 text-red-400' />
                   <div>
-                    <p className="text-sm text-gray-400">Critical</p>
-                    <p className="text-xl font-bold text-white">{cyclesData.criticalCount}</p>
+                    <p className='text-sm text-gray-400'>Critical</p>
+                    <p className='text-xl font-bold text-white'>{cyclesData.criticalCount}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="bg-gray-800 border-gray-700">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="topup">Top Up</TabsTrigger>
+          <Tabs defaultValue='overview' className='space-y-6'>
+            <TabsList className='bg-gray-800 border-gray-700'>
+              <TabsTrigger value='overview'>Overview</TabsTrigger>
+              <TabsTrigger value='topup'>Top Up</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="space-y-4">
-              <div className="grid gap-4">
+            <TabsContent value='overview' className='space-y-4'>
+              <div className='grid gap-4'>
                 {cyclesData.canisters.map((canister) => (
-                  <Card key={canister.canister} className="card-readable">
-                    <CardContent className="p-6">
-                      <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center space-x-3">
-                          <div className="text-lg font-semibold capitalize text-white">
+                  <Card key={canister.canister} className='card-readable'>
+                    <CardContent className='p-6'>
+                      <div className='flex items-center justify-between mb-4'>
+                        <div className='flex items-center space-x-3'>
+                          <div className='text-lg font-semibold capitalize text-white'>
                             {canister.canister}
                           </div>
                           <Badge className={getStatusColor(canister.status)}>
                             {getStatusIcon(canister.status)}
-                            <span className="ml-1 capitalize">{canister.status}</span>
+                            <span className='ml-1 capitalize'>{canister.status}</span>
                           </Badge>
                         </div>
-                        <div className="text-right">
-                          <p className="text-lg font-bold text-white">
+                        <div className='text-right'>
+                          <p className='text-lg font-bold text-white'>
                             {formatCycles(canister.cycles)}
                           </p>
-                          <p className="text-xs text-gray-400">cycles</p>
+                          <p className='text-xs text-gray-400'>cycles</p>
                         </div>
                       </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-400">Usage</span>
-                          <span className="text-gray-300">
+
+                      <div className='space-y-2'>
+                        <div className='flex justify-between text-sm'>
+                          <span className='text-gray-400'>Usage</span>
+                          <span className='text-gray-300'>
                             {calculateProgress(canister.cycles, canister.threshold).toFixed(1)}%
                           </span>
                         </div>
-                        <Progress 
-                          value={calculateProgress(canister.cycles, canister.threshold)} 
-                          className="h-2"
+                        <Progress
+                          value={calculateProgress(canister.cycles, canister.threshold)}
+                          className='h-2'
                         />
                       </div>
                     </CardContent>
@@ -267,25 +270,25 @@ export function CyclesDashboard() {
               </div>
             </TabsContent>
 
-            <TabsContent value="topup" className="space-y-6">
-              <Card className="card-readable">
+            <TabsContent value='topup' className='space-y-6'>
+              <Card className='card-readable'>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Plus className="w-5 h-5" />
+                  <CardTitle className='flex items-center gap-2'>
+                    <Plus className='w-5 h-5' />
                     Top Up Canister Cycles
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="canister">Select Canister</Label>
+                <CardContent className='space-y-4'>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                    <div className='space-y-2'>
+                      <Label htmlFor='canister'>Select Canister</Label>
                       <select
-                        id="canister"
+                        id='canister'
                         value={selectedCanister}
                         onChange={(e) => setSelectedCanister(e.target.value)}
-                        className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white"
+                        className='w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white'
                       >
-                        <option value="">Choose canister...</option>
+                        <option value=''>Choose canister...</option>
                         {cyclesData?.canisters.map((canister) => (
                           <option key={canister.canister} value={canister.canister}>
                             {canister.canister} ({formatCycles(canister.cycles)})
@@ -293,33 +296,33 @@ export function CyclesDashboard() {
                         ))}
                       </select>
                     </div>
-                    
-                    <div className="space-y-2">
-                      <Label htmlFor="amount">Amount (cycles)</Label>
+
+                    <div className='space-y-2'>
+                      <Label htmlFor='amount'>Amount (cycles)</Label>
                       <Input
-                        id="amount"
-                        type="number"
-                        placeholder="1000000000000"
+                        id='amount'
+                        type='number'
+                        placeholder='1000000000000'
                         value={topUpAmount}
                         onChange={(e) => setTopUpAmount(e.target.value)}
-                        className="bg-gray-800 border-gray-600 text-white"
+                        className='bg-gray-800 border-gray-600 text-white'
                       />
                     </div>
                   </div>
-                  
-                  <Button 
+
+                  <Button
                     onClick={handleTopUp}
                     disabled={topUpLoading || !selectedCanister || !topUpAmount}
-                    className="w-full"
+                    className='w-full'
                   >
                     {topUpLoading ? (
                       <>
-                        <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                        <RefreshCw className='w-4 h-4 mr-2 animate-spin' />
                         Processing Top-Up...
                       </>
                     ) : (
                       <>
-                        <Zap className="w-4 h-4 mr-2" />
+                        <Zap className='w-4 h-4 mr-2' />
                         Top Up Cycles
                       </>
                     )}
@@ -330,9 +333,9 @@ export function CyclesDashboard() {
           </Tabs>
 
           {/* Last Updated */}
-          <Card className="card-readable">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between text-sm text-gray-400">
+          <Card className='card-readable'>
+            <CardContent className='p-4'>
+              <div className='flex items-center justify-between text-sm text-gray-400'>
                 <span>Last updated: {new Date(cyclesData.lastUpdated).toLocaleString()}</span>
                 <span>Auto-refresh every 30 seconds</span>
               </div>

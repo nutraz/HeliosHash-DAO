@@ -41,14 +41,12 @@ Should return HTTP 200 response.
 ## Authentication Options Available
 
 1. **Social Login** (Recommended for mobile)
-
    - Google OAuth
    - GitHub OAuth
    - Discord OAuth
    - Twitter OAuth
 
 2. **Email/OTP** (Mobile-friendly)
-
    - Enter email address
    - Receive OTP code
    - Quick login process

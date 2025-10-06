@@ -56,10 +56,10 @@ export const projectsApi = {
           'Planning' in project.status
             ? 'Planning'
             : 'Construction' in project.status
-            ? 'Construction'
-            : 'Operational' in project.status
-            ? 'Operational'
-            : 'Maintenance',
+              ? 'Construction'
+              : 'Operational' in project.status
+                ? 'Operational'
+                : 'Maintenance',
         owner: project.owner.toString(),
         createdAt: Number(project.createdAt),
         governmentApprovals: project.governmentApprovals,

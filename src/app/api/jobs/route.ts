@@ -235,6 +235,31 @@ Key Responsibilities:
   },
 ];
 
+/**
+ * Retrieves a filtered, sorted, and paginated list of job postings from the mock database.
+ *
+ * @param request - Incoming NextRequest whose URL query parameters control filtering, sorting, and pagination. Supported query parameters:
+ *   - `page` (default `1`) — page number for pagination
+ *   - `limit` (default `10`) — number of jobs per page
+ *   - `category` — comma-separated categories to include
+ *   - `location` — comma-separated location types to include (matches `location.type`)
+ *   - `search` — text to match against title, description, skills, or category (case-insensitive)
+ *   - `featured` (`true`/`false`) — include only featured jobs when `true`
+ *   - `sortBy` (`created` | `compensation` | `applications` | `deadline`, default `created`) — field to sort by
+ *   - `sortOrder` (`asc` | `desc`, default `desc`) — sort direction
+ *   - `minCompensation` / `maxCompensation` — numeric compensation bounds (compares against `compensation.amount`)
+ *   - `experienceLevel` — comma-separated experience levels to include
+ *   - `workType` — comma-separated work types to include
+ *   - `urgency` — comma-separated urgency levels to include
+ *   - `posted` (`All` | `Today` | `Week` | `Month`) — filter by creation recency
+ *
+ * @returns A JobListResponse containing:
+ *   - `jobs` — array of job postings matching the query after sorting and pagination
+ *   - `total` — total number of matched jobs before pagination
+ *   - `page` — current page number
+ *   - `limit` — page size used
+ *   - `hasMore` — `true` if more pages are available, `false` otherwise
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -383,6 +408,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Create a new job posting from the request body and add it to the in-memory mock database.
+ *
+ * The function generates `id`, `created`, `status`, `applicants`, and `applicationCount` fields and prepends the new job to the mock job list.
+ *
+ * @param request - Incoming HTTP request containing the job payload as JSON
+ * @returns The created `JobPosting` as JSON with HTTP status 201 on success; on failure returns an error JSON object with HTTP status 500
+ */
 export async function POST(request: NextRequest) {
   try {
     const jobData = await request.json();

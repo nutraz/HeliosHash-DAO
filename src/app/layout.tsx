@@ -52,6 +52,12 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Sets up the application's root HTML structure, global providers, theme handling, and a persistent MVP simulation banner.
+ *
+ * @param children - The application content to render inside the global providers and theme context.
+ * @returns The root HTML element tree containing body, global providers (error boundary, auth, theme), the MVP simulation banner, rendered children, and the toast container.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

@@ -495,7 +495,17 @@ const mockWorkflows: ApprovalWorkflow[] = [
   },
 ];
 
-// GET - Fetch approval workflows based on user role and filters
+/**
+ * Fetches approval workflows filtered by user role and query parameters and returns them with department data and summary statistics.
+ *
+ * Accepts the following URL query parameters: `userRole` ('applicant' | 'government' | 'officer' | 'admin'), `userId`, `departmentId`, `status`, `priority`, and `applicationId`. Filters workflows based on the provided parameters and computes aggregate stats (counts by status and priority, average processing time placeholder, SLA compliance placeholder).
+ *
+ * @param request - Incoming NextRequest containing URL search parameters for filtering
+ * @returns A JSON payload with:
+ * - `success`: `true` on successful fetch, `false` on error.
+ * - `data`: when successful, an object with `workflows` (filtered workflows array), `departments` (available departments), and `stats` (aggregate statistics).
+ * - `error` and `details`: provided when `success` is `false`.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -574,7 +584,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Submit new approval request or update existing workflow
+/**
+ * Create a new government approval workflow (or initiate a new request) from the HTTP request body.
+ *
+ * Expects the request JSON to include `applicationId`, `departmentId`, and `approvalType`; when provided, constructs a new workflow record with default status, initial stage, submission and target completion timestamps, and returns that record.
+ *
+ * @param request - Incoming NextRequest whose JSON body must contain `applicationId`, `departmentId`, and `approvalType` (additional workflow fields may be included and will be merged into the created workflow)
+ * @returns On success, an object with `success: true`, `data` containing the created workflow, and a `message`. If required fields are missing, responds with a 400 error and an explanatory `error`. On internal failure, responds with a 500 error and `details` describing the failure.
+ */
 export async function POST(request: NextRequest) {
   try {
     const workflowData = await request.json();

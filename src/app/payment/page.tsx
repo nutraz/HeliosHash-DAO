@@ -3,6 +3,14 @@
 import { ArrowRight, CreditCard, Smartphone, Wallet } from 'lucide-react';
 import Link from 'next/link';
 
+/**
+ * Render the Payment Hub page showing payment options and summary features.
+ *
+ * Displays a header with title and bilingual subtitle, three navigable payment option cards
+ * (UPI Payment, 1WP Tiers, Wallet) with CTAs, and a features grid summarizing key metrics.
+ *
+ * @returns The component's JSX element representing the Payment Hub user interface.
+ */
 export default function PaymentPage() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'>

@@ -25,6 +25,14 @@ import {
   Download,
 } from 'lucide-react';
 
+/**
+ * Render the Partners portal UI with tabs for projects, land records, applications, and government permissions.
+ *
+ * Renders a multi-tab dashboard that displays active projects and milestones, land record management, application tracking,
+ * and government permission statuses; includes handlers for creating new applications and viewing project details.
+ *
+ * @returns The React element tree for the Partners portal interface.
+ */
 export default function PartnersPage() {
   const [landRecords, setLandRecords] = useState([
     {

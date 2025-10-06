@@ -177,6 +177,15 @@ const investmentTiers = [
   },
 ];
 
+/**
+ * Render the Investment Hub page that displays solar project investment opportunities and related tools.
+ *
+ * The component provides a tabbed interface for browsing opportunities, an ROI calculator stub, a portfolio view,
+ * and investor tiers. It manages UI state for the active tab, category and risk filters, investment amount input,
+ * and the currently selected opportunity; it also uses the router to perform back navigation.
+ *
+ * @returns The component's JSX element tree representing the Investment Hub page.
+ */
 export default function ContributePage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('opportunities');

@@ -11,7 +11,15 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 // Mock OWP token balance (would come from wallet in real implementation)
-const mockUserBalance = 250000; // 250K OWP tokens
+const mockUserBalance = 250000; /**
+ * Render the NFT marketplace page for the UrgamU HeliosHash collection.
+ *
+ * Displays mock NFT cards with rarity and energy details, a "Mint New NFT" call-to-action,
+ * and a collection statistics panel. The back button navigates to the previous route.
+ * All content is static mock data; no data fetching or wallet integration is performed.
+ *
+ * @returns A JSX element representing the NFT marketplace page.
+ */
 
 export default function NFTPage() {
   const [userBalance] = useState(mockUserBalance);

@@ -238,7 +238,21 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch applications based on user role and access level
+/**
+ * Fetches project applications and aggregated statistics filtered by requester role and query parameters.
+ *
+ * @param request - Incoming NextRequest whose URL search parameters may include:
+ *   - `userRole`: 'applicant' | 'government' | 'investor' | 'admin' (controls role-based visibility)
+ *   - `userId`: applicant identifier (used when `userRole` is 'applicant')
+ *   - `status`: application status to filter by
+ *   - `projectType`: project type to filter by
+ * @returns A JSON object with:
+ *   - `success`: boolean indicating operation result
+ *   - `data`: object containing:
+ *     - `applications`: array of matching ProjectApplication entries
+ *     - `landRecords`: array of LandRecord entries (present when `userRole` is 'applicant')
+ *     - `stats`: aggregated metrics including `totalApplications`, `byStatus`, `byProjectType`, `totalCapacity`, and `totalInvestment`
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -316,7 +330,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create new application or update existing one
+/**
+ * Create a new project application from the JSON body after validating required fields.
+ *
+ * @param request - HTTP request containing the application data as JSON
+ * @returns A JSON response object:
+ * - On success: `{ success: true, data: ProjectApplication, message: string }`.
+ * - On validation failure: `{ success: false, error: string }` with HTTP status 400.
+ * - On internal error: `{ success: false, error: string, details: string }` with HTTP status 500.
+ */
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();

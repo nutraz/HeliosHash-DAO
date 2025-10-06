@@ -13,6 +13,13 @@ type Message = {
   timestamp: string;
 };
 
+/**
+ * Interactive demo component that connects to a Socket.IO server, displays real-time messages, and lets the user send messages.
+ *
+ * The component manages connection state, appends incoming messages to a message list, and provides an input and send control to emit messages to the server.
+ *
+ * @returns The rendered JSX element for the WebSocket demo UI.
+ */
 export default function SocketDemo() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');

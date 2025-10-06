@@ -29,6 +29,16 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 
+/**
+ * Page component that renders a five-step form for creating a community solar project.
+ *
+ * The component manages form state across steps (basic info, technical specs, land & legal,
+ * financial, and review), enforces step-specific validation before advancing, accepts file
+ * uploads for land documents, displays a progress indicator, and simulates submission with
+ * a redirect on success.
+ *
+ * @returns The JSX element for the Create Project page containing the multi-step form UI.
+ */
 export default function CreateProjectPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);

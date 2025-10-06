@@ -14,6 +14,15 @@ interface Investment {
   timestamp: string;
 }
 
+/**
+ * Render the 5kW solar co-ownership dashboard, including an investment breakdown, form to add a new co-owner,
+ * today's energy generation, monthly revenue split, and system/reality-check status panels.
+ *
+ * The component maintains local state for investments and a new-investor form; when a new investment is added
+ * it recalculates ownership percentages for all investors and appends the new entry.
+ *
+ * @returns The React element for the Investments page.
+ */
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>([
     { id: 1, name: 'You (Nutraz)', amount: 100000, percentage: 33.33, timestamp: '2025-10-06' },

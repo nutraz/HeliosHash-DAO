@@ -6,6 +6,13 @@ import { AlertTriangle, Home, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect } from 'react';
 
+/**
+ * Render a full-page global error UI that displays a concise message, an optional error ID, and actions to retry or navigate home.
+ *
+ * @param error - The caught Error object. If `error.digest` is present it will be shown as an "Error ID".
+ * @param reset - Callback invoked when the user clicks "Try Again" to reset the error boundary.
+ * @returns A JSX element containing a centered error card with title, description, optional error ID, a retry button that calls `reset`, and a homepage link.
+ */
 export default function GlobalError({
   error,
   reset,

@@ -45,6 +45,11 @@ interface SolarProject {
   updatedAt: string;
 }
 
+/**
+ * Return a JSON response containing a list of sample solar project objects.
+ *
+ * @returns A NextResponse JSON payload with `success: true`, `data` as an array of `SolarProject`, `count` as the number of projects, and a `message`; on failure, a 500 response with `success: false`, an `error` string, and a `message`.
+ */
 export async function GET() {
   try {
     // Simulate solar projects data
@@ -187,6 +192,12 @@ export async function GET() {
   }
 }
 
+/**
+ * Create a new solar project proposal from the request JSON body.
+ *
+ * @param request - HTTP request whose JSON body must include `name`, `description`, `location`, `capacity`, `budget`, and `applicantId`; `documents` is optional.
+ * @returns A JSON response object with a `success` flag. On success includes the created project under `data` and a success message. If required fields are missing returns a 400 response with an error message. On internal failure returns a 500 response with an error message.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

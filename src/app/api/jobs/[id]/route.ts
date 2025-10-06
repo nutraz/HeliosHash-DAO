@@ -8,6 +8,13 @@ const MOCK_JOBS: JobPosting[] = [
   // In a real app, this would be fetched from a shared data source
 ];
 
+/**
+ * Fetches a job by its route `id` and returns it as JSON.
+ *
+ * @param request - The incoming Next.js request
+ * @param params - Route parameters; `params.id` is the job identifier to fetch
+ * @returns The job object when found, or an error object `{ error: string }` with HTTP status 404 if not found or 500 on failure
+ */
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const jobId = params.id;
@@ -26,6 +33,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
+/**
+ * Updates an existing job posting with the fields provided in the request body.
+ *
+ * @param request - The incoming request whose JSON body contains the partial job fields to apply
+ * @param params - Route parameters; `params.id` is the ID of the job to update
+ * @returns The updated job object as JSON on success; `{ error: 'Job not found' }` with status 404 if no job matches `params.id`; `{ error: 'Failed to update job' }` with status 500 on internal error
+ */
 export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const jobId = params.id;
@@ -47,6 +61,12 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
   }
 }
 
+/**
+ * Deletes the job identified by the route parameter `id` from the mock job list.
+ *
+ * @param params - Route parameters object containing the `id` of the job to delete
+ * @returns `{ success: true }` when deletion succeeds; `{ error: 'Job not found' }` if no job matches the `id`; `{ error: 'Failed to delete job' }` on internal error
+ */
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const jobId = params.id;

@@ -77,6 +77,19 @@ const MOCK_APPLICATIONS: JobApplication[] = [
   },
 ];
 
+/**
+ * Return a paginated, filtered, and time-descending list of job applications.
+ *
+ * Supports query parameters on the request URL:
+ * - `page` (default 1): page number
+ * - `limit` (default 10): items per page
+ * - `jobId`: filter by job id
+ * - `applicantId`: filter by applicant id
+ * - `status`: comma-separated list of statuses to include
+ *
+ * @param request - Incoming request whose URL search params provide filtering and pagination options
+ * @returns An ApplicationListResponse containing the page of applications, total matching items, `page`, `limit`, and `hasMore` indicating if more items exist beyond the current page
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -126,6 +139,11 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Create a new job application in the mock database, validating required fields and preventing duplicate submissions.
+ *
+ * @returns On success, a JSON response containing the newly created `JobApplication` with HTTP status 201. If required fields are missing, a JSON error `{ error: 'Missing required fields' }` with status 400 is returned. If an application by the same applicant for the same job already exists, a JSON error `{ error: 'Already applied to this job' }` with status 409 is returned. On unexpected failure, a JSON error `{ error: 'Failed to create application' }` with status 500 is returned.
+ */
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();

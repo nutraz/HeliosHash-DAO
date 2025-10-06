@@ -322,7 +322,12 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch land records with role-based filtering
+/**
+ * Handle GET requests to retrieve land records filtered by role and query parameters, and return summary statistics.
+ *
+ * Supports query parameters: `userRole` ('landowner'|'government'|'surveyor'|'admin'), `userId`, `village`, `district`, `ownerName`, `surveyNumber`, and `solarSuitable` ('true'|'false'). Role-based filtering limits results for landowners (by owner email/name) and government users (only verified records); additional query parameters apply substring or numeric suitability filters.
+ *
+ * @returns A JSON object with `success: true` and `data` containing `landRecords` (the filtered records) and `summary` (aggregated statistics). On failure, returns `success: false` with an `error` message and `details`.
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -427,7 +432,13 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create or update land record
+/**
+ * Create a new land record from the request body after validating required fields.
+ *
+ * Parses JSON from the incoming NextRequest, validates required fields (surveyNumber, village, district, and owner name), constructs a LandRecord with generated id, default verification flags, timestamps, and status 'Active', and returns the created record.
+ *
+ * @returns On success: an object `{ success: true, data: LandRecord, message: string }`. On validation failure: `{ success: false, error: string }` with HTTP status 400. On server error: `{ success: false, error: string, details?: string }` with HTTP status 500.
+ */
 export async function POST(request: NextRequest) {
   try {
     const recordData = await request.json();

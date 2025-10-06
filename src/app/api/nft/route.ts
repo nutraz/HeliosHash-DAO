@@ -53,6 +53,18 @@ interface NFTCollection {
   createdAt: string;
 }
 
+/**
+ * Handle GET requests for NFT-related data based on URL query parameters.
+ *
+ * Reads `userId`, `collectionId`, and `nftId` from the request URL and returns:
+ * - a single NFT when `nftId` is present,
+ * - a collection when `collectionId` is present,
+ * - the NFTs owned by a user when `userId` is present,
+ * - or a list of all collections when no specific parameter is provided.
+ *
+ * @param request - The incoming HTTP request whose URL query may include `userId`, `collectionId`, or `nftId`.
+ * @returns A JSON object with `success: true` and `data` containing the requested resource (NFT, collection, array of NFTs, or array of collections) and related metadata (`count`, `message`), or `success: false` with an `error` and `message` when an internal error occurs (responds with HTTP status 500).
+ */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -242,6 +254,20 @@ export async function GET(request: Request) {
   }
 }
 
+/**
+ * Handle NFT-related POST actions: `mint`, `list`, and `transfer`.
+ *
+ * Expects a JSON body with `{ action, userId, nftData }` and returns a JSON response
+ * describing the result or an error.
+ *
+ * @param request - Incoming HTTP request containing a JSON body with `action` (`'mint' | 'list' | 'transfer'`), `userId`, and `nftData`
+ * @returns A JSON object with a `success` boolean and additional fields depending on the action:
+ * - For `mint`: `data` containing the created NFT object and `message`.
+ * - For `list`: `listingId`, `expiresAt` (or `null`), and `message`.
+ * - For `transfer`: `transactionHash`, `fromAddress`, `toAddress`, and `message`.
+ * - On validation errors: `error`, `message` with HTTP status 400.
+ * - On unexpected failures: `error`, `message` with HTTP status 500.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

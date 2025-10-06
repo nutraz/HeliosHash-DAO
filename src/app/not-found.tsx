@@ -3,6 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
+/**
+ * Render a stylized 404 Not Found page with a title, description, action buttons to go back or to the homepage, and a small branding footer.
+ *
+ * @returns A JSX element containing the full-page 404 UI.
+ */
 export default function NotFound() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-6'>

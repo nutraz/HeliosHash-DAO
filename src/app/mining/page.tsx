@@ -36,6 +36,15 @@ interface MinerStats {
   heatUtilization: number;
 }
 
+/**
+ * Render the Mining dashboard UI that displays overall network metrics, per-miner cards, heat management, and rewards.
+ *
+ * The layout includes a header, a stats overview, and tabbed sections for Overview, Miners, Heat Management, and Rewards.
+ * Available actions in the Overview tab are gated by authentication state; when unauthenticated, action controls are presented as locked.
+ * The component initializes with a loading placeholder and then populates sample mining and miner data after mounting.
+ *
+ * @returns The JSX element for the complete mining dashboard UI.
+ */
 export default function MiningPage() {
   const { isAuthenticated } = useAuth();
   const [miningData, setMiningData] = useState<MiningData>({

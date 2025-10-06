@@ -130,6 +130,15 @@ const mockOpportunities: Opportunity[] = [
   },
 ];
 
+/**
+ * Render the Technical Collaboration Hub page.
+ *
+ * Displays a header, expertise area icons, and a tabbed interface with Opportunities, Profile, and Applications.
+ * The Opportunities tab includes search and filters (type, location, urgency) and a list of mock opportunities
+ * filtered by the current search and filter state.
+ *
+ * @returns A React element that renders the collaboration hub UI (header, expertise areas, tabs, filters, opportunity list, and placeholder profile/applications content).
+ */
 export default function CollaboratePage() {
   const router = useRouter();
   const [searchTerm, setSearchTerm] = useState('');

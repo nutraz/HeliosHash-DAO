@@ -408,7 +408,7 @@ class ValidationSessionService {
     try {
       const principal = Principal.fromText(validatorId);
       // Convert amount to the smallest indivisible unit using the token's decimals
-      const amountInSmallestUnit = BigInt(Math.round(amount * (10 ** OWP_TOKEN_DECIMALS)));
+      const amountInSmallestUnit = BigInt(Math.round(amount * 10 ** OWP_TOKEN_DECIMALS));
 
       // Call the real OWP token canister to mint the reward
       const result = await owpTokenService.mint(principal, amountInSmallestUnit);
@@ -416,7 +416,10 @@ class ValidationSessionService {
       if (result && 'ok' in result) {
         console.log(`Successfully awarded ${amount} OWP to validator ${validatorId}`);
       } else {
-        console.error(`Failed to award OWP to ${validatorId}:`, result ? ('err' in result ? result.err : 'Unknown error') : 'No result');
+        console.error(
+          `Failed to award OWP to ${validatorId}:`,
+          result ? ('err' in result ? result.err : 'Unknown error') : 'No result'
+        );
       }
     } catch (error) {
       console.error(`Error awarding OWP to ${validatorId}:`, error);

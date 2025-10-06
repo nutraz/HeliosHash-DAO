@@ -13,6 +13,12 @@ type Message = {
   timestamp: string;
 };
 
+/**
+ * Interactive chat demo that connects to a Socket.IO server, displays received messages, and lets the user send messages.
+ *
+ * The component manages connection state, maintains a local message list (optimistically updated on send), and renders a simple UI showing connection status, messages, and an input to send new messages.
+ *
+ * @returns A React element rendering the chat UI and connection status.
 export default function SocketDemo() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');

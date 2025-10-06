@@ -32,6 +32,15 @@ interface VoteHistory {
   transactionHash: string;
 }
 
+/**
+ * Handle submission of a vote for a proposal.
+ *
+ * Validates the request body for required fields and allowed vote values, simulates recording the vote,
+ * and returns the updated vote counts and a generated vote identifier on success.
+ *
+ * @param request - Incoming HTTP request whose JSON body must match the `VoteRequest` shape (`proposalId`, `vote`, `userId`, optional `votingPower` and `comment`).
+ * @returns A `VoteResponse` JSON object: on success `success: true` with `voteId` and `currentVotes`; on validation failure returns status 400 with `success: false`, `error`, and `message`; on internal failure returns status 500 with `success: false`, `error`, and `message`.
+ */
 export async function POST(request: Request) {
   try {
     const body: VoteRequest = await request.json();
@@ -111,6 +120,15 @@ export async function POST(request: Request) {
   }
 }
 
+/**
+ * Retrieve voting data: user vote history, proposal details, or general statistics based on query parameters.
+ *
+ * If `userId` is present in the request URL search params, returns that user's voting history.
+ * If `proposalId` is present, returns detailed voting information for that proposal.
+ * If neither is present, returns overall voting statistics.
+ *
+ * @param request - HTTP request whose URL search params may include `userId` or `proposalId`
+ * @returns A JSON response object with `success` and `data`; `data` contains either an array of vote records (when `userId` is provided), proposal voting details (when `proposalId` is provided), or aggregated voting statistics otherwise.
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -211,7 +229,12 @@ export async function GET(request: Request) {
   }
 }
 
-// Endpoint to check if a user has voted on a specific proposal
+/**
+ * Checks whether a user has voted on a specific proposal and returns vote details.
+ *
+ * @param request - HTTP request whose URL must include `proposalId` and `userId` search parameters.
+ * @returns JSON response: on success `data` contains `hasVoted` (boolean), `vote` (`'for' | 'against' | 'abstain'` or `null`), `votingPower` (number), and `timestamp` (ISO string or `null`); on failure includes `error` and `message` and an appropriate HTTP status.
+ */
 export async function PUT(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

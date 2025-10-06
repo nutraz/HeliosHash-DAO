@@ -29,6 +29,13 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 
+/**
+ * Render the multi-step "Create Solar Project" page and manage its form state, per-step validation, navigation, file uploads, and submission flow.
+ *
+ * The component provides a five-step wizard for entering basic information, technical specifications, land & legal details, financial structure, and a final review. It maintains local form state, tracks the current step and submission status, and redirects to the projects list on successful submission.
+ *
+ * @returns The rendered JSX for the Create Project page component.
+ */
 export default function CreateProjectPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);

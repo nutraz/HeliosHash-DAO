@@ -53,6 +53,12 @@ interface NFTCollection {
   createdAt: string;
 }
 
+/**
+ * Handle GET requests to retrieve NFT-related data based on query parameters.
+ *
+ * @param request - Incoming Request whose URL may include `nftId`, `collectionId`, or `userId` query parameters to select: a specific NFT, a collection, a user's NFTs, or all collections when none are provided.
+ * @returns An object with a `success` boolean; on success `data` contains an `NFT`, an `NFTCollection`, or an array of those (list responses also include `count`), and `message` describes the result; on failure includes `error` and returns HTTP status 500.
+ */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -242,6 +248,22 @@ export async function GET(request: Request) {
   }
 }
 
+/**
+ * Handle NFT-related POST actions ('mint', 'list', 'transfer') and return structured JSON responses.
+ *
+ * Expects the request body to be JSON with an `action` field specifying one of: 'mint', 'list', or 'transfer'.
+ * - For 'mint': include `userId` and `nftData.metadata`. `nftData` may include optional `rarity` and `category`.
+ * - For 'list': include `nftData.tokenId` and `nftData.price`; `nftData.auctionEndTime` may be provided for expiration.
+ * - For 'transfer': include `nftData.tokenId` and `nftData.toAddress`; the request `userId` is treated as the sender.
+ *
+ * @param request - The incoming HTTP request whose JSON body contains `{ action, userId?, nftData? }`.
+ * @returns A JSON response object. On success, `success` is `true` and the body contains:
+ * - for 'mint': `data` with the newly created NFT partial object and a success `message`;
+ * - for 'list': `message`, `listingId`, and `expiresAt` (or `null`);
+ * - for 'transfer': `message`, `transactionHash`, `fromAddress`, and `toAddress`.
+ * On client error (invalid or missing fields or unknown action), `success` is `false` with `error` and `message` and an HTTP 400 status.
+ * On internal failure, `success` is `false` with `error` and `message` and an HTTP 500 status.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

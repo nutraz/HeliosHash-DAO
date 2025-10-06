@@ -45,6 +45,11 @@ interface SolarProject {
   updatedAt: string;
 }
 
+/**
+ * Sends a JSON HTTP response with simulated solar project data.
+ *
+ * @returns A `NextResponse` whose successful JSON body contains `success: true`, `data: SolarProject[]`, `count: number`, and `message: string`. On error, returns a `NextResponse` with `success: false`, `error: string`, `message: string` and HTTP status 500.
+ */
 export async function GET() {
   try {
     // Simulate solar projects data
@@ -187,6 +192,13 @@ export async function GET() {
   }
 }
 
+/**
+ * Handle submission of a new solar project proposal and respond with the created project or an error payload.
+ *
+ * @returns On success: an object containing `success: true`, `data` with the created project (partial `SolarProject`), and `message`. 
+ *          If required fields are missing: an object with `success: false`, `error`, and `message` and HTTP status 400.
+ *          On internal failure: an object with `success: false`, `error`, and `message` and HTTP status 500.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

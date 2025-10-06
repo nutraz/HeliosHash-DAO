@@ -52,6 +52,15 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout component that wraps application pages with global providers, theming, error handling, authentication, and shared UI.
+ *
+ * Renders the top-level HTML structure (<html> and <body>), composes global providers (Providers, ErrorBoundary, AuthProvider, ThemeProvider),
+ * injects a persistent MVP simulation banner, renders the page `children`, and mounts the global Toaster for notifications.
+ *
+ * @param children - The page content to be rendered inside the root layout.
+ * @returns The root HTML element hierarchy for the application containing providers, the MVP banner, the provided children, and the Toaster.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

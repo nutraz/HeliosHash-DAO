@@ -21,6 +21,14 @@ import {
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
+/**
+ * Render the landing page for the HeliosHash DAO marketing site.
+ *
+ * Displays the hero, stats, features, impact, roadmap, CTA, and footer sections.
+ * Animates live metrics for energy generated and community members and wires CTAs to navigate to authentication and dashboard routes.
+ *
+ * @returns The JSX element for the landing page component
+ */
 export default function LandingPage() {
   const router = useRouter();
   const [energyGenerated, setEnergyGenerated] = useState(12847);

@@ -53,6 +53,17 @@ interface FormData {
   relatedProjectId?: number;
 }
 
+/**
+ * Render a multi-step HHDAO application form with role-specific fields, dynamic lists, validation, and submission.
+ *
+ * The form walks the user through selecting an application type, entering basic information, providing
+ * role-specific details, adding contact and verification data, and reviewing before submitting.
+ *
+ * @param onSubmit - Optional callback invoked with the created `applicationId` after successful submission.
+ * @param onCancel - Optional callback invoked when the user cancels the form flow.
+ * @param initialType - Optional initial application type to preselect in the form.
+ * @returns The React element for the application form UI.
+ */
 export function ApplicationForm({ onSubmit, onCancel, initialType }: ApplicationFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>({

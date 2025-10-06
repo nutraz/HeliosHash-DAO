@@ -249,6 +249,13 @@ interface ApplicationCardProps {
   onRefresh: () => void;
 }
 
+/**
+ * Renders a card showing an application's summary, progress, latest status, uploaded documents, status history, and available actions.
+ *
+ * @param application - The application data to display in the card.
+ * @param onRefresh - Callback invoked to refresh application data (e.g., after uploads or status changes).
+ * @returns The JSX element representing the application's interactive card UI.
+ */
 function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
   const [showDetails, setShowDetails] = useState(false);
 

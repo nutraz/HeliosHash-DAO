@@ -14,6 +14,14 @@ interface Investment {
   timestamp: string;
 }
 
+/**
+ * Renders the 5kW Solar Co-Ownership dashboard and manages co-owner state and additions.
+ *
+ * The component displays current co-owners, total investments, daily energy share, monthly
+ * revenue split, system status, and a form to add a new co-owner which updates local state.
+ *
+ * @returns The React element for the investments dashboard
+ */
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>([
     { id: 1, name: 'You (Nutraz)', amount: 100000, percentage: 33.33, timestamp: '2025-10-06' },

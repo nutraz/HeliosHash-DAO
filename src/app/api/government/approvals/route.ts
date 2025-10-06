@@ -495,7 +495,12 @@ const mockWorkflows: ApprovalWorkflow[] = [
   },
 ];
 
-// GET - Fetch approval workflows based on user role and filters
+/**
+ * Fetches approval workflows filtered by user role and query parameters and returns those workflows with department data and summary statistics.
+ *
+ * @param request - Incoming request whose query parameters may include `userRole`, `userId`, `departmentId`, `status`, `priority`, and `applicationId` to control filtering.
+ * @returns An object with `success: true` and `data` containing `workflows` (filtered ApprovalWorkflow[]), `departments` (Department[]), and `stats` (summary counts and metrics); on failure returns `success: false` and an `error` message with `details`.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -574,7 +579,16 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Submit new approval request or update existing workflow
+/**
+ * Accepts a workflow submission payload and creates a new government approval workflow record.
+ *
+ * Expects the request body to be JSON containing at minimum `applicationId`, `departmentId`, and `approvalType`.
+ * If any of those fields are missing, responds with a 400 error. On success, returns a newly created workflow
+ * object seeded with default status, initial stage, submitted and target completion dates.
+ *
+ * @param request - Incoming NextRequest whose JSON body contains the workflow data (required fields: `applicationId`, `departmentId`, `approvalType`; optional additional fields are merged into the created workflow)
+ * @returns A JSON object with `success` boolean, `data` containing the created workflow summary, and a human-readable `message`; on validation failure returns a 400 response with an `error` field, and on unexpected errors returns a 500 response with `error` and `details`
+ */
 export async function POST(request: NextRequest) {
   try {
     const workflowData = await request.json();

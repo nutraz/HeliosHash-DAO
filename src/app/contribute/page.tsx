@@ -177,6 +177,15 @@ const investmentTiers = [
   },
 ];
 
+/**
+ * Render the Investment Hub page UI for browsing, filtering, and interacting with solar investment opportunities.
+ *
+ * The component provides tabs for Opportunities, ROI Calculator, My Portfolio, and Investor Tiers; filter controls for
+ * category, risk level, and investment amount; a list of opportunity cards with funding progress and actions; and tier
+ * overview cards.
+ *
+ * @returns The React element that composes the Investment Hub interface.
+ */
 export default function ContributePage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('opportunities');

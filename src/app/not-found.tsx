@@ -3,6 +3,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { ArrowLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
+/**
+ * Render a full-screen 404 page with a styled card, navigation actions, and branding.
+ *
+ * @returns A JSX element displaying a "Page Not Found" view with "Go Back" and "Homepage" buttons and HeliosHash DAO branding.
+ */
 export default function NotFound() {
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-6'>

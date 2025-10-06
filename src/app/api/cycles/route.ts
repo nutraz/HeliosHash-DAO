@@ -14,6 +14,11 @@ interface CycleData {
   }[];
 }
 
+/**
+ * Serve simulated ICP cycles metrics and canister details as a JSON API response.
+ *
+ * @returns A NextResponse containing a JSON payload. On success the payload has `success: true`, `data` set to a `CycleData` object and a `message`. On error the payload has `success: false`, an `error` string and a `message`, and the response uses HTTP status 500.
+ */
 export async function GET() {
   try {
     // Simulate ICP cycles data
@@ -69,6 +74,16 @@ export async function GET() {
   }
 }
 
+/**
+ * Handle POST requests to perform a canister cycles action (topup or transfer).
+ *
+ * Expects the request JSON body to include `action` (`'topup'` or `'transfer'`), `canisterId`, and `amount`.
+ *
+ * @returns A JSON response object:
+ * - On success for `topup` or `transfer`: `{ success: true, message: string, transactionId: string }`.
+ * - For an unrecognized action: `{ success: false, error: 'Invalid action', message: string }` with HTTP status 400.
+ * - On internal error: `{ success: false, error: 'Failed to process cycles request', message: 'Internal server error' }` with HTTP status 500.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

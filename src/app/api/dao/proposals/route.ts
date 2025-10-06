@@ -47,6 +47,11 @@ interface DAOProposal {
   updatedAt: string;
 }
 
+/**
+ * Retrieve simulated DAO proposals and return them in a JSON HTTP response.
+ *
+ * @returns A JSON HTTP response with shape `{ success: true, data: DAOProposal[], count: number, message: string }`. On error returns a 500 response with `{ success: false, error: string, message: string }`.
+ */
 export async function GET() {
   try {
     // Simulate DAO proposals data
@@ -228,6 +233,14 @@ export async function GET() {
   }
 }
 
+/**
+ * Create a new DAO proposal from the JSON body of the incoming request and return a JSON response containing the created proposal.
+ *
+ * Validates that `title`, `description`, `category`, `proposerId`, and `votingPeriod` are present; returns a 400 response with an error message if any are missing. On success returns the newly constructed proposal object (status 'draft') along with a success message. If an unexpected error occurs, returns a 500 response with an error message.
+ *
+ * @param request - HTTP request whose JSON body must include `title`, `description`, `category`, `proposerId`, `votingPeriod`, and optional `budget` and `attachments`
+ * @returns A JSON object: on success `{ success: true, data: <newProposal>, message: 'DAO proposal created successfully' }`; on validation failure `{ success: false, error: 'Missing required fields', message: 'Please provide all required proposal information' }` with status 400; on internal error `{ success: false, error: 'Failed to create DAO proposal', message: 'Internal server error' }` with status 500.
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

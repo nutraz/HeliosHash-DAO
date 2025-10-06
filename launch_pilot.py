@@ -47,7 +47,15 @@ THERMAL_THRESHOLDS = {
 # === THERMAL MANAGEMENT FUNCTIONS ===
 
 def init_thermal_db():
-    """Initialize SQLite database for thermal monitoring data."""
+    """
+    Create or open the thermal monitoring SQLite database and ensure the required tables for readings and alerts exist.
+    
+    This will create the database file under the project root if it does not exist and initialize the
+    thermal_readings and thermal_alerts tables.
+    
+    Returns:
+        db_path (pathlib.Path): Path to the SQLite database file (thermal_data.db) created or opened.
+    """
     db_path = PROJECT_ROOT / "thermal_data.db"
     conn = sqlite3.connect(db_path)
     
@@ -86,7 +94,16 @@ def init_thermal_db():
     return db_path
 
 def calculate_thermal_efficiency(panel_temp: float, base_temp: float = 25.0) -> float:
-    """Calculate solar panel efficiency based on temperature."""
+    """
+    Compute the solar panel efficiency multiplier based on panel temperature relative to a reference temperature.
+    
+    Parameters:
+        panel_temp (float): Panel temperature in degrees Celsius.
+        base_temp (float): Reference temperature in degrees Celsius used as the baseline for efficiency (default 25.0).
+    
+    Returns:
+        float: Efficiency multiplier relative to nominal performance (1.0 = nominal). Value will be at least 0.5.
+    """
     # Standard temperature coefficient for silicon panels: -0.4% per °C
     temp_coefficient = -0.004
     temp_diff = panel_temp - base_temp
@@ -99,7 +116,25 @@ def simulate_thermal_profile(
     wind_speed: float = 2.0,
     time_of_day: int = 12
 ) -> Dict[str, float]:
-    """Simulate thermal profile for solar installation in Urgam Valley conditions."""
+    """
+    Estimate component temperatures and resulting panel efficiency for a solar installation given ambient conditions.
+    
+    Parameters:
+        ambient_temp (float): Ambient temperature in degrees Celsius.
+        solar_irradiance (float): Solar irradiance in watts per square meter (W/m²).
+        wind_speed (float, optional): Wind speed in meters per second (m/s). Defaults to 2.0.
+        time_of_day (int, optional): Hour of day (0-23) used for contextual simulations. Defaults to 12.
+    
+    Returns:
+        dict: A mapping with the following keys:
+            - "panel_temp" (float): Estimated panel temperature in °C (rounded to 2 decimals).
+            - "inverter_temp" (float): Estimated inverter temperature in °C (rounded to 2 decimals).
+            - "battery_temp" (float): Estimated battery temperature in °C (rounded to 2 decimals).
+            - "efficiency" (float): Estimated panel efficiency as a fraction (0-1, rounded to 3 decimals).
+            - "ambient_temp" (float): Echoes the provided ambient temperature in °C.
+            - "solar_irradiance" (float): Echoes the provided irradiance in W/m².
+            - "wind_speed" (float): Echoes the provided wind speed in m/s.
+    """
     
     # Panel temperature calculation (simplified model)
     # Formula: Tpanel = Tambient + ((NOCT - 20) / 800) * Solar_Irradiance * (1 - efficiency) / (1 + wind_factor)
@@ -128,7 +163,21 @@ def simulate_thermal_profile(
     }
 
 def check_thermal_alerts(thermal_data: Dict[str, float]) -> List[Dict[str, str]]:
-    """Check thermal data against thresholds and generate alerts."""
+    """
+    Evaluate thermal measurements against configured safety thresholds and produce alert records for out-of-range conditions.
+    
+    Parameters:
+        thermal_data (Dict[str, float]): Measurements for the system. Expected keys include
+            - "panel_temp": panel temperature in degrees Celsius
+            - "inverter_temp": inverter temperature in degrees Celsius
+            - "efficiency": panel efficiency as a fraction (e.g., 0.85)
+    
+    Returns:
+        List[Dict[str, str]]: A list of alert dictionaries. Each alert contains:
+            - "device_type": type of device ("panel", "inverter", etc.)
+            - "severity": alert severity ("warning" or "critical")
+            - "message": human-readable description of the condition
+    """
     alerts = []
     
     # Panel temperature alerts
@@ -164,7 +213,19 @@ def check_thermal_alerts(thermal_data: Dict[str, float]) -> List[Dict[str, str]]
     return alerts
 
 def monitor_thermal_systems():
-    """Main thermal monitoring function for ongoing system health."""
+    """
+    Run a single thermal monitoring cycle: simulate site conditions, evaluate alerts, persist readings and alerts to the thermal database, and print a status summary.
+    
+    This function simulates ambient conditions for Urgam Valley, generates a thermal profile for panel/inverter/battery, checks against configured thresholds, writes a reading to the thermal_readings table and any alerts to the thermal_alerts table in the initialized SQLite database, and prints a human-readable summary.
+    
+    Returns:
+        tuple: (thermal_profile, alerts)
+            - thermal_profile (dict): Current simulated thermal metrics including keys such as
+              `panel_temp`, `inverter_temp`, `battery_temp`, `efficiency`, `ambient_temp`,
+              `solar_irradiance`, and `wind_speed`.
+            - alerts (list): List of alert dicts (each containing keys like `device_type`,
+              `severity`, and `message`). Empty list if no alerts were generated.
+    """
     print("\n🌡️ Initializing thermal management system...")
     
     # Initialize database
@@ -240,7 +301,14 @@ def monitor_thermal_systems():
     return thermal_profile, alerts
 
 def generate_thermal_bim_export():
-    """Generate Building Information Modeling (BIM) data export for thermal analysis."""
+    """
+    Generate a BIM-compatible thermal model and a simplified CSV summary for the Urgam Valley solar installation.
+    
+    Creates a JSON BIM export describing project metadata, thermal zones, design temperatures, cooling strategies, and monitoring points, and writes a companion CSV summarizing each zone's area, design max/min temperatures, and cooling strategy to the project root.
+    
+    Returns:
+        (bim_export_path, csv_path) (Tuple[pathlib.Path, pathlib.Path]): Paths to the generated BIM JSON file and the thermal summary CSV file, respectively.
+    """
     print("\n🏗️ Generating BIM thermal export for Urgam Valley installation...")
     
     # Create BIM-compatible thermal model data
@@ -343,7 +411,17 @@ def generate_thermal_bim_export():
 # === CORE FUNCTIONS ===
 
 def run_cmd(cmd: str, cwd=None, check=True):
-    """Run shell command with error handling."""
+    """
+    Execute a shell command and return its captured standard output.
+    
+    Parameters:
+        cmd (str): Shell command to run.
+        cwd (Optional[str]): Working directory for the command; defaults to PROJECT_ROOT when not provided.
+        check (bool): If True, on a non-zero exit status the function prints stderr (and stdout if present) and exits the process with code 1.
+    
+    Returns:
+        str: The command's standard output with trailing whitespace removed.
+    """
     print(f"🚀 {cmd}")
     result = subprocess.run(cmd, shell=True, cwd=cwd or PROJECT_ROOT, 
                           capture_output=True, text=True)
@@ -492,7 +570,14 @@ def launch_voice_pilot():
     print("🌟 Voice pilot ready! Share QR codes with Urgam villagers.")
 
 def sync_with_1wp(canister_ids):
-    """Register HHDAO as official India node of UrgamU Smart City."""
+    """
+    Prepare and persist a local registration payload to register HHDAO as the India node of the UrgamU Smart City.
+    
+    Creates a JSON file under .pilot/1wp_registration.json containing project metadata (name, region, coordinates), provided canister IDs, network, timestamp, integration type, and parent project. The function does not perform any network requests; it only writes the registration payload to disk for later submission.
+    
+    Parameters:
+        canister_ids (dict): Mapping of canister names to their deployed identifiers to include in the registration payload.
+    """
     print("\n🔗 Syncing with 1WP UrgamU DAO...")
     
     # Prepare registration data
@@ -523,7 +608,14 @@ def sync_with_1wp(canister_ids):
     print("✅ Ready for 1WP ecosystem integration!")
 
 def monitor_compute_profitability():
-    """Monitor Bitcoin mining profitability and trigger AI pivot if needed."""
+    """
+    Evaluate Bitcoin-mining economics and, if below the configured threshold, attempt to pivot the node to AI compute workloads.
+    
+    If the computed profit per TH/s is below the module's profitability threshold, the function attempts to invoke the hhdao_compute canister to switch compute mode to AI and logs estimated AI revenue and profit; otherwise it leaves the compute mode unchanged. Uses local/hardcoded estimates for difficulty, price, power cost, and hardware statistics in the current implementation.
+    
+    Returns:
+        profitability_per_th (float): Estimated profit in USD per TH/s per day.
+    """
     print("\n⚡ Starting compute profitability monitoring...")
     
     # Mock API calls (replace with real data sources in production)
@@ -588,7 +680,20 @@ def monitor_compute_profitability():
     return profitability_per_th
 
 def simulate_thermal_optimization():
-    """Run thermal simulation and optimize cooling system."""
+    """
+    Run a daily thermal simulation, summarize results, and apply significant optimization updates.
+    
+    This function invokes the thermal simulation workflow which produces a results file at
+    ".pilot/thermal_results.json", loads the reported daily summary metrics (temperature reduction,
+    energy gain, water saved, and estimated revenue), and prints a concise summary. If the reported
+    average efficiency gain exceeds 5%, the function attempts to apply the improvement to the
+    compute subsystem by issuing a canister call to update compute statistics. The simulation run
+    and any canister update are best-effort and non-fatal; failures are reported but do not raise.
+    
+    Returns:
+        dict or None: The parsed thermal results dictionary when available, `None` if the results
+        file is missing or an error occurred while running or loading the simulation.
+    """
     print("\n🌡️ Running thermal optimization simulation...")
     
     try:
@@ -639,7 +744,14 @@ def simulate_thermal_optimization():
         return None
 
 def start_development_server():
-    """Start the Next.js development server."""
+    """
+    Start a local Next.js development server for the project.
+    
+    Installs project dependencies with `pnpm install` if node_modules is missing, then launches the Next.js dev server on http://localhost:3001 as a background process.
+    
+    Returns:
+        process (subprocess.Popen): The spawned background process running `pnpm dev`.
+    """
     print("\n🌐 Starting development server...")
     
     # Install dependencies if needed
@@ -696,6 +808,11 @@ def cleanup():
 # === MAIN EXECUTION ===
 
 def main():
+    """
+    Orchestrates the full HHDAO pilot launch workflow and its runtime monitors.
+    
+    Performs a sequential launch and runtime setup for the pilot, including prerequisite checks, canister deployment, partner onboarding, voice-pilot activation, One World Project registration, compute profitability monitoring, thermal system monitoring and BIM export, optional thermal optimization, development server startup, continuous health monitoring, and final cleanup on exit.
+    """
     print("🌅 HHDAO PILOT LAUNCHER — Building Civilization for 1000 Years")
     print("🏔️ Transforming Urgam Valley, Uttarakhand through Solar DAO")
     print("=" * 65)

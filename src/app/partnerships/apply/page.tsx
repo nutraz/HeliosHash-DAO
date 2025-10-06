@@ -19,6 +19,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
+/**
+ * Renders a five-step partnership application page for land partners.
+ *
+ * Manages form state, per-step validation, file uploads, progress UI, and submission/navigation flows for applying as a land partner in a solar project.
+ *
+ * @returns The JSX element for the multi-step partnership application page.
+ */
 export default function PartnershipApplicationPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);

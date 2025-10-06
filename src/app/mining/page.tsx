@@ -36,6 +36,13 @@ interface MinerStats {
   heatUtilization: number;
 }
 
+/**
+ * Render the mining dashboard with overview statistics, tabs (Overview, Miners, Heat Management, Rewards), and controls for sessions, actions, and theme.
+ *
+ * The component manages local sample state for aggregate mining metrics and individual miner stats, formats and presents those values, and conditionally shows action controls based on authentication.
+ *
+ * @returns The JSX element tree for the mining dashboard UI.
+ */
 export default function MiningPage() {
   const { isAuthenticated } = useAuth();
   const [miningData, setMiningData] = useState<MiningData>({

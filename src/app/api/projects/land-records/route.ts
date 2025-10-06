@@ -322,7 +322,18 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch land records with role-based filtering
+/**
+ * Fetches land records applying role-based access and optional search filters, and returns the matching records with aggregated summary statistics.
+ *
+ * Supports the following URL search parameters:
+ * - `userRole` — 'landowner', 'government', 'surveyor', or 'admin' (affects role-based filtering)
+ * - `userId` — identifier used to restrict landowner results to that user's records
+ * - `village`, `district`, `ownerName`, `surveyNumber` — case-insensitive substring filters
+ * - `solarSuitable` — 'true' to keep records with averageSunlight > 7 and estimatedCapacity > 5
+ *
+ * @param request - Incoming NextRequest whose URL searchParams provide filtering and role information
+ * @returns An object with `success: true` and `data` containing `landRecords` (the filtered records) and `summary` (counts and aggregated metrics). On error, returns `success: false` with an `error` message and `details`.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -427,7 +438,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create or update land record
+/**
+ * Create a new land record from the JSON request body and return the created record.
+ *
+ * Validates that `surveyNumber`, `village`, `district`, and `ownerDetails.name` are present in the request body.
+ * Generates an `id`, sets `createdDate` and `lastUpdated` to now, ensures `verification` has defaults (`verified`, `fieldSurveyDone`, `gpsVerified` set to `false` if not provided), and sets `status` to `'Active'`.
+ *
+ * @param request - Incoming NextRequest whose JSON body must include `surveyNumber`, `village`, `district`, and `ownerDetails.name`
+ * @returns On success: an object with `success: true`, `data` containing the created `LandRecord`, and a `message`. On validation failure: a 400 response with `success: false` and an `error` message. On server error: a 500 response with `success: false`, `error`, and `details`.
+ */
 export async function POST(request: NextRequest) {
   try {
     const recordData = await request.json();

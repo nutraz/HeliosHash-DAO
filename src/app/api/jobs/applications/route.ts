@@ -77,6 +77,19 @@ const MOCK_APPLICATIONS: JobApplication[] = [
   },
 ];
 
+/**
+ * Retrieve a paginated, optionally filtered and sorted list of job applications.
+ *
+ * The request URL may include these query parameters to control results:
+ * - `page` — page number (defaults to 1)
+ * - `limit` — page size (defaults to 10)
+ * - `jobId` — filter by job identifier
+ * - `applicantId` — filter by applicant identifier
+ * - `status` — comma-separated list of statuses to include
+ *
+ * @param request - Incoming NextRequest whose URL search params may specify pagination and filters
+ * @returns An ApplicationListResponse with `applications` (the current page of results), `total` (number of matched applications), `page`, `limit`, and `hasMore` (true if more pages exist)
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -126,6 +139,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
+/**
+ * Create a new job application from the request body and append it to the in-memory store.
+ *
+ * The request JSON must include `jobId`, `applicantId`, and `coverLetter`. If an application
+ * for the same `jobId` by the same `applicantId` already exists, the request is rejected.
+ *
+ * @param request - NextRequest whose JSON body contains the application fields. Required fields: `jobId`, `applicantId`, `coverLetter`. Optional fields may include `jobTitle`, `applicantName`, `applicantEmail`, `skills`, `experience`, `availability`, `expectedCompensation`, `portfolio`, `documents`, `notes`, etc.
+ * @returns The created `JobApplication` object as JSON with status 201 on success; returns a JSON error with status 400 for missing required fields, 409 for a duplicate application, or 500 for server errors.
+ */
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();

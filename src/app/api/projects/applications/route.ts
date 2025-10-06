@@ -238,7 +238,22 @@ const mockLandRecords: LandRecord[] = [
   },
 ];
 
-// GET - Fetch applications based on user role and access level
+/**
+ * Retrieve project applications filtered by requester role and optional query parameters.
+ *
+ * Filters the mocked applications by `userRole` (applicant, government, investor, admin)
+ * and optional `status` and `projectType` query parameters, and returns the matching
+ * applications along with land records for applicants and basic aggregated statistics.
+ *
+ * @param request - Incoming request whose URL search parameters may include:
+ *   - `userRole`: 'applicant' | 'government' | 'investor' | 'admin'
+ *   - `userId`: applicant identifier (used when `userRole` is 'applicant')
+ *   - `status`: application status to filter by
+ *   - `projectType`: project type to filter by
+ * @returns An object with:
+ *   - `success`: `true` on successful fetch, `false` on error
+ *   - `data`: `{ applications: ProjectApplication[], landRecords: LandRecord[] | [], stats: { totalApplications, byStatus, byProjectType, totalCapacity, totalInvestment } }`
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -316,7 +331,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create new application or update existing one
+/**
+ * Create a new project application from the request JSON and return the created application.
+ *
+ * Validates that `projectName`, `projectType`, and `landRecordId` are present; constructs a
+ * ProjectApplication with an generated `id`, `applicationDate`, initial `status` and `timeline`.
+ *
+ * @param request - Incoming HTTP request whose JSON body contains application fields
+ * @returns On success, a JSON response with `success: true`, `data` set to the created ProjectApplication, and a success `message`. If required fields are missing, a 400 response with `success: false` and an `error` message is returned. On internal failure, a 500 response with `success: false`, an `error` message, and `details` is returned.
+ */
 export async function POST(request: NextRequest) {
   try {
     const applicationData = await request.json();

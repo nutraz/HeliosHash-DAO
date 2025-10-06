@@ -14,6 +14,14 @@ interface Investment {
   timestamp: string;
 }
 
+/**
+ * Render the InvestmentsPage dashboard for managing co-ownership and viewing energy and revenue metrics.
+ *
+ * Displays current co-owners and their investment breakdown, allows adding a new co-owner (which rebalances ownership percentages),
+ * and shows today's energy generation, monthly revenue split, and system/reality-check status.
+ *
+ * @returns The rendered investments dashboard as a JSX element.
+ */
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>([
     { id: 1, name: 'You (Nutraz)', amount: 100000, percentage: 33.33, timestamp: '2025-10-06' },

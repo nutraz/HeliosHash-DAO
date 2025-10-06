@@ -24,6 +24,16 @@ import {
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+/**
+ * Render the main dashboard page with role-based views, onboarding flow, and a user menu.
+ *
+ * Displays a loading screen while authentication is being checked, redirects unauthenticated users
+ * to the login page, shows an onboarding flow for users without roles, and otherwise renders the
+ * dashboard UI with role switching, connectivity/health panels, treasury and role-specific content,
+ * a collapsible user menu with navigation actions, and a bottom navigation bar.
+ *
+ * @returns The JSX element for the dashboard page; may render a loading screen, onboarding UI, or null during redirect. 
+ */
 export default function DashboardPage() {
   const router = useRouter();
   const { user, isLoading, isAuthenticated, logout, setUserRole } = useAuth();

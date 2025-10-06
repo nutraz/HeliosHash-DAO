@@ -47,6 +47,17 @@ interface DAOProposal {
   updatedAt: string;
 }
 
+/**
+ * Retrieve a simulated list of DAO proposals.
+ *
+ * @returns A JSON object containing:
+ * - `success`: `true` on success, `false` on failure
+ * - `data`: an array of `DAOProposal` when `success` is `true`
+ * - `count`: number of proposals in `data`
+ * - `message`: human-readable status message
+ *
+ * On failure the response contains `success: false`, an `error` string, and a `message`; the failure response is returned with HTTP status 500.
+ */
 export async function GET() {
   try {
     // Simulate DAO proposals data
@@ -228,6 +239,12 @@ export async function GET() {
   }
 }
 
+/**
+ * Create a new in-memory DAO proposal from the JSON body of the request.
+ *
+ * @param request - HTTP request whose JSON body must include `title`, `description`, `category`, `proposerId`, and `votingPeriod`; optional fields include `budget` and `attachments`
+ * @returns A JSON response object with `success`; on success includes `data` containing the created proposal and `message`; on failure includes `error` and `message`. HTTP status codes indicate outcome (200, 400, 500).
+ */
 export async function POST(request: Request) {
   try {
     const body = await request.json();

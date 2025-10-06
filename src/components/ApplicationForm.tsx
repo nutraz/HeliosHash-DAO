@@ -53,6 +53,15 @@ interface FormData {
   relatedProjectId?: number;
 }
 
+/**
+ * Render the HHDAO multi-step application form and manage its state, validation, dynamic fields, navigation, and submission flow.
+ *
+ * The component guides a user through selecting an application type, entering basic and role-specific details, providing contact and verification information, reviewing the submission, and sending the final request to the application service. It maintains internal form state, per-field validation errors, dynamic lists (technical skills, preferred roles, references), progress tracking, and submits a consolidated request; submission success triggers the optional `onSubmit` callback.
+ *
+ * @param onSubmit - Optional callback invoked with the newly created application ID after a successful submission.
+ * @param onCancel - Optional callback invoked when the user cancels the form flow.
+ * @param initialType - Optional initial application type to preselect on the first step.
+ */
 export function ApplicationForm({ onSubmit, onCancel, initialType }: ApplicationFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<FormData>({

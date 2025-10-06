@@ -3,9 +3,9 @@
 import CorrectedUPIPaymentGateway from '@/components/CorrectedUPIPaymentGateway';
 
 /**
- * Renders the CorrectedUPIPaymentGateway payment UI.
+ * Page component that renders the corrected UPI payment gateway UI.
  *
- * @returns A JSX element that renders the CorrectedUPIPaymentGateway component.
+ * @returns A JSX element containing the payment gateway interface.
  */
 export default function TiersPage() {
   return <CorrectedUPIPaymentGateway />;

@@ -496,16 +496,26 @@ const mockWorkflows: ApprovalWorkflow[] = [
 ];
 
 /**
- * Retrieves approval workflows filtered by user role and query parameters.
+ * Retrieve approval workflows filtered by user role and query parameters, and return summary statistics.
  *
- * @param request - NextRequest whose URL search params may include:
- *   `userRole` ('applicant' | 'government' | 'officer' | 'admin'),
- *   `userId`, `departmentId`, `status`, `priority`, and `applicationId`.
- * @returns A JSON object with `success: true` and `data` containing:
- *   - `workflows`: the list of approval workflows after applied filters,
- *   - `departments`: available department metadata,
- *   - `stats`: summary statistics (totalWorkflows, counts by status and priority, avgProcessingTime, slaCompliance).
- *   On failure, `success` is `false` and an `error` and `details` field describe the failure.
+ * This handler reads query parameters from the incoming request (userRole, userId, departmentId, status, priority, applicationId),
+ * filters the in-memory workflows accordingly, builds simple statistics (counts by status and priority, total, placeholders for
+ * average processing time and SLA compliance), and returns the filtered workflows along with department data and stats.
+ *
+ * @param request - Incoming NextRequest; expected search params:
+ *   - userRole: 'applicant' | 'government' | 'officer' | 'admin'
+ *   - userId: officer id used when userRole is 'officer'
+ *   - departmentId: department id used when userRole is 'government'
+ *   - status: filter by workflow overallStatus
+ *   - priority: filter by workflow priority
+ *   - applicationId: filter by applicationId when userRole is 'applicant'
+ * @returns An object with:
+ *   - `success`: `true` on success, `false` on error.
+ *   - `data` (when `success` is `true`): an object containing
+ *       - `workflows`: the filtered array of ApprovalWorkflow objects,
+ *       - `departments`: array of Department objects,
+ *       - `stats`: summary statistics (totalWorkflows, byStatus, byPriority, avgProcessingTime, slaCompliance).
+ *   - `error` and `details` (when `success` is `false`): error message and details.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -586,14 +596,10 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Creates a new government approval workflow from the request body.
+ * Create a new government approval workflow or update an existing workflow using JSON from the request body.
  *
- * Expects a JSON body containing at minimum `applicationId`, `departmentId`, and `approvalType`; returns a validation error if any are missing.
- *
- * @returns A JSON response object:
- * - On success (`success: true`): `data` contains the created workflow object and `message` summarizes the result.
- * - On client error (`status: 400`): `success: false` and `error` explains the missing fields.
- * - On server error (`status: 500`): `success: false`, `error` summarizes the failure, and `details` may contain the error message.
+ * @param request - NextRequest whose JSON body must include `applicationId`, `departmentId`, and `approvalType`; other workflow fields may be provided to populate the created workflow.
+ * @returns A JSON object with `success: true` and `data` containing the created workflow and a `message` on success; on validation failure `success: false` with an `error` message; on server error `success: false` with `error` and `details`.
  */
 export async function POST(request: NextRequest) {
   try {

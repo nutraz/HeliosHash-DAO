@@ -239,16 +239,17 @@ const mockLandRecords: LandRecord[] = [
 ];
 
 /**
- * Fetches project applications filtered by requester role and optional query parameters.
+ * Fetches project applications filtered by user role and optional query parameters, and returns matching applications along with aggregated statistics.
  *
- * Accepts query parameters `userRole` ('applicant' | 'government' | 'investor' | 'admin'), `userId`,
- * `status`, and `projectType` to filter returned applications. Also computes aggregate statistics
- * for the filtered result and includes land records when the requester role is `applicant`.
- *
- * @param request - The incoming NextRequest whose URL query provides `userRole`, `userId`, `status`, and `projectType`.
- * @returns An object with `success`, and on success a `data` object containing:
- *          `applications` (array of ProjectApplication), `landRecords` (array of LandRecord, present only for applicants),
- *          and `stats` (aggregation: totalApplications, byStatus, byProjectType, totalCapacity, totalInvestment).
+ * @param request - Incoming NextRequest whose URL search params may include:
+ *   - `userRole`: 'applicant' | 'government' | 'investor' | 'admin'
+ *   - `userId`: applicant identifier (used when `userRole` is 'applicant')
+ *   - `status`: application status to filter by
+ *   - `projectType`: project type to filter by
+ * @returns A JSON payload containing:
+ *   - `success`: `true` when the fetch succeeds, `false` on error
+ *   - `data`: an object with `applications` (filtered list), `landRecords` (included only when `userRole` is 'applicant'), and `stats` (counts by status and project type, totalCapacity, totalInvestment)
+ *   - On internal failure, returns `success: false` with an error message and HTTP status 500
  */
 export async function GET(request: NextRequest) {
   try {
@@ -328,17 +329,13 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Create a new project application or update an existing one from the request payload.
+ * Create a new project application from the incoming request body.
  *
- * Validates that `projectName`, `projectType`, and `landRecordId` are present in the request body,
- * then constructs and returns a new ProjectApplication object initialized with default status,
- * current stage, timeline, and empty government approvals.
+ * Validates that `projectName`, `projectType`, and `landRecordId` are present; if validation fails, responds with a 400 error. On success, constructs a new `ProjectApplication` (assigning an `id`, `applicationDate`, `status: 'Draft'`, `currentStage: 'Application Preparation'`, empty `governmentApprovals`, and an initial `timeline` entry) and returns it in the response. On unexpected errors returns a 500 error with details.
  *
- * @param request - The incoming HTTP request whose JSON body contains the application fields.
- *   Required body fields: `projectName`, `projectType`, `landRecordId`.
- * @returns On success: a JSON response containing `{ success: true, data: ProjectApplication, message: string }`.
- *   On client error (missing fields): `{ success: false, error: string }` with HTTP 400.
- *   On server error: `{ success: false, error: string, details: string }` with HTTP 500.
+ * @returns A JSON object containing:
+ * - `success`: `true` and `data` with the created `ProjectApplication` and a `message` on success.
+ * - `success`: `false` and an `error` message (plus `details` when available) on failure. Validation failures use HTTP 400; unexpected errors use HTTP 500.
  */
 export async function POST(request: NextRequest) {
   try {

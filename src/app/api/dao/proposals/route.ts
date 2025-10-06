@@ -48,15 +48,9 @@ interface DAOProposal {
 }
 
 /**
- * Retrieve a simulated list of DAO proposals.
+ * Responds with a JSON payload containing a list of mock DAO proposals.
  *
- * @returns A JSON object containing:
- * - `success`: `true` on success, `false` on failure
- * - `data`: an array of `DAOProposal` when `success` is `true`
- * - `count`: number of proposals in `data`
- * - `message`: human-readable status message
- *
- * On failure the response contains `success: false`, an `error` string, and a `message`; the failure response is returned with HTTP status 500.
+ * @returns A NextResponse containing `{ success: true, data: DAOProposal[], count: number, message: string }` on success, or a 500 response with `{ success: false, error: string, message: string }` on failure.
  */
 export async function GET() {
   try {
@@ -240,10 +234,13 @@ export async function GET() {
 }
 
 /**
- * Create a new in-memory DAO proposal from the JSON body of the request.
+ * Create a new DAO proposal from the JSON body of the incoming request.
  *
- * @param request - HTTP request whose JSON body must include `title`, `description`, `category`, `proposerId`, and `votingPeriod`; optional fields include `budget` and `attachments`
- * @returns A JSON response object with `success`; on success includes `data` containing the created proposal and `message`; on failure includes `error` and `message`. HTTP status codes indicate outcome (200, 400, 500).
+ * @param request - Incoming Request whose JSON body must include `title`, `description`, `category`, `proposerId`, and `votingPeriod`. Optional fields: `budget` and `attachments`.
+ * @returns An HTTP JSON response:
+ * - On success: `{ success: true, data: <newProposal>, message: 'DAO proposal created successfully' }`.
+ * - On validation failure: `{ success: false, error: 'Missing required fields', message: 'Please provide all required proposal information' }` with status 400.
+ * - On server error: `{ success: false, error: 'Failed to create DAO proposal', message: 'Internal server error' }` with status 500.
  */
 export async function POST(request: Request) {
   try {

@@ -236,14 +236,14 @@ Key Responsibilities:
 ];
 
 /**
- * Retrieve a filtered, sorted, and paginated list of job postings based on URL query parameters.
+ * Fetches job postings and returns a filtered, sorted, and paginated job list based on URL query parameters.
  *
- * Supports filtering by category, location, search (title/description/skills/category), featured,
- * experience level, work type, urgency, compensation range, and posted timeframe (Today/Week/Month).
- * Results can be sorted by `compensation`, `applications`, `deadline`, or `created` in `asc` or `desc` order,
- * and are paginated via `page` and `limit`.
+ * Supported query parameters: page, limit, category (comma-separated), location (comma-separated), search,
+ * featured (true/false), sortBy (created|compensation|applications|deadline), sortOrder (asc|desc),
+ * minCompensation, maxCompensation, experienceLevel (comma-separated), workType (comma-separated),
+ * urgency (comma-separated), posted (Today|Week|Month|All).
  *
- * @returns A JobListResponse object containing the matching `jobs`, the `total` number of matches, current `page`, `limit`, and `hasMore` flag.
+ * @returns A JSON response containing a JobListResponse payload with `jobs`, `total`, `page`, `limit`, and `hasMore`. On failure returns a JSON error object with HTTP status 500.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -394,10 +394,11 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Create a new job posting from the request body and add it to the in-memory mock database.
+ * Create a new job posting from the request body and prepend it to the mock database.
  *
- * @param request - Incoming NextRequest whose JSON body provides the job fields used to construct the new job posting
- * @returns The created `JobPosting` object as the response body; returns a JSON error object on failure. Successful creation is returned with HTTP status 201, failures return HTTP status 500.
+ * The handler generates an `id`, sets `created`, `status` to "Active", and initializes `applicants` and `applicationCount` before adding the job to the in-memory list.
+ *
+ * @returns The created `JobPosting` object (returned with HTTP status 201) on success, or an error object with HTTP status 500 on failure.
  */
 export async function POST(request: NextRequest) {
   try {

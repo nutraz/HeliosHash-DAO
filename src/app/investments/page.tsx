@@ -15,12 +15,9 @@ interface Investment {
 }
 
 /**
- * Render the InvestmentsPage dashboard for managing co-ownership and viewing energy and revenue metrics.
+ * Render the Investments page: a 5kW solar co-ownership dashboard that displays current co-owners, derived metrics (total investment, daily generation share, monthly revenue split, system status), and a form to add new co-owners.
  *
- * Displays current co-owners and their investment breakdown, allows adding a new co-owner (which rebalances ownership percentages),
- * and shows today's energy generation, monthly revenue split, and system/reality-check status.
- *
- * @returns The rendered investments dashboard as a JSX element.
+ * @returns The JSX element representing the investments dashboard page.
  */
 export default function InvestmentsPage() {
   const [investments, setInvestments] = useState<Investment[]>([

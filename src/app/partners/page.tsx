@@ -26,11 +26,11 @@ import {
 } from 'lucide-react';
 
 /**
- * Render the Partners Portal UI that displays projects, land records, applications, and government permissions.
+ * Renders the Partners Portal dashboard with tabs for Projects, Land Records, Applications, and Government permissions while managing sample data and view state for creating and viewing project applications.
  *
- * Manages internal sample data and view state to switch between the main dashboard, a project application form, and a project detail view.
+ * The component switches between the main dashboard, an application form, and a project detail view; submitting an application prepends entries to the applications and land records state and returns to the main view.
  *
- * @returns The rendered React element for the partners page
+ * @returns A JSX element representing the partners dashboard UI.
  */
 export default function PartnersPage() {
   const [landRecords, setLandRecords] = useState([

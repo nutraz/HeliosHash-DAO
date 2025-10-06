@@ -30,14 +30,13 @@ import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
 
 /**
- * Render the Create Solar Project page with a five-step project creation form.
+ * Render the Create Project page: a five-step form for defining and submitting a solar project.
  *
- * Renders a multi-step UI (Basic Info, Technical, Land & Legal, Financial, Review)
- * that collects project details, tracks progress, validates each step, supports
- * file upload for land documents, and simulates submission before redirecting to
- * `/projects?created=true`.
+ * The component manages local form state, per-step validation and navigation (Basic Info, Technical,
+ * Land & Legal, Financial, Review), file upload for land documents, a progress indicator, and
+ * submission handling that redirects to the projects list on success.
  *
- * @returns The React element for the Create Project page.
+ * @returns The React element rendering the Create Project page with its multi-step form and controls.
  */
 export default function CreateProjectPage() {
   const router = useRouter();

@@ -7,13 +7,15 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 
 /**
- * Render a full-page global error UI that presents an error message and actions to retry or return home.
+ * Renders a full-page global error UI with retry and homepage actions.
  *
- * Displays an optional error identifier when `error.digest` is present.
+ * Displays an error title, description, optional "Error ID" when `error.digest` is present,
+ * and buttons to retry (calls `reset`) or navigate to the homepage. The received `error`
+ * is logged to the console when the component mounts or when the `error` changes.
  *
- * @param error - The caught Error; may include a `digest` string to surface an error ID to the user.
- * @param reset - Callback invoked to attempt recovery (e.g., retry or reset the error boundary).
- * @returns The JSX element for the global error page.
+ * @param error - The error object; may include an optional `digest` string shown as an error ID.
+ * @param reset - Callback invoked when the user clicks the "Try Again" button.
+ * @returns The rendered global error page element.
  */
 export default function GlobalError({
   error,

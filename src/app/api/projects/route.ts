@@ -46,9 +46,9 @@ interface SolarProject {
 }
 
 /**
- * Retrieve a list of sample solar project records.
+ * Retrieves a hardcoded list of sample solar projects.
  *
- * @returns An object with `success`, `data` (array of `SolarProject`), `count`, and `message` when successful; on failure an error object with `success`, `error`, and `message` and HTTP status 500.
+ * @returns A JSON response with `success: true`, `data` set to an array of `SolarProject` objects, `count` equal to the number of projects, and `message`. If an error occurs, returns a JSON response with `success: false`, `error`, and `message`, and an HTTP status of 500.
  */
 export async function GET() {
   try {
@@ -193,15 +193,12 @@ export async function GET() {
 }
 
 /**
- * Handle POST requests to create a new solar project proposal.
+ * Handles POST requests to create a new solar project proposal.
  *
- * Validates that `name`, `description`, `location`, `capacity`, `budget`, and `applicantId` are present in the request body,
- * constructs a new project object (including generated `id`, `status: 'proposed'`, initialized stakeholders/approvals/documents, and timestamps),
- * and returns the created project.
+ * Expects the request body to be JSON with `name`, `description`, `location`, `capacity`, `budget`, and `applicantId`; optional `documents` may be provided.
  *
- * @returns On success: an object with `success: true`, `data` containing the created project, and a `message`.  
- * On validation failure: `success: false`, `error: 'Missing required fields'`, `message: 'Please provide all required project information'` with HTTP status 400.  
- * On internal error: `success: false`, `error: 'Failed to create project'`, `message: 'Internal server error'` with HTTP status 500.
+ * @param request - The incoming HTTP request whose JSON body provides the project data
+ * @returns An object with `success` boolean, `data` containing the created project on success, and `message`; on validation failure `error` and `message` are provided with HTTP status 400, and on server failure `error` and `message` are provided with HTTP status 500.
  */
 export async function POST(request: Request) {
   try {

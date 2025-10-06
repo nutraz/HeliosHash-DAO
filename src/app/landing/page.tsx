@@ -22,12 +22,13 @@ import {
 import { useRouter } from 'next/navigation';
 
 /**
- * Renders the HeliosHash DAO landing page with hero, stats, features, impact, roadmap, CTA, and footer sections.
+ * Landing page React component for the HeliosHash DAO marketing and onboarding experience.
  *
- * The component displays live-updating counters and an entrance animation, and provides navigation actions
- * for joining, signing up, and exploring the dashboard.
+ * Renders the full homepage including header navigation, hero, animated stats, features,
+ * impact section, roadmap, calls-to-action, and footer with responsive layout and interactive
+ * navigation handlers.
  *
- * @returns A React element representing the complete landing page layout for HeliosHash DAO.
+ * @returns The JSX element for the HeliosHash DAO landing page.
  */
 export default function LandingPage() {
   const router = useRouter();

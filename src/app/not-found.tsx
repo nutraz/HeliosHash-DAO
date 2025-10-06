@@ -4,13 +4,12 @@ import { ArrowLeft, Home } from 'lucide-react';
 import Link from 'next/link';
 
 /**
- * Render a full-screen 404 page with actions and branding.
+ * Render a centered "Page Not Found" (404) view with actions and branding.
  *
- * Renders a centered card showing a "404" badge, title and explanation, a pair of action buttons
- * (one that navigates to the previous history entry and one that navigates to the homepage),
- * and a small HeliosHash DAO branding footer.
+ * Displays a 404 badge, title, and description, plus a "Go Back" action and a "Homepage" link,
+ * and includes HeliosHash DAO branding in the footer.
  *
- * @returns A React element representing the not-found page layout.
+ * @returns The JSX element for the 404 Not Found page.
  */
 export default function NotFound() {
   return (

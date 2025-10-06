@@ -20,12 +20,11 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 
 /**
- * Render the multi-step partnership application page for land partners.
+ * Renders a multi-step partnership application page for landowners to provide personal and land details, upload legal documents, select partnership preferences, review the submission, and submit an application.
  *
- * Manages form state, per-step validation and navigation, file uploads, optional services selection,
- * and submission flow that redirects to the partnerships listing on success.
+ * The component manages form state, per-step validation and navigation, a progress indicator, file uploads, and a simulated submission flow that redirects on success.
  *
- * @returns The JSX element for the partnership application page
+ * @returns The React element representing the partnership application page.
  */
 export default function PartnershipApplicationPage() {
   const router = useRouter();

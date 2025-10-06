@@ -15,12 +15,9 @@ interface CycleData {
 }
 
 /**
- * Provide simulated ICP cycles data as a JSON HTTP response.
+ * Provide simulated ICP cycles metrics and canister details as a JSON HTTP response.
  *
- * Returns a NextResponse containing { success: true, data: CycleData, message } on success;
- * on failure returns a NextResponse with { success: false, error, message } and HTTP status 500.
- *
- * @returns A NextResponse with a JSON payload representing the result of the request.
+ * @returns A JSON object with `success: true`, `data` containing `CycleData` (totalCycles, availableCycles, usedCycles, dailyConsumption, monthlyConsumption, and `canisters` array of {id, name, cycles, status}), and a `message` on success; on failure, an object with `success: false`, an `error` label, and a `message`.
  */
 export async function GET() {
   try {
@@ -78,17 +75,19 @@ export async function GET() {
 }
 
 /**
- * Handle POST requests to perform a cycles top-up or transfer for a specified canister.
+ * Handle POST requests to perform a simulated ICP cycles action (topup or transfer).
  *
- * Expects the request body to be JSON with the shape: `{ action, canisterId, amount }`,
- * where `action` is `"topup"` or `"transfer"`, `canisterId` is the target canister ID, and
- * `amount` is the number of cycles to operate on.
+ * Expects a JSON body with `action`, `canisterId`, and `amount`. If `action` is
+ * 'topup' or 'transfer', returns a success response containing a human-readable
+ * message and a generated `transactionId`. If `action` is missing or invalid,
+ * returns an error response with status 400. On unexpected failures, returns an
+ * error response with status 500.
  *
- * @param request - The incoming Request whose JSON body defines the operation.
- * @returns A JSON response object:
- * - On success (`action` is `"topup"` or `"transfer"`): `{ success: true, message: string, transactionId: string }`.
- * - If `action` is invalid: `{ success: false, error: string, message: string }` with HTTP status 400.
- * - On internal failure: `{ success: false, error: string, message: string }` with HTTP status 500.
+ * @param request - Incoming request whose JSON body must include:
+ *   - `action`: either `'topup'` or `'transfer'`
+ *   - `canisterId`: the target canister identifier
+ *   - `amount`: number of cycles to top up or transfer
+ * @returns A JSON HTTP response. On success: an object with `success: true`, `message`, and `transactionId`. On invalid action: `success: false`, `error`, and `message` (HTTP 400). On internal failure: `success: false`, `error`, and `message` (HTTP 500).
  */
 export async function POST(request: Request) {
   try {

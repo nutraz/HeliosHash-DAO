@@ -54,12 +54,9 @@ interface NFTCollection {
 }
 
 /**
- * Serve GET requests to retrieve NFT or collection data based on query parameters.
+ * Handle GET requests for NFT resources and return NFT, collection, or collections data based on provided query parameters.
  *
- * Supports three query parameters on the request URL: `nftId` to fetch a single NFT's details, `collectionId` to fetch a single collection's details, and `userId` to fetch NFTs owned by a user. When no selector is provided, returns a list of all collections.
- *
- * @param request - Incoming HTTP Request whose URL search parameters may include `userId`, `collectionId`, or `nftId`
- * @returns A NextResponse containing a JSON payload with `success`, `data` (an NFT, an NFTCollection, an array of NFTs, or an array of NFTCollections), optional `count`, and a `message`; on unexpected errors returns an error payload and a 500 status
+ * @returns An object with a `success` boolean and a `data` payload containing one of: a single `NFT`, an array of `NFT`s, a single `NFTCollection`, or an array of `NFTCollection`s. Responses may also include `count` for lists and `message`; on validation or internal failure the response includes `success: false` and an `error` and `message` describing the failure.
  */
 export async function GET(request: Request) {
   try {
@@ -251,19 +248,21 @@ export async function GET(request: Request) {
 }
 
 /**
- * Handle POST requests for NFT operations: minting, listing, and transferring.
+ * Handle NFT-related operations driven by the request body: minting, listing, or transferring an NFT.
  *
- * Accepts a JSON body with an `action` field (`'mint' | 'list' | 'transfer'`) and performs the requested operation.
- * - For `mint`: requires `userId` and `nftData.metadata`; responds with the created NFT in `data`.
- * - For `list`: requires `nftData.tokenId` and `nftData.price`; responds with `listingId` and optional `expiresAt`.
- * - For `transfer`: requires `nftData.tokenId` and `nftData.toAddress`; responds with `transactionHash`, `fromAddress`, and `toAddress`.
- *
- * Validation failures return a JSON error with HTTP status 400. Unexpected failures return a JSON error with HTTP status 500.
- *
- * @returns A JSON response object describing the outcome:
- * - On success: `success: true` plus operation-specific fields (`data`, `listingId`, `transactionHash`, etc.) and `message`.
- * - On validation error: `success: false`, `error`, and `message` with status 400.
- * - On internal failure: `success: false`, `error`, and `message` with status 500.
+ * @param request - HTTP request whose JSON body must include:
+ *   - `action`: one of `'mint'`, `'list'`, or `'transfer'`
+ *   - `userId`: identifier of the acting user (required for `mint` and used as `fromAddress` for `transfer`)
+ *   - `nftData`: payload with action-specific fields:
+ *       - `metadata` (required for `mint`)
+ *       - `tokenId` and `price` (required for `list`)
+ *       - `tokenId` and `toAddress` (required for `transfer`)
+ * @returns A JSON response object with a `success` boolean and a `message`. Additional fields depending on the action:
+ *   - On `mint` success: `data` containing the created partial `NFT`.
+ *   - On `list` success: `listingId` and `expiresAt`.
+ *   - On `transfer` success: `transactionHash`, `fromAddress`, and `toAddress`.
+ *   - On validation failure: `error` and `message` with HTTP 400 status.
+ *   - On internal failure: `error` and `message` with HTTP 500 status.
  */
 export async function POST(request: Request) {
   try {

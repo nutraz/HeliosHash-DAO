@@ -53,9 +53,10 @@ export const metadata: Metadata = {
 };
 
 /**
- * Root layout component that wraps the application with global providers, error and auth boundaries, theming, and a persistent MVP simulation banner.
+ * Renders the application's root HTML layout, applying global fonts, providers, theme, error boundary, and an always-visible MVP simulation banner.
  *
- * @returns The root HTML layout element containing providers, theme context, the MVP banner, the rendered page `children`, and the global `Toaster`.
+ * @param children - The page content to render inside the application layout
+ * @returns A React element representing the root HTML and body structure for the app
  */
 export default function RootLayout({
   children,

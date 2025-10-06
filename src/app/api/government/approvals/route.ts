@@ -496,16 +496,10 @@ const mockWorkflows: ApprovalWorkflow[] = [
 ];
 
 /**
- * Retrieves approval workflows filtered by user role and query parameters.
+ * Fetches approval workflows filtered by user role and query parameters and responds with matching workflows, department data, and basic statistics.
  *
- * @param request - NextRequest whose URL search params may include:
- *   `userRole` ('applicant' | 'government' | 'officer' | 'admin'),
- *   `userId`, `departmentId`, `status`, `priority`, and `applicationId`.
- * @returns A JSON object with `success: true` and `data` containing:
- *   - `workflows`: the list of approval workflows after applied filters,
- *   - `departments`: available department metadata,
- *   - `stats`: summary statistics (totalWorkflows, counts by status and priority, avgProcessingTime, slaCompliance).
- *   On failure, `success` is `false` and an `error` and `details` field describe the failure.
+ * @param request - Incoming HTTP request whose query parameters may include `userRole`, `userId`, `departmentId`, `status`, `priority`, and `applicationId`
+ * @returns A JSON response where `success` is `true` and `data` contains `workflows` (filtered list), `departments` (department mock data), and `stats` (counts by status/priority and summary metrics); on failure `success` is `false` and the response includes `error` and `details`
  */
 export async function GET(request: NextRequest) {
   try {
@@ -586,14 +580,12 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Creates a new government approval workflow from the request body.
+ * Initiates a new government approval workflow or updates an existing one based on the request body.
  *
- * Expects a JSON body containing at minimum `applicationId`, `departmentId`, and `approvalType`; returns a validation error if any are missing.
+ * Creates a workflow record (with default stage, dates, and identifiers) when required fields are present;
+ * returns a validation error if `applicationId`, `departmentId`, or `approvalType` are missing, and returns an error response on failure.
  *
- * @returns A JSON response object:
- * - On success (`success: true`): `data` contains the created workflow object and `message` summarizes the result.
- * - On client error (`status: 400`): `success: false` and `error` explains the missing fields.
- * - On server error (`status: 500`): `success: false`, `error` summarizes the failure, and `details` may contain the error message.
+ * @returns An object with `success` (`true` on success, `false` on error). On success includes `data` containing the created workflow and a `message`. On validation failure or internal error includes `error` and, for internal errors, `details`.
  */
 export async function POST(request: NextRequest) {
   try {

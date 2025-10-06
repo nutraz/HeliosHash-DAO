@@ -12,9 +12,11 @@ import { useState } from 'react';
 
 // Mock OWP token balance (would come from wallet in real implementation)
 const mockUserBalance = 250000; /**
- * Render the NFT Collection page displaying mock NFTs, a minting call-to-action, and collection statistics.
+ * Display the NFT Collection page with a grid of mock NFTs, a minting prompt, and collection statistics.
  *
- * @returns The page's JSX element containing the NFT collection UI.
+ * The page includes a Back button that navigates to the previous route and renders statically defined NFTs showing rarity, energy, and a "View Details" action.
+ *
+ * @returns The React element representing the NFT Collection page.
  */
 
 export default function NFTPage() {

@@ -250,11 +250,11 @@ interface ApplicationCardProps {
 }
 
 /**
- * Render an application card showing status, progress, timeline, uploaded documents, status history, and available actions for a single application.
+ * Render a card displaying an application's details, progress, status badges, action buttons, and expandable documents and status history.
  *
- * @param application - The application data to display in the card.
- * @param onRefresh - Optional callback invoked to refresh the parent list after actions (e.g., uploads or updates).
- * @returns The rendered card element representing the given application.
+ * @param application - The application object to display.
+ * @param onRefresh - Optional callback invoked to refresh the application list after actions that may change application state.
+ * @returns The JSX element representing the application card.
  */
 function ApplicationCard({ application, onRefresh }: ApplicationCardProps) {
   const [showDetails, setShowDetails] = useState(false);

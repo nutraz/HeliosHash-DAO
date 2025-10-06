@@ -323,10 +323,17 @@ const mockLandRecords: LandRecord[] = [
 ];
 
 /**
- * Retrieves land records filtered by role and query parameters and returns matching records with an aggregated summary.
+ * Fetches land records filtered by role and query parameters and returns the matching records along with summary statistics.
  *
- * @param request - Incoming request whose query parameters may include `userRole` (`landowner`, `government`, `surveyor`, `admin`), `userId`, `village`, `district`, `ownerName`, `surveyNumber`, and `solarSuitable` (set to `true` to filter high solar potential).
- * @returns JSON object containing `landRecords` (the filtered list of records) and `summary` (aggregated statistics: `totalRecords`, `totalArea`, `verifiedRecords`, `solarSuitableRecords`, `totalSolarPotential`, `byOwnershipType`, and `byLandClass`).
+ * @param request - NextRequest whose query parameters may include:
+ *   - `userRole` ('landowner' | 'government' | 'surveyor' | 'admin')
+ *   - `userId`
+ *   - `village`
+ *   - `district`
+ *   - `ownerName`
+ *   - `surveyNumber`
+ *   - `solarSuitable` ('true' | 'false')
+ * @returns An object with `success` and `data` when successful; `data` contains `landRecords` (array of matching records) and `summary` (aggregated counts and metrics such as totalRecords, totalArea, verifiedRecords, solarSuitableRecords, totalSolarPotential, byOwnershipType, and byLandClass). On failure, returns an object with `success: false` and `error` and `details` describing the failure.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -433,13 +440,17 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Creates a new land record from the request body after validating required fields.
+ * Create a new land record from the incoming request payload.
  *
- * Validates that `surveyNumber`, `village`, `district`, and `ownerDetails.name` are present.
+ * Validates required fields and returns a JSON response describing the created record on success or an error on failure.
  *
- * @returns A JSON HTTP response where `data` contains the created `LandRecord` and `success: true` on success.
- *          On validation failure returns a 400 response with `success: false` and an `error` message.
- *          On internal failure returns a 500 response with `success: false`, an `error` message, and optional `details`.
+ * - Performs required-field validation for `surveyNumber`, `village`, `district`, and `ownerDetails.name`; responds with HTTP 400 if any are missing.
+ * - Initializes `id`, `verification` defaults (`verified`, `fieldSurveyDone`, `gpsVerified` set to `false` unless provided), `createdDate`, `lastUpdated`, and sets `status` to `'Active'`.
+ *
+ * @returns A JSON response object:
+ * - On success: `{ success: true, data: LandRecord, message: string }` for the newly created record.
+ * - On client validation failure: `{ success: false, error: string }` with HTTP status 400.
+ * - On unexpected server error: `{ success: false, error: string, details: string }` with HTTP status 500.
  */
 export async function POST(request: NextRequest) {
   try {

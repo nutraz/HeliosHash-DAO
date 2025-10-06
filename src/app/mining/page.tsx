@@ -37,14 +37,12 @@ interface MinerStats {
 }
 
 /**
- * Render the mining dashboard UI with overview, miners, heat management, and rewards tabs.
+ * Mining dashboard page showing overall mining metrics, individual miner cards, heat management panels, and rewards.
  *
- * Shows summary statistics, a miners grid, performance and thermal metrics, and rewards panels.
- * When the user is authenticated, interactive quick actions are available; otherwise an authenticated
- * prompt is shown. The component initializes state with placeholder data that is populated shortly
- * after mount.
+ * Displays aggregated stats (hashrate, energy, heat utilization, active miners), interactive tabs (Overview, Miners, Heat Management, Rewards),
+ * and conditional quick actions when the user is authenticated. The UI is populated with sample mining data and miner entries after a short delay.
  *
- * @returns The React element for the mining dashboard page.
+ * @returns The JSX element for the Mining dashboard page
  */
 export default function MiningPage() {
   const { isAuthenticated } = useAuth();

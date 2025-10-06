@@ -48,15 +48,9 @@ interface DAOProposal {
 }
 
 /**
- * Retrieve a simulated list of DAO proposals.
+ * Retrieve a list of mocked DAO proposals along with basic response metadata.
  *
- * @returns A JSON object containing:
- * - `success`: `true` on success, `false` on failure
- * - `data`: an array of `DAOProposal` when `success` is `true`
- * - `count`: number of proposals in `data`
- * - `message`: human-readable status message
- *
- * On failure the response contains `success: false`, an `error` string, and a `message`; the failure response is returned with HTTP status 500.
+ * @returns A JSON NextResponse with `success`, `data` (an array of `DAOProposal`), `count`, and `message`. On error the response contains `success: false`, an `error` message, and is returned with HTTP status 500.
  */
 export async function GET() {
   try {
@@ -240,10 +234,13 @@ export async function GET() {
 }
 
 /**
- * Create a new in-memory DAO proposal from the JSON body of the request.
+ * Handle POST requests to create a new DAO proposal from the JSON request body.
  *
- * @param request - HTTP request whose JSON body must include `title`, `description`, `category`, `proposerId`, and `votingPeriod`; optional fields include `budget` and `attachments`
- * @returns A JSON response object with `success`; on success includes `data` containing the created proposal and `message`; on failure includes `error` and `message`. HTTP status codes indicate outcome (200, 400, 500).
+ * @param request - HTTP request whose JSON body must include `title`, `description`, `category`, `proposerId`, and `votingPeriod`; optional fields include `budget` and `attachments`.
+ * @returns A JSON response object:
+ * - On success: `{ success: true, data: <new proposal object>, message: 'DAO proposal created successfully' }`.
+ * - On validation failure: `{ success: false, error: 'Missing required fields', message: 'Please provide all required proposal information' }` with HTTP status 400.
+ * - On internal error: `{ success: false, error: 'Failed to create DAO proposal', message: 'Internal server error' }` with HTTP status 500.
  */
 export async function POST(request: Request) {
   try {

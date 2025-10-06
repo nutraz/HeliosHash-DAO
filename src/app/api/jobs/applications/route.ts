@@ -78,15 +78,11 @@ const MOCK_APPLICATIONS: JobApplication[] = [
 ];
 
 /**
- * Retrieve a filtered, sorted, and paginated list of job applications from the mock store.
+ * Handles GET requests to list job applications with optional filtering, sorting, and pagination.
  *
- * The request may include these query parameters: `page` (defaults to 1), `limit` (defaults to 10),
- * `jobId`, `applicantId`, and `status` (comma-separated list). Results are sorted by `submitted`
- * (most recent first) and paginated accordingly.
+ * Filters by `jobId`, `applicantId`, and comma-separated `status` query parameters, sorts results by submission date (newest first), and returns the requested page of results.
  *
- * @param request - Incoming request whose search parameters are used for filtering and pagination.
- * @returns An ApplicationListResponse containing `applications` (the current page), `total` (number of matched applications),
- * `page`, `limit`, and `hasMore`. On failure, returns an error object with status 500.
+ * @returns A JSON NextResponse containing an `ApplicationListResponse` with `applications`, `total`, `page`, `limit`, and `hasMore`. On failure, returns a JSON error object and a 500 status.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -140,8 +136,14 @@ export async function GET(request: NextRequest) {
 /**
  * Create a new job application from the JSON request body and add it to the mock datastore.
  *
- * @param request - Incoming HTTP request containing application data in JSON
- * @returns The newly created `JobApplication` with status `201` on success; an error object with status `400` if required fields are missing, `409` if an application by the same applicant for the same job already exists, or `500` if creation fails.
+ * The request body must include `jobId`, `applicantId`, and `coverLetter`. Other `JobApplication`
+ * fields (e.g., `jobTitle`, `applicantName`, `skills`, `portfolio`, `documents`, `notes`) may be
+ * provided and will be included in the created application.
+ *
+ * @param request - The incoming HTTP request whose JSON body contains the application data.
+ * @returns The newly created `JobApplication` on success. On failure, a JSON object with an `error`
+ * message and an appropriate HTTP status code will be returned (`400` for missing fields,
+ * `409` for duplicate application, `500` for server errors).
  */
 export async function POST(request: NextRequest) {
   try {

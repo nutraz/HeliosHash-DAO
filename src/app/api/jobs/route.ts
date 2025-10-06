@@ -236,14 +236,14 @@ Key Responsibilities:
 ];
 
 /**
- * Retrieve a filtered, sorted, and paginated list of job postings based on URL query parameters.
+ * Handle GET requests to list job postings with filtering, sorting, and pagination.
  *
- * Supports filtering by category, location, search (title/description/skills/category), featured,
- * experience level, work type, urgency, compensation range, and posted timeframe (Today/Week/Month).
- * Results can be sorted by `compensation`, `applications`, `deadline`, or `created` in `asc` or `desc` order,
- * and are paginated via `page` and `limit`.
+ * Supports query parameters: page, limit, category (comma-separated), location (comma-separated),
+ * search, featured (true), sortBy (created|compensation|applications|deadline), sortOrder (asc|desc),
+ * minCompensation, maxCompensation, experienceLevel (comma-separated), workType (comma-separated),
+ * urgency (comma-separated), and posted (Today|Week|Month|All).
  *
- * @returns A JobListResponse object containing the matching `jobs`, the `total` number of matches, current `page`, `limit`, and `hasMore` flag.
+ * @returns A JobListResponse containing the paginated jobs, total count, current page, limit, and `hasMore` flag
  */
 export async function GET(request: NextRequest) {
   try {
@@ -396,8 +396,11 @@ export async function GET(request: NextRequest) {
 /**
  * Create a new job posting from the request body and add it to the in-memory mock database.
  *
- * @param request - Incoming NextRequest whose JSON body provides the job fields used to construct the new job posting
- * @returns The created `JobPosting` object as the response body; returns a JSON error object on failure. Successful creation is returned with HTTP status 201, failures return HTTP status 500.
+ * The created job will include a generated `id`, a `created` timestamp, `status` set to `"Active"`,
+ * an empty `applicants` array, and `applicationCount` set to `0`.
+ *
+ * @returns The created `JobPosting` serialized as JSON with HTTP status `201`, or an error object
+ * `{ error: 'Failed to create job' }` with HTTP status `500` if creation fails.
  */
 export async function POST(request: NextRequest) {
   try {

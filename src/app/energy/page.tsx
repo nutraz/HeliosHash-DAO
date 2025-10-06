@@ -12,12 +12,11 @@ import { ActionCard } from '@/components/action-card';
 import { Zap, TrendingUp, Battery, Home, Factory } from 'lucide-react';
 
 /**
- * Renders the Energy Grid dashboard with live-updating energy metrics and visualizations.
+ * Renders the Energy Grid dashboard UI showing live and historical energy metrics.
  *
- * The component maintains internal state for current generation, daily generation, grid status, solar efficiency,
- * and battery level, and simulates real-time updates while mounted. The update interval is cleaned up on unmount.
+ * Simulates real-time energy metrics by updating internal state periodically to drive visualizations (current generation, daily total, grid status, solar efficiency, and battery level).
  *
- * @returns The dashboard's React element.
+ * @returns The JSX element tree for the Energy Grid dashboard.
  */
 export default function EnergyPage() {
   const [currentGeneration, setCurrentGeneration] = useState(2.4);

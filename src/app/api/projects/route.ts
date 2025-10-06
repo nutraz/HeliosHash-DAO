@@ -46,9 +46,9 @@ interface SolarProject {
 }
 
 /**
- * Retrieve a list of sample solar project records.
+ * Retrieve a list of simulated solar projects.
  *
- * @returns An object with `success`, `data` (array of `SolarProject`), `count`, and `message` when successful; on failure an error object with `success`, `error`, and `message` and HTTP status 500.
+ * @returns A JSON HTTP response with `{ success: true, data: SolarProject[], count: number, message: string }` on success; on failure returns `{ success: false, error: string, message: string }` with HTTP status 500.
  */
 export async function GET() {
   try {
@@ -195,13 +195,13 @@ export async function GET() {
 /**
  * Handle POST requests to create a new solar project proposal.
  *
- * Validates that `name`, `description`, `location`, `capacity`, `budget`, and `applicantId` are present in the request body,
- * constructs a new project object (including generated `id`, `status: 'proposed'`, initialized stakeholders/approvals/documents, and timestamps),
- * and returns the created project.
+ * Validates required fields from the request body, simulates creating a project record,
+ * and returns a JSON response describing the result.
  *
- * @returns On success: an object with `success: true`, `data` containing the created project, and a `message`.  
- * On validation failure: `success: false`, `error: 'Missing required fields'`, `message: 'Please provide all required project information'` with HTTP status 400.  
- * On internal error: `success: false`, `error: 'Failed to create project'`, `message: 'Internal server error'` with HTTP status 500.
+ * @returns A JSON response object with the shape { success, data?, error?, message }.
+ * - On success: `success` is `true` and `data` contains the created project object.
+ * - On validation failure: `success` is `false`, `error` and `message` describe missing fields, and the response status is 400.
+ * - On internal error: `success` is `false`, `error` and `message` describe the failure, and the response status is 500.
  */
 export async function POST(request: Request) {
   try {

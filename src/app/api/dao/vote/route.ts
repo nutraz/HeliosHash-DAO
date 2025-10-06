@@ -33,10 +33,9 @@ interface VoteHistory {
 }
 
 /**
- * Records a vote for a proposal from the JSON body of the incoming HTTP request.
+ * Handle an incoming vote submission, validate input, simulate recording the vote, and return updated vote counts.
  *
- * @param request - HTTP request whose JSON body must follow `VoteRequest`: contains `proposalId`, `vote` ('for' | 'against' | 'abstain'), and `userId`; optional `votingPower` (defaults to 1) and `comment` are allowed.
- * @returns A `VoteResponse` describing the result. On success, includes `success: true`, a generated `voteId`, and updated `currentVotes`. On validation failure responds with `success: false` and an error message (HTTP 400). On unexpected errors responds with `success: false` and an internal error message (HTTP 500).
+ * @returns A `VoteResponse` object: on success contains `success: true`, `message`, `voteId`, and `currentVotes` (updated counts); on client error contains `success: false`, `error`, and `message` with a 400 status; on server error contains `success: false`, `error`, and `message` with a 500 status.
  */
 export async function POST(request: Request) {
   try {
@@ -118,14 +117,10 @@ export async function POST(request: Request) {
 }
 
 /**
- * Serve voting-related data based on query parameters in the request URL.
+ * Retrieve voting data based on query parameters: user voting history, proposal voting details, or general voting statistics.
  *
- * @param request - Incoming HTTP request whose URL search params control the response: `userId` returns that user's vote history, `proposalId` returns details for that proposal, and absence of both returns general voting statistics.
- * @returns A JSON object with `success` and `data` fields whose shape depends on the query:
- * - If `userId` is provided: `data` is an array of `VoteHistory` entries and `count` is the number of entries.
- * - If `proposalId` is provided: `data` is an object with proposal voting details (totals, breakdown, quorum, distribution, time remaining, and user vote status).
- * - If neither is provided: `data` is an object with general voting statistics (totals, participation, and trends).
- * On error, returns a JSON object with `success: false`, `error`, and `message`, and an HTTP 500 status.
+ * @param request - HTTP request whose URL search parameters may include `userId` or `proposalId`
+ * @returns A JSON object with a `success` flag and `data`: if `userId` is present, an array of `VoteHistory` entries and `count`; if `proposalId` is present, voting details for that proposal; otherwise general voting statistics. On error, a JSON object with `success: false` and an `error` message is returned.
  */
 export async function GET(request: Request) {
   try {
@@ -228,19 +223,14 @@ export async function GET(request: Request) {
 }
 
 /**
- * Check whether a specific user has cast a vote on a given proposal.
+ * Check whether a given user has cast a vote on a specific proposal.
  *
- * Expects `proposalId` and `userId` as URL query parameters and returns the user's vote status.
- *
- * @param request - Incoming HTTP request. Required query parameters: `proposalId`, `userId`.
- * @returns On success, an object with `success: true` and `data` containing:
- * - `hasVoted` (`boolean`) — whether the user has voted,
- * - `vote` (`'for' | 'against' | 'abstain' | null`) — the user's vote or `null` if not voted,
- * - `votingPower` (`number`) — the voting power associated with the vote,
- * - `timestamp` (`string | null`) — ISO timestamp when the vote was recorded or `null` if not voted.
- *
- * On client error (missing query parameters) returns `success: false` with HTTP 400 and an `error` and `message`.
- * On internal failure returns `success: false` with HTTP 500 and an `error` and `message`.
+ * @returns A JSON response object. On success, `success` is `true` and `data` contains:
+ * - `hasVoted`: `true` if the user has voted, `false` otherwise.
+ * - `vote`: `'for' | 'against' | 'abstain'` when `hasVoted` is `true`, otherwise `null`.
+ * - `votingPower`: the numeric voting power associated with the vote.
+ * - `timestamp`: ISO 8601 string when `hasVoted` is `true`, otherwise `null`.
+ * The response also includes a `message` string. On failure, `success` is `false` and an `error` string is provided.
  */
 export async function PUT(request: Request) {
   try {

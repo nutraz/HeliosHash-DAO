@@ -496,16 +496,20 @@ const mockWorkflows: ApprovalWorkflow[] = [
 ];
 
 /**
- * Retrieves approval workflows filtered by user role and query parameters.
+ * Handle GET requests to retrieve approval workflows filtered by user role and query parameters.
  *
  * @param request - NextRequest whose URL search params may include:
- *   `userRole` ('applicant' | 'government' | 'officer' | 'admin'),
- *   `userId`, `departmentId`, `status`, `priority`, and `applicationId`.
+ *   - `userRole` ('applicant' | 'government' | 'officer' | 'admin') to scope results,
+ *   - `userId` to filter by assigned officer,
+ *   - `departmentId` to filter by department,
+ *   - `status` to filter by workflow overall status,
+ *   - `priority` to filter by workflow priority,
+ *   - `applicationId` to fetch a specific application for applicants.
  * @returns A JSON object with `success: true` and `data` containing:
- *   - `workflows`: the list of approval workflows after applied filters,
- *   - `departments`: available department metadata,
- *   - `stats`: summary statistics (totalWorkflows, counts by status and priority, avgProcessingTime, slaCompliance).
- *   On failure, `success` is `false` and an `error` and `details` field describe the failure.
+ *   - `workflows`: array of matching ApprovalWorkflow objects,
+ *   - `departments`: array of Department objects (mock data),
+ *   - `stats`: aggregated statistics (counts by status/priority, avgProcessingTime, slaCompliance).
+ *   On failure, returns `success: false` with `error` and `details` describing the failure.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -586,14 +590,11 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Creates a new government approval workflow from the request body.
+ * Create or update a government approval workflow from the request body and return the resulting workflow or an error.
  *
- * Expects a JSON body containing at minimum `applicationId`, `departmentId`, and `approvalType`; returns a validation error if any are missing.
+ * Validates that `applicationId`, `departmentId`, and `approvalType` are present in the request JSON and initializes default workflow fields when creating a new approval.
  *
- * @returns A JSON response object:
- * - On success (`success: true`): `data` contains the created workflow object and `message` summarizes the result.
- * - On client error (`status: 400`): `success: false` and `error` explains the missing fields.
- * - On server error (`status: 500`): `success: false`, `error` summarizes the failure, and `details` may contain the error message.
+ * @returns On success, an object with `success: true`, `data` containing the created workflow (partial `ApprovalWorkflow`), and a `message`. On validation failure, `success: false` and an `error` message (HTTP 400). On internal error, `success: false`, an `error` message, and `details` describing the failure (HTTP 500).
  */
 export async function POST(request: NextRequest) {
   try {

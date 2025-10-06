@@ -239,16 +239,15 @@ const mockLandRecords: LandRecord[] = [
 ];
 
 /**
- * Fetches project applications filtered by requester role and optional query parameters.
+ * Fetches project applications filtered by user role and optional query parameters and returns matching applications with aggregated statistics.
  *
- * Accepts query parameters `userRole` ('applicant' | 'government' | 'investor' | 'admin'), `userId`,
- * `status`, and `projectType` to filter returned applications. Also computes aggregate statistics
- * for the filtered result and includes land records when the requester role is `applicant`.
+ * The handler reads the request URL search parameters `userRole` (one of "applicant", "government", "investor", "admin"), `userId`, `status`, and `projectType` to filter the returned applications. When `userRole` is "applicant", related land records are included in the response.
  *
- * @param request - The incoming NextRequest whose URL query provides `userRole`, `userId`, `status`, and `projectType`.
- * @returns An object with `success`, and on success a `data` object containing:
- *          `applications` (array of ProjectApplication), `landRecords` (array of LandRecord, present only for applicants),
- *          and `stats` (aggregation: totalApplications, byStatus, byProjectType, totalCapacity, totalInvestment).
+ * @param request - Incoming NextRequest whose URL search parameters control filtering (`userRole`, `userId`, `status`, `projectType`)
+ * @returns An object with `success: true` and `data` containing:
+ *  - `applications`: the array of filtered ProjectApplication objects,
+ *  - `landRecords`: array of LandRecord (included only when `userRole` is "applicant"),
+ *  - `stats`: aggregated statistics with `totalApplications`, `byStatus` (counts for Draft, Submitted, Under Review, Approved, Rejected), `byProjectType` (counts for Solar Farm, Rooftop Solar, Microgrid, Storage System), `totalCapacity`, and `totalInvestment`.
  */
 export async function GET(request: NextRequest) {
   try {
@@ -328,17 +327,11 @@ export async function GET(request: NextRequest) {
 }
 
 /**
- * Create a new project application or update an existing one from the request payload.
+ * Handle POST requests to create a new project application.
  *
- * Validates that `projectName`, `projectType`, and `landRecordId` are present in the request body,
- * then constructs and returns a new ProjectApplication object initialized with default status,
- * current stage, timeline, and empty government approvals.
+ * Validates required fields and initializes application metadata and an initial timeline entry.
  *
- * @param request - The incoming HTTP request whose JSON body contains the application fields.
- *   Required body fields: `projectName`, `projectType`, `landRecordId`.
- * @returns On success: a JSON response containing `{ success: true, data: ProjectApplication, message: string }`.
- *   On client error (missing fields): `{ success: false, error: string }` with HTTP 400.
- *   On server error: `{ success: false, error: string, details: string }` with HTTP 500.
+ * @returns A JSON response: on success (status 200) `success: true` with `data` containing the created ProjectApplication and a `message`; on validation failure (status 400) `success: false` with an `error` message; on unexpected errors (status 500) `success: false` with `error` and `details`.
  */
 export async function POST(request: NextRequest) {
   try {

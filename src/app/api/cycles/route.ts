@@ -15,12 +15,10 @@ interface CycleData {
 }
 
 /**
- * Provide simulated ICP cycles data as a JSON HTTP response.
+ * Provide simulated ICP cycles metrics and per-canister details as a JSON HTTP response.
  *
- * Returns a NextResponse containing { success: true, data: CycleData, message } on success;
- * on failure returns a NextResponse with { success: false, error, message } and HTTP status 500.
- *
- * @returns A NextResponse with a JSON payload representing the result of the request.
+ * @returns A `NextResponse` whose successful body is `{ success: true, data: CycleData, message: string }`.
+ *          On failure the response body is `{ success: false, error: string, message: string }` and the HTTP status is 500.
  */
 export async function GET() {
   try {
@@ -78,17 +76,13 @@ export async function GET() {
 }
 
 /**
- * Handle POST requests to perform a cycles top-up or transfer for a specified canister.
+ * Handle canister cycle actions ('topup' or 'transfer') from a JSON request and return a JSON response describing the outcome.
  *
- * Expects the request body to be JSON with the shape: `{ action, canisterId, amount }`,
- * where `action` is `"topup"` or `"transfer"`, `canisterId` is the target canister ID, and
- * `amount` is the number of cycles to operate on.
- *
- * @param request - The incoming Request whose JSON body defines the operation.
- * @returns A JSON response object:
- * - On success (`action` is `"topup"` or `"transfer"`): `{ success: true, message: string, transactionId: string }`.
- * - If `action` is invalid: `{ success: false, error: string, message: string }` with HTTP status 400.
- * - On internal failure: `{ success: false, error: string, message: string }` with HTTP status 500.
+ * @param request - HTTP request whose JSON body must include `action` ('topup' | 'transfer'), `canisterId`, and `amount`
+ * @returns A NextResponse containing JSON:
+ * - On success: `{ success: true, message, transactionId }`
+ * - If `action` is invalid: `{ success: false, error: 'Invalid action', message }` with HTTP status 400
+ * - On internal failure: `{ success: false, error: 'Failed to process cycles request', message }` with HTTP status 500
  */
 export async function POST(request: Request) {
   try {

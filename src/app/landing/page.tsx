@@ -22,12 +22,13 @@ import {
 import { useRouter } from 'next/navigation';
 
 /**
- * Renders the HeliosHash DAO landing page with hero, stats, features, impact, roadmap, CTA, and footer sections.
+ * Render the LandingPage for the HeliosHash DAO Urgam Valley node.
  *
- * The component displays live-updating counters and an entrance animation, and provides navigation actions
- * for joining, signing up, and exploring the dashboard.
+ * The component displays the hero, stats, features, impact, roadmap, CTA, and footer sections;
+ * it includes animated counters for energy generated and community members and provides
+ * navigation actions for joining the DAO and exploring the dashboard.
  *
- * @returns A React element representing the complete landing page layout for HeliosHash DAO.
+ * @returns The React element representing the landing page UI.
  */
 export default function LandingPage() {
   const router = useRouter();

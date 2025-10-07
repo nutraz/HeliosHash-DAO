@@ -1,445 +1,88 @@
 
-# HeliosHash DAO (HHDAO) Copilot Instructions
+## HeliosHash DAO — Copilot guidance (short)
 
-## Project Overview
+HeliosHash DAO (HHDAO) combines Motoko canisters (backend) and a Next.js + TypeScript frontend. This file gives focused, actionable rules for an AI coding assistant so it can be productive immediately.
 
-HeliosHash DAO is a solar energy infrastructure DAO for India, built on Internet Computer (IC) with Motoko canisters and a Next.js/React frontend. It is part of the One World Project ecosystem, focused on decentralized solar projects and community governance.
+⚠️ **Do not suggest fixes for authentication, wallet, or UPI flows** — these are intentionally mocked in MVP. Focus on UI, navigation, form state, and mobile responsiveness.
 
-**Tech Stack:** Motoko (backend), Next.js + React + TypeScript (frontend), DFX (IC deployment), Playwright/Vitest (testing), pnpm (package manager)
+Quick facts:
+- Backend: Motoko canisters under `canisters/` (main business logic in `canisters/hhdao/src/lib.mo` and `main.mo`).
+- Frontend: Next.js App Router in `src/app/`, components in `src/components/`, hooks in `src/hooks/`.
+- Tooling: `dfx.json` (canisters), `package.json` (pnpm scripts), Playwright (E2E) and Vitest (unit).
 
-## Architecture & Key Components
+Actionable rules for edits and suggestions:
+- Keep Motoko canister boundaries: change business logic in `lib.mo`; keep actor entry in `main.mo` thin. See `canisters/test-runner/run-tests.sh` for test patterns.
+- Frontend must import canister actors from `src/declarations/`; prefer hooks in `src/hooks/` for auth/stateful flows (see `src/hooks/useAuthContext.ts`).
+- Use existing scripts only: `pnpm dev`, `pnpm test:e2e`, `pnpm test:canister`, and `dfx deploy`. Don’t suggest unfamiliar global tools.
+- Tests: add Vitest tests for React components and Motoko `.test.mo` using `TestUtils`. Tag Playwright tests with `@smoke`/`@integration` as appropriate.
 
-### Canisters (Motoko)
-- `canisters/hhdao/`: Main business logic (projects, proposals, NFTs, applications)
-  - `src/main.mo`: Actor entrypoint, inter-canister calls
-  - `src/lib.mo`: Core types (Project, Proposal, NFT, MembershipTier, Application)
-  - `test/`: Motoko tests using custom `TestUtils`
-- `canisters/dao/`: DAO governance (proposals, voting, dispute resolution)
-- `canisters/identity/`: User identity, roles, KYC, profile
-- `canisters/telemetry/`: Solar device data, metrics
-- `canisters/documents/`: Document work
+Minimal examples (literal)
 
+1) Frontend — Importing a canister actor (TypeScript)
 
+```ts
+// Correct way to use canister actors in frontend
+import { createActor } from '@/declarations/hhdao_dao';
+const daoActor = createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
+```
 
+// Call canister method (example: fetch proposals)
+const proposals = await daoActor.getProposals();
 
+Always use `createActor` from generated declarations. Never hardcode canister IDs or use `@dfinity/agent` directly.
 
+2) Motoko — Business logic in `lib.mo`, not `main.mo`
 
+```motoko
+// canisters/dao/src/lib.mo
+import Types "Types";
 
+public func createProposal(
+  title: Text,
+  description: Text,
+  proposer: Principal
+): async Result.Result<Proposal, Text> {
+  // ← Pure logic here
+};
+```
 
+```motoko
+// canisters/dao/main.mo
+import Lib "lib";
+import Types "Types";
 
+actor DAO {
+  public shared(msg) func createProposal(...) : async Result.Result<Proposal, Text> {
+    await Lib.createProposal(...); // ← Thin wrapper
+  };
+};
+```
 
+Keep `main.mo` minimal — delegate to `lib.mo`. Use `Result` for error handling.
 
+Verified pnpm scripts (subset from `package.json`)
 
+Use only these pnpm scripts:
+- dev: starts desktop server (port 3001)
+- mobile: starts network-accessible mobile server (`mobile_hhdao_server.js`)
+- test:e2e: runs Playwright tests
+- test:canister: runs Motoko tests (`canisters/test-runner/run-tests.sh`)
+- build:canisters: compiles canisters (`dfx build`)
 
 
+Integration notes:
+- Canister IDs come from environment vars (`CANISTER_ID_HHDAO_*`) and `dfx.json`.
+- Mobile E2E flows use `mobile_hhdao_server.js` and QR utilities in `mobile-*.sh`.
 
+Repository conventions:
+- Branches: `feature/*`. Commits follow `type(scope): message`.
+- Prefer small, test-covered PRs and update `MANUAL_TESTING_GUIDE.md` or `MOBILE-README.md` when adding platform-facing behavior.
 
+Files to read first when unsure: `dfx.json`, `package.json`, `canisters/hhdao/src/lib.mo`, `canisters/hhdao/src/main.mo`, `src/hooks/useAuthContext.ts`, `canisters/test-runner/run-tests.sh`, `MANUAL_TESTING_GUIDE.md`.
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-flows, access control
-
-### Frontend (Next.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+If you update this file, keep it short and include file examples and exact scripts.
 
 
 

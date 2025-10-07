@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
 import { createActor } from '@/declarations/hhdao_dao';
 import { useAuthContext } from '@/hooks/useAuthContext';
+import React, { useState } from 'react';
 
 type Props = {
   onSubmitted?: (id: number) => void;
@@ -27,7 +27,11 @@ export default function AnimalCareForm({ onSubmitted }: Props) {
 
     try {
       setLoading(true);
-      const actor = createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
+      // Prefer injected mock actor in test environments (Playwright) if available
+      const win: any = typeof window !== 'undefined' ? window : {};
+      const actor = win.__HHDAO_MOCK_ACTOR
+        ? win.__HHDAO_MOCK_ACTOR
+        : createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
       const photoList = photos
         .split(',')
         .map((p) => p.trim())

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import AnimalCareForm from '@/components/community/AnimalCareForm';
 import { createActor } from '@/declarations/hhdao_dao';
+import { useEffect, useState } from 'react';
 
 export default function AnimalCarePage() {
   const [reports, setReports] = useState<any[]>([]);
@@ -11,7 +11,10 @@ export default function AnimalCarePage() {
   const loadReports = async () => {
     setLoading(true);
     try {
-      const actor = createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
+      const win: any = typeof window !== 'undefined' ? window : {};
+      const actor = win.__HHDAO_MOCK_ACTOR
+        ? win.__HHDAO_MOCK_ACTOR
+        : createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
       const all = await actor.getAllAnimalReports();
       setReports(all as any[]);
     } catch (e) {

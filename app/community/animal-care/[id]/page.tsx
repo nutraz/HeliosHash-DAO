@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createActor } from '@/declarations/hhdao_dao';
 import { useAuthContext } from '@/hooks/useAuthContext';
+import { useEffect, useState } from 'react';
 
 export default function AnimalReportPage({ params }: { params: { id: string } }) {
   const { id } = params;
@@ -11,7 +10,10 @@ export default function AnimalReportPage({ params }: { params: { id: string } })
   const { user } = useAuthContext();
 
   const load = async () => {
-    const actor = createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
+    const win: any = typeof window !== 'undefined' ? window : {};
+    const actor = win.__HHDAO_MOCK_ACTOR
+      ? win.__HHDAO_MOCK_ACTOR
+      : createActor(process.env.NEXT_PUBLIC_DAO_CANISTER_ID!);
     const r = await actor.getAnimalReport(Number(id));
     setReport(r ?? null);
   };

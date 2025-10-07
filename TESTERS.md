@@ -16,6 +16,21 @@ Purpose: get a tester online quickly with the mobile dev server and a short chec
 
 3) Contact
 - Add notes and screenshots to the feedback file and ping the maintainer in the team chat.
+
+4) Running the Playwright mobile smoke (optional)
+- Ensure the mobile server is running and reachable on the LAN (see `scripts/smoke-mobile.sh`).
+- Run Playwright mobile smoke locally (replace MOBILE_TEST_BASE if your LAN IP differs):
+
+```bash
+# Run the mobile smoke test (uses `MOBILE_TEST_BASE` env if provided)
+MOBILE_TEST_BASE="http://192.168.29.210:3003" pnpm test:e2e --grep smoke-animal-care
+```
+
+Or run the test file directly:
+
+```bash
+npx playwright test playwright/tests/smoke-animal-care.spec.ts --project=mobile-chrome
+```
 # HeliosHash DAO – 50kW Solar Co‑Ownership MVP Tester Guide
 
 > **MVP Simulation – No Real Funds or Wallets Active**

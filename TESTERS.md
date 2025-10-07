@@ -1,3 +1,21 @@
+# Tester Onboarding (quick)
+
+Purpose: get a tester online quickly with the mobile dev server and a short checklist for smoke tests.
+
+1) Prerequisites
+- Be on the same LAN as the dev machine.
+- Scan the QR or visit the network URL shared by the dev: http://<LAN_IP>:3003
+- Use a modern mobile browser (Chrome/Safari) and allow camera if prompted for QR utilities.
+
+2) Quick smoke checklist
+- Open URL and confirm homepage loads.
+- Sign in via the mocked local auth flow (if prompted).
+- Navigate to Community → Projects and open any proposal.
+- Submit a simple application form (use placeholder values).
+- Report results in `TESTER_FEEDBACK.md`.
+
+3) Contact
+- Add notes and screenshots to the feedback file and ping the maintainer in the team chat.
 # HeliosHash DAO – 50kW Solar Co‑Ownership MVP Tester Guide
 
 > **MVP Simulation – No Real Funds or Wallets Active**

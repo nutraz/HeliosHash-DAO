@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development PORT=3001 HOSTNAME=0.0.0.0 npx tsx server.ts 2>&1 | tee dev.log",
     "dev:health": "pnpm dev & DEV_PID=$!; sleep 3; pnpm health || true; wait $DEV_PID",
+  "dev:e2e": "pnpm dev",
     "dev:nodemon": "nodemon --exec \"npx tsx server.ts\" --watch server.ts --watch src --ext ts,tsx,js,jsx 2>&1 | tee dev.log",
     "dev:next": "next dev",
     "health": "bash scripts/health-check.sh",
@@ -64,6 +65,8 @@
     "deploy:mobile": "./scripts/enhanced-deploy.sh mobile"
   },
   "dependencies": {
+    "@connect2ic/core": "0.2.0-beta.24",
+    "@connect2ic/react": "0.2.0-beta.24",
     "@dfinity/agent": "^3.2.7",
     "@dfinity/auth-client": "^3.2.7",
     "@dfinity/candid": "^3.2.7",

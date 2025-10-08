@@ -1,7 +1,14 @@
 
-
-
-
+import Result "mo:base/Result";
+import Principal "mo:base/Principal";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
 
 module {
   public type ProjectStatus = {
@@ -553,5 +560,129 @@ module {
         };
       };
     };
+
+    /* Animal care (stray) reporting & community-validated rewards
+       - Reporters submit animal-care events (location, description, photos)
+       - Community members vote; when votesFor >= votesRequired the report is validated
+       - On validation we issue a small community NFT reward to the reporter (low-risk, uses existing mintMembershipNFT)
+    */
+
+    public type ReportStatus = { #Submitted; #Open; #Validated; #Rejected };
+
+    public type AnimalReport = {
+      id : Nat;
+      reporter : Principal;
+      location : Text;
+      description : Text;
+      photos : [Text];
+      votesFor : Nat;
+      votesAgainst : Nat;
+      votesRequired : Nat;
+      status : ReportStatus;
+      createdAt : Int;
+      validatedAt : ?Int;
+      rewardIssued : Bool;
+    };
+
+    private var nextReportId : Nat = 1;
+    private var animalReports = HashMap.HashMap<Nat, AnimalReport>(8, Nat.equal, natHash);
+
+    public func submitAnimalReport(
+      location : Text,
+      description : Text,
+      photos : [Text],
+      votesRequired : ?Nat,
+      reporter : Principal
+    ) : Nat {
+      let id = nextReportId;
+      nextReportId += 1;
+      let now = Time.now();
+      let required = switch (votesRequired) { case (?v) { v } case (null) { 3 } }; // default 3 votes
+      let report : AnimalReport = {
+        id = id;
+        reporter = reporter;
+        location = location;
+        description = description;
+        photos = photos;
+        votesFor = 0;
+        votesAgainst = 0;
+        votesRequired = required;
+        status = #Submitted;
+        createdAt = now;
+        validatedAt = null;
+        rewardIssued = false;
+      };
+      animalReports.put(id, report);
+      id;
+    };
+
+    private func tryIssueReward(report : AnimalReport) : Bool {
+      // low-risk reward path: mint a short-duration membership NFT to recognise the reporter
+      if (report.rewardIssued) { return false }; // already issued
+      // Mint a community-tier NFT for 30 days as recognition
+      let mintReq = {
+        recipient = report.reporter;
+        tier = #Community;
+        durationDays = 30 : Nat;
+      };
+      // ignore result; if mint fails we still mark rewardIssued=false
+      switch (mintMembershipNFT(mintReq)) {
+        case (#ok(_tokenId)) {
+          true
+        };
+        case (#err(_e)) {
+          false
+        };
+      };
+    };
+
+    public func voteOnAnimalReport(reportId : Nat, inFavor : Bool) : Bool {
+      switch (animalReports.get(reportId)) {
+        case (?report) {
+          if (report.status != #Submitted and report.status != #Open) { return false }; 
+          let updated : AnimalReport = {
+            id = report.id;
+            reporter = report.reporter;
+            location = report.location;
+            description = report.description;
+            photos = report.photos;
+            votesFor = if (inFavor) report.votesFor + 1 else report.votesFor;
+            votesAgainst = if (not inFavor) report.votesAgainst + 1 else report.votesAgainst;
+            votesRequired = report.votesRequired;
+            status = report.status;
+            createdAt = report.createdAt;
+            validatedAt = report.validatedAt;
+            rewardIssued = report.rewardIssued;
+          };
+
+          let newStatus : ReportStatus =
+            if (updated.votesFor >= report.votesRequired) #Validated
+            else if (updated.votesAgainst >= report.votesRequired) #Rejected
+            else #Open;
+
+          let final = { updated with status = newStatus };
+          // store
+          animalReports.put(reportId, final);
+
+          // On validation, attempt reward issuance (best-effort)
+          if (newStatus == #Validated and not final.rewardIssued) {
+            let issued = tryIssueReward(final);
+            if (issued) {
+              let now = Time.now();
+              let withReward : AnimalReport = { final with rewardIssued = true; validatedAt = ?now };
+              animalReports.put(reportId, withReward);
+            };
+          };
+
+          true;
+        };
+        case (null) { false };
+      };
+    };
+
+    public func getAnimalReport(reportId : Nat) : ?AnimalReport { animalReports.get(reportId) };
+
+    public func getAllAnimalReports() : [AnimalReport] { Iter.toArray(animalReports.vals()) };
+
   };
 }

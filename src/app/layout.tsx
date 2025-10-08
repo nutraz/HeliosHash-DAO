@@ -1,86 +1,14 @@
-import ErrorBoundary from '@/components/error-boundary';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/hooks/useAuthContext';
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import { Providers } from './providers';
 
-// Force dynamic rendering to prevent useContext errors during static generation
-export const dynamic = 'force-dynamic';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-  display: 'swap',
-  preload: true,
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-  display: 'swap',
-  preload: false, // Only preload if actually used
-});
-
-export const metadata: Metadata = {
-  title: 'HeliosHash DAO - Solar Energy Decentralized Autonomous Organization',
-  description:
-    "Empowering India's Solar Future through Decentralized Autonomous Organization powered by Internet Computer",
-  keywords: [
-    'HeliosHash',
-    'DAO',
-    'Solar Energy',
-    'Internet Computer',
-    'Blockchain',
-    'India',
-    'Renewable Energy',
-  ],
-  authors: [{ name: 'HeliosHash Team' }],
-  openGraph: {
-    title: 'HeliosHash DAO',
-    description: "Empowering India's Solar Future through Decentralized Autonomous Organization",
-    url: 'https://helioshash.org',
-    siteName: 'HeliosHash DAO',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'HeliosHash DAO',
-    description: "Empowering India's Solar Future through Decentralized Autonomous Organization",
-  },
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en' suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
-      >
-        <Providers>
-          <ErrorBoundary>
-            <AuthProvider>
-              <ThemeProvider
-                attribute='class'
-                defaultTheme='system'
-                enableSystem
-                disableTransitionOnChange
-              >
-                {/* MVP Simulation Banner - informs testers no real funds */}
-                <div className='w-full bg-amber-500/90 dark:bg-amber-600 text-black dark:text-white text-sm md:text-[13px] tracking-wide px-3 py-2 text-center font-medium shadow-sm z-50'>
-                  <strong>MVP Simulation – No Real Funds or Wallets Active</strong>
-                </div>
-                {children}
-                <Toaster />
-              </ThemeProvider>
-            </AuthProvider>
-          </ErrorBoundary>
-        </Providers>
+    <html lang='en'>
+      <body>
+        {process.env.NEXT_PUBLIC_DISABLE_MOCK_MODE === 'true' ? (
+          <AuthProvider>{children}</AuthProvider>
+        ) : (
+          children // mock mode: skip auth
+        )}
       </body>
     </html>
   );

@@ -197,8 +197,8 @@ importers:
         specifier: ^8.1.0
         version: 8.1.0
       i18next:
-        specifier: ^23.16.8
-        version: 23.16.8
+        specifier: ^25.6.0
+        version: 25.6.0(typescript@5.9.3)
       i18next-browser-languagedetector:
         specifier: ^7.2.2
         version: 7.2.2
@@ -243,7 +243,7 @@ importers:
         version: 7.65.0(react@19.2.0)
       react-i18next:
         specifier: ^13.5.0
-        version: 13.5.0(i18next@23.16.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 13.5.0(i18next@25.6.0(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react-leaflet:
         specifier: ^5.0.0
         version: 5.0.0(leaflet@1.9.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -4695,8 +4695,13 @@ packages:
   i18next-browser-languagedetector@7.2.2:
     resolution: {integrity: sha512-6b7r75uIJDWCcCflmbof+sJ94k9UQO4X0YR62oUfqGI/GjCLVzlCwu8TFdRZIqVLzWbzNcmkmhfqKEr4TLz4HQ==}
 
-  i18next@23.16.8:
-    resolution: {integrity: sha512-06r/TitrM88Mg5FdUXAKL96dJMzgqLE5dv3ryBAra4KCwD9mJ4ndOTS95ZuymIGoE+2hzfdaMak2X11/es7ZWg==}
+  i18next@25.6.0:
+    resolution: {integrity: sha512-tTn8fLrwBYtnclpL5aPXK/tAYBLWVvoHM1zdfXoRNLcI+RvtMsoZRV98ePlaW3khHYKuNh/Q65W/+NVFUeIwVw==}
+    peerDependencies:
+      typescript: ^5
+    peerDependenciesMeta:
+      typescript:
+        optional: true
 
   ic-stoic-identity@2.0.0:
     resolution: {integrity: sha512-0lvtX+lWR0LaEo076SFTKYDds+WKByQZfn3iU8ap5iCgc+OEBt/g/0jHwsnH3e7tI46JLiNaxSQIp223BEj81Q==}
@@ -12853,9 +12858,11 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.28.4
 
-  i18next@23.16.8:
+  i18next@25.6.0(typescript@5.9.3):
     dependencies:
       '@babel/runtime': 7.28.4
+    optionalDependencies:
+      typescript: 5.9.3
 
   ic-stoic-identity@2.0.0(@dfinity/candid@0.19.3(@dfinity/principal@0.19.3)):
     dependencies:
@@ -15113,11 +15120,11 @@ snapshots:
     dependencies:
       react: 19.2.0
 
-  react-i18next@13.5.0(i18next@23.16.8)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-i18next@13.5.0(i18next@25.6.0(typescript@5.9.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       '@babel/runtime': 7.28.4
       html-parse-stringify: 3.0.1
-      i18next: 23.16.8
+      i18next: 25.6.0(typescript@5.9.3)
       react: 19.2.0
     optionalDependencies:
       react-dom: 19.2.0(react@19.2.0)

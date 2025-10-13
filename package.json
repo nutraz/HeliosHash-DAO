@@ -170,7 +170,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@faker-js/faker": "^9.0.3",
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.56.0",
     "@tailwindcss/postcss": "^4.1.14",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@testing-library/jest-dom": "^6.9.1",

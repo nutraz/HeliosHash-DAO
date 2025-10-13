@@ -4,6 +4,7 @@ import { setupSocket } from '@/lib/socket';
 import { createServer } from 'http';
 import next from 'next';
 import { Server } from 'socket.io';
+import { spawn } from 'child_process';
 
 const dev = process.env.NODE_ENV !== 'production';
 let currentPort = process.env.PORT ? parseInt(process.env.PORT) : 3001;
@@ -69,6 +70,10 @@ async function createCustomServer() {
           console.log('⚠ Could not detect LAN IP automatically (may be a VPN / container).');
         }
         console.log('──────────────────────────────────────────────');
+
+        // Spawn QR code generator for developer convenience
+        const qrArgs = [`http://localhost:${currentPort}`];
+        const qrProcess = spawn('node', ['scripts/display-qr.js', ...qrArgs], { stdio: 'inherit' });
       });
     }
 

@@ -129,7 +129,7 @@
     "i18next-browser-languagedetector": "^7.2.2",
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
-    "lucide-react": "^0.544.0",
+    "lucide-react": "^0.545.0",
     "next": "15.5.4",
     "next-auth": "^4.24.11",
     "next-intl": "^4.3.12",

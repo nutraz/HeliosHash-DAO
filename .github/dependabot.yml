@@ -2,7 +2,14 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
-    schedule: { interval: 'weekly' }
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'chore(deps)'
+    ignore:
+      - dependency-name: 'validate.js'
   - package-ecosystem: 'github-actions'
     directory: '/'
-    schedule: { interval: 'weekly' }
+    schedule:
+      interval: 'daily'

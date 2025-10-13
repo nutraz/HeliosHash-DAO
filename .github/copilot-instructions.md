@@ -1,6 +1,8 @@
 # HeliosHash DAO — AI Coding Agent Instructions
 
-HeliosHash DAO (HHDAO) is a solar infrastructure DAO for remote valley transformation in Uttarakhand, India. Built with Motoko canisters (Internet Computer) + Next.js frontend.
+HeliosHash DAO (HHDAO) is a solar infrastructure DAO for remote valley transformation in Urgam Valley, Uttarakhand, India. Built with Motoko canisters (Internet Computer) + Next.js frontend.
+
+> **Note**: This file contains focused, actionable guidance for AI coding assistants. For detailed code examples and patterns, see `COPILOT_CONTEXT.md`.
 
 ## Architecture Overview
 
@@ -72,6 +74,75 @@ $MOC -o wasm/test.wasm --package base "$(dfx cache show)/base" src/lib.mo test/t
 
 **Testing Tags**: Use `@smoke` for critical paths, `@integration` for canister tests, `@performance`/`@security` for specialized suites.
 
+## Project Structure
+
+```
+HeliosHash-DAO/
+├── canisters/              # Motoko backend canisters
+│   ├── hhdao/             # Main business logic
+│   │   ├── src/main.mo    # Actor entrypoint (thin)
+│   │   ├── src/lib.mo     # Core logic
+│   │   └── test/          # Motoko tests (.test.mo)
+│   ├── hhdao_dao/         # DAO governance
+│   ├── hhdao_identity/    # Identity management
+│   ├── hhdao_compute/     # Mining compute stats
+│   ├── hhdao_telemetry/   # Solar telemetry
+│   └── test-runner/       # Custom Motoko test framework
+├── src/
+│   ├── app/               # Next.js App Router pages
+│   ├── components/        # React components
+│   │   └── ui/           # Shadcn/UI components
+│   ├── hooks/            # Custom React hooks
+│   ├── types/            # TypeScript interfaces
+│   ├── declarations/     # Auto-generated canister bindings (DO NOT EDIT)
+│   └── lib/              # Utility functions
+├── tests/                 # E2E tests (Playwright)
+├── dfx.json              # Canister configuration
+├── package.json          # Frontend dependencies
+└── mobile_hhdao_server.js # Mobile development server
+```
+
+## Code Style & Conventions
+
+### Motoko
+- Use 2-space indentation
+- Prefix private functions with `_` (e.g., `_validateProposal`)
+- Always use `Result.Result<T, Text>` for error handling
+- Stable variables for persistent state: `private stable var`
+- Document public functions with comments
+
+### TypeScript/React
+- Use 2-space indentation (enforced by Prettier)
+- Prefer functional components with hooks
+- Use `'use client'` directive for client components
+- Import UI components from `@/components/ui/`
+- Type all props with interfaces (not `any`)
+- Use semantic HTML and ARIA attributes for accessibility
+
+### Naming Conventions
+- Files: kebab-case (`solar-project-card.tsx`)
+- Components: PascalCase (`SolarProjectCard`)
+- Functions/variables: camelCase (`fetchProposals`)
+- Constants: UPPER_SNAKE_CASE (`MAX_PROPOSAL_DURATION`)
+- Test files: `*.test.mo` (Motoko), `*.spec.ts` (TypeScript)
+
+## Common Issues & Troubleshooting
+
+### Canister Deployment Errors
+- **Error: "Canister principal not found"** → Run `dfx deploy` first
+- **Error: "Cannot find module '@/declarations/...'** → Run `dfx generate` to regenerate bindings
+- **Outdated declarations** → Always run `dfx generate` after changing canister interfaces
+
+### Frontend Build Issues
+- **Module not found errors** → Check `package.json` dependencies, run `pnpm install`
+- **Port already in use** → Desktop: 3001, Mobile: 3003 - check for conflicting processes
+- **Environment variables missing** → Copy `.env.example` to `.env.local`
+
+### Testing Issues
+- **E2E tests failing** → Ensure dev server is running (`pnpm dev`)
+- **Canister tests not found** → Tests must be in `canisters/*/test/*.test.mo`
+- **Mobile tests not accessible** → Check network firewall, use `pnpm mobile` not `pnpm dev`
+
 ## Key Files for Context
 - `dfx.json` - All canister definitions and dependencies  
 - `canisters/hhdao/src/main.mo` - Main actor with dependency injection
@@ -80,7 +151,11 @@ $MOC -o wasm/test.wasm --package base "$(dfx cache show)/base" src/lib.mo test/t
 - `MANUAL_TESTING_GUIDE.md` - UI/UX testing procedures
 - `TEST_INFRASTRUCTURE.md` - Testing patterns and factories
 
-**Branches**: `feature/*` | **Commits**: `type(scope): message` | **Focus**: Mobile responsiveness, UI polish, testing coverage
+## Git Workflow
+- **Branches**: `feature/*` for features, `fix/*` for bugs
+- **Commits**: `type(scope): message` (e.g., `feat(dao): add proposal voting`)
+  - Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+- **Focus**: Mobile responsiveness, UI polish, testing coverage
 
 ---
 

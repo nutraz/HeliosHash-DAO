@@ -96,3 +96,19 @@ yarn.lock
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Large binary/generated files that shouldn't be committed
+sys
+diff-report.txt
+*.ps
+*.eps
+
+# Development logs and temporary files
+dev_*.log
+*.log
+
+# Extension development
+extensions/*/node_modules
+extensions/*/*.vsix
+extensions/*/__pycache__
+extensions/*/pnpm-lock.yaml

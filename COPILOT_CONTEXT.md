@@ -10,7 +10,7 @@
 
 ### Project Overview
 
-**HeliosHash DAO (HHDAO)** is the **India node of the One World Project (1WP)** - a revolutionary solar energy infrastructure DAO built on Internet Computer Protocol. It serves as a living pilot project in Urgam Valley, Gujarat, demonstrating how renewable energy, community governance, and decentralized job opportunities can transform rural communities.
+**HeliosHash DAO (HHDAO)** is the **India node of the One World Project (1WP)** - a revolutionary solar energy infrastructure DAO built on Internet Computer Protocol. It serves as a living pilot project in Urgam Valley, Uttarakhand, demonstrating how renewable energy, community governance, and decentralized job opportunities can transform rural communities.
 
 **🌍 Global Context**: Part of the One World Project (https://www.oneworldproject.io/) - a network of interconnected sustainable infrastructure nodes worldwide, focusing on solar energy, community empowerment, and decentralized governance.
 

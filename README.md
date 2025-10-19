@@ -1,3 +1,62 @@
+# ⛔ CRITICAL SECURITY NOTICE - READ BEFORE PROCEEDING
+
+**🚨 THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT**  
+**⚠️ NOT PRODUCTION READY - CLAIMS TO THE CONTRARY ARE INCORRECT**  
+**🚫 SMART CONTRACTS HAVE NOT BEEN PROFESSIONALLY AUDITED**  
+**💰 DO NOT DEPOSIT REAL FUNDS - TOTAL LOSS RISK**  
+**📋 FOR DEVELOPMENT AND TESTING ONLY**
+
+---
+
+## ⚖️ LEGAL DISCLAIMERS
+
+### NOT AN INVESTMENT OFFER
+This project does NOT constitute:
+- An offer to sell securities or tokens
+- Investment advice of any kind
+- A solicitation for investment
+- A guarantee of returns or functionality
+
+### EXTREME RISK WARNING
+- ⚠️ You may lose ALL deposited funds
+- ⚠️ Smart contracts are UNAUDITED
+- ⚠️ No insurance or investor protection exists
+- ⚠️ Regulatory approval has NOT been obtained
+- ⚠️ System security NOT independently verified
+
+### DEVELOPMENT STATUS
+- Current Phase: Alpha Development
+- Security Audit: NOT COMPLETED
+- Production Readiness: NOT ACHIEVED
+- Legal Compliance: NOT VERIFIED
+
+**Required Before Production:**
+- Professional smart contract audit ($40-50k) - NOT DONE
+- Penetration testing ($15-25k) - NOT DONE
+- Legal compliance review ($10-20k) - NOT DONE
+- Security hardening (3-6 months) - NOT DONE
+
+### CONSULT LEGAL COUNSEL
+Before participating in ANY capacity, consult with qualified legal counsel
+regarding securities laws, tax implications, and regulatory requirements.
+
+---
+
+## 📋 Security Documentation
+- [Security Audit Report](docs/security-audit-2025-10-19.md) - Known vulnerabilities
+- [Bug Bounty Program](docs/BUG_BOUNTY.md) - Vulnerability disclosure
+- [Security Policy](SECURITY.md) - Responsible disclosure
+
+---
+
+# HeliosHash DAO - Development Project
+
+**Status:** 🚧 Alpha Development (NOT Production Ready)  
+**Last Security Review:** October 19, 2025  
+**Next Audit Scheduled:** Q1 2026
+
+[Rest of README continues...]
+
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
 **🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: Network-ready for local testing (use your LAN IP)
 **⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors.

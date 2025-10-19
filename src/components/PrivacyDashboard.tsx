@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ConsentLevel, GenderOption, privacyService, PrivacySettings } from '../services/privacyComplianceService';
+import {
+  ConsentLevel,
+  GenderOption,
+  privacyService,
+  PrivacySettings,
+} from '../services/privacyComplianceService';
 
 interface PrivacyDashboardProps {
   userId: string;
@@ -29,6 +34,9 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
     loadDashboard();
   }, [userId]);
 
+  // TODO(PRIV-003): Ensure privacyService uses persistent encrypted storage and server-side access controls.
+  // See .github/ISSUES/privacy/003-audit-privacydashboard.md for migration steps, audit logging, and acceptance criteria.
+
   const loadDashboard = async () => {
     try {
       setLoading(true);
@@ -42,7 +50,10 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
     }
   };
 
-  const handleObtainConsent = async (consentLevel: ConsentLevel, settings: Partial<PrivacySettings>) => {
+  const handleObtainConsent = async (
+    consentLevel: ConsentLevel,
+    settings: Partial<PrivacySettings>
+  ) => {
     try {
       const result = await privacyService.obtainConsent(userId, consentLevel, settings);
       if (result.success) {
@@ -86,16 +97,16 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
 
   if (loading) {
     return (
-      <div className="privacy-dashboard">
-        <div className="loading">Loading privacy dashboard...</div>
+      <div className='privacy-dashboard'>
+        <div className='loading'>Loading privacy dashboard...</div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="privacy-dashboard">
-        <div className="error">{error}</div>
+      <div className='privacy-dashboard'>
+        <div className='error'>{error}</div>
         <button onClick={() => setError(null)}>Retry</button>
       </div>
     );
@@ -103,65 +114,69 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
 
   if (!dashboard) {
     return (
-      <div className="privacy-dashboard">
-        <div className="error">No dashboard data available</div>
+      <div className='privacy-dashboard'>
+        <div className='error'>No dashboard data available</div>
       </div>
     );
   }
 
   return (
-    <div className="privacy-dashboard">
-      <div className="dashboard-header">
+    <div className='privacy-dashboard'>
+      <div className='dashboard-header'>
         <h2>Privacy Dashboard</h2>
-        {onClose && <button onClick={onClose} className="close-btn">×</button>}
+        {onClose && (
+          <button onClick={onClose} className='close-btn'>
+            ×
+          </button>
+        )}
       </div>
 
-      <div className="dashboard-content">
+      <div className='dashboard-content'>
         {/* Consent Status */}
-        <div className="section">
+        <div className='section'>
           <h3>Consent Status</h3>
-          <div className="status-item">
+          <div className='status-item'>
             <span>Consent Level:</span>
             <span className={`level-${dashboard.consentLevel}`}>
               {dashboard.consentLevel.toUpperCase()}
             </span>
           </div>
-          <div className="status-item">
+          <div className='status-item'>
             <span>Has Consent:</span>
             <span className={dashboard.hasConsent ? 'yes' : 'no'}>
               {dashboard.hasConsent ? 'Yes' : 'No'}
             </span>
           </div>
           {!dashboard.hasConsent && (
-            <button onClick={() => setShowConsentForm(true)} className="action-btn">
+            <button onClick={() => setShowConsentForm(true)} className='action-btn'>
               Obtain Consent
             </button>
           )}
         </div>
 
         {/* Gender Data */}
-        <div className="section">
+        <div className='section'>
           <h3>Gender Information</h3>
-          <div className="status-item">
+          <div className='status-item'>
             <span>Data Stored:</span>
             <span className={dashboard.genderStored ? 'yes' : 'no'}>
               {dashboard.genderStored ? 'Yes' : 'No'}
             </span>
           </div>
           {dashboard.lastAccessed && (
-            <div className="status-item">
+            <div className='status-item'>
               <span>Last Accessed:</span>
               <span>{new Date(dashboard.lastAccessed).toLocaleDateString()}</span>
             </div>
           )}
           {dashboard.accessCount !== undefined && (
-            <div className="status-item">
+            <div className='status-item'>
               <span>Access Count:</span>
               <span>{dashboard.accessCount}</span>
             </div>
           )}
           {dashboard.hasConsent && !dashboard.genderStored && (
-            <button onClick={() => setShowGenderForm(true)} className="action-btn">
+            <button onClick={() => setShowGenderForm(true)} className='action-btn'>
               Provide Gender Information
             </button>
           )}
@@ -169,22 +184,22 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
 
         {/* Privacy Settings */}
         {dashboard.settings && (
-          <div className="section">
+          <div className='section'>
             <h3>Privacy Settings</h3>
-            <div className="settings-grid">
-              <div className="setting-item">
+            <div className='settings-grid'>
+              <div className='setting-item'>
                 <span>Data Collection:</span>
                 <span>{dashboard.settings.allowDataCollection ? 'Allowed' : 'Disabled'}</span>
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <span>Bonus Eligibility:</span>
                 <span>{dashboard.settings.allowBonusEligibility ? 'Enabled' : 'Disabled'}</span>
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <span>Analytics:</span>
                 <span>{dashboard.settings.allowAnalytics ? 'Allowed' : 'Disabled'}</span>
               </div>
-              <div className="setting-item">
+              <div className='setting-item'>
                 <span>Data Retention:</span>
                 <span>{dashboard.settings.dataRetentionPeriod} days</span>
               </div>
@@ -193,14 +208,14 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
         )}
 
         {/* Actions */}
-        <div className="section">
+        <div className='section'>
           <h3>Actions</h3>
           {dashboard.canWithdraw && (
-            <button onClick={() => setShowWithdrawForm(true)} className="withdraw-btn">
+            <button onClick={() => setShowWithdrawForm(true)} className='withdraw-btn'>
               Withdraw Consent & Delete Data
             </button>
           )}
-          <button onClick={loadDashboard} className="refresh-btn">
+          <button onClick={loadDashboard} className='refresh-btn'>
             Refresh Dashboard
           </button>
         </div>
@@ -208,18 +223,12 @@ export const PrivacyDashboard: React.FC<PrivacyDashboardProps> = ({ userId, onCl
 
       {/* Consent Form Modal */}
       {showConsentForm && (
-        <ConsentForm
-          onSubmit={handleObtainConsent}
-          onCancel={() => setShowConsentForm(false)}
-        />
+        <ConsentForm onSubmit={handleObtainConsent} onCancel={() => setShowConsentForm(false)} />
       )}
 
       {/* Gender Form Modal */}
       {showGenderForm && (
-        <GenderForm
-          onSubmit={handleStoreGender}
-          onCancel={() => setShowGenderForm(false)}
-        />
+        <GenderForm onSubmit={handleStoreGender} onCancel={() => setShowGenderForm(false)} />
       )}
 
       {/* Withdraw Form Modal */}
@@ -253,59 +262,67 @@ const ConsentForm: React.FC<{
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div className='modal-overlay'>
+      <div className='modal'>
         <h3>Obtain Consent</h3>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="consent-level">Consent Level:</label>
+          <div className='form-group'>
+            <label htmlFor='consent-level'>Consent Level:</label>
             <select
-              id="consent-level"
+              id='consent-level'
               value={consentLevel}
               onChange={(e) => setConsentLevel(e.target.value as ConsentLevel)}
             >
-              <option value="none">None - No data collection</option>
-              <option value="basic">Basic - Essential data only</option>
-              <option value="full">Full - All features including women's empowerment bonus</option>
+              <option value='none'>None - No data collection</option>
+              <option value='basic'>Basic - Essential data only</option>
+              <option value='full'>Full - All features including women's empowerment bonus</option>
             </select>
           </div>
 
-          <div className="form-group">
+          <div className='form-group'>
             <label>
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={settings.allowDataCollection || false}
-                onChange={(e) => setSettings({...settings, allowDataCollection: e.target.checked})}
+                onChange={(e) =>
+                  setSettings({ ...settings, allowDataCollection: e.target.checked })
+                }
               />
               Allow data collection for platform features
             </label>
           </div>
 
-          <div className="form-group">
+          <div className='form-group'>
             <label>
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={settings.allowBonusEligibility || false}
-                onChange={(e) => setSettings({...settings, allowBonusEligibility: e.target.checked})}
+                onChange={(e) =>
+                  setSettings({ ...settings, allowBonusEligibility: e.target.checked })
+                }
               />
               Allow bonus eligibility calculation (women's empowerment program)
             </label>
           </div>
 
-          <div className="form-group">
+          <div className='form-group'>
             <label>
               <input
-                type="checkbox"
+                type='checkbox'
                 checked={settings.allowAnalytics || false}
-                onChange={(e) => setSettings({...settings, allowAnalytics: e.target.checked})}
+                onChange={(e) => setSettings({ ...settings, allowAnalytics: e.target.checked })}
               />
               Allow anonymous analytics for platform improvement
             </label>
           </div>
 
-          <div className="modal-actions">
-            <button type="button" onClick={onCancel}>Cancel</button>
-            <button type="submit" className="primary">Submit Consent</button>
+          <div className='modal-actions'>
+            <button type='button' onClick={onCancel}>
+              Cancel
+            </button>
+            <button type='submit' className='primary'>
+              Submit Consent
+            </button>
           </div>
         </form>
       </div>
@@ -326,24 +343,33 @@ const GenderForm: React.FC<{
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div className='modal-overlay'>
+      <div className='modal'>
         <h3>Provide Gender Information</h3>
-        <p>This information is used solely for women's empowerment program eligibility and receives enhanced privacy protection.</p>
+        <p>
+          This information is used solely for women's empowerment program eligibility and receives
+          enhanced privacy protection.
+        </p>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="gender-select">Gender:</label>
-            <select id="gender-select" value={gender} onChange={(e) => setGender(e.target.value as GenderOption)}>
-              <option value="not-provided">Prefer not to provide</option>
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="prefer-not-to-say">Prefer not to say</option>
+          <div className='form-group'>
+            <label htmlFor='gender-select'>Gender:</label>
+            <select
+              id='gender-select'
+              value={gender}
+              onChange={(e) => setGender(e.target.value as GenderOption)}
+            >
+              <option value='not-provided'>Prefer not to provide</option>
+              <option value='female'>Female</option>
+              <option value='male'>Male</option>
+              <option value='non-binary'>Non-binary</option>
+              <option value='prefer-not-to-say'>Prefer not to say</option>
             </select>
           </div>
 
-          <div className="privacy-notice">
-            <p><strong>Privacy Notice:</strong></p>
+          <div className='privacy-notice'>
+            <p>
+              <strong>Privacy Notice:</strong>
+            </p>
             <ul>
               <li>Gender data is encrypted using AES-256 encryption</li>
               <li>Data is never shared with third parties</li>
@@ -352,9 +378,13 @@ const GenderForm: React.FC<{
             </ul>
           </div>
 
-          <div className="modal-actions">
-            <button type="button" onClick={onCancel}>Cancel</button>
-            <button type="submit" className="primary">Submit</button>
+          <div className='modal-actions'>
+            <button type='button' onClick={onCancel}>
+              Cancel
+            </button>
+            <button type='submit' className='primary'>
+              Submit
+            </button>
           </div>
         </form>
       </div>
@@ -375,28 +405,32 @@ const WithdrawForm: React.FC<{
   };
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div className='modal-overlay'>
+      <div className='modal'>
         <h3>Withdraw Consent & Delete Data</h3>
-        <p className="warning">
-          This action will permanently delete all your gender data and cannot be undone.
-          You can re-consent and provide information again at any time.
+        <p className='warning'>
+          This action will permanently delete all your gender data and cannot be undone. You can
+          re-consent and provide information again at any time.
         </p>
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="withdraw-reason">Reason for withdrawal (optional):</label>
+          <div className='form-group'>
+            <label htmlFor='withdraw-reason'>Reason for withdrawal (optional):</label>
             <textarea
-              id="withdraw-reason"
+              id='withdraw-reason'
               value={reason}
               onChange={(e) => setReason(e.target.value)}
-              placeholder="Please provide a reason for withdrawing consent..."
+              placeholder='Please provide a reason for withdrawing consent...'
               rows={3}
             />
           </div>
 
-          <div className="modal-actions">
-            <button type="button" onClick={onCancel}>Cancel</button>
-            <button type="submit" className="danger">Withdraw & Delete Data</button>
+          <div className='modal-actions'>
+            <button type='button' onClick={onCancel}>
+              Cancel
+            </button>
+            <button type='submit' className='danger'>
+              Withdraw & Delete Data
+            </button>
           </div>
         </form>
       </div>

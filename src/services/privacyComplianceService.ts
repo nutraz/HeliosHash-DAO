@@ -55,6 +55,8 @@ class PrivacyCompliantGenderService {
   private readonly DEFAULT_RETENTION_PERIOD = 2555; // 7 years in days (compliance requirement)
 
   // In-memory storage (in production, use secure database)
+  // TODO(PRIV-003): Replace in-memory Maps with a persistent, encrypted store (e.g., PostgreSQL with TDE or cloud KMS).
+  // See .github/ISSUES/privacy/003-audit-privacydashboard.md for details. Use KMS for ENCRYPTION_KEY management and rotate keys.
   private consentRecords: Map<string, ConsentRecord> = new Map();
   private encryptedGenderData: Map<string, EncryptedGenderData> = new Map();
   private privacySettings: Map<string, PrivacySettings> = new Map();
@@ -138,13 +140,18 @@ class PrivacyCompliantGenderService {
   /**
    * Store gender data with encryption and consent validation
    */
-  async storeGenderData(userId: string, gender: GenderOption): Promise<{ success: boolean; message: string }> {
+  async storeGenderData(
+    userId: string,
+    gender: GenderOption
+  ): Promise<{ success: boolean; message: string }> {
     try {
       const consent = this.consentRecords.get(userId);
       const settings = this.privacySettings.get(userId);
 
       if (!consent || !settings?.allowDataCollection) {
-        this.logAudit(userId, 'STORE_GENDER_DENIED', { reason: 'No consent or data collection disabled' });
+        this.logAudit(userId, 'STORE_GENDER_DENIED', {
+          reason: 'No consent or data collection disabled',
+        });
         return {
           success: false,
           message: 'Cannot store gender data without proper consent',
@@ -166,14 +173,19 @@ class PrivacyCompliantGenderService {
 
       this.encryptedGenderData.set(userId, genderData);
 
-      this.logAudit(userId, 'STORE_GENDER', { success: true, genderProvided: gender !== 'not-provided' });
+      this.logAudit(userId, 'STORE_GENDER', {
+        success: true,
+        genderProvided: gender !== 'not-provided',
+      });
 
       return {
         success: true,
         message: 'Gender information stored securely',
       };
     } catch (error) {
-      this.logAudit(userId, 'STORE_GENDER_FAILED', { error: error instanceof Error ? error.message : 'Unknown error' });
+      this.logAudit(userId, 'STORE_GENDER_FAILED', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
       return {
         success: false,
         message: 'Failed to store gender data',
@@ -198,7 +210,10 @@ class PrivacyCompliantGenderService {
     const genderData = this.encryptedGenderData.get(userId);
     const settings = this.privacySettings.get(userId);
 
-    this.logAudit(userId, 'DASHBOARD_ACCESS', { consentExists: !!consent, genderStored: !!genderData });
+    this.logAudit(userId, 'DASHBOARD_ACCESS', {
+      consentExists: !!consent,
+      genderStored: !!genderData,
+    });
 
     return {
       hasConsent: !!consent && !consent.withdrawalDate,
@@ -298,7 +313,10 @@ class PrivacyCompliantGenderService {
   /**
    * Withdraw consent and delete all user data
    */
-  async withdrawConsentAndDeleteData(userId: string, reason: string): Promise<{ success: boolean; message: string }> {
+  async withdrawConsentAndDeleteData(
+    userId: string,
+    reason: string
+  ): Promise<{ success: boolean; message: string }> {
     try {
       const consent = this.consentRecords.get(userId);
 
@@ -326,7 +344,9 @@ class PrivacyCompliantGenderService {
         message: 'Consent withdrawn and all data deleted successfully',
       };
     } catch (error) {
-      this.logAudit(userId, 'WITHDRAW_CONSENT_FAILED', { error: error instanceof Error ? error.message : 'Unknown error' });
+      this.logAudit(userId, 'WITHDRAW_CONSENT_FAILED', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
       return {
         success: false,
         message: 'Failed to withdraw consent and delete data',
@@ -337,7 +357,13 @@ class PrivacyCompliantGenderService {
   /**
    * Audit logging for compliance
    */
-  private logAudit(userId: string, action: string, details: any, ipAddress?: string, userAgent?: string): void {
+  private logAudit(
+    userId: string,
+    action: string,
+    details: any,
+    ipAddress?: string,
+    userAgent?: string
+  ): void {
     const auditEntry = {
       timestamp: Date.now(),
       userId,
@@ -360,7 +386,10 @@ class PrivacyCompliantGenderService {
   /**
    * Get audit log for compliance (admin only)
    */
-  getAuditLog(userId?: string, limit: number = 100): Array<{
+  getAuditLog(
+    userId?: string,
+    limit: number = 100
+  ): Array<{
     timestamp: number;
     userId: string;
     action: string;
@@ -369,7 +398,7 @@ class PrivacyCompliantGenderService {
     let filteredLog = this.auditLog;
 
     if (userId) {
-      filteredLog = this.auditLog.filter(entry => entry.userId === userId);
+      filteredLog = this.auditLog.filter((entry) => entry.userId === userId);
     }
 
     return filteredLog
@@ -503,7 +532,7 @@ class PrivacyCompliantGenderService {
 export const privacyService = new PrivacyCompliantGenderService();
 
 // Export types for use in components
-export type { ConsentLevel, ConsentRecord, EncryptedGenderData, GenderOption, PrivacySettings };
+// Types are exported inline above; no re-export here to avoid conflicts.
 
 // Export audit log types
 export interface AuditEntry {

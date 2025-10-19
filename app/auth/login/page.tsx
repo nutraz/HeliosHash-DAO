@@ -19,10 +19,12 @@ export default function LoginPage() {
           const user = {
             principal: accounts[0],
             isWoman: true, // Set to true for testing women's bonus
-            balance: 2450
+            balance: 2450,
           };
+          // TODO(PRIV-002): Do NOT persist sensitive profile data in localStorage. Use secure server-side session or HttpOnly cookie.
+          // See .github/ISSUES/privacy/002-audit-login-localstorage.md for details and migration plan.
           localStorage.setItem('user', JSON.stringify(user));
-          // Set auth cookie for middleware
+          // Set auth cookie for middleware (keep only minimal token; rotate and store sessions server-side)
           document.cookie = 'auth_token=valid_token; path=/; max-age=86400';
           router.push('/dashboard');
         }
@@ -38,19 +40,15 @@ export default function LoginPage() {
   };
 
   return (
-    <main role="main">
+    <main role='main'>
       <div>
         <h1>Login</h1>
         <p>Wallet connection and authentication</p>
-        <button
-          data-testid="connect-wallet-button"
-          onClick={connectWallet}
-          disabled={connecting}
-        >
+        <button data-testid='connect-wallet-button' onClick={connectWallet} disabled={connecting}>
           {connecting ? 'Connecting...' : 'Connect Wallet'}
         </button>
         {errorMessage && (
-          <div data-testid="error-message" style={{ color: 'red', marginTop: '10px' }}>
+          <div data-testid='error-message' className='text-red-600 mt-2'>
             {errorMessage}
           </div>
         )}

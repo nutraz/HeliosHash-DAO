@@ -67,7 +67,7 @@ regarding securities laws, tax implications, and regulatory requirements.
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
 
 **🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: Network-ready for local testing (use your LAN IP)
-**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors.
+**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: Pilot, research and community testing (this repository is NOT a solicitation for investment).
 
 ### Transforming Uttarakhand's Remote Valleys | India Extension of One World Project (1WP)
 
@@ -163,7 +163,7 @@ Transform **Urgam Valley, Uttarakhand** from a disconnected remote region into a
 
 ### 📱 **Mobile E2E Experience**
 
-**Status**: ✅ **PRODUCTION READY** - Full mobile ecosystem deployed
+**Status**: 🔬 TEST / LOCAL ONLY — Mobile ecosystem is available for local testing and development (NOT production ready)
 
 - **📱 Native Mobile Server**: Complete HHDAO interface accessible via QR codes
 - **🔍 Data Integration**: Test identity and mock balances (no real funds)
@@ -173,7 +173,7 @@ Transform **Urgam Valley, Uttarakhand** from a disconnected remote region into a
 
 ### 🎯 **Community Opportunities Platform**
 
-**Status**: ✅ **LIVE + MOBILE OPTIMIZED** - Responsive job board at `/community`
+**Status**: ⚙️ DEVELOPMENT / TESTING - Community features are under active development and provided for testing and feedback only
 
 - **📱 Mobile-First Design**: Touch-optimized interface with QR code accessibility
 - **🔍 Smart Job Matching**: Advanced filtering by category, experience, location, skills
@@ -182,16 +182,16 @@ Transform **Urgam Valley, Uttarakhand** from a disconnected remote region into a
 - **📝 Application Management**: Track applications, deadlines, job status on mobile
 - **🏗️ Categories**: Engineering, Technology, Management, Security, Education, Construction
 
-### 🔋 **Solar Infrastructure & Revenue Generation**
+### 🔋 **Solar Infrastructure & Potential Revenue Models**
 
-**Status**: � **PILOT READY** - Urgam Valley activation prepared (668km from Mumbai)
+**Status**: PILOT / RESEARCH — Exploring technical and operational models for renewable infrastructure. This section describes potential use-cases being researched; it is NOT an offer, guarantee, or invitation to invest.
 
-- **�️ Urgam Valley Focus**: Remote Uttarakhand valley transformation with 50kW initial deployment
-- **📍 Location Intelligence**: Mumbai proximity (19.0728°N, 72.8826°E) with automated partner coordination
-- **🤝 Delhi Partner Network**: Automated onboarding system for supply chain and logistics
-- **⚡ Scalable Infrastructure**: 50kW → 500kW expansion path with micro data center integration
-- **₿ Revenue Diversification**: Bitcoin mining + edge computing + community services
-- **🎯 Automation Ready**: Complete pilot launch system via `launch_pilot.py`
+- **�️ Urgam Valley Focus**: Remote Uttarakhand valley transformation with 50kW initial deployment (pilot)
+- **📍 Location Intelligence**: Mumbai proximity (19.0728°N, 72.8826°E) used for planning and simulations
+- **🤝 Partner Network**: Onboarding and coordination tools for working with local partners (development only)
+- **⚡ Scalable Infrastructure**: Architecture designed to scale, subject to audits, funding, and regulatory approvals
+- **Potential revenue models**: Research includes edge compute, micro data centers, or other services — none are guaranteed and none constitute a solicitation for investment.
+- **🎯 Automation Ready**: Pilot launch tooling (for development/testing) via `launch_pilot.py`
 
 ### 🪙 **1WP Treasury & OWP Token Integration**
 

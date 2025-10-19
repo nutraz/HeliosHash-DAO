@@ -1,11 +1,4 @@
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
-
-**⚠️ CRITICAL NOTICE: This project is in EARLY ALPHA development stage and is NOT READY for production use.**
-
-**🚫 Smart contracts have NOT been professionally audited. No funds should be deposited until security audit completion and legal compliance.**
-
-## 🔥 **REALITY CHECK: MVP DEVELOPMENT PHASE** (October 2025)
-
 **🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: Network-ready for local testing (use your LAN IP)
 **⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 days
 

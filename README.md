@@ -1,10 +1,4 @@
-<<<<<<< HEAD
-...your main branch code...
-=======
-...your audit-clean branch code...
->>>>>>> audit-clean**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 daysDAO)
->>>>>>> audit-clean
-=======
+
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
 
 **⚠️ CRITICAL NOTICE: This project is in EARLY ALPHA development stage and is NOT READY for production use.**

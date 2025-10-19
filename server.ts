@@ -4,10 +4,7 @@ import { setupSocket } from '@/lib/socket';
 import { createServer } from 'http';
 import next from 'next';
 import { Server } from 'socket.io';
-<<<<<<< HEAD
 import { spawn } from 'child_process';
-=======
->>>>>>> audit-clean
 
 const dev = process.env.NODE_ENV !== 'production';
 let currentPort = process.env.PORT ? parseInt(process.env.PORT) : 3001;
@@ -28,10 +25,61 @@ async function createCustomServer() {
     const handle = nextApp.getRequestHandler();
 
     // Create HTTP server that will handle both Next.js and Socket.IO
-    const server = createServer((req, res) => {
+    // Simple in-memory rate limiting and auth for API routes
+    const rateMap = new Map<string, { count: number; resetAt: number }>();
+    const WINDOW_MS = parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'); // 15m
+    const MAX_REQ = parseInt(process.env.RATE_LIMIT_MAX || '100');
+    const AUTH_TOKEN = process.env.AUTH_TOKEN;
+
+    function getClientIp(req: any): string {
+      const xf = req.headers['x-forwarded-for'];
+      if (typeof xf === 'string') {
+        return xf.split(',')[0].trim();
+      }
+      return (req.socket && (req.socket.remoteAddress as string)) || 'unknown';
+    }
+
+    function checkRateLimit(ip: string): boolean {
+      const now = Date.now();
+      const entry = rateMap.get(ip);
+      if (!entry || now > entry.resetAt) {
+        rateMap.set(ip, { count: 1, resetAt: now + WINDOW_MS });
+        return true;
+      }
+      if (entry.count >= MAX_REQ) return false;
+      entry.count += 1;
+      return true;
+    }
+
+    const server = createServer((req: any, res: any) => {
       // Skip socket.io requests from Next.js handler
       if (req.url?.startsWith('/api/socketio')) {
         return;
+      }
+
+      // Minimal API security: rate limit and token check for /api/* except status
+      if (req.url?.startsWith('/api/') && !req.url.startsWith('/api/status')) {
+        const ip = getClientIp(req);
+        if (!checkRateLimit(ip)) {
+          res.statusCode = 429;
+          res.setHeader('Content-Type', 'application/json');
+          res.end(JSON.stringify({ error: 'Too Many Requests' }));
+          return;
+        }
+        if (AUTH_TOKEN) {
+          const authHeader = req.headers['authorization'];
+          const tokenHeader = req.headers['x-auth-token'];
+          const bearer = authHeader && typeof authHeader === 'string' && authHeader.startsWith('Bearer ')
+            ? authHeader.substring(7)
+            : undefined;
+          const provided = (typeof tokenHeader === 'string' ? tokenHeader : undefined) || bearer;
+          if (provided !== AUTH_TOKEN) {
+            res.statusCode = 401;
+            res.setHeader('Content-Type', 'application/json');
+            res.end(JSON.stringify({ error: 'Unauthorized' }));
+            return;
+          }
+        }
       }
       handle(req, res);
     });
@@ -73,13 +121,9 @@ async function createCustomServer() {
           console.log('⚠ Could not detect LAN IP automatically (may be a VPN / container).');
         }
         console.log('──────────────────────────────────────────────');
-<<<<<<< HEAD
-
-        // Spawn QR code generator for developer convenience
-        const qrArgs = [`http://localhost:${currentPort}`];
-        const qrProcess = spawn('node', ['scripts/display-qr.js', ...qrArgs], { stdio: 'inherit' });
-=======
->>>>>>> audit-clean
+  // Spawn QR code generator for developer convenience
+  const qrArgs = [`http://localhost:${currentPort}`];
+  spawn('node', ['scripts/display-qr.js', ...qrArgs], { stdio: 'inherit' });
       });
     }
 

@@ -1,4 +1,3 @@
-
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
 
 **⚠️ CRITICAL NOTICE: This project is in EARLY ALPHA development stage and is NOT READY for production use.**
@@ -7,13 +6,10 @@
 
 ## 🔥 **REALITY CHECK: MVP DEVELOPMENT PHASE** (October 2025)
 
-**🖥️ Desktop**: `http://localhost:3001/investments` | **📱 Mobile**: Network ready for testing
-**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 daysDAO)
-=======
-**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 daysDAO)
->>>>>>> audit-clean
+**🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: Network-ready for local testing (use your LAN IP)
+**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 days
 
-### �️ Transforming Uttarakhand's Remote Valleys | India Extension of One World Project (1WP)
+### Transforming Uttarakhand's Remote Valleys | India Extension of One World Project (1WP)
 
 **Solar Infrastructure DAO | OWP Token Integration | Decentralized Community Governance**
 
@@ -29,7 +25,7 @@
 
 ## 🚨 **SYSTEM STATUS: EARLY ALPHA - NOT PRODUCTION READY** (October 2025)
 
-**�️ Desktop**: `http://localhost:3001` | **📱 Mobile**: `http://192.168.29.210:3003`  
+**🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: `http://<LAN_IP>:3003`  
 **⚡ Status**: Early Alpha Development | **🔋 Proximity**: 668km from Mumbai
 
 ### ✅ **BREAKTHROUGH ACHIEVEMENTS (October 2025)**
@@ -37,11 +33,7 @@
 #### 🎯 **Complete Mobile E2E Experience**
 
 - **📱 Full Mobile HHDAO Server**: Network-accessible mobile interface with QR codes
-<<<<<<< HEAD
-- **🔍 Real Data Integration**: Authentic nutrazz identity (226,898 OWP balance)
-=======
-- **🔍 Real Data Integration**: Authentic TEST_USER identity (OWP_BALANCE_PLACEHOLDER)
->>>>>>> audit-clean
+- **🔍 Data Integration**: Test identity and mock balances (no real funds)
 - **📋 Mobile User Journey**: Scan → Login → Dashboard → Solar Projects → Governance → Rewards
 - **🎨 Responsive Design**: Touch-optimized interface for complete mobile functionality
 
@@ -114,13 +106,9 @@ Transform **Urgam Valley, Uttarakhand** from a disconnected remote region into a
 **Status**: ✅ **PRODUCTION READY** - Full mobile ecosystem deployed
 
 - **📱 Native Mobile Server**: Complete HHDAO interface accessible via QR codes
-<<<<<<< HEAD
-- **🔍 Real Data Integration**: Authentic nutrazz identity with 226,898 OWP balance
-=======
-- **🔍 Real Data Integration**: Authentic nutrazz identity with OWP_BALANCE_PLACEHOLDER
->>>>>>> audit-clean
+- **🔍 Data Integration**: Test identity and mock balances (no real funds)
 - **📋 Complete User Journey**: Scan → Login → Dashboard → Solar Projects → Governance → Rewards
-- **🌐 Network Accessibility**: Mobile server on `192.168.29.210:3003` with proper interface binding
+- **🌐 Network Accessibility**: Mobile server accessible via `http://<LAN_IP>:3003` with proper interface binding
 - **⚡ Real-time Sync**: Live synchronization with desktop experience and canister backends
 
 ### 🎯 **Community Opportunities Platform**

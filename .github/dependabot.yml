@@ -2,35 +2,19 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
-<<<<<<< HEAD
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
-    reviewers:
-      - 'nutraz'
-    assignees:
-      - 'nutraz'
-    commit-message:
-      prefix: 'chore(deps)'
-    ignore:
-      - dependency-name: 'validate.js'
+    open-pull-requests-limit: 10
     labels:
       - 'dependencies'
       - 'security'
+    commit-message:
+      prefix: 'deps'
+      include: 'scope'
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:
       interval: 'daily'
-    reviewers:
-      - 'nutraz'
-    assignees:
-      - 'nutraz'
     labels:
       - 'dependencies'
       - 'ci'
-=======
-    schedule: { interval: 'weekly' }
-  - package-ecosystem: 'github-actions'
-    directory: '/'
-    schedule: { interval: 'weekly' }
->>>>>>> audit-clean

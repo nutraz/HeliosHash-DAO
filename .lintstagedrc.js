@@ -1,6 +1,4 @@
-export default {
-  '*.{js,jsx,ts,tsx}': [
-    'eslint --fix',
-    'prettier --write',
-  ],
+module.exports = {
+  '*.{js,json,ts}': ['prettier --write', 'git add'],
+  '*.md': ['markdown-toc -i', 'prettier --write', 'git add']
 };

@@ -1,3 +1,21 @@
 {
-  "/page": "app/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/privacy/route": "app/api/privacy/route.js",
+  "/api/status/route": "app/api/status/route.js",
+  "/admin/page": "app/admin/page.js",
+  "/auth/login/page": "app/auth/login/page.js",
+  "/bridge/page": "app/bridge/page.js",
+  "/community/animal-care/[id]/page": "app/community/animal-care/[id]/page.js",
+  "/community/page": "app/community/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/governance/local/page": "app/governance/local/page.js",
+  "/governance/page": "app/governance/page.js",
+  "/job-board/page": "app/job-board/page.js",
+  "/page": "app/page.js",
+  "/payment/upi/page": "app/payment/upi/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/projects/page": "app/projects/page.js",
+  "/rewards/page": "app/rewards/page.js",
+  "/wallet/page": "app/wallet/page.js",
+  "/community/animal-care/page": "app/community/animal-care/page.js"
 }

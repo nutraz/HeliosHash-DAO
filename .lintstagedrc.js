@@ -1,4 +1,3 @@
 module.exports = {
-  '*.{js,json,ts}': ['prettier --write', 'git add'],
-  '*.md': ['markdown-toc -i', 'prettier --write', 'git add']
+  '*.{js,jsx,ts,tsx,css,md,json,yml,yaml}': ['prettier --write --loglevel silent'],
 };

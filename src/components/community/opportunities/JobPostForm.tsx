@@ -4,16 +4,26 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+<<<<<<< HEAD
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
+=======
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+>>>>>>> audit-clean
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
+<<<<<<< HEAD
   Select,
   SelectContent,
   SelectItem,
@@ -31,6 +41,25 @@ import {
   JobCategory,
   JobPostingFormData,
   WORK_TYPES,
+=======
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useAuthContext } from '@/hooks/useAuthContext';
+import {
+    CATEGORY_SKILLS,
+    CURRENCIES,
+    Currency,
+    EXPERIENCE_LEVELS,
+    JOB_CATEGORIES,
+    JobCategory,
+    JobPostingFormData,
+    WORK_TYPES,
+>>>>>>> audit-clean
 } from '@/types/jobs';
 import { Briefcase, MapPin, Plus, Save, Send, X } from 'lucide-react';
 import { useState } from 'react';
@@ -51,7 +80,11 @@ export default function JobPostForm({
   initialData,
   className,
 }: JobPostFormProps) {
+<<<<<<< HEAD
   const { user } = useAuth();
+=======
+  const { user } = useAuthContext();
+>>>>>>> audit-clean
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 

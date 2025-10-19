@@ -5,6 +5,17 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Rewards Page', () => {
   test.beforeEach(async ({ page }) => {
+<<<<<<< HEAD
+=======
+    // Mock authentication cookie
+    await page.context().addCookies([{
+      name: 'auth_token',
+      value: 'valid_token',
+      domain: 'localhost',
+      path: '/',
+    }]);
+
+>>>>>>> audit-clean
     // Wallet mock (consistent with existing tests)
     await page.addInitScript(() => {
       (window as any).ic = {
@@ -17,7 +28,11 @@ test.describe('Rewards Page', () => {
   });
 
   test('should display rewards stats and available rewards', async ({ page }) => {
+<<<<<<< HEAD
     await page.goto('http://localhost:3000/rewards', { waitUntil: 'networkidle' });
+=======
+    await page.goto('/rewards', { waitUntil: 'networkidle' });
+>>>>>>> audit-clean
 
     // Header present
     await expect(page.locator('[data-testid="rewards-header"]')).toBeVisible();
@@ -39,6 +54,11 @@ test.describe('Rewards Page', () => {
       '[data-testid="available-rewards"] [data-testid^="reward-available-"]'
     );
     await expect(available.first()).toBeVisible();
+<<<<<<< HEAD
+=======
+    await page.waitForTimeout(1000);  // Render
+    expect(await available.count()).toBeGreaterThan(0);
+>>>>>>> audit-clean
 
     // Switch to claimed tab
     await page.click('role=tab[name="My Collection"]');

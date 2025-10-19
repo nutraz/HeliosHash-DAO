@@ -1,0 +1,26 @@
+{
+  "name": "HeliosHash DAO",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:20-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/guiyomh/features/internet-computer-sdk:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.vscode-typescript-next",
+        "ms-playwright.playwright",
+        "dfinity-foundation.vscode-motoko"
+      ]
+    }
+  },
+  "initializeCommand": "corepack prepare pnpm@latest --activate",
+  "postCreateCommand": "corepack enable && pnpm install && dfx cache install",
+    "3001": { "label": "Next.js Dev (port 3001)" },
+    "3001": { "label": "Next.js Dev" },
+    // Port 8000 is used by the local Internet Computer (IC) replica for canister development.
+    // See: https://internetcomputer.org/docs/current/developer-docs/build/install/
+    "8000": { "label": "IC Replica" }
+  },
+  "forwardPorts": [3001, 8000]
+}

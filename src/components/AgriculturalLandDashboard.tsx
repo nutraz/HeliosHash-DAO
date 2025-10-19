@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Agricultural Land Dashboard Component
  * Baghpat District Land Validation & Urgam Valley Pilot Interface
@@ -573,3 +574,13 @@ export const AgriculturalLandDashboard: React.FC<AgriculturalLandDashboardProps>
 };
 
 export default AgriculturalLandDashboard;
+=======
+export default function AgriculturalLandDashboard() {
+  return (
+    <div>
+      <h2>Agricultural Land Dashboard</h2>
+      <p>Land records and verification component</p>
+    </div>
+  );
+}
+>>>>>>> audit-clean

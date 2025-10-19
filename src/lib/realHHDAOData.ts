@@ -1,13 +1,21 @@
 /**
  * HHDAO Real Data Override - Bypass Mock Mode
+<<<<<<< HEAD
  * Shows nutrazz identity and real HHDAO data instead of Arjun Patel demo
+=======
+ * Shows TEST_USER identity and mock HHDAO data instead of Arjun Patel demo
+>>>>>>> audit-clean
  */
 
 // Real HHDAO Data Structure
 export const REAL_HHDAO_DATA = {
   user: {
     identity: 'nutraazz',
+<<<<<<< HEAD
     name: 'Nutrazz (HHDAO Founder)',
+=======
+  name: 'TEST_USER (HHDAO Founder)',
+>>>>>>> audit-clean
     owpBalance: 226898,
     rank: 1,
     location: {
@@ -131,7 +139,11 @@ export function shouldUseRealData(): boolean {
 // Main data provider function
 export function getHHDAOData() {
   if (shouldUseRealData()) {
+<<<<<<< HEAD
     console.log('🎯 Loading REAL HHDAO data for nutrazz');
+=======
+  console.log('🎯 Loading mock HHDAO data for TEST_USER');
+>>>>>>> audit-clean
     return REAL_HHDAO_DATA;
   } else {
     console.log('🎭 Loading mock demo data');

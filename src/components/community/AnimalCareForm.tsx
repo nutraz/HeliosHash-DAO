@@ -54,32 +54,56 @@ export default function AnimalCareForm({ onSubmitted }: Props) {
   return (
     <form onSubmit={handleSubmit} className='space-y-4'>
       <div>
+<<<<<<< HEAD
         <label className='block text-sm font-medium'>Location</label>
         <input
+=======
+        <label htmlFor='location' className='block text-sm font-medium'>Location</label>
+        <input
+          id='location'
+>>>>>>> audit-clean
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           className='mt-1 block w-full'
         />
       </div>
       <div>
+<<<<<<< HEAD
         <label className='block text-sm font-medium'>Description</label>
         <textarea
+=======
+        <label htmlFor='description' className='block text-sm font-medium'>Description</label>
+        <textarea
+          id='description'
+>>>>>>> audit-clean
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className='mt-1 block w-full'
         />
       </div>
       <div>
+<<<<<<< HEAD
         <label className='block text-sm font-medium'>Photos (comma-separated URLs)</label>
         <input
+=======
+        <label htmlFor='photos' className='block text-sm font-medium'>Photos (comma-separated URLs)</label>
+        <input
+          id='photos'
+>>>>>>> audit-clean
           value={photos}
           onChange={(e) => setPhotos(e.target.value)}
           className='mt-1 block w-full'
         />
       </div>
       <div>
+<<<<<<< HEAD
         <label className='block text-sm font-medium'>Votes required</label>
         <input
+=======
+        <label htmlFor='votesRequired' className='block text-sm font-medium'>Votes required</label>
+        <input
+          id='votesRequired'
+>>>>>>> audit-clean
           type='number'
           value={votesRequired ?? 3}
           onChange={(e) => setVotesRequired(Number(e.target.value) || 3)}

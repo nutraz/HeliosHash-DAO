@@ -1,6 +1,17 @@
+<<<<<<< HEAD
 import type { ActorSubclass, HttpAgentOptions, ActorConfig, Agent } from '@dfinity/agent';
 import type { Principal } from '@dfinity/principal';
 import type { IDL } from '@dfinity/candid';
+=======
+import type {
+  ActorSubclass,
+  HttpAgentOptions,
+  ActorConfig,
+  Agent,
+} from "@dfinity/agent";
+import type { Principal } from "@dfinity/principal";
+import type { IDL } from "@dfinity/candid";
+>>>>>>> audit-clean
 
 import { _SERVICE } from './hhdao_dao.did';
 

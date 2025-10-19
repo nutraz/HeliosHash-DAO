@@ -6,6 +6,7 @@ import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
 import Text "mo:base/Text";
 import Float "mo:base/Float";
+<<<<<<< HEAD
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Result "mo:base/Result";
@@ -18,6 +19,9 @@ import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
 import Text "mo:base/Text";
 import Float "mo:base/Float";
+=======
+import Int "mo:base/Int";
+>>>>>>> audit-clean
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Result "mo:base/Result";
@@ -103,6 +107,14 @@ persistent actor Identity {
     transient var verifications = HashMap.HashMap<Nat, VerificationRequest>(10, Nat.equal, func (n: Nat): Nat32 { Nat32.fromNat(n % 100000) });
     // Treasury authorization (set-once)
     private var treasuryCanister : ?Principal = null;
+<<<<<<< HEAD
+=======
+    
+    // Internet Identity integration
+    // Note: Using a placeholder principal for local development
+    // In production, this should be set to the actual II canister principal
+    private let ii_canister : Principal = Principal.fromText("aaaaa-aa");
+>>>>>>> audit-clean
 
     // System functions for upgrades
     system func preupgrade() {
@@ -131,6 +143,35 @@ persistent actor Identity {
         Principal.toText(principal) # "_" # Int.toText(Time.now())
     };
 
+<<<<<<< HEAD
+=======
+    func isSessionValid(session: AuthSession): Bool {
+        let now = Time.now();
+        now <= session.expiresAt
+    };
+
+    func refreshSession(sessionId: Text): async Result.Result<AuthSession, Text> {
+        switch (sessions.get(sessionId)) {
+            case (null) { #err("Session not found") };
+            case (?session) {
+                if (not isSessionValid(session)) {
+                    sessions.delete(sessionId);
+                    #err("Session expired")
+                } else {
+                    let now = Time.now();
+                    let updatedSession = {
+                        session with
+                        expiresAt = now + (24 * 60 * 60 * 1_000_000_000);
+                        lastActivity = now
+                    };
+                    sessions.put(sessionId, updatedSession);
+                    #ok(updatedSession)
+                }
+            };
+        }
+    };
+
+>>>>>>> audit-clean
     func isUsernameAvailable(username: Text): Bool {
         Option.isNull(usernameMap.get(username))
     };
@@ -139,16 +180,43 @@ persistent actor Identity {
         Option.isNull(emailMap.get(email))
     };
 
+<<<<<<< HEAD
+=======
+    // NOTE: Internet Identity delegation verification is not implemented here.
+    func verifyIIDelegate(_principal: Principal, _delegation: Text): async Bool {
+        // Placeholder: always return true for now
+        true
+    };
+
+>>>>>>> audit-clean
     // Public functions
     public shared ({ caller }) func createProfile(
         username: ?Text,
         email: ?Text,
         displayName: ?Text,
+<<<<<<< HEAD
         role: Role
+=======
+        role: Role,
+        ii_delegation: ?Text  // Internet Identity delegation proof
+>>>>>>> audit-clean
     ): async Result.Result<UserProfile, Text> {
         if (Principal.isAnonymous(caller)) {
             return #err("Anonymous principal cannot create profile");
         };
+<<<<<<< HEAD
+=======
+        // Verify Internet Identity delegation
+        switch (ii_delegation) {
+            case (null) { return #err("Internet Identity delegation required") };
+            case (?delegation) {
+                let isValid = await verifyIIDelegate(caller, delegation);
+                if (not isValid) {
+                    return #err("Invalid Internet Identity delegation");
+                };
+            };
+        };
+>>>>>>> audit-clean
 
         // Check if profile already exists
         switch (profiles.get(caller)) {

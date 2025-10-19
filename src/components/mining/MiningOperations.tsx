@@ -15,7 +15,11 @@ export function MiningOperations() {
     status: 'active' as const,
     thermalRecovery: {
       enabled: true,
+<<<<<<< HEAD
       heatOutput: '8.5 kW',
+=======
+      heatOutput: '8.50kW',
+>>>>>>> audit-clean
       waterHeating: '42°C',
     },
   };

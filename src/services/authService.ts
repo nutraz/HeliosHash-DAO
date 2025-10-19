@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 // Real DFINITY AuthClient imports
 import { AuthClient } from '@dfinity/auth-client';
+=======
+import { Identity } from '@dfinity/agent';
+import { AuthClient } from '@dfinity/auth-client';
+import { createActor } from '../declarations/identity';
+import { _SERVICE as IdentityService } from '../declarations/identity/identity.did';
+import { canisterId } from '../declarations/identity/index';
+>>>>>>> audit-clean
 
 export interface User {
   principal: string;
@@ -22,6 +30,71 @@ class AuthService {
   private authClient: AuthClient | null = null;
   private user: User | null = null;
   private listeners: ((user: User | null) => void)[] = [];
+<<<<<<< HEAD
+=======
+  private errorListeners: ((error: string) => void)[] = [];
+
+  private async refreshUserProfile(): Promise<void> {
+    if (!this.authClient || !this.authClient.isAuthenticated()) {
+      throw new Error('Not authenticated');
+    }
+
+    const identity = this.authClient.getIdentity();
+    const principal = identity.getPrincipal().toString();
+    
+    // Get user profile from identity canister
+    const identityActor = await this.getIdentityActor(identity);
+    const profile = await identityActor.getProfile(principal);
+    
+    if ('err' in profile) {
+      throw new Error(profile.err);
+    }
+    
+    this.user = {
+      principal,
+      isAuthenticated: true,
+      identity,
+      membershipTier: profile.ok.membershipTier,
+      joinedAt: Number(profile.ok.createdAt),
+      votingPower: profile.ok.votingPower,
+      walletAddress: profile.ok.walletAddress,
+      nftBalance: profile.ok.nftBalance
+    };
+
+    this.notifyListeners();
+  }
+
+  private async completeAuthentication(): Promise<void> {
+    if (!this.authClient) {
+      throw new Error('AuthClient not initialized');
+    }
+
+    const result = await this.authClient.tryCompleteAuthentication();
+    if (!result) {
+      throw new Error('Failed to complete authentication');
+    }
+
+    await this.refreshUserProfile();
+    
+    // Clear redirect params and return to original page
+    const url = new URL(window.location.href);
+    url.searchParams.delete('loginRedirect');
+    window.history.replaceState({}, '', url.toString());
+  }
+
+  private notifyError(error: string): void {
+    this.errorListeners.forEach(listener => listener(error));
+  }
+
+  private async getIdentityActor(identity: Identity): Promise<IdentityService> {
+    return createActor(canisterId, {
+      agentOptions: {
+        identity,
+        host: process.env.NEXT_PUBLIC_IC_HOST || 'http://localhost:4943'
+      }
+    });
+  }
+>>>>>>> audit-clean
 
   async initialize(): Promise<void> {
     try {
@@ -29,6 +102,7 @@ class AuthService {
 
       // Check if user is already authenticated
       const isAuthenticated = await this.authClient.isAuthenticated();
+<<<<<<< HEAD
 
       if (isAuthenticated) {
         const identity = this.authClient.getIdentity();
@@ -48,6 +122,26 @@ class AuthService {
       }
     } catch (error) {
       console.error('Auth initialization error:', error);
+=======
+      
+      if (isAuthenticated) {
+        await this.refreshUserProfile();
+      } else {
+        // Check if we have a redirect from II
+        const searchParams = new URLSearchParams(window.location.search);
+        const loginRedirect = searchParams.get('loginRedirect');
+        
+        if (loginRedirect) {
+          // Complete the authentication flow
+          await this.completeAuthentication();
+        }
+      }
+    } catch (error) {
+      console.error('Auth initialization error:', error);
+      // Clear any partial auth state on error
+      await this.logout();
+      this.notifyError(error instanceof Error ? error.message : 'Authentication failed');
+>>>>>>> audit-clean
     }
   }
 

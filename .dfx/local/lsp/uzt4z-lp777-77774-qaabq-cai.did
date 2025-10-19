@@ -1,0 +1,297 @@
+type Application = record {
+  id : nat;
+  relatedProjectId : opt nat;
+  status : ApplicationStatus;
+  uploadedDocuments : vec UploadedDocument;
+  title : text;
+  applicantId : principal;
+  assignedReviewer : opt principal;
+  submittedAt : int;
+  description : text;
+  statusHistory : vec ApplicationStatusHistory;
+  lastUpdatedAt : int;
+  governmentApprovalId : opt text;
+  reviewDeadline : opt int;
+  priority : ApplicationPriority;
+  applicationData : ApplicationData;
+  applicationType : ApplicationType;
+};
+type ApplicationData = record {
+  references : opt vec text;
+  technicalSkills : opt vec text;
+  investmentCapacity : opt nat;
+  riskTolerance : opt text;
+  bankAccount : opt text;
+  investmentHorizon : opt text;
+  localKnowledge : opt text;
+  electricityAccess : opt bool;
+  landLocation : opt text;
+  experience : opt nat;
+  workingHours : opt text;
+  availability : opt text;
+  contactEmail : opt text;
+  specialization : opt text;
+  landSize : opt nat;
+  preferredRoles : opt vec text;
+  aadhaarNumber : opt text;
+  currentLandUse : opt text;
+  contactPhone : opt text;
+};
+type ApplicationPriority = variant { Low; High; Medium; Urgent };
+type ApplicationStatus = variant {
+  UnderReview;
+  Approved;
+  Rejected;
+  Submitted;
+  Interview;
+  DocumentsRequested;
+  Expired;
+};
+type ApplicationStatusHistory = record {
+  status : ApplicationStatus;
+  documentsRequested : opt vec DocumentType;
+  updatedAt : int;
+  updatedBy : principal;
+  comments : opt text;
+};
+type ApplicationType = variant {
+  CommunityContributor;
+  Investor;
+  LandPartner;
+  TechCollaborator;
+  Vendor;
+};
+type Category = variant { Governance; Project; Treasury };
+type DocumentType = variant {
+  TechnicalCertificate;
+  BankDetails;
+  Resume;
+  LocalApproval;
+  LandDeed;
+  IdentityProof;
+  Other : text;
+  EnvironmentalClearance;
+};
+type HHDAO = service {
+  addDocumentToApplication : (nat, UploadedDocument) -> (bool);
+  assignApplicationReviewer : (nat, principal) -> (bool);
+  createProject : (text, text, nat, text, nat, opt int) -> (Result_2);
+  createProposal : (
+      record {
+        title : text;
+        votesRequired : nat;
+        description : text;
+        category : Category;
+      },
+    ) -> (Result_1);
+  getAllApplications : () -> (vec Application) query;
+  getApplication : (nat) -> (opt Application) query;
+  getApplicationsByReviewer : () -> (vec Application) query;
+  getApplicationsByStatus : (ApplicationStatus) -> (vec Application) query;
+  getApplicationsByType : (ApplicationType) -> (vec Application) query;
+  getCyclesBalance : () -> (nat) query;
+  getDashboardData : () -> (
+      record {
+        documents : vec record {
+          id : text;
+          accessLevel : variant {
+            DAO;
+            Private;
+            Public;
+            Restricted : vec principal;
+          };
+          status : variant {
+            UnderReview;
+            Approved;
+            Draft;
+            Rejected;
+            Archived;
+            Submitted;
+          };
+          documentType : variant {
+            Legal;
+            Technical;
+            Report;
+            Image;
+            Financial;
+            Other : text;
+            Video;
+            Environmental;
+            Certificate;
+          };
+          owner : principal;
+          metadata : vec record { text; text };
+          hash : text;
+          name : text;
+          createdAt : int;
+          size : nat;
+          tags : vec text;
+          mimeType : text;
+          description : opt text;
+          version : nat;
+          updatedAt : int;
+        };
+        projects : vec Project;
+        userProfile : opt record {
+          bio : opt text;
+          "principal" : principal;
+          username : opt text;
+          displayName : opt text;
+          createdAt : int;
+          email : opt text;
+          website : opt text;
+          updatedAt : int;
+          isVerified : bool;
+          verificationLevel : variant { KYC; Enhanced; Email; Basic };
+          location : opt text;
+          avatar : opt text;
+        };
+        devices : vec record {
+          id : text;
+          status : variant { Error; Online; Maintenance; Offline };
+          owner : principal;
+          metadata : vec record { text; text };
+          name : text;
+          deviceType : variant {
+            GridConnection;
+            SolarPanel;
+            Battery;
+            EnergyMeter;
+            Inverter;
+            WeatherStation;
+          };
+          registeredAt : int;
+          lastPing : int;
+          location : record {
+            region : opt text;
+            latitude : float64;
+            longitude : float64;
+            address : opt text;
+          };
+        };
+      },
+    );
+  getNFTInfo : (nat) -> (opt NFT) query;
+  getProject : (nat) -> (opt Project) query;
+  getProjects : () -> (vec Project) query;
+  getProposal : (nat) -> (
+      opt record {
+        id : nat;
+        status : variant { Passed; Active; Rejected; Executed };
+        title : text;
+        votesAgainst : nat;
+        votesFor : nat;
+        createdAt : int;
+        votingDeadline : int;
+        description : text;
+        proposalType : variant { Governance; Project; Treasury; Community };
+        proposer : principal;
+        executionData : opt text;
+      },
+    );
+  getSystemStats : () -> (
+      record { totalProjects : nat; timestamp : int; totalUsers : nat },
+    ) query;
+  getUserApplications : () -> (vec Application) query;
+  joinPlatform : (opt text, opt text, opt text) -> (Result);
+  mintMembershipNFT : (
+      record {
+        durationDays : nat;
+        tier : MembershipTier;
+        recipient : principal;
+      },
+    ) -> (MintResult);
+  registerSolarDevice : (
+      text,
+      text,
+      variant {
+        GridConnection;
+        SolarPanel;
+        Battery;
+        EnergyMeter;
+        Inverter;
+        WeatherStation;
+      },
+      float64,
+      float64,
+      opt text,
+      vec record { text; text },
+    ) -> (Result);
+  seed_data : () -> (text);
+  submitApplication : (
+      ApplicationType,
+      text,
+      text,
+      ApplicationData,
+      ApplicationPriority,
+      opt nat,
+    ) -> (nat);
+  updateApplicationStatus : (
+      nat,
+      ApplicationStatus,
+      opt text,
+      opt vec DocumentType,
+    ) -> (bool);
+  updateProjectStatus : (nat, ProjectStatus) -> (bool);
+  uploadProjectDocument : (
+      nat,
+      text,
+      opt text,
+      variant {
+        Legal;
+        Technical;
+        Report;
+        Image;
+        Financial;
+        Other : text;
+        Video;
+        Environmental;
+        Certificate;
+      },
+      text,
+      nat,
+      text,
+      bool,
+    ) -> (Result);
+  vote : (nat, bool) -> (Result);
+};
+type MembershipTier = variant { Supporter; Partner; Investor; Community };
+type MintResult = variant { ok : nat; err : text };
+type NFT = record {
+  id : nat;
+  expiresAt : int;
+  owner : principal;
+  tier : MembershipTier;
+  mintedAt : int;
+};
+type Project = record {
+  id : nat;
+  status : ProjectStatus;
+  completionDate : opt int;
+  owner : principal;
+  name : text;
+  createdAt : int;
+  description : text;
+  governmentApprovals : vec text;
+  capacity : nat;
+  estimatedCost : nat;
+  location : text;
+  telemetryId : opt text;
+};
+type ProjectStatus = variant {
+  Operational;
+  Maintenance;
+  Planning;
+  Construction;
+};
+type Result = variant { ok : text; err : text };
+type Result_1 = variant { ok : nat; err : text };
+type Result_2 = variant { ok : Project; err : text };
+type UploadedDocument = record {
+  id : text;
+  documentType : DocumentType;
+  fileName : text;
+  verificationStatus : variant { Rejected : text; Verified; Pending };
+  uploadedAt : int;
+};
+service : HHDAO

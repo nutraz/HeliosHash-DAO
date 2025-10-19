@@ -50,11 +50,19 @@ test.describe('Security Tests', () => {
   test('should validate authentication tokens properly', async ({ page }) => {
     // Test with invalid/expired tokens
     await page.addInitScript(() => {
+<<<<<<< HEAD
       localStorage.setItem('authToken', 'invalid-token-12345');
       localStorage.setItem('isAuthenticated', 'true');
     });
 
     await page.goto('/dashboard');
+=======
+      localStorage.setItem('token', 'invalid');
+      localStorage.setItem('isAuthenticated', 'true');
+    });
+
+    await page.goto('/dashboard', { waitUntil: 'networkidle' });
+>>>>>>> audit-clean
 
     // Should redirect to login for invalid token
     await expect(page).toHaveURL(/.*login/);
@@ -176,7 +184,16 @@ test.describe('Security Tests', () => {
     for (const input of inputs) {
       const element = page.locator(input.selector);
       if (await element.isVisible()) {
+<<<<<<< HEAD
         await element.fill(input.value);
+=======
+        const inputType = await element.getAttribute('type');
+        if (inputType === 'number') {
+          await element.fill('9'.repeat(100)); // Use numbers for number inputs
+        } else {
+          await element.fill(input.value);
+        }
+>>>>>>> audit-clean
 
         // Should limit input length
         const actualValue = await element.inputValue();
@@ -230,6 +247,7 @@ test.describe('Security Tests', () => {
     let requestCount = 0;
     let rateLimitHit = false;
 
+<<<<<<< HEAD
     await page.route('**/api/**', (route) => {
       requestCount++;
       const response = route.request().response();
@@ -237,6 +255,19 @@ test.describe('Security Tests', () => {
         rateLimitHit = true;
       }
       route.continue();
+=======
+    await page.route('**/api/**', async (route) => {
+      requestCount++;
+      try {
+        const response = await route.request().response();
+        if (response && (response.status === 429 || response.status === 503)) {
+          rateLimitHit = true;
+        }
+      } catch (error) {
+        // Ignore errors for routes that complete after test ends
+      }
+      await route.continue();
+>>>>>>> audit-clean
     });
 
     // Make rapid API calls
@@ -249,8 +280,17 @@ test.describe('Security Tests', () => {
 
     await page.waitForTimeout(1000);
 
+<<<<<<< HEAD
     // Should implement some form of rate limiting
     // (This test may pass if rate limiting is implemented correctly)
+=======
+    // Cleanup: Unroute all routes before test ends
+    await page.unrouteAll({ behavior: 'ignoreErrors' });
+
+    // Should implement some form of rate limiting
+    // (This test may pass if rate limiting is implemented correctly)
+    expect(requestCount).toBeGreaterThan(10);
+>>>>>>> audit-clean
   });
 
   test('should validate file upload security', async ({ page }) => {

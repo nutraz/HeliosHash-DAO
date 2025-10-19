@@ -8,6 +8,7 @@ export class DashboardPage {
   }
 
   async navigateToProjects() {
+<<<<<<< HEAD
     await this.page.click('[data-testid="projects-nav"]');
   }
 
@@ -17,6 +18,17 @@ export class DashboardPage {
 
   async navigateToEnergy() {
     await this.page.click('[data-testid="energy-nav"]');
+=======
+    await this.page.click('[data-testid="projects-tab"]');
+  }
+
+  async navigateToGovernance() {
+    await this.page.click('[data-testid="governance-tab"]');
+  }
+
+  async navigateToEnergy() {
+    await this.page.click('[data-testid="energy-dashboard"]');
+>>>>>>> audit-clean
   }
 
   async navigateToWallet() {

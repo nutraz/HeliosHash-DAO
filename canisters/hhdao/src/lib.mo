@@ -10,7 +10,11 @@ import Array "mo:base/Array";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
 
+<<<<<<< HEAD
 module {
+=======
+module HHDAOLib {
+>>>>>>> audit-clean
   public type ProjectStatus = {
     #Planning;
     #Construction;
@@ -234,6 +238,7 @@ module {
       switch (Array.find(projects, func (p : Project) : Bool { p.id == id })) {
         case (?project) {
           if (project.owner != caller) {
+<<<<<<< HEAD
             return false;
           };
           let updatedProject = {
@@ -255,6 +260,30 @@ module {
           });
           projects := Array.append(projects, [updatedProject]);
           true
+=======
+            false
+          } else {
+            let updatedProject = {
+              id = project.id;
+              name = project.name;
+              location = project.location;
+              capacity = project.capacity;
+              status = status;
+              owner = project.owner;
+              createdAt = project.createdAt;
+              governmentApprovals = project.governmentApprovals;
+              telemetryId = project.telemetryId;
+              description = project.description;
+              estimatedCost = project.estimatedCost;
+              completionDate = project.completionDate;
+            };
+            projects := Array.filter<Project>(projects, func (p : Project) : Bool {
+              p.id != id
+            });
+            projects := Array.append(projects, [updatedProject]);
+            true
+          }
+>>>>>>> audit-clean
         };
         case (null) { false };
       }
@@ -305,6 +334,7 @@ module {
       switch (proposals.get(proposalId)) {
         case (?proposal) {
           if (proposal.status != #Open) {
+<<<<<<< HEAD
             return false;
           };
           let updatedProposal : Proposal = {
@@ -324,6 +354,28 @@ module {
           let finalProposal = { updatedProposal with status = newStatus };
           proposals.put(proposalId, finalProposal);
           true;
+=======
+            false
+          } else {
+            let updatedProposal : Proposal = {
+              id = proposal.id;
+              title = proposal.title;
+              description = proposal.description;
+              votesRequired = proposal.votesRequired;
+              category = proposal.category;
+              votesFor = if (inFavor) proposal.votesFor + 1 else proposal.votesFor;
+              votesAgainst = if (not inFavor) proposal.votesAgainst + 1 else proposal.votesAgainst;
+              status = proposal.status;
+            };
+            let newStatus : Status = 
+              if (updatedProposal.votesFor >= proposal.votesRequired) #Passed
+              else if (updatedProposal.votesAgainst >= proposal.votesRequired) #Rejected
+              else #Open;
+            let finalProposal = { updatedProposal with status = newStatus };
+            proposals.put(proposalId, finalProposal);
+            true
+          }
+>>>>>>> audit-clean
         };
         case (null) {
           false;
@@ -471,6 +523,7 @@ module {
       switch (applications.get(applicationId)) {
         case (?application) {
           if (application.applicantId != uploader) {
+<<<<<<< HEAD
             return false; // Only applicant can upload documents
           };
           
@@ -482,6 +535,19 @@ module {
           
           applications.put(applicationId, updatedApplication);
           true;
+=======
+            false // Only applicant can upload documents
+          } else {
+            let updatedApplication : Application = {
+              application with 
+              uploadedDocuments = Array.append(application.uploadedDocuments, [document]);
+              lastUpdatedAt = Time.now();
+            };
+            
+            applications.put(applicationId, updatedApplication);
+            true
+          }
+>>>>>>> audit-clean
         };
         case (null) {
           false;
@@ -597,7 +663,11 @@ module {
       let id = nextReportId;
       nextReportId += 1;
       let now = Time.now();
+<<<<<<< HEAD
       let required = switch (votesRequired) { case (?v) { v } case (null) { 3 } }; // default 3 votes
+=======
+      let required = switch (votesRequired) { case (?v) { v }; case (null) { 3 } }; // default 3 votes
+>>>>>>> audit-clean
       let report : AnimalReport = {
         id = id;
         reporter = reporter;
@@ -618,6 +688,7 @@ module {
 
     private func tryIssueReward(report : AnimalReport) : Bool {
       // low-risk reward path: mint a short-duration membership NFT to recognise the reporter
+<<<<<<< HEAD
       if (report.rewardIssued) { return false }; // already issued
       // Mint a community-tier NFT for 30 days as recognition
       let mintReq = {
@@ -632,6 +703,25 @@ module {
         };
         case (#err(_e)) {
           false
+=======
+      if (report.rewardIssued) {
+        false // already issued
+      } else {
+        // Mint a community-tier NFT for 30 days as recognition
+        let mintReq = {
+          recipient = report.reporter;
+          tier = #Community;
+          durationDays = 30 : Nat;
+        };
+        // ignore result; if mint fails we still mark rewardIssued=false
+        switch (mintMembershipNFT(mintReq)) {
+          case (#ok(_tokenId)) {
+            true
+          };
+          case (#err(_e)) {
+            false
+          };
+>>>>>>> audit-clean
         };
       };
     };
@@ -639,6 +729,7 @@ module {
     public func voteOnAnimalReport(reportId : Nat, inFavor : Bool) : Bool {
       switch (animalReports.get(reportId)) {
         case (?report) {
+<<<<<<< HEAD
           if (report.status != #Submitted and report.status != #Open) { return false }; 
           let updated : AnimalReport = {
             id = report.id;
@@ -675,6 +766,47 @@ module {
           };
 
           true;
+=======
+          if (report.status != #Submitted and report.status != #Open) {
+            false
+          } else {
+            let updated : AnimalReport = {
+              id = report.id;
+              reporter = report.reporter;
+              location = report.location;
+              description = report.description;
+              photos = report.photos;
+              votesFor = if (inFavor) report.votesFor + 1 else report.votesFor;
+              votesAgainst = if (not inFavor) report.votesAgainst + 1 else report.votesAgainst;
+              votesRequired = report.votesRequired;
+              status = report.status;
+              createdAt = report.createdAt;
+              validatedAt = report.validatedAt;
+              rewardIssued = report.rewardIssued;
+            };
+
+            let newStatus : ReportStatus =
+              if (updated.votesFor >= report.votesRequired) #Validated
+              else if (updated.votesAgainst >= report.votesRequired) #Rejected
+              else #Open;
+
+            let final = { updated with status = newStatus };
+            // store
+            animalReports.put(reportId, final);
+
+            // On validation, attempt reward issuance (best-effort)
+            if (newStatus == #Validated and not final.rewardIssued) {
+              let issued = tryIssueReward(final);
+              if (issued) {
+                let now = Time.now();
+                let withReward : AnimalReport = { final with rewardIssued = true; validatedAt = ?now };
+                animalReports.put(reportId, withReward);
+              };
+            };
+
+            true
+          }
+>>>>>>> audit-clean
         };
         case (null) { false };
       };

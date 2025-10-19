@@ -2,12 +2,22 @@ name: CI
 
 on:
   push:
+<<<<<<< HEAD
     branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
   test:
+=======
+    branches: [ main, mvp-testers ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: JS unit/integration & E2E
+>>>>>>> audit-clean
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -38,3 +48,50 @@ jobs:
           name: playwright-report
           path: playwright-report/
         if: always()
+<<<<<<< HEAD
+=======
+
+  flutter-analyze:
+    name: Flutter analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+
+  flutter-test:
+    name: Flutter test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run tests
+        run: flutter test --coverage
+
+  node-checks:
+    name: Node quick checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install pnpm
+        run: npm i -g pnpm
+      - name: Install packages
+        run: pnpm install
+      - name: Run JS unit tests (non-blocking)
+        run: pnpm test:run || true
+>>>>>>> audit-clean

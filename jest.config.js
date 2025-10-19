@@ -28,8 +28,12 @@ const customJestConfig = {
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
     '<rootDir>/e2e/',
+<<<<<<< HEAD
     '<rootDir>/src/**/*.test.ts',
     '<rootDir>/src/**/*.test.tsx',
+=======
+    '<rootDir>/src/.*\\.test\\.(ts|tsx)$',
+>>>>>>> audit-clean
   ],
 };
 

@@ -123,7 +123,11 @@ const mockApplications: ProjectApplication[] = [
     landRecordId: 'LAND001',
     projectName: 'Residential Solar Installation - Ward 3',
     description:
+<<<<<<< HEAD
       '5kW rooftop solar installation for residential cluster covering 15 households in Ward 3, Urgam Valley',
+=======
+      '50kW rooftop solar installation for residential cluster covering 15 households in Ward 3, Urgam Valley',
+>>>>>>> audit-clean
     capacity: 5,
     estimatedCost: 350000,
     estimatedDuration: 2,

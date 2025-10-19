@@ -1,3 +1,30 @@
+<<<<<<< HEAD
+=======
+// Define wallet provider mocks as globals before importing the service
+class Plug {
+  async connect() {
+    return true;
+  }
+  async getPrincipal() {
+    return 'mock-principal';
+  }
+  async requestBalance() {
+    return { owp: 42, pendingRewards: 1, stakedAmount: 2, fiatValue: 100, transactions: [] };
+  }
+}
+class Stoic extends Plug {}
+class NFID extends Plug {}
+class Bitfinity extends Plug {}
+// @ts-ignore
+globalThis.Plug = Plug;
+// @ts-ignore
+globalThis.Stoic = Stoic;
+// @ts-ignore
+globalThis.NFID = NFID;
+// @ts-ignore
+globalThis.Bitfinity = Bitfinity;
+
+>>>>>>> audit-clean
 import { beforeEach, describe, expect, it } from 'vitest';
 import { MultiChainWalletService } from '../multiChainWallet';
 

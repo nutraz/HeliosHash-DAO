@@ -3,6 +3,7 @@ import Time "mo:base/Time";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Nat "mo:base/Nat";
+<<<<<<< HEAD
 import Float "mo:base/Float";
 import Debug "mo:base/Debug";
 
@@ -16,6 +17,15 @@ import Float "mo:base/Float";
 import Iter "mo:base/Iter";
 import Array "mo:base/Array";
 import Result "mo:base/Result";
+=======
+import Int "mo:base/Int";
+import Float "mo:base/Float";
+import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
+import Nat32 "mo:base/Nat32";
+import Iter "mo:base/Iter";
+import Array "mo:base/Array";
+>>>>>>> audit-clean
 
 persistent actor Telemetry {
 

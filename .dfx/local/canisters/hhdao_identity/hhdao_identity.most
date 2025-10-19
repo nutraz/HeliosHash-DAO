@@ -1,0 +1,55 @@
+// Version: 1.0.0
+type AuthSession__204672817 =
+  {
+    createdAt : Int;
+    expiresAt : Int;
+    isActive : Bool;
+    lastActivity : Int;
+    principal : Principal;
+    sessionId : Text
+  };
+type Role__1028166337 = {#Authority; #Community; #DAO; #Investor; #Partner};
+type UserProfile__3748973 =
+  {
+    aadhaarVerified : Bool;
+    avatar : ?Text;
+    bio : ?Text;
+    createdAt : Int;
+    displayName : ?Text;
+    email : ?Text;
+    isVerified : Bool;
+    location : ?Text;
+    owpBalance : Nat;
+    prefersDuoValidation : Bool;
+    principal : Principal;
+    role : Role__1028166337;
+    secondaryRoles : [Role__1028166337];
+    updatedAt : Int;
+    username : ?Text;
+    verificationLevel : VerificationLevel__574187504;
+    website : ?Text
+  };
+type VerificationLevel__574187504 = {#Basic; #Email; #Enhanced; #KYC};
+type VerificationRequest__659694798 =
+  {
+    documentHash : ?Text;
+    id : Nat;
+    notes : ?Text;
+    principal : Principal;
+    processedAt : ?Int;
+    requestedAt : Int;
+    status : VerificationStatus__809070309;
+    verificationType : VerificationLevel__574187504
+  };
+type VerificationStatus__809070309 =
+  {#Approved; #InReview; #Pending; #Rejected};
+actor {
+  stable var emailEntries : [(Text, Principal)];
+  stable ii_canister : Principal;
+  stable var profileEntries : [(Principal, UserProfile__3748973)];
+  stable var sessionEntries : [(Text, AuthSession__204672817)];
+  stable var treasuryCanister : ?Principal;
+  stable var usernameEntries : [(Text, Principal)];
+  stable var verificationCounter : Nat;
+  stable var verificationEntries : [(Nat, VerificationRequest__659694798)]
+};

@@ -4,11 +4,31 @@
 // Author: HeliosHash Core Team
 // License: Apache 2.0
 
+<<<<<<< HEAD
 
 
 
 
 actor GenderIncentives {
+=======
+import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
+import Option "mo:base/Option";
+import Order "mo:base/Order";
+import Float "mo:base/Float";
+import Char "mo:base/Char";
+import Buffer "mo:base/Buffer";
+
+persistent actor GenderIncentives {
+>>>>>>> audit-clean
     
     // ==================== TYPE DEFINITIONS ====================
     
@@ -99,6 +119,7 @@ actor GenderIncentives {
     
     // ==================== STATE VARIABLES ====================
     
+<<<<<<< HEAD
     private stable var memberEntries : [(Principal, Member)] = [];
     private var members = HashMap.HashMap<Principal, Member>(10, Principal.equal, Principal.hash);
     
@@ -110,6 +131,19 @@ actor GenderIncentives {
     
     // NFT Badge templates
     private let nftBadgeTemplates : [NFTBadge] = [
+=======
+    stable var memberEntries : [(Principal, Member)] = [];
+    transient var members = HashMap.HashMap<Principal, Member>(10, Principal.equal, Principal.hash);
+    
+    stable var grantPoolBalance : Nat = 8_000_000; // $8K in micro-units
+    stable var bonusMultiplier : Float = 0.20; // 20% bonus
+    
+    stable var nextGrantId : Nat = 1;
+    stable var nextJobId : Nat = 1;
+    
+    // NFT Badge templates
+    transient let nftBadgeTemplates : [NFTBadge] = [
+>>>>>>> audit-clean
         {
             badgeId = "solar_sister_001";
             name = "Solar Sister";
@@ -532,6 +566,7 @@ actor GenderIncentives {
                     case (_) { nftBadgeTemplates[0] };
                 };
                 
+<<<<<<< HEAD
                 let badgeId = badgeTemplate.badgeId # "_" # Principal.toText(recipient);
                 
                 // Check if already has this badge
@@ -539,6 +574,33 @@ actor GenderIncentives {
                     member.nftBadges,
                     func(b: Text) : Bool { 
                         Text.contains(b, badgeTemplate.badgeId)
+=======
+                let prefix = badgeTemplate.badgeId # "_";
+                let badgeId = prefix # Principal.toText(recipient);
+
+                // Check if already has this badge
+                let hasBadge = Array.find<Text>(
+                    member.nftBadges,
+                    func(b: Text) : Bool {
+                        let bSize = Text.size(b);
+                        let prefixSize = Text.size(prefix);
+                        if (bSize < prefixSize) {
+                            false
+                        } else {
+                            // Compare character by character for prefix match
+                            let bChars = Iter.toArray(Text.toIter(b));
+                            let prefixChars = Iter.toArray(Text.toIter(prefix));
+                            var matches = true;
+                            var i = 0;
+                            while (i < prefixSize and matches) {
+                                if (bChars[i] != prefixChars[i]) {
+                                    matches := false;
+                                };
+                                i := i + 1;
+                            };
+                            matches
+                        }
+>>>>>>> audit-clean
                     }
                 );
                 

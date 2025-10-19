@@ -10,6 +10,12 @@ describe('TreasuryIntegrationService', () => {
   beforeEach(() => {
     treasuryService = new TreasuryIntegrationService();
     testPrincipal = Principal.fromText('aaaaa-aa');
+<<<<<<< HEAD
+=======
+    // Reset treasury mock overrides before each test
+    // @ts-ignore
+    globalThis.__treasuryMockOverrides = undefined;
+>>>>>>> audit-clean
   });
 
   describe('getBalance', () => {
@@ -21,16 +27,41 @@ describe('TreasuryIntegrationService', () => {
     });
 
     it('should handle errors gracefully', async () => {
+<<<<<<< HEAD
       // TODO: Mock treasury actor to throw error
+=======
+      // Mock treasury actor to throw error
+      // @ts-ignore
+      globalThis.__treasuryMockOverrides = {
+        balanceOf: async () => {
+          throw new Error('Test error');
+        },
+      };
+>>>>>>> audit-clean
       await expect(treasuryService.getBalance(testPrincipal)).rejects.toThrow(WalletError);
     });
 
     it('should retry on failure', async () => {
       let attempts = 0;
+<<<<<<< HEAD
       // TODO: Mock treasury actor to fail twice then succeed
       const balance = await treasuryService.getBalance(testPrincipal);
       expect(attempts).toBeGreaterThan(1);
       expect(balance).toBeDefined();
+=======
+      // Mock treasury actor to fail twice then succeed
+      // @ts-ignore
+      globalThis.__treasuryMockOverrides = {
+        balanceOf: async () => {
+          attempts++;
+          if (attempts < 3) throw new Error('Test error');
+          return BigInt(123);
+        },
+      };
+      const balance = await treasuryService.getBalance(testPrincipal);
+      expect(attempts).toBeGreaterThan(1);
+      expect(balance).toBe(BigInt(123));
+>>>>>>> audit-clean
     });
   });
 
@@ -42,6 +73,10 @@ describe('TreasuryIntegrationService', () => {
     });
 
     it('should handle pagination correctly', async () => {
+<<<<<<< HEAD
+=======
+      // No override needed: the default mock returns different arrays for different offsets
+>>>>>>> audit-clean
       const page1 = await treasuryService.getTransactions(testPrincipal, 5, 0);
       const page2 = await treasuryService.getTransactions(testPrincipal, 5, 5);
       expect(page1).not.toEqual(page2);

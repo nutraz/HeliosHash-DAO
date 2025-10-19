@@ -6,7 +6,11 @@ MOC="$(dfx cache show)/moc"
 
 
 # Set paths
+<<<<<<< HEAD
 CANISTER_DIR="../hhdao"
+=======
+CANISTER_DIR="canisters/hhdao"
+>>>>>>> audit-clean
 TEST_DIR="$CANISTER_DIR/test"
 SRC_DIR="$CANISTER_DIR/src"
 WASM_DIR="wasm"
@@ -18,8 +22,11 @@ mkdir -p $WASM_DIR
 echo "Compiling test canister..."
 $MOC -o $WASM_DIR/hhdao-test.wasm \
   --package base "$(dfx cache show)/base" \
+<<<<<<< HEAD
   $SRC_DIR/lib.mo \
   $TEST_DIR/test-utils.mo \
+=======
+>>>>>>> audit-clean
   $TEST_DIR/hhdao.test.mo
 
 if [ $? -ne 0 ]; then
@@ -28,7 +35,12 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Running tests..."
+<<<<<<< HEAD
 node test-runner.js $WASM_DIR/hhdao-test.wasm
+=======
+SCRIPT_DIR="$(dirname "$0")"
+node "$SCRIPT_DIR/test-runner.js" $WASM_DIR/hhdao-test.wasm
+>>>>>>> audit-clean
 
 # Check exit code
 if [ $? -ne 0 ]; then

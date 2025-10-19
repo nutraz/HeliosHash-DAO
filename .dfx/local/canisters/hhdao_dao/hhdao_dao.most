@@ -1,0 +1,94 @@
+// Version: 1.0.0
+type ContributionType__1052874073 =
+  {
+    #CommunityCare;
+    #DisputeResolution;
+    #Mentorship;
+    #Other : Text;
+    #PanelMaintenance;
+    #Teaching
+  };
+type DisputeEvidence__52000111 =
+  {
+    description : Text;
+    evidenceHash : Text;
+    submitter : Principal;
+    timestamp : Time__853362862
+  };
+type DisputeStatus__46437271 =
+  {#Appealed; #InArbitration; #Pending; #Resolved};
+type Dispute__818322923 =
+  {
+    appealDeadline : ?Time__853362862;
+    challenger : Principal;
+    createdAt : Time__853362862;
+    evidence : [DisputeEvidence__52000111];
+    id : Nat;
+    jurors : [Principal];
+    proposalId : ProposalId__37183637;
+    reason : Text;
+    resolvedAt : ?Time__853362862;
+    ruling : ?{reasoning : Text; winner : Principal};
+    status : DisputeStatus__46437271
+  };
+type GenderIdentity__792712027 =
+  {#Female; #Male; #NonBinary; #PreferNotToSay};
+type JurorApplication__929268169 =
+  {
+    appliedAt : Time__853362862;
+    approved : Bool;
+    experience : Text;
+    juror : Principal;
+    stake : Nat
+  };
+type MemberId__400315714 = Principal;
+type Member__66120613 =
+  {
+    contributionScore : Nat;
+    gender : ?GenderIdentity__792712027;
+    id : MemberId__400315714;
+    isVerified : Bool;
+    joinedAt : Time__853362862;
+    mentorshipStatus : ?{isMentor : Bool; specialization : Text}
+  };
+type ProposalId__37183637 = Nat;
+type ProposalStatus__211910594 = {#Active; #Expired; #Passed; #Rejected};
+type Proposal__520171771 =
+  {
+    approved : Bool;
+    category : ContributionType__1052874073;
+    createdAt : Time__853362862;
+    description : Text;
+    finalized : Bool;
+    id : ProposalId__37183637;
+    location : ?{address : Text; latitude : Float; longitude : Float};
+    proposer : MemberId__400315714;
+    status : ProposalStatus__211910594;
+    title : Text;
+    votesAgainst : Nat;
+    votesFor : Nat;
+    votingDeadline : Time__853362862
+  };
+type Time__853362862 = Int;
+type Vote__229050909 =
+  {
+    approve : Bool;
+    proposalId : ProposalId__37183637;
+    voter : MemberId__400315714
+  };
+actor {
+  stable var approvedJurors : [Principal];
+  stable var consensusBps : Nat;
+  stable var disputeFee : Nat;
+  stable var disputes : [Dispute__818322923];
+  stable var isTestMode : Bool;
+  stable var jurorApplications : [JurorApplication__929268169];
+  stable var members : [Member__66120613];
+  stable var nextDisputeId : Nat;
+  stable var nextProposalId : Nat;
+  stable var proposals : [Proposal__520171771];
+  stable var schemaVersion : Nat;
+  stable var votes : [Vote__229050909];
+  stable var votingWindowNs : Int;
+  stable var womenQuotaBps : Nat
+};

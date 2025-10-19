@@ -1,4 +1,5 @@
 /**
+<<<<<<< HEAD
  * Urgam Valley Pilot System
  *
  * Comprehensive pilot deployment system for solar installations in Urgam Valley
@@ -57,11 +58,21 @@ export interface PilotSite {
   };
 }
 
+=======
+ * Urgam Valley Pilot Operations Service
+ *
+ * Manages remote solar deployment operations in Urgam Valley,
+ * including field team coordination, mobile data collection,
+ * and pilot readiness assessment.
+ */
+
+>>>>>>> audit-clean
 export interface FieldTeam {
   teamId: string;
   leadEngineer: string;
   members: string[];
   specialization: string[];
+<<<<<<< HEAD
   currentLocation?: UrgamValleyLocation;
   equipment: string[];
   status: 'available' | 'deployed' | 'returning' | 'maintenance';
@@ -109,10 +120,45 @@ export interface PilotReadinessReport {
   }[];
   recommendations: string[];
   nextSteps: {
+=======
+  currentLocation?: {
+    id: string;
+    name: string;
+    coordinates: { latitude: number; longitude: number };
+    distanceFromBase: number;
+    altitude: number;
+    accessibility: string;
+  };
+  equipment: string[];
+  status: 'available' | 'deployed' | 'maintenance';
+  deploymentHistory: Array<{
+    siteId: string;
+    deployDate: Date;
+    returnDate: Date;
+    objectives: string[];
+    outcomes: string[];
+  }>;
+}
+
+export interface PilotReadinessReport {
+  overallReadiness: number;
+  sitesAssessed: number;
+  sitesReady: number;
+  totalCapacity: number;
+  estimatedCost: number;
+  risks: Array<{
+    category: string;
+    level: 'low' | 'medium' | 'high' | 'critical';
+    description: string;
+    mitigation: string;
+  }>;
+  nextSteps: Array<{
+>>>>>>> audit-clean
     action: string;
     responsible: string;
     deadline: Date;
     dependencies: string[];
+<<<<<<< HEAD
   }[];
 }
 
@@ -212,10 +258,34 @@ export class UrgamValleyPilotService {
         constructionPhase: 'not_started',
         commissioningPhase: 'not_started',
       },
+=======
+  }>;
+  criticalPath: string[];
+}
+
+class UrgamValleyPilotService {
+  private static readonly PILOT_SITES = [
+    {
+      id: 'UV-001',
+      name: 'Urgam Village Center',
+      capacity: 5.2,
+      altitude: 2100,
+      distance: 668,
+      readiness: 95,
+    },
+    {
+      id: 'UV-002',
+      name: 'Valley Upper Slopes',
+      capacity: 8.9,
+      altitude: 2350,
+      distance: 672,
+      readiness: 87,
+>>>>>>> audit-clean
     },
   ];
 
   static async generatePilotReadinessReport(): Promise<PilotReadinessReport> {
+<<<<<<< HEAD
     const sites = this.SAMPLE_SITES;
     const readySites = sites.filter(
       (site) =>
@@ -430,6 +500,87 @@ export class UrgamValleyPilotService {
         Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
+=======
+    return {
+      overallReadiness: 91,
+      sitesAssessed: 2,
+      sitesReady: 1,
+      totalCapacity: 14.1,
+      estimatedCost: 85.2,
+      risks: [
+        {
+          category: 'Logistics',
+          level: 'medium',
+          description: 'Remote location requires specialized transport coordination',
+          mitigation: 'Pre-position equipment and establish supply chain',
+        },
+        {
+          category: 'Weather',
+          level: 'high',
+          description: 'Heavy monsoon season impacts construction timeline',
+          mitigation: 'Schedule construction during optimal weather windows',
+        },
+        {
+          category: 'Connectivity',
+          level: 'medium',
+          description: 'Limited mobile network coverage in valley',
+          mitigation: 'Implement satellite communication backup',
+        },
+      ],
+      nextSteps: [
+        {
+          action: 'Complete forest clearance for UV-002',
+          responsible: 'Regulatory Team',
+          deadline: new Date('2024-02-15'),
+          dependencies: ['State forest department approval'],
+        },
+        {
+          action: 'Deploy field team for detailed assessment',
+          responsible: 'Operations Team',
+          deadline: new Date('2024-02-01'),
+          dependencies: ['Equipment readiness', 'Weather conditions'],
+        },
+        {
+          action: 'Establish base camp facilities',
+          responsible: 'Logistics Team',
+          deadline: new Date('2024-01-30'),
+          dependencies: ['Site access approval'],
+        },
+      ],
+      criticalPath: [
+        'Forest clearance approval',
+        'Detailed site survey completion',
+        'Community consent finalization',
+        'Equipment transport coordination',
+        'Construction crew mobilization',
+        'Weather window alignment',
+      ],
+    };
+  }
+
+  static async generateMobileSyncReport() {
+    return {
+      connectivityStatus: 'Limited',
+      pendingUploads: 23,
+      offlineData: 156,
+      lastSync: new Date('2024-01-20T10:30:00Z'),
+    };
+  }
+
+  static async deployFieldTeam(teamId: string, siteId: string) {
+    return {
+      deploymentId: `DEP-${Date.now()}`,
+      teamId,
+      siteId,
+      deployTime: new Date(),
+      estimatedDuration: 72, // hours
+      objectives: ['Site assessment', 'Equipment installation', 'Data collection'],
+    };
+  }
+
+  static async generateQRCode(siteId: string, surveyId: string) {
+    return `QR-${siteId}-${surveyId}-${Date.now()}`;
+>>>>>>> audit-clean
   }
 }
 

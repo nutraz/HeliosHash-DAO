@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -61,44 +62,92 @@ export default defineConfig({
   },
 
   /* Configure projects for major browsers */
+=======
+// playwright.config.ts
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: 'e2e',
+  testMatch: /.*\.(spec|e2e)\.(ts|tsx|js)/,
+  testIgnore: [
+    '**/node_modules/**',
+    '**/node_modules.bak/**',
+    'src/**',
+    'tests/**',
+    'dist/**',
+    '.dfx/**',
+  ],
+  use: {
+    baseURL: 'http://localhost:3001',
+    trace: 'on-first-retry',
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
+  },
+
+  webServer: {
+    command: 'pnpm dev:e2e',
+    port: 3001,
+    reuseExistingServer: true,
+  },
+
+>>>>>>> audit-clean
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> audit-clean
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> audit-clean
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+<<<<<<< HEAD
 
     /* Test against mobile viewports. */
+=======
+>>>>>>> audit-clean
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> audit-clean
     {
       name: 'mobile-safari',
       use: { ...devices['iPhone 12'] },
     },
+<<<<<<< HEAD
 
     /* Tablet testing */
+=======
+>>>>>>> audit-clean
     {
       name: 'tablet-chrome',
       use: { ...devices['iPad Pro'] },
     },
+<<<<<<< HEAD
 
     /* Smoke tests - Critical path tests */
+=======
+>>>>>>> audit-clean
     {
       name: 'smoke',
       testMatch: /.*\.spec\.ts/,
       grep: /@smoke/,
+<<<<<<< HEAD
       use: {
         ...devices['Desktop Chrome'],
       },
@@ -135,6 +184,9 @@ export default defineConfig({
     },
 
     /* Security testing project */
+=======
+    },
+>>>>>>> audit-clean
     {
       name: 'security',
       testMatch: /.*\.spec\.ts/,
@@ -146,6 +198,7 @@ export default defineConfig({
           'X-Security-Test-Mode': 'enabled',
         },
       },
+<<<<<<< HEAD
       timeout: 90000,
     },
   ],
@@ -162,6 +215,13 @@ export default defineConfig({
   outputDir: 'test-results/',
 
   /* Metadata for test runs */
+=======
+      timeout: 90_000,
+    },
+  ],
+
+  outputDir: 'test-results/',
+>>>>>>> audit-clean
   metadata: {
     project: 'HeliosHash DAO',
     version: process.env.npm_package_version || '1.0.0',
@@ -169,3 +229,7 @@ export default defineConfig({
     buildId: process.env.BUILD_ID || 'local',
   },
 });
+<<<<<<< HEAD
+=======
+
+>>>>>>> audit-clean

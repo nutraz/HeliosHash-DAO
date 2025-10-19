@@ -2,7 +2,22 @@
 // Enforces ≥ consensusBps community approval for proposals (default 66%)
 // Supports non-financial contributions (mentorship, care, teaching)
 
+<<<<<<< HEAD
 
+=======
+import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
+import Option "mo:base/Option";
+import Buffer "mo:base/Buffer";
+import Error "mo:base/Error";
+>>>>>>> audit-clean
 
 persistent actor DAO {
   // === Versioning & Governance Parameters ===

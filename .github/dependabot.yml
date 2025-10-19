@@ -2,6 +2,7 @@ version: 2
 updates:
   - package-ecosystem: 'npm'
     directory: '/'
+<<<<<<< HEAD
     schedule:
       interval: 'daily'
     open-pull-requests-limit: 5
@@ -27,3 +28,9 @@ updates:
     labels:
       - 'dependencies'
       - 'ci'
+=======
+    schedule: { interval: 'weekly' }
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule: { interval: 'weekly' }
+>>>>>>> audit-clean

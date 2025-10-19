@@ -1,9 +1,14 @@
 // Pure ledger logic module for OWP token
 // Decimals: 8
 // Minimal module used by treasury canister
-// Added missing base library imports for Time, Principal, Result, Iter, Array, HashMap
 
-
+import Time "mo:base/Time";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Iter "mo:base/Iter";
+import Array "mo:base/Array";
+import HashMap "mo:base/HashMap";
+import Nat "mo:base/Nat";
 
 module {
   public type TxId = Nat;

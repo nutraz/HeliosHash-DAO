@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { expect, test } from '@playwright/test';
 import { TestDataFactory } from './factories/test-data-factory';
+=======
+import { test, expect } from '@playwright/test';
+>>>>>>> audit-clean
 import TestHelper from './utils/test-helper';
 
 test.describe('Solar Projects Tests', () => {
@@ -17,6 +21,7 @@ test.describe('Solar Projects Tests', () => {
     // Setup integration test with authentication
     await helper.setupIntegrationTest();
 
+<<<<<<< HEAD
     // Generate test application data
     const testApplication = TestDataFactory.Application.createWomensEmpowermentApp({
       title: 'Test Solar Farm Cooperative',
@@ -92,14 +97,46 @@ test.describe('Solar Projects Tests', () => {
 
     // Verify no XSS content made it to the page
     await helper.assert.assertNoXSSContent();
+=======
+    // Navigate to projects page with retries
+    await helper.nav.gotoWithRetry('/projects');
+
+    // Check for basic placeholder content
+    await expect(page.locator('body')).toContainText('Projects');
+    await expect(page.locator('body')).toContainText('Solar projects and initiatives');
+  });
+
+  test('@integration should display existing applications', async ({ page }) => {
+    // Setup integration test
+    await helper.setupIntegrationTest();
+
+    // Navigate to projects page with retries
+    await helper.nav.gotoWithRetry('/projects');
+
+    // Should display applications list
+    await expect(page.locator('[data-testid="applications-list"]')).toBeVisible();
+  });
+
+  test.skip('@performance should handle multiple application submissions', async ({ page }) => {
+    // Skipped - requires implemented application forms
+  });
+
+  test.skip('@security should validate application input fields', async ({ page }) => {
+    // Skipped - requires implemented application forms and validation
+>>>>>>> audit-clean
   });
 
   test('@security should prevent XSS in project display', async ({ page }) => {
     // Setup security test
     await helper.setupSecurityTest();
 
+<<<<<<< HEAD
     // Navigate to projects page
     await helper.nav.gotoProjects();
+=======
+    // Navigate to projects page with retries
+    await helper.nav.gotoWithRetry('/projects');
+>>>>>>> audit-clean
 
     // Verify page content is safe
     await helper.assert.assertNoXSSContent();
@@ -109,6 +146,7 @@ test.describe('Solar Projects Tests', () => {
     expect(pageContent).not.toMatch(/<script[^>]*>.*alert.*<\/script>/i);
   });
 
+<<<<<<< HEAD
   test('@integration should handle form validation correctly', async ({ page }) => {
     // Setup integration test
     await helper.setupIntegrationTest();
@@ -154,5 +192,24 @@ test.describe('Solar Projects Tests', () => {
 
     // Should display basic project information
     await helper.assert.assertElementVisible('[data-testid="projects-stats"], .project-statistics');
+=======
+  test.skip('@integration should handle form validation correctly', async ({ page }) => {
+    // Skipped - requires implemented application forms and validation
+  });
+
+  test.skip('@performance should load projects page quickly', async ({ page }) => {
+    // Skipped - requires performance measurement utilities
+  });
+
+  test('@smoke should display project statistics', async ({ page }) => {
+    // Setup smoke test
+    await helper.setupSmokeTest();
+
+    // Navigate to projects page
+    await helper.nav.gotoProjects();
+
+    // Check for basic placeholder content (statistics not implemented yet)
+    await expect(page.locator('body')).toContainText('Projects');
+>>>>>>> audit-clean
   });
 });

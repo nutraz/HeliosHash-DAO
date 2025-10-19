@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+<<<<<<< HEAD
 import { useAuth } from '@/hooks/useAuthContext';
 import { CURRENCIES, JOB_CATEGORIES, JobPosting } from '@/types/jobs';
 import {
@@ -24,6 +25,27 @@ import {
   Star,
   Users,
   XCircle,
+=======
+import { useAuthContext } from '@/hooks/useAuthContext';
+import { CURRENCIES, JOB_CATEGORIES, JobPosting } from '@/types/jobs';
+import {
+    AlertCircle,
+    ArrowLeft,
+    Bookmark,
+    Briefcase,
+    Building,
+    Calendar,
+    CheckCircle,
+    Clock,
+    DollarSign,
+    Globe,
+    MapPin,
+    Send,
+    Share2,
+    Star,
+    Users,
+    XCircle,
+>>>>>>> audit-clean
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -35,7 +57,11 @@ interface JobDetailsProps {
 }
 
 export default function JobDetails({ job, onBack, onApply, className }: JobDetailsProps) {
+<<<<<<< HEAD
   const { user, isAuthenticated } = useAuth();
+=======
+  const { user } = useAuthContext();
+>>>>>>> audit-clean
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   const category = JOB_CATEGORIES.find((cat) => cat.value === job.category);
@@ -92,13 +118,21 @@ export default function JobDetails({ job, onBack, onApply, className }: JobDetai
   };
 
   const canApply = () => {
+<<<<<<< HEAD
     if (!isAuthenticated) return false;
+=======
+    if (!user) return false;
+>>>>>>> audit-clean
     if (!job.deadline) return job.status === 'Active';
     return job.status === 'Active' && Date.now() < job.deadline;
   };
 
   const hasUserApplied = () => {
+<<<<<<< HEAD
     return user && job.applicants.includes(user.id);
+=======
+    return user && job.applicants.includes(user.principal ?? '');
+>>>>>>> audit-clean
   };
 
   return (
@@ -315,7 +349,11 @@ export default function JobDetails({ job, onBack, onApply, className }: JobDetai
           {/* Application Status */}
           <Card>
             <CardContent className='p-6'>
+<<<<<<< HEAD
               {!isAuthenticated ? (
+=======
+              {!user ? (
+>>>>>>> audit-clean
                 <div className='text-center'>
                   <p className='text-sm text-muted-foreground mb-4'>
                     Please sign in to apply for this position

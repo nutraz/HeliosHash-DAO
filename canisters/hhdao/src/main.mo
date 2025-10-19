@@ -496,4 +496,287 @@ persistent actor class HHDAO(
 	};
 
 	public query func getCyclesBalance() : async Nat { Cycles.balance() };
+<<<<<<< HEAD
+=======
+
+	// Seed data method for development and testing
+	public shared ({ caller }) func seed_data() : async Text {
+		var summary = "=== Seeding HHDAO with sample data ===\n\n";
+
+		// 1. Create Sample Projects
+		summary #= "📊 Creating sample projects...\n";
+		let project1 = state.createProject(
+			"Urgam Valley Solar Farm",
+			"Urgam Valley, Gujarat, India",
+			500, // 500 kW capacity
+			"Community-owned solar farm providing clean energy to 200+ households in Urgam Valley",
+			2500000, // 25 lakh rupees
+			?(Time.now() + (180 * 24 * 60 * 60 * 1000000000)), // 180 days from now
+			caller
+		);
+		summary #= "  ✓ Project #" # Nat.toText(project1.id) # ": " # project1.name # "\n";
+
+		let project2 = state.createProject(
+			"Dharampur Rooftop Solar Initiative",
+			"Dharampur, Gujarat, India",
+			250, // 250 kW capacity
+			"Distributed rooftop solar installation across 50 homes and small businesses",
+			1200000, // 12 lakh rupees
+			?(Time.now() + (120 * 24 * 60 * 60 * 1000000000)), // 120 days from now
+			caller
+		);
+		summary #= "  ✓ Project #" # Nat.toText(project2.id) # ": " # project2.name # "\n";
+
+		let project3 = state.createProject(
+			"Valsad Agricultural Solar Pumps",
+			"Valsad District, Gujarat, India",
+			100, // 100 kW capacity
+			"Solar-powered irrigation pumps for 30 farming families",
+			800000, // 8 lakh rupees
+			?(Time.now() + (90 * 24 * 60 * 60 * 1000000000)), // 90 days from now
+			caller
+		);
+		summary #= "  ✓ Project #" # Nat.toText(project3.id) # ": " # project3.name # "\n";
+
+		// 2. Create Sample Proposals
+		summary #= "\n📋 Creating sample proposals...\n";
+		let proposal1 = state.createProposal({
+			title = "Approve Urgam Valley Solar Farm";
+			description = "Proposal to approve the construction of a 500kW solar farm in Urgam Valley with community ownership model";
+			votesRequired = 100;
+			category = #Project;
+		});
+		summary #= "  ✓ Proposal #" # Nat.toText(proposal1) # ": Urgam Valley Solar Farm\n";
+
+		let proposal2 = state.createProposal({
+			title = "Update DAO Governance Rules";
+			description = "Proposal to reduce voting period from 7 days to 5 days for faster decision making";
+			votesRequired = 150;
+			category = #Governance;
+		});
+		summary #= "  ✓ Proposal #" # Nat.toText(proposal2) # ": Governance Rules Update\n";
+
+		let proposal3 = state.createProposal({
+			title = "Allocate Treasury Funds for Training";
+			description = "Proposal to allocate 500,000 rupees for solar technician training program";
+			votesRequired = 120;
+			category = #Treasury;
+		});
+		summary #= "  ✓ Proposal #" # Nat.toText(proposal3) # ": Treasury Allocation\n";
+
+		// Add some votes to proposals
+		ignore state.vote(proposal1, true);
+		ignore state.vote(proposal1, true);
+		ignore state.vote(proposal2, true);
+		ignore state.vote(proposal2, false);
+
+		// 3. Mint Sample NFTs
+		summary #= "\n🎫 Minting sample membership NFTs...\n";
+		let nft1 = state.mintMembershipNFT({
+			recipient = caller;
+			tier = #Community;
+			durationDays = 365;
+		});
+		switch (nft1) {
+			case (#ok(tokenId)) {
+				summary #= "  ✓ NFT #" # Nat.toText(tokenId) # ": Community Tier (365 days)\n";
+			};
+			case (#err(e)) {
+				summary #= "  ✗ Failed to mint Community NFT: " # e # "\n";
+			};
+		};
+
+		let nft2 = state.mintMembershipNFT({
+			recipient = caller;
+			tier = #Supporter;
+			durationDays = 180;
+		});
+		switch (nft2) {
+			case (#ok(tokenId)) {
+				summary #= "  ✓ NFT #" # Nat.toText(tokenId) # ": Supporter Tier (180 days)\n";
+			};
+			case (#err(e)) {
+				summary #= "  ✗ Failed to mint Supporter NFT: " # e # "\n";
+			};
+		};
+
+		let nft3 = state.mintMembershipNFT({
+			recipient = caller;
+			tier = #Investor;
+			durationDays = 730;
+		});
+		switch (nft3) {
+			case (#ok(tokenId)) {
+				summary #= "  ✓ NFT #" # Nat.toText(tokenId) # ": Investor Tier (730 days)\n";
+			};
+			case (#err(e)) {
+				summary #= "  ✗ Failed to mint Investor NFT: " # e # "\n";
+			};
+		};
+
+		// 4. Create Sample Applications
+		summary #= "\n📝 Creating sample applications...\n";
+		let app1 = state.submitApplication(
+			#LandPartner,
+			"5 Acre Land Partnership - Urgam Valley",
+			"Offering 5 acres of agricultural land for solar farm development with 25-year lease agreement",
+			{
+				landSize = ?5;
+				landLocation = ?"Urgam Valley, Gujarat - GPS: 20.5937° N, 73.0076° E";
+				currentLandUse = ?"Agricultural - currently fallow";
+				electricityAccess = ?true;
+				technicalSkills = null;
+				experience = null;
+				availability = null;
+				specialization = null;
+				preferredRoles = null;
+				workingHours = null;
+				localKnowledge = null;
+				investmentCapacity = null;
+				investmentHorizon = null;
+				riskTolerance = null;
+				contactPhone = ?"+91-9876543210";
+				contactEmail = ?"landowner@example.com";
+				aadhaarNumber = ?"1234-5678-9012";
+				bankAccount = ?"HDFC-123456789";
+				references = ?["Village Sarpanch", "Local Cooperative"];
+			},
+			#High,
+			?project1.id,
+			caller
+		);
+		summary #= "  ✓ Application #" # Nat.toText(app1) # ": Land Partnership\n";
+
+		let app2 = state.submitApplication(
+			#TechCollaborator,
+			"Solar Engineer - System Design & Installation",
+			"Experienced solar engineer with 5 years in renewable energy sector, specializing in grid-tied systems",
+			{
+				landSize = null;
+				landLocation = null;
+				currentLandUse = null;
+				electricityAccess = null;
+				technicalSkills = ?["Solar PV Design", "Grid Integration", "SCADA Systems", "AutoCAD"];
+				experience = ?5;
+				availability = ?"Full-time";
+				specialization = ?"Solar photovoltaic systems and grid integration";
+				preferredRoles = null;
+				workingHours = null;
+				localKnowledge = null;
+				investmentCapacity = null;
+				investmentHorizon = null;
+				riskTolerance = null;
+				contactPhone = ?"+91-9876543211";
+				contactEmail = ?"engineer@example.com";
+				aadhaarNumber = ?"2345-6789-0123";
+				bankAccount = ?"SBI-987654321";
+				references = ?["Previous Employer - Solar Corp", "IIT Professor"];
+			},
+			#High,
+			null,
+			caller
+		);
+		summary #= "  ✓ Application #" # Nat.toText(app2) # ": Tech Collaborator\n";
+
+		let app3 = state.submitApplication(
+			#CommunityContributor,
+			"Solar Panel Maintenance - Local Resident",
+			"Local resident interested in panel cleaning and basic maintenance work",
+			{
+				landSize = null;
+				landLocation = null;
+				currentLandUse = null;
+				electricityAccess = null;
+				technicalSkills = null;
+				experience = null;
+				availability = null;
+				specialization = null;
+				preferredRoles = ?["Panel Cleaning", "Site Monitoring", "Basic Maintenance"];
+				workingHours = ?"4 hours daily, flexible timing";
+				localKnowledge = ?"Born and raised in Urgam Valley, fluent in Gujarati and Hindi";
+				investmentCapacity = null;
+				investmentHorizon = null;
+				riskTolerance = null;
+				contactPhone = ?"+91-9876543212";
+				contactEmail = ?"resident@example.com";
+				aadhaarNumber = ?"3456-7890-1234";
+				bankAccount = ?"BOI-456789123";
+				references = ?["Village Elder", "Local School Teacher"];
+			},
+			#Medium,
+			?project1.id,
+			caller
+		);
+		summary #= "  ✓ Application #" # Nat.toText(app3) # ": Community Contributor\n";
+
+		let app4 = state.submitApplication(
+			#Investor,
+			"Investment Proposal - 500K INR",
+			"Interested in investing 500,000 rupees in solar projects with 5-year horizon",
+			{
+				landSize = null;
+				landLocation = null;
+				currentLandUse = null;
+				electricityAccess = null;
+				technicalSkills = null;
+				experience = null;
+				availability = null;
+				specialization = null;
+				preferredRoles = null;
+				workingHours = null;
+				localKnowledge = null;
+				investmentCapacity = ?500000;
+				investmentHorizon = ?"Medium-term (5 years)";
+				riskTolerance = ?"Moderate - seeking 8-12% annual returns";
+				contactPhone = ?"+91-9876543213";
+				contactEmail = ?"investor@example.com";
+				aadhaarNumber = ?"4567-8901-2345";
+				bankAccount = ?"ICICI-789123456";
+				references = ?["Financial Advisor", "Business Partner"];
+			},
+			#High,
+			?project2.id,
+			caller
+		);
+		summary #= "  ✓ Application #" # Nat.toText(app4) # ": Investor\n";
+
+		// 5. Create Sample Animal Care Reports
+		summary #= "\n🐕 Creating sample animal care reports...\n";
+		let report1 = state.submitAnimalReport(
+			"Near Urgam Valley Primary School",
+			"Injured stray dog with leg wound, provided first aid and water. Needs veterinary attention.",
+			["photo1_dog_injury.jpg", "photo2_location.jpg"],
+			?3,
+			caller
+		);
+		summary #= "  ✓ Report #" # Nat.toText(report1) # ": Injured stray dog\n";
+
+		let report2 = state.submitAnimalReport(
+			"Village Square, Urgam Valley",
+			"Fed 5 stray dogs and provided water bowls. Regular feeding spot established.",
+			["photo1_feeding.jpg", "photo2_dogs.jpg", "photo3_water_bowls.jpg"],
+			?3,
+			caller
+		);
+		summary #= "  ✓ Report #" # Nat.toText(report2) # ": Community feeding initiative\n";
+
+		// Add votes to animal reports
+		ignore state.voteOnAnimalReport(report1, true);
+		ignore state.voteOnAnimalReport(report1, true);
+		ignore state.voteOnAnimalReport(report2, true);
+		ignore state.voteOnAnimalReport(report2, true);
+		ignore state.voteOnAnimalReport(report2, true); // This should validate it
+
+		summary #= "\n✅ Seed data creation complete!\n";
+		summary #= "\nSummary:\n";
+		summary #= "  • Projects: 3\n";
+		summary #= "  • Proposals: 3\n";
+		summary #= "  • NFTs: 3\n";
+		summary #= "  • Applications: 4\n";
+		summary #= "  • Animal Reports: 2\n";
+		summary #= "\nYou can now test the canister with populated data.\n";
+
+		summary
+	};
+>>>>>>> audit-clean
 }

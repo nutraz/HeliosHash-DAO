@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { FullConfig, chromium } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -118,3 +119,22 @@ async function globalSetup(config: FullConfig) {
 }
 
 export default globalSetup;
+=======
+// e2e/global-setup.ts
+import { exec } from 'child_process';
+import { setupServer } from 'msw/node';
+import { handlers } from './mocks/handlers';
+
+export default async function globalSetup() {
+  // Global setup runs before all tests
+  // Set up any global test state here, e.g., environment variables
+  process.env.PLAYWRIGHT_BASE_URL = 'http://localhost:3004';
+
+  // Start MSW server for API mocking
+  const server = setupServer(...handlers);
+  await server.listen({ onUnhandledRequest: 'bypass' });
+
+  // Store server instance for teardown if needed
+  (global as any).__MSW_SERVER__ = server;
+}
+>>>>>>> audit-clean

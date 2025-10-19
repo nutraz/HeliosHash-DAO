@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * Enhanced Aadhaar KYC Dashboard Component
  * Privacy-preserving identity verification interface
@@ -652,3 +653,13 @@ export const AadhaarKYCDashboard: React.FC<AadhaarKYCDashboardProps> = ({
 };
 
 export default AadhaarKYCDashboard;
+=======
+export default function AadhaarKYCDashboard({ onVerificationComplete }: { onVerificationComplete?: (result: any) => void }) {
+  return (
+    <div>
+      <h2>Aadhaar KYC Dashboard</h2>
+      <p>Aadhaar verification component</p>
+    </div>
+  );
+}
+>>>>>>> audit-clean

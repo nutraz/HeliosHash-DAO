@@ -15,11 +15,21 @@ const nextConfig: NextConfig = {
   // Force all routes to be dynamic to prevent useContext issues during static generation
   experimental: {
     cacheComponents: false,
+<<<<<<< HEAD
+=======
+    optimizeCss: true,
+>>>>>>> audit-clean
   },
 
   // Disable static optimization to prevent prerendering issues
   output: 'standalone',
 
+<<<<<<< HEAD
+=======
+  // Fix workspace root inference for multiple lockfiles
+  outputFileTracingRoot: require('path').join(process.cwd()),
+
+>>>>>>> audit-clean
   // Mobile development configuration
   async rewrites() {
     return [
@@ -82,6 +92,10 @@ const nextConfig: NextConfig = {
     if (dev) {
       // Reduce verbose logging
       config.stats = 'errors-warnings';
+<<<<<<< HEAD
+=======
+      config.resolve.fallback = { ...config.resolve.fallback, 'react-dom/client': false };
+>>>>>>> audit-clean
     }
     return config;
   },

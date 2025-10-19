@@ -1,0 +1,97 @@
+type TxKind = 
+ variant {
+   Burn;
+   Mint;
+   Transfer;
+ };
+type TxId = nat;
+type TransferResult = 
+ variant {
+   Err: TransferError;
+   Ok: nat;
+ };
+type TransferError = 
+ variant {
+   BadBurn: record {min_burn_amount: nat;};
+   BadFee: record {expected_fee: nat;};
+   CreatedInFuture: record {ledger_time: nat;};
+   Duplicate: record {duplicate_of: nat;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientFunds: record {balance: nat;};
+   TemporarilyUnavailable;
+   TooOld: record {allowed_window_nanos: nat;};
+ };
+type TransferArgs = 
+ record {
+   amount: nat;
+   created_at_time: opt nat;
+   fee: opt nat;
+   from_subaccount: opt blob;
+   memo: opt blob;
+   to: Account;
+ };
+type Transaction = 
+ record {
+   amount: Amount;
+   from: opt principal;
+   id: TxId;
+   kind: TxKind;
+   timestamp: Time;
+   to: opt principal;
+ };
+type Time = int;
+type Result_1 = 
+ variant {
+   err: text;
+   ok;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: TxId;
+ };
+type Meta = 
+ record {
+   daoCanister: opt principal;
+   decimals: nat;
+   holderCount: nat;
+   identityCanister: opt principal;
+   lastTxTime: opt Time;
+   locked: bool;
+   name: text;
+   symbol: text;
+   totalSupply: nat;
+   txCount: nat;
+ };
+type Amount = nat;
+type Account = 
+ record {
+   owner: principal;
+   subaccount: opt blob;
+ };
+service : {
+  balanceOf: (p: principal) -> (nat) query;
+  burn: (from: principal, amount: nat) -> (Result);
+  getMeta: () -> (Meta) query;
+  getTx: (id: nat) -> (opt Transaction) query;
+  icrc1_balance_of: (account: Account) -> (nat) query;
+  icrc1_decimals: () -> (nat8) query;
+  icrc1_name: () -> (text) query;
+  icrc1_symbol: () -> (text) query;
+  icrc1_total_supply: () -> (nat) query;
+  icrc1_transfer: (args: TransferArgs) -> (TransferResult);
+  listHolders: (offset: nat, limit: nat) ->
+   (vec record {
+          principal;
+          nat;
+        }) query;
+  listTx: (from: nat, limit: nat) -> (vec Transaction) query;
+  mint: (to: principal, amount: nat) -> (Result);
+  setDaoCanister: (p: principal) -> ();
+  setIdentityCanister: (p: principal) -> ();
+  syncIdentityBalance: (user: principal) -> (Result_1);
+  transfer: (to: principal, amount: nat) -> (Result);
+}

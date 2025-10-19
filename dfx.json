@@ -41,9 +41,9 @@
       "type": "motoko"
     },
     "owp_token_test": {
-        "main": "canisters/owp_token/main.test.mo",
-        "type": "motoko",
-        "dependencies": ["owp_token"]
+      "main": "canisters/owp_token/main.test.mo",
+      "type": "motoko",
+      "dependencies": ["owp_token"]
     },
     "community_badges": {
       "main": "canisters/nft/main.mo",
@@ -55,6 +55,19 @@
     },
     "hhdao_meeting_management": {
       "main": "canisters/meeting-management/main.mo",
+      "type": "motoko"
+    },
+    "treasury": {
+      "main": "canisters/treasury/main.mo",
+      "type": "motoko"
+    },
+    "treasury_test": {
+      "main": "canisters/treasury/test/runner.mo",
+      "type": "motoko",
+      "dependencies": ["treasury"]
+    },
+    "governance": {
+      "main": "canisters/governance/src/lib.mo",
       "type": "motoko"
     },
     "hhdao_frontend": {

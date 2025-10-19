@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Chain Fusion imports for ckBTC integration
 // Note: These would be actual imports in production
 // import CKBTC "mo:ckbtc/ckbtc";
@@ -6,6 +7,21 @@
 // Added missing base imports
 
 
+=======
+// Core imports
+import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
+import Nat32 "mo:base/Nat32";
+import Float "mo:base/Float";
+import Debug "mo:base/Debug";
+import Buffer "mo:base/Buffer";
+import Iter "mo:base/Iter";
+>>>>>>> audit-clean
 
 persistent actor Compute {
   

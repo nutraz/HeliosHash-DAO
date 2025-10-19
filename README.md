@@ -276,7 +276,7 @@ pnpm install  # Updated to latest dependencies
 pnpm dev  # Available at http://localhost:3001
 
 # Mobile E2E Server (network accessible)
-node mobile_hhdao_server.js  # Available at http://192.168.29.210:3003
+node mobile_hhdao_server.js  # Available at http://<YOUR_LOCAL_IP>:3003
 
 # Generate Mobile QR Codes
 node generate_mobile_qr.js

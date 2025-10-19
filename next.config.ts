@@ -35,17 +35,16 @@ const nextConfig: NextConfig = {
   },
 
   // Configure allowed origins for mobile development
-  allowedDevOrigins: [
-    '192.168.29.210:3001',
-    '192.168.29.210:3003',
-    '192.168.29.210:3005',
-    '127.0.0.1:3001',
-    '127.0.0.1:3003',
-    '127.0.0.1:3005',
-    'localhost:3001',
-    'localhost:3003',
-    'localhost:3005',
-  ],
+  allowedDevOrigins: (() => {
+    const LAN = process.env.LOCAL_LAN_IP || '';
+    const ports = ['3001', '3003', '3005'];
+    const locals = ports.flatMap((p) => [
+      `127.0.0.1:${p}`,
+      `localhost:${p}`,
+    ]);
+    const lanHosts = LAN ? ports.map((p) => `${LAN}:${p}`) : [];
+    return [...lanHosts, ...locals];
+  })(),
 
   // Allow mobile device connections in development
   async headers() {

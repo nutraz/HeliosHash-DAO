@@ -1,46 +1,36 @@
 {
-<<<<<<< HEAD
-  "timestamp": "2025-10-03T22:39:55.266Z",
-  "user": "nutrazz",
-=======
-  "timestamp": "2025-10-13T21:34:16.943Z",
+  "timestamp": "2025-10-19T00:00:00.000Z",
   "user": "TEST_USER",
->>>>>>> audit-clean
   "access_points": [
     {
       "png": "hhdao_main_dashboard.png",
       "svg": "hhdao_main_dashboard.svg",
-      "url": "http://192.168.29.210:3001"
+  "url": "http://<LAN_IP>:3001"
     },
     {
       "png": "hhdao_mobile_optimized.png",
       "svg": "hhdao_mobile_optimized.svg",
-      "url": "http://192.168.29.210:3001?mobile=true"
+  "url": "http://<LAN_IP>:3001?mobile=true"
     },
     {
       "png": "hhdao_governance.png",
       "svg": "hhdao_governance.svg",
-      "url": "http://192.168.29.210:3001/governance"
+  "url": "http://<LAN_IP>:3001/governance"
     },
     {
       "png": "hhdao_urgam_projects.png",
       "svg": "hhdao_urgam_projects.svg",
-      "url": "http://192.168.29.210:3001/projects"
+  "url": "http://<LAN_IP>:3001/projects"
     }
   ],
   "device_instructions": {
-    "android": "Open Camera app → Point at QR code → Tap notification",
-    "ios": "Open Camera app → Point at QR code → Tap banner",
-    "manual": "Type in browser: http://192.168.29.210:3001"
+  "android": "Open Camera app → Point at QR code → Tap notification",
+  "ios": "Open Camera app → Point at QR code → Tap banner",
+  "manual": "Type in browser: http://<LAN_IP>:3001"
   },
   "features_available": [
-<<<<<<< HEAD
-    "Real nutrazz identity (not Arjun Patel)",
-    "226,898 OWP balance display",
-=======
-  "Real TEST_USER identity (not Arjun Patel)",
-  "OWP_BALANCE_PLACEHOLDER balance display",
->>>>>>> audit-clean
+    "Real TEST_USER identity (not Arjun Patel)",
+    "OWP_BALANCE_PLACEHOLDER balance display",
     "Urgam Valley solar proposals",
     "Mumbai location (668km to Urgam)",
     "Delhi partner network access",
@@ -48,13 +38,9 @@
     "Real-time governance participation"
   ],
   "network_info": {
-    "local_ip": "192.168.29.210",
+  "local_ip": "<LAN_IP>",
     "port": 3001,
     "protocol": "http",
     "connectivity": "Same WiFi network required"
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> audit-clean

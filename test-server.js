@@ -10,7 +10,8 @@ const host = '0.0.0.0';
 
 server.listen(port, host, () => {
   console.log(`Test server running on http://${host}:${port}`);
-  console.log(`Mobile access: http://192.168.29.210:${port}`);
+  const lan = process.env.LOCAL_LAN_IP || '<LAN_IP>';
+  console.log(`Mobile access: http://${lan}:${port}`);
 });
 
 // Keep the server running

@@ -1,50 +1,41 @@
-# Logs & temp
-sys
-=======
-# Logs & temp
+### Node & Next.js
+node_modules/
+.next/
+dist/
+.turbo/
+coverage/
+
+### Logs & temp
 sys
 dev.log
 debug.log
 mobile_server.log
-
-# Temporary and generated files
-temp/
 *.log
+temp/
+*.tmp
+
+### Generated/diagnostics
 *_diagnostics.json
 test-analytics*.json
 proximity_test_*.json
 current_proximity_*.json
 
-# Backup directories
-node_modules.bak/
-*.bak/
+### Secrets (never commit)
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.pfx
+*.cer
 
-# Large binary files
+### OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+### Large binaries
 react
 *.node
-
-# Next.js SWC binaries (should be in node_modules which is ignored)
 next-swc*.node
-
-# === NEVER COMMIT THESE ===
-node_modules.bak/
-*.bak/
-react
-*.node
-
-# === NEVER COMMIT THESE ===
-node_modules.bak/
-*.bak/
-react
-*.node
-
-# === NEVER COMMIT THESE ===
-node_modules.bak/
-*.bak/
-react
-*.node
-node_modules.bak/
-*.bak/
-react
-*.node
->>>>>>> audit-clean

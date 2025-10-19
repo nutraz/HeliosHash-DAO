@@ -5,13 +5,13 @@
 ✅ Firewall ports opened: 3001/tcp, 8000/tcp  
 ✅ Server configured to bind to 0.0.0.0  
 ✅ CORS configured for mobile access  
-✅ Local IP identified: 192.168.29.210
+✅ Local IP identified: <LAN_IP>
 
 ## Mobile Access URLs
 
-- **Main App**: http://192.168.29.210:3001
-- **Login Page**: http://192.168.29.210:3001/auth/login
-- **Dashboard**: http://192.168.29.210:3001/dashboard
+- **Main App**: http://<LAN_IP>:3001
+- **Login Page**: http://<LAN_IP>:3001/auth/login
+- **Dashboard**: http://<LAN_IP>:3001/dashboard
 
 ## Steps to Connect Mobile Device
 
@@ -27,7 +27,7 @@ Wait for: `Ready on http://0.0.0.0:3001`
 ### 2. Verify Connection (from computer)
 
 ```bash
-curl -I http://192.168.29.210:3001
+curl -I http://<LAN_IP>:3001
 ```
 
 Should return HTTP 200 response.
@@ -36,7 +36,7 @@ Should return HTTP 200 response.
 
 - Ensure mobile device is on same WiFi network
 - Open browser on mobile device
-- Navigate to: `http://192.168.29.210:3001/auth/login`
+- Navigate to: `http://<LAN_IP>:3001/auth/login`
 
 ## Authentication Options Available
 

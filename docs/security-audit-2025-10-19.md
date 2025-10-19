@@ -60,13 +60,13 @@ git log --all --full-history -- "*" | grep -i "private\|secret\|key\|password"
 **Issue:**
 
 ```text
-Mobile Server: http://192.168.29.210:3003
+Mobile Server: http://<LAN_IP>:3003
 Desktop Server: http://localhost:3001
 ```
 
 **Risks:**
 
-- Private IP address `192.168.29.210` exposed in documentation
+- Private IP address `<LAN_IP>` exposed in documentation
 - Network interface binding allows **unauthorized access** from any device on the network
 - No authentication mentioned for mobile server access
 - QR codes provide unrestricted access to the application
@@ -644,12 +644,12 @@ git log --all --full-history -- "*" | grep -i "private\|secret\|key\|password"
 
 **Issue:**
 ```
-Mobile Server: http://192.168.29.210:3003
+Mobile Server: http://<LAN_IP>:3003
 Desktop Server: http://localhost:3001
 ```
 
 **Risks:**
-- Private IP address `192.168.29.210` exposed in documentation
+- Private IP address `<LAN_IP>` exposed in documentation
 - Network interface binding allows **unauthorized access** from any device on the network
 - No authentication mentioned for mobile server access
 - QR codes provide unrestricted access to the application

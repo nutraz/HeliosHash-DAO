@@ -79,7 +79,7 @@ test.use({ viewport: { width: 412, height: 915 } });
 
 test('mobile smoke - animal care flow', async ({ page }) => {
   // Replace LAN_IP with your dev machine IP if not running in CI
-  const base = process.env.MOBILE_TEST_BASE || 'http://192.168.29.210:3003';
+  const base = process.env.MOBILE_TEST_BASE || 'http://localhost:3003';
   await page.goto(base + '/community/animal-care');
 
   // Fill form

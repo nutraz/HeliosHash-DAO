@@ -1,6 +1,6 @@
 # 🚨 HeliosHash DAO - EARLY ALPHA DEVELOPMENT
 **🖥️ Desktop**: `http://localhost:3001` | **📱 Mobile**: Network-ready for local testing (use your LAN IP)
-**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors in 30 days
+**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: 3 real investors.
 
 ### Transforming Uttarakhand's Remote Valleys | India Extension of One World Project (1WP)
 

@@ -10,11 +10,7 @@ import Array "mo:base/Array";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
 
-<<<<<<< HEAD
-module {
-=======
 module HHDAOLib {
->>>>>>> audit-clean
   public type ProjectStatus = {
     #Planning;
     #Construction;
@@ -238,29 +234,6 @@ module HHDAOLib {
       switch (Array.find(projects, func (p : Project) : Bool { p.id == id })) {
         case (?project) {
           if (project.owner != caller) {
-<<<<<<< HEAD
-            return false;
-          };
-          let updatedProject = {
-            id = project.id;
-            name = project.name;
-            location = project.location;
-            capacity = project.capacity;
-            status = status;
-            owner = project.owner;
-            createdAt = project.createdAt;
-            governmentApprovals = project.governmentApprovals;
-            telemetryId = project.telemetryId;
-            description = project.description;
-            estimatedCost = project.estimatedCost;
-            completionDate = project.completionDate;
-          };
-          projects := Array.filter<Project>(projects, func (p : Project) : Bool {
-            p.id != id
-          });
-          projects := Array.append(projects, [updatedProject]);
-          true
-=======
             false
           } else {
             let updatedProject = {
@@ -283,7 +256,6 @@ module HHDAOLib {
             projects := Array.append(projects, [updatedProject]);
             true
           }
->>>>>>> audit-clean
         };
         case (null) { false };
       }
@@ -334,27 +306,6 @@ module HHDAOLib {
       switch (proposals.get(proposalId)) {
         case (?proposal) {
           if (proposal.status != #Open) {
-<<<<<<< HEAD
-            return false;
-          };
-          let updatedProposal : Proposal = {
-            id = proposal.id;
-            title = proposal.title;
-            description = proposal.description;
-            votesRequired = proposal.votesRequired;
-            category = proposal.category;
-            votesFor = if (inFavor) proposal.votesFor + 1 else proposal.votesFor;
-            votesAgainst = if (not inFavor) proposal.votesAgainst + 1 else proposal.votesAgainst;
-            status = proposal.status;
-          };
-          let newStatus : Status = 
-            if (updatedProposal.votesFor >= proposal.votesRequired) #Passed
-            else if (updatedProposal.votesAgainst >= proposal.votesRequired) #Rejected
-            else #Open;
-          let finalProposal = { updatedProposal with status = newStatus };
-          proposals.put(proposalId, finalProposal);
-          true;
-=======
             false
           } else {
             let updatedProposal : Proposal = {
@@ -375,7 +326,6 @@ module HHDAOLib {
             proposals.put(proposalId, finalProposal);
             true
           }
->>>>>>> audit-clean
         };
         case (null) {
           false;

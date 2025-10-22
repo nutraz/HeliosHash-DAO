@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  push:
+<<<<<<< HEAD
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+=======
+    branches: [ main, mvp-testers ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: JS unit/integration & E2E
+>>>>>>> audit-clean
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'pnpm'
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run unit/integration tests (Vitest)
+        run: pnpm test:run
+      - name: Upload Vitest JSON report
+        uses: actions/upload-artifact@v4
+        with:
+          name: vitest-report
+          path: vitest-report.json
+        if: always()
+      - name: Run canister tests
+        run: pnpm test:canister
+      - name: Run E2E tests (Playwright)
+        run: pnpm test:e2e
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+        if: always()
+<<<<<<< HEAD
+=======
+
+  flutter-analyze:
+    name: Flutter analyze
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze
+        run: flutter analyze
+
+  flutter-test:
+    name: Flutter test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Run tests
+        run: flutter test --coverage
+
+  node-checks:
+    name: Node quick checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install pnpm
+        run: npm i -g pnpm
+      - name: Install packages
+        run: pnpm install
+      - name: Run JS unit tests (non-blocking)
+        run: pnpm test:run || true
+>>>>>>> audit-clean

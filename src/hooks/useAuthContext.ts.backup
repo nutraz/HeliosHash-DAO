@@ -1,0 +1,195 @@
+'use client';
+
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
+export type UserRole = 'Community' | 'Investor' | 'Authority' | 'Partner' | 'DAO';
+
+interface User {
+  id: string;
+  principal: string;
+  username?: string;
+  email?: string;
+  displayName?: string;
+  role: UserRole;
+  secondaryRoles: UserRole[];
+  location?: string;
+  owpBalance: number;
+  isVerified: boolean;
+  aadhaarVerified: boolean;
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  hasRole: (role: UserRole) => boolean;
+  login: (credentials: any) => Promise<void>;
+  logout: () => void;
+  updateProfile: (updates: Partial<User>) => Promise<void>;
+  setUserRole: (role: UserRole) => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Mock user data for development - replace with actual canister integration
+const mockUsers: Record<string, User> = {
+  'community-user': {
+    id: '1',
+    principal: 'rdmx6-jaaaa-aaaah-qcaiq-cai',
+    username: 'priya_farmer',
+    email: 'priya@village.com',
+    displayName: 'Priya Sharma',
+    role: 'Community',
+    secondaryRoles: [],
+    location: 'UrgamU Valley, Karnataka',
+    owpBalance: 1250,
+    isVerified: true,
+    aadhaarVerified: true
+  },
+  'investor-user': {
+    id: '2',
+    principal: 'rdmx6-jaaaa-aaaah-qcaiq-cai',
+    username: 'raj_investor',
+    email: 'raj@investment.com', 
+    displayName: 'Raj Patel',
+    role: 'Investor',
+    secondaryRoles: ['DAO'],
+    location: 'Mumbai, Maharashtra',
+    owpBalance: 25000,
+    isVerified: true,
+    aadhaarVerified: false
+  },
+  'authority-user': {
+    id: '3',
+    principal: 'rdmx6-jaaaa-aaaah-qcaiq-cai',
+    username: 'sarpanch_kumar',
+    email: 'kumar@panchayat.gov.in',
+    displayName: 'Suresh Kumar',
+    role: 'Authority',
+    secondaryRoles: ['Community'],
+    location: 'Gram Panchayat Office, Rajasthan',
+    owpBalance: 500,
+    isVerified: true,
+    aadhaarVerified: true
+  },
+  'partner-user': {
+    id: '4',
+    principal: 'rdmx6-jaaaa-aaaah-qcaiq-cai',
+    username: 'ngo_director',
+    email: 'director@cleannrg.org',
+    displayName: 'Dr. Anita Singh',
+    role: 'Partner',
+    secondaryRoles: ['DAO'],
+    location: 'New Delhi',
+    owpBalance: 5000,
+    isVerified: true,
+    aadhaarVerified: false
+  },
+  'dao-user': {
+    id: '5',
+    principal: 'rdmx6-jaaaa-aaaah-qcaiq-cai',
+    username: 'dao_governor',
+    email: 'governor@hhdao.org',
+    displayName: 'Vikram Chandra',
+    role: 'DAO',
+    secondaryRoles: ['Investor', 'Authority'],
+    location: 'Distributed',
+    owpBalance: 50000,
+    isVerified: true,
+    aadhaarVerified: false
+  }
+};
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize with mock data - replace with actual auth logic
+  useEffect(() => {
+    const initAuth = async () => {
+      setIsLoading(true);
+      
+      // Check if user is already logged in (localStorage for demo)
+      const savedUserId = localStorage.getItem('hhdao-user-id');
+      if (savedUserId && mockUsers[savedUserId]) {
+        setUser(mockUsers[savedUserId]);
+      }
+      
+      setIsLoading(false);
+    };
+
+    initAuth();
+  }, []);
+
+  const hasRole = (role: UserRole): boolean => {
+    if (!user) return false;
+    return user.role === role || user.secondaryRoles.includes(role);
+  };
+
+  const login = async (credentials: any) => {
+    setIsLoading(true);
+    
+    // Mock login logic - replace with actual canister calls
+    const { userType = 'community-user' } = credentials;
+    const userData = mockUsers[userType];
+    
+    if (userData) {
+      setUser(userData);
+      localStorage.setItem('hhdao-user-id', userType);
+    }
+    
+    setIsLoading(false);
+  };
+
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem('hhdao-user-id');
+  };
+
+  const updateProfile = async (updates: Partial<User>) => {
+    if (!user) return;
+    
+    const updatedUser = { ...user, ...updates };
+    setUser(updatedUser);
+    
+    // Update mock data
+    const userId = Object.keys(mockUsers).find(key => mockUsers[key].id === user.id);
+    if (userId) {
+      mockUsers[userId] = updatedUser;
+    }
+  };
+
+  const setUserRole = async (role: UserRole) => {
+    await updateProfile({ role });
+  };
+
+  const value: AuthContextType = {
+    user,
+    isLoading,
+    isAuthenticated: !!user,
+    hasRole,
+    login,
+    logout,
+    updateProfile,
+    setUserRole
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuthContext() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuthContext must be used within an AuthProvider');
+  }
+  return context;
+}
+
+// Legacy hook for backward compatibility
+export function useAuth() {
+  return useAuthContext();
+}

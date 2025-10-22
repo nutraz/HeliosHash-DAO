@@ -1,0 +1,19 @@
+{
+  "timestamp": "2025-10-13T19:44:49.006Z",
+  "summary": {
+    "totalIssues": 0,
+    "totalWarnings": 1,
+    "criticalIssues": 0,
+    "highIssues": 0
+  },
+  "issues": [],
+  "warnings": [
+    {
+      "severity": "MEDIUM",
+      "category": "DEPENDENCIES",
+      "message": "Dependency audit failed or vulnerabilities found",
+      "file": null,
+      "timestamp": "2025-10-13T19:44:49.005Z"
+    }
+  ]
+}

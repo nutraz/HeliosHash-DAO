@@ -1,0 +1,104 @@
+{
+  "canisters": {
+    "hhdao": {
+      "main": "canisters/hhdao/src/main.mo",
+      "type": "motoko",
+      "dependencies": [
+        "hhdao_dao",
+        "hhdao_identity",
+        "hhdao_telemetry",
+        "hhdao_documents",
+        "hhdao_compute",
+        "gender_incentives"
+      ]
+    },
+    "hhdao_dao": {
+      "main": "canisters/dao/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_identity": {
+      "main": "canisters/identity/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_telemetry": {
+      "main": "canisters/telemetry/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_documents": {
+      "main": "canisters/documents/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_compute": {
+      "main": "canisters/compute/main.mo",
+      "type": "motoko"
+    },
+    "gender_incentives": {
+      "main": "canisters/dao/gender_incentives.mo",
+      "type": "motoko"
+    },
+    "owp_token": {
+      "main": "canisters/owp_token/main.mo",
+      "type": "motoko"
+    },
+    "owp_token_test": {
+      "main": "canisters/owp_token/main.test.mo",
+      "type": "motoko",
+      "dependencies": ["owp_token"]
+    },
+    "community_badges": {
+      "main": "canisters/nft/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_dispute_resolution": {
+      "main": "canisters/dispute-resolution/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_meeting_management": {
+      "main": "canisters/meeting-management/main.mo",
+      "type": "motoko"
+    },
+    "treasury": {
+      "main": "canisters/treasury/main.mo",
+      "type": "motoko"
+    },
+    "treasury_test": {
+      "main": "canisters/treasury/test/runner.mo",
+      "type": "motoko",
+      "dependencies": ["treasury"]
+    },
+    "governance": {
+      "main": "canisters/governance/src/lib.mo",
+      "type": "motoko"
+    },
+    "hhdao_frontend": {
+      "dependencies": [
+        "hhdao",
+        "hhdao_dao",
+        "hhdao_identity",
+        "hhdao_telemetry",
+        "hhdao_documents",
+        "gender_incentives",
+        "community_badges"
+      ],
+      "frontend": {
+        "entrypoint": "public/index.html"
+      },
+      "source": ["public/"],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000"
+    },
+    "ic": {
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}

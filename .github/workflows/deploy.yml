@@ -1,0 +1,50 @@
+name: Deploy to Internet Computer
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Install DFX
+        uses: dfinity/setup-dfx@main
+
+      - name: Deploy to Internet Computer (Local)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: |
+          dfx start --clean --background
+          dfx deploy --network local
+
+      - name: Deploy to Internet Computer (Mainnet)
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          DFX_IDENTITY: ${{ secrets.DFX_IDENTITY }}
+          DFX_NETWORK: ic
+        run: |
+          dfx deploy --network ic

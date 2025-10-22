@@ -1,0 +1,30 @@
+name: E2E Smoke (Playwright)
+
+on:
+  push:
+    branches: [ 'mvp-testers' ]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Start dev server (background)
+        run: |
+          pnpm dev &
+          DEV_PID=$!
+          echo "dev pid=$DEV_PID"
+          # wait for server to be ready
+          npx wait-on http://localhost:3001 && sleep 1
+      - name: Run Playwright smoke
+        run: npx playwright test playwright/tests/smoke-animal-care.spec.ts --project=mobile-chrome --reporter=list
+      - name: Stop dev server
+        if: always()
+        run: |
+          kill $DEV_PID || true

@@ -1,0 +1,117 @@
+name: 'Test Analytics'
+description: 'Analyze test results and generate comprehensive reports'
+inputs:
+  results-path:
+    description: 'Path to test results directory'
+    required: false
+    default: './test-results'
+  output-format:
+    description: 'Output format (json, markdown, both)'
+    required: false
+    default: 'both'
+outputs:
+  analytics-file:
+    description: 'Path to generated analytics file'
+    value: ${{ steps.analytics.outputs.file }}
+  report-file:
+    description: 'Path to generated report file'
+    value: ${{ steps.report.outputs.file }}
+runs:
+  using: 'composite'
+  steps:
+    - name: 🔍 Install Dependencies
+      shell: bash
+      run: |
+        if [ ! -f "package.json" ]; then
+          echo "No package.json found, creating minimal one for analytics"
+          echo '{"name": "test-analytics", "private": true}' > package.json
+        fi
+
+        # Install minimal dependencies for analytics
+        if ! npm list | grep -q ".*"; then
+          echo "Installing analytics dependencies..."
+          # Analytics scripts are self-contained Node.js scripts
+        fi
+
+    - name: 📊 Generate Test Analytics
+      id: analytics
+      shell: bash
+      run: |
+        echo "🚀 Generating test analytics..."
+
+        # Run our analytics scripts
+        if [ -f "scripts/generate-test-report.js" ]; then
+          node scripts/generate-test-report.js "${{ inputs.results-path }}" > test-report.md
+          echo "✅ Test report generated: test-report.md"
+        fi
+
+        if [ -f "scripts/test-analytics.js" ]; then
+          node scripts/test-analytics.js test-analytics.json > analytics-summary.md
+          echo "✅ Analytics summary generated: analytics-summary.md"
+        fi
+
+        if [ -f "scripts/performance-analysis.js" ]; then
+          node scripts/performance-analysis.js "${{ inputs.results-path }}" > performance-report.md
+          echo "✅ Performance report generated: performance-report.md"
+        fi
+
+        echo "file=test-analytics-detailed.json" >> $GITHUB_OUTPUT
+
+    - name: 📝 Generate Combined Report
+      id: report
+      shell: bash
+      run: |
+        echo "📋 Creating combined test report..."
+
+        REPORT_FILE="combined-test-report.md"
+
+        cat > $REPORT_FILE << 'EOF'
+        # 🧪 HeliosHash DAO - Complete Test Analysis Report
+
+        **Generated:** $(date)
+        **GitHub Run:** ${{ github.run_id }}
+        **Commit:** ${{ github.sha }}
+        **Branch:** ${{ github.ref_name }}
+
+        ---
+
+        EOF
+
+        # Append individual reports if they exist
+        if [ -f "test-report.md" ]; then
+          echo "" >> $REPORT_FILE
+          cat test-report.md >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+        fi
+
+        if [ -f "analytics-summary.md" ]; then
+          echo "" >> $REPORT_FILE
+          cat analytics-summary.md >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+        fi
+
+        if [ -f "performance-report.md" ]; then
+          echo "" >> $REPORT_FILE
+          cat performance-report.md >> $REPORT_FILE
+          echo "" >> $REPORT_FILE
+        fi
+
+        echo "📊 Combined report created: $REPORT_FILE"
+        echo "file=$REPORT_FILE" >> $GITHUB_OUTPUT
+
+    - name: 📤 Upload Analytics Artifacts
+      shell: bash
+      run: |
+        echo "📦 Preparing analytics artifacts..."
+
+        # Create artifacts directory
+        mkdir -p test-analytics-artifacts
+
+        # Copy all analytics files
+        [ -f "test-analytics.json" ] && cp test-analytics.json test-analytics-artifacts/
+        [ -f "test-analytics-detailed.json" ] && cp test-analytics-detailed.json test-analytics-artifacts/
+        [ -f "performance-analytics.json" ] && cp performance-analytics.json test-analytics-artifacts/
+        [ -f "test-history.json" ] && cp test-history.json test-analytics-artifacts/
+        [ -f "combined-test-report.md" ] && cp combined-test-report.md test-analytics-artifacts/
+
+        echo "✅ Analytics artifacts prepared in test-analytics-artifacts/"

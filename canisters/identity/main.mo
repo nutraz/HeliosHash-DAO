@@ -1,11 +1,3 @@
-    /// Returns up to 100 user profiles (pagination required for more)
-    public query func getUserProfilesPaginated(limit : Nat, offset : Nat) : async [UserProfile] {
-        let all = Iter.toArray(profiles.vals());
-        let maxLimit = 100;
-        let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
-        let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
-        Array.tabulate<UserProfile>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
-    }
 
 import HashMap "mo:base/HashMap";
 import Time "mo:base/Time";
@@ -63,7 +55,6 @@ persistent actor Identity {
         aadhaarVerified: Bool;   // For KYC compliance
         owpBalance: Nat;         // Will sync with treasury
         prefersDuoValidation: Bool;  // NEW: Preference for paired validation
-        isWoman: Bool;           // For women's incentive system
     };
 
     public type VerificationLevel = {
@@ -277,7 +268,6 @@ persistent actor Identity {
             aadhaarVerified = false;
             owpBalance = 0;
             prefersDuoValidation = false;  // Default to false
-            isWoman = false;  // Default to false, can be updated later
         };
 
         profiles.put(caller, profile);
@@ -696,28 +686,8 @@ persistent actor Identity {
             case (null) { return #err("Profile not found") };
             case (?profile) {
                 let updatedProfile = {
-                    profile with
+                    profile with 
                     prefersDuoValidation = prefersDuo;
-                    updatedAt = Time.now();
-                };
-                profiles.put(caller, updatedProfile);
-                #ok(updatedProfile)
-            };
-        }
-    };
-
-    // Set isWoman field for women's incentive system
-    public shared ({ caller }) func setIsWoman(isWoman: Bool): async Result.Result<UserProfile, Text> {
-        if (Principal.isAnonymous(caller)) {
-            return #err("Anonymous principal cannot update gender information");
-        };
-
-        switch (profiles.get(caller)) {
-            case (null) { return #err("Profile not found") };
-            case (?profile) {
-                let updatedProfile = {
-                    profile with
-                    isWoman = isWoman;
                     updatedAt = Time.now();
                 };
                 profiles.put(caller, updatedProfile);

@@ -9,7 +9,7 @@
         "hhdao_telemetry",
         "hhdao_documents",
         "hhdao_compute",
-        "womens_incentive"
+        "gender_incentives"
       ]
     },
     "hhdao_dao": {
@@ -32,10 +32,9 @@
       "main": "canisters/compute/main.mo",
       "type": "motoko"
     },
-    "womens_incentive": {
-      "main": "canisters/womens_incentive/src/main.mo",
-      "type": "motoko",
-      "dependencies": ["hhdao_identity"]
+    "gender_incentives": {
+      "main": "canisters/dao/gender_incentives.mo",
+      "type": "motoko"
     },
     "owp_token": {
       "main": "canisters/owp_token/main.mo",
@@ -78,7 +77,7 @@
         "hhdao_identity",
         "hhdao_telemetry",
         "hhdao_documents",
-        "womens_incentive",
+        "gender_incentives",
         "community_badges"
       ],
       "frontend": {

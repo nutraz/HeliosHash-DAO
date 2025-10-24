@@ -1,0 +1,23 @@
+// Version: 1.0.0
+type AssocList__500356992<K, V> = List__439041906<(K, V)>;
+type AssocList__522881999<K, V> = AssocList__500356992<K, V>;
+type Branch__307888398<K, V> =
+  {left : Trie__161052279<K, V>; right : Trie__161052279<K, V>; size : Nat};
+type Hash__573325948 = Nat32;
+type Key__768376980<K> = {hash : Hash__573325948; key : K};
+type Leaf__462985899<K, V> =
+  {keyvals : AssocList__522881999<Key__768376980<K>, V>; size : Nat};
+type List__439041906<T> = ?(T, List__439041906<T>);
+type Trie__161052279<K, V> =
+  {#branch : Branch__307888398<K, V>; #empty; #leaf : Leaf__462985899<K, V>};
+actor {
+  stable var initialized : Bool;
+  stable var ledger :
+    {
+      #branch : Branch__307888398<Principal, Nat>;
+      #empty;
+      #leaf : Leaf__462985899<Principal, Nat>
+    };
+  stable var owner : Principal;
+  stable var totalSupply : Nat
+};

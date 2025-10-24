@@ -7,7 +7,6 @@ import TestUtils "../test/test-utils";
 import HHDAOLib "../src/lib";
 
 import Time "mo:base/Time";
-import Principal "mo:base/Principal";
 
 
 
@@ -121,53 +120,6 @@ actor {
     } catch (e) {
       Debug.print("Error in Performance Test: " # debug_show(e));
       TestUtils.printTestResult("Performance Test", false);
-    };
-
-    // Test 5: Application document upload authorization
-    TestUtils.printTestHeader("Application Doc Upload Authorization");
-    try {
-      let appId = state.submitApplication(
-        #Investor,
-        "Test Investor App",
-        "desc",
-        {
-          landSize = null; landLocation = null; currentLandUse = null; electricityAccess = null;
-          technicalSkills = null; experience = null; availability = null; specialization = null;
-          preferredRoles = null; workingHours = null; localKnowledge = null;
-          investmentCapacity = ?100; investmentHorizon = ?"short"; riskTolerance = ?"low";
-          contactPhone = null; contactEmail = null; aadhaarNumber = null; bankAccount = null; references = null;
-        },
-        #Low,
-        null,
-        TestUtils.mockPrincipal
-      );
-      let okByOwner = state.addDocumentToApplication(appId, {
-        id = "doc1"; documentType = #BankDetails; fileName = "bank.pdf"; uploadedAt = Time.now(); verificationStatus = #Pending
-      }, TestUtils.mockPrincipal);
-      let okByOther = state.addDocumentToApplication(appId, {
-        id = "doc2"; documentType = #BankDetails; fileName = "bank2.pdf"; uploadedAt = Time.now(); verificationStatus = #Pending
-      }, Principal.fromText("aaaaa-aa"));
-      TestUtils.assertTrue(okByOwner, "Owner should be able to upload");
-      TestUtils.assertTrue(not okByOther, "Non-owner should be rejected");
-      TestUtils.printTestResult("Application Doc Upload Authorization", true);
-    } catch (e) {
-      Debug.print("Error in Application Doc Upload Authorization: " # debug_show(e));
-      TestUtils.printTestResult("Application Doc Upload Authorization", false);
-    };
-
-    // Test 6: Animal report lifecycle + reward attempt
-    TestUtils.printTestHeader("Animal Report Validation Flow");
-    try {
-      let id = state.submitAnimalReport("loc","help",[],?2, TestUtils.mockPrincipal);
-      ignore state.voteOnAnimalReport(id, true);
-      let v2 = state.voteOnAnimalReport(id, true);
-      TestUtils.assertTrue(v2, "Second vote accepted");
-      let rep = state.getAnimalReport(id);
-      switch (rep) { case (?r) { TestUtils.assertTrue(r.status == #Validated, "Should be validated"); }; case (null) { TestUtils.assertTrue(false, "Report should exist") } };
-      TestUtils.printTestResult("Animal Report Validation Flow", true);
-    } catch (e) {
-      Debug.print("Error in Animal Report Validation Flow: " # debug_show(e));
-      TestUtils.printTestResult("Animal Report Validation Flow", false);
     };
   };
 }

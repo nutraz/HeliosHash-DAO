@@ -1,140 +1,94 @@
-"use client";
+'use client';
+
 import Link from 'next/link';
-import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
-import { Sun, Moon, Menu, X, Mic, MicOff } from 'lucide-react';
 
 export default function Header() {
   const [language, setLanguage] = useState('en');
   const [voiceActive, setVoiceActive] = useState(false);
+  const [theme, setTheme] = useState('light');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const headingText = language === 'hi' ? 'हेलिओसहैश' : 'HeliosHash DAO';
 
-  const navigationItems = [
-    { href: '/dashboard', en: 'Dashboard', hi: 'डैशबोर्ड' },
-    { href: '/projects', en: 'Projects', hi: 'परियोजनाएं' },
-    { href: '/governance', en: 'Governance', hi: 'शासन' },
-    { href: '/wallet', en: 'Wallet', hi: 'वॉलेट' },
-    { href: '/community', en: 'Community', hi: 'समुदाय' },
-  ];
-
   return (
-    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border sticky top-0 z-50">
+    <header className="bg-white shadow-sm border-b dark:bg-gray-800 dark:border-gray-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <div className="flex items-center">
-            <Link 
-              href="/" 
-              className="text-xl font-bold text-foreground hover:text-primary transition-colors flex items-center gap-2"
-              data-testid="main-heading"
-            >
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
-                <span className="text-primary-foreground text-sm font-bold">H</span>
-              </div>
+            <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white" data-testid="main-heading">
               {headingText}
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8" aria-label="Navigation menu">
-            {navigationItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-muted-foreground hover:text-primary transition-colors font-medium relative group px-2 py-1 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {language === 'hi' ? item.hi : item.en}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
-              </Link>
-            ))}
+            <Link href="/dashboard" className="text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="dashboard-link">
+              {language === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+            </Link>
+            <Link href="/projects" className="text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="projects-nav">
+              {language === 'hi' ? 'परियोजनाएं' : 'Projects'}
+            </Link>
+            <Link href="/governance" className="text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="governance-nav">
+              {language === 'hi' ? 'शासन' : 'Governance'}
+            </Link>
+            <Link href="/wallet" className="text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="wallet-nav">
+              {language === 'hi' ? 'वॉलेट' : 'Wallet'}
+            </Link>
+            <Link href="/community" className="text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="community-nav">
+              {language === 'hi' ? 'समुदाय' : 'Community'}
+            </Link>
           </nav>
 
-          {/* Controls */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-4">
             {/* Language Selector */}
             <div className="relative" data-testid="language-selector">
               <select
                 value={language}
                 onChange={(e) => setLanguage(e.target.value)}
-                className="appearance-none bg-background border border-border rounded-lg px-3 py-1.5 pr-8 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm font-medium cursor-pointer"
+                className="appearance-none bg-white border border-gray-300 rounded-md px-3 py-1 pr-8 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                 data-testid="language-select"
                 aria-label="Select language"
               >
                 <option value="en">English</option>
                 <option value="hi" data-testid="language-hindi">हिंदी</option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
-                <span className="text-muted-foreground">▾</span>
-              </div>
             </div>
 
             {/* Voice Activation */}
             <button
               onClick={() => setVoiceActive(!voiceActive)}
-              className={`p-2 rounded-lg transition-all duration-200 ${
-                voiceActive 
-                  ? 'bg-primary text-primary-foreground shadow-lg scale-105' 
-                  : 'bg-muted text-muted-foreground hover:bg-muted/80 hover:scale-105'
-              }`}
+              className={`p-2 rounded-md ${voiceActive ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300'}`}
               data-testid="voice-activation"
-              aria-label={voiceActive ? 'Disable voice' : 'Enable voice'}
             >
-              {voiceActive ? (
-                <Mic className="w-4 h-4" />
-              ) : (
-                <MicOff className="w-4 h-4" />
-              )}
-              {voiceActive && (
-                <span 
-                  className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"
-                  data-testid="voice-indicator"
-                ></span>
-              )}
+              🎤
+              {voiceActive && <span data-testid="voice-indicator" className="ml-1">●</span>}
             </button>
 
             {/* Theme Toggle */}
             <button
               onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-              className="p-2 rounded-lg bg-[var(--color-muted)] text-[var(--color-muted-foreground)] hover:bg-[color-mix(in_srgb,var(--color-muted)_80%,#000)] hover:scale-105 transition-all duration-200"
+              className="p-2 rounded-md bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
               data-testid="theme-toggle"
-              aria-label={mounted ? `Switch to ${theme === 'light' ? 'dark' : 'light'} mode` : 'Switch to dark mode'}
             >
-              {mounted ? (
-                theme === 'light' ? (
-                  <Moon className="w-4 h-4" />
-                ) : (
-                  <Sun className="w-4 h-4" />
-                )
-              ) : (
-                <Sun className="w-4 h-4" />
-              )}
+              {theme === 'light' ? '🌙' : '☀️'}
             </button>
 
             {/* Mobile Menu Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg bg-muted text-muted-foreground hover:bg-muted/80 transition-all duration-200"
+              className="md:hidden p-2 rounded-md bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
               data-testid="mobile-menu-button"
-              aria-label="Toggle mobile menu"
             >
-              {mobileMenuOpen ? (
-                <X className="w-5 h-5" />
-              ) : (
-                <Menu className="w-5 h-5" />
-              )}
+              ☰
             </button>
 
             {/* User Profile */}
             <div data-testid="user-profile" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center text-primary-foreground text-sm font-bold shadow-lg">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm">
                 U
               </div>
             </div>
@@ -143,18 +97,23 @@ export default function Header() {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border bg-background/95 backdrop-blur">
-            <nav className="px-2 py-4 space-y-3" aria-label="Mobile navigation" data-testid="mobile-menu">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="block px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors font-medium"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {language === 'hi' ? item.hi : item.en}
-                </Link>
-              ))}
+          <div className="md:hidden border-t dark:border-gray-700">
+            <nav className="px-4 py-2 space-y-2" aria-label="Mobile navigation" data-testid="mobile-menu">
+              <Link href="/dashboard" className="block text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="dashboard-link-mobile">
+                {language === 'hi' ? 'डैशबोर्ड' : 'Dashboard'}
+              </Link>
+              <Link href="/projects" className="block text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="projects-nav-mobile">
+                {language === 'hi' ? 'परियोजनाएं' : 'Projects'}
+              </Link>
+              <Link href="/governance" className="block text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="governance-nav-mobile">
+                {language === 'hi' ? 'शासन' : 'Governance'}
+              </Link>
+              <Link href="/wallet" className="block text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="wallet-nav-mobile">
+                {language === 'hi' ? 'वॉलेट' : 'Wallet'}
+              </Link>
+              <Link href="/community" className="block text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white" data-testid="community-nav-mobile">
+                {language === 'hi' ? 'समुदाय' : 'Community'}
+              </Link>
             </nav>
           </div>
         )}

@@ -1,0 +1,165 @@
+type WorkflowType = 
+ variant {
+   Approval;
+   Audit;
+   Certification;
+   Custom: text;
+   Review;
+ };
+type WorkflowStep = 
+ record {
+   assignedTo: opt principal;
+   comments: opt text;
+   completedAt: opt int;
+   description: text;
+   id: nat;
+   name: text;
+   required: bool;
+   status: StepStatus;
+ };
+type WorkflowStatus = 
+ variant {
+   Cancelled;
+   Completed;
+   InProgress;
+   Pending;
+ };
+type StepStatus = 
+ variant {
+   Completed;
+   InProgress;
+   NotStarted;
+   Skipped;
+ };
+type ShareAccessLevel = 
+ variant {
+   Comment;
+   Edit;
+   Read;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: Document;
+ };
+type DocumentWorkflow = 
+ record {
+   assignedTo: opt principal;
+   completedAt: opt int;
+   createdAt: int;
+   createdBy: principal;
+   currentStep: nat;
+   documentId: text;
+   id: nat;
+   status: WorkflowStatus;
+   steps: vec WorkflowStep;
+   workflowType: WorkflowType;
+ };
+type DocumentVersion = 
+ record {
+   changeNote: opt text;
+   changedBy: principal;
+   documentId: text;
+   hash: text;
+   timestamp: int;
+   version: nat;
+ };
+type DocumentType = 
+ variant {
+   Certificate;
+   Environmental;
+   Financial;
+   Image;
+   Legal;
+   Other: text;
+   Report;
+   Technical;
+   Video;
+ };
+type DocumentStatus = 
+ variant {
+   Approved;
+   Archived;
+   Draft;
+   Rejected;
+   Submitted;
+   UnderReview;
+ };
+type Document = 
+ record {
+   accessLevel: AccessLevel;
+   createdAt: int;
+   description: opt text;
+   documentType: DocumentType;
+   hash: text;
+   id: text;
+   metadata: vec record {
+                   text;
+                   text;
+                 };
+   mimeType: text;
+   name: text;
+   owner: principal;
+   size: nat;
+   status: DocumentStatus;
+   tags: vec text;
+   updatedAt: int;
+   version: nat;
+ };
+type AccessLevel = 
+ variant {
+   DAO;
+   Private;
+   Public;
+   Restricted: vec principal;
+ };
+service : {
+  completeWorkflowStep: (workflowId: nat, stepId: nat, comments: opt text) ->
+   (Result_2);
+  getAccessibleDocuments: () -> (vec Document) query;
+  getDocument: (documentId: text) -> (Result) query;
+  getDocumentStats: () ->
+   (record {
+      activeWorkflows: nat;
+      documentsByStatus: vec record {
+                               DocumentStatus;
+                               nat;
+                             };
+      documentsByType: vec record {
+                             DocumentType;
+                             nat;
+                           };
+      totalDocuments: nat;
+      totalWorkflows: nat;
+    }) query;
+  getDocumentVersions: (documentId: text) -> (opt vec DocumentVersion) query;
+  getDocumentWorkflows: (documentId: text) -> (vec DocumentWorkflow) query;
+  getMyDocuments: () -> (vec Document) query;
+  getMyWorkflows: () -> (vec DocumentWorkflow) query;
+  getWorkflow: (workflowId: nat) -> (opt DocumentWorkflow) query;
+  searchDocuments: (searchQuery: text, documentType: opt DocumentType, tags:
+   opt vec text) -> (vec Document) query;
+  shareDocument: (documentId: text, shareWith: principal, accessLevel:
+   ShareAccessLevel, expiresAt: opt int) -> (Result_2);
+  startWorkflow: (documentId: text, workflowType: WorkflowType, steps:
+   vec text, assignTo: opt principal) -> (Result_1);
+  updateDocument: (documentId: text, name: opt text, description: opt text,
+   newHash: opt text, accessLevel: opt AccessLevel, tags: opt vec text,
+   changeNote: opt text) -> (Result);
+  uploadDocument: (name: text, description: opt text, documentType:
+   DocumentType, mimeType: text, size: nat, hash: text, accessLevel:
+   AccessLevel, tags: vec text, metadata: vec record {
+                                                text;
+                                                text;
+                                              }) -> (Result);
+}

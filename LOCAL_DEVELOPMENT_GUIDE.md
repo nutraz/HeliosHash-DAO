@@ -40,49 +40,7 @@ If you see `bash: /dfx/env: No such file or directory`, it's because your shell 
 
 **Solution**: These lines have been commented out in your `~/.bashrc`. The `dfx` command still works from your PATH.
 
-# Local Development Guide
-
-## Frontend Access After Deployment
-
-After successfully deploying canisters with `dfx deploy`, you'll see output like:
-
-```text
-URLs:
-  Frontend canister via browser:
-    hhdao_frontend:
-      - http://vizcg-th777-77774-qaaea-cai.localhost:8000/ (Recommended)
-      - http://127.0.0.1:8000/?canisterId=vizcg-th777-77774-qaaea-cai  (Legacy)
-```
-
-### ✅ Working URL (Use This)
-
-On Fedora/Linux, use the **Legacy URL format**:
-
-```text
-http://127.0.0.1:8000/?canisterId=vizcg-th777-77774-qaaea-cai
-```
-
-This always works because it uses the IP address directly.
-
-### ❌ Why .localhost URLs Don't Work
-
-The "Recommended" URL `http://<canister-id>.localhost:8000/` fails on Linux because:
-
-1. Linux doesn't automatically resolve `*.localhost` to `127.0.0.1`
-2. Wildcard DNS resolution requires system configuration
-
-### � Shell Configuration Fix
-
-If you see `bash: /dfx/env: No such file or directory`, it's because your shell config has:
-
-```bash
-. "$HOME/.local/share/dfx/env"
-. "$XDG_DATA_HOME/dfx/env"
-```
-
-**Solution**: These lines have been commented out in your `~/.bashrc`. The `dfx` command still works from your PATH.
-
-### �🚀 Development Workflow
+### 🚀 Development Workflow
 
 1. Start local IC replica: `dfx start --clean --background`
 2. Deploy canisters: `dfx deploy`
@@ -96,31 +54,14 @@ For mobile testing, the dev server runs on port 3001:
 ```bash
 pnpm dev  # Starts on http://localhost:3001
 ```
-
 ### 🧪 Playwright Configuration
 
 Playwright tests are configured to use `localhost:3001` (dev server), not the canister URLs. This allows testing without requiring full canister deployment.
 
 ## Quick Reference
 
-| Purpose                    | URL                                               |
-| -------------------------- | ------------------------------------------------- |
+| Purpose | URL |
+|---------|-----|
 | IC Frontend (after deploy) | `http://127.0.0.1:8000/?canisterId=<canister-id>` |
-| Dev Server (for testing)   | `http://localhost:3001`                           |
-| Mobile Dev Server          | `http://0.0.0.0:3001` (accessible on network)     |
-
-### ⚠️ Important Security Notice
-
-**🚨 THIS PROJECT IS IN EARLY ALPHA DEVELOPMENT**  
-**⚠️ NOT PRODUCTION READY - DO NOT USE WITH REAL FUNDS**  
-**🚫 SMART CONTRACTS HAVE NOT BEEN PROFESSIONALLY AUDITED**
-
-All development and testing should be done on the testnet only. The URLs and instructions provided are for development purposes only and should not be used with real funds or in a production environment.
-
-### 🔍 Current Development Focus
-
-1. **Frontend Development** - Continue UI/UX improvements
-2. **Testing** - Expand test coverage to 95%+
-3. **Documentation** - Create comprehensive guides
-
-Remember that this project is currently in an alpha stage with significant security and compliance considerations. Always refer to the latest [Production Readiness Assessment](docs/production-readiness-2025-10-20.md) for the most up-to-date project status.
+| Dev Server (for testing) | `http://localhost:3001` |
+| Mobile Dev Server | `http://0.0.0.0:3001` (accessible on network) |

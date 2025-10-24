@@ -4,9 +4,8 @@ import Time "mo:base/Time";
 import Result "mo:base/Result";
 import Array "mo:base/Array";
 import Nat "mo:base/Nat";
-import Principal "mo:base/Principal";
 
-persistent actor Governance {
+actor Governance {
   // Enhanced Proposal structure with vote thresholds
   type Proposal = {
     id: Nat;
@@ -22,13 +21,12 @@ persistent actor Governance {
   };
 
   // Governance configuration
-  private transient var voteThresholdPercentage : Nat = 51; // 51% of total voting power
-  private transient var emergencyThresholdPercentage : Nat = 75; // 75% for emergency actions
-  private transient var totalVotingPower : Nat = 1000000; // Total OWP tokens eligible for voting
-  private transient var paused : Bool = false; // Emergency pause for governance
-  private transient var maxVotingPowerPercentage : Nat = 5; // Maximum 5% voting power per holder to prevent whale dominance
+  private var voteThresholdPercentage : Nat = 51; // 51% of total voting power
+  private var emergencyThresholdPercentage : Nat = 75; // 75% for emergency actions
+  private var totalVotingPower : Nat = 1000000; // Total OWP tokens eligible for voting
+  private var paused : Bool = false; // Emergency pause for governance
 
-  var proposals: [Proposal] = [];
+  stable var proposals: [Proposal] = [];
 
   public func createProposal(title: Text, description: Text): async Nat {
     let id = proposals.size();
@@ -38,7 +36,7 @@ persistent actor Governance {
       title;
       description;
       votes = 0;
-      votingMethod = #Quadratic;
+      votingMethod = Voting.VotingMethod.Quadratic;
       createdAt = Time.now();
       executed = false;
       executedAt = null;
@@ -57,7 +55,7 @@ persistent actor Governance {
       title;
       description;
       votes = 0;
-      votingMethod = #Quadratic;
+      votingMethod = Voting.VotingMethod.Quadratic;
       createdAt = Time.now();
       executed = false;
       executedAt = null;
@@ -82,22 +80,22 @@ persistent actor Governance {
   };
 
   // Emergency functions to trigger treasury pause/resume through governance vote
-  public func emergencyPauseTreasury(treasuryCanisterId: Principal): async () {
-    if (paused) { return () };
+  public func emergencyPauseTreasury(treasuryCanisterId: Principal): async Result.Result<(), Text> {
+    if (paused) { return #err("Governance is paused - cannot trigger emergency actions") };
     // This would require a governance proposal to be executed first
     // For now, simplified - in production, this should check for executed emergency proposal
     type TreasuryActor = actor {
-      pauseTreasury : () -> async ()
+      pauseTreasury : () -> async Result.Result<(), Text>
     };
     let treasury : TreasuryActor = actor (Principal.toText(treasuryCanisterId));
     await treasury.pauseTreasury()
   };
 
-  public func emergencyResumeTreasury(treasuryCanisterId: Principal): async () {
-    if (paused) { return () };
+  public func emergencyResumeTreasury(treasuryCanisterId: Principal): async Result.Result<(), Text> {
+    if (paused) { return #err("Governance is paused - cannot trigger emergency actions") };
     // This would require a governance proposal to be executed first
     type TreasuryActor = actor {
-      resumeTreasury : () -> async ()
+      resumeTreasury : () -> async Result.Result<(), Text>
     };
     let treasury : TreasuryActor = actor (Principal.toText(treasuryCanisterId));
     await treasury.resumeTreasury()
@@ -109,15 +107,8 @@ persistent actor Governance {
 
   public func voteQuadratic(proposalId: Nat, tokens: Nat) : async Result.Result<Nat, Text> {
     if (paused) { return #err("Governance paused") };
-
-    // Check voting power cap to prevent whale dominance
-    let maxAllowedTokens = (totalVotingPower * maxVotingPowerPercentage) / 100;
-    if (tokens > maxAllowedTokens) {
-      return #err("Voting power exceeds maximum allowed limit of " # Nat.toText(maxVotingPowerPercentage) # "%");
-    };
-
     // Find proposal
-    let proposalOpt = Array.find(proposals, func(p) = p.id == proposalId);
+    let proposalOpt = Array.find<Proposal>(proposals, func(p) = p.id == proposalId);
     switch (proposalOpt) {
       case null { #err("Proposal not found") };
       case (?prop) {
@@ -125,7 +116,7 @@ persistent actor Governance {
         let votePower = Voting.quadraticVotes(tokens);
         let newVotes = prop.votes + votePower;
         let updated = { prop with votes = newVotes };
-        proposals := Array.map(proposals, func(p) = if (p.id == proposalId) updated else p);
+        proposals := Array.map<Proposal>(proposals, func(p) = if (p.id == proposalId) updated else p);
         #ok(votePower)
       };
     };
@@ -133,14 +124,14 @@ persistent actor Governance {
 
   public func executeProposal(proposalId: Nat) : async Result.Result<(), Text> {
     if (paused) { return #err("Governance paused") };
-    let proposalOpt = Array.find(proposals, func(p) = p.id == proposalId);
+    let proposalOpt = Array.find<Proposal>(proposals, func(p) = p.id == proposalId);
     switch (proposalOpt) {
       case null { #err("Proposal not found") };
       case (?prop) {
         if (prop.executed) { return #err("Already executed") };
         if (prop.votes < prop.voteThreshold) { return #err("Insufficient votes") };
         let updated = { prop with executed = true; executedAt = ?Time.now() };
-        proposals := Array.map(proposals, func(p) = if (p.id == proposalId) updated else p);
+        proposals := Array.map<Proposal>(proposals, func(p) = if (p.id == proposalId) updated else p);
         #ok(())
       };
     };
@@ -148,14 +139,7 @@ persistent actor Governance {
 
   public func voteConviction(proposalId: Nat, tokens: Nat, timeHeld: Int) : async Result.Result<Nat, Text> {
     if (paused) { return #err("Governance paused") };
-
-    // Check voting power cap to prevent whale dominance
-    let maxAllowedTokens = (totalVotingPower * maxVotingPowerPercentage) / 100;
-    if (tokens > maxAllowedTokens) {
-      return #err("Voting power exceeds maximum allowed limit of " # Nat.toText(maxVotingPowerPercentage) # "%");
-    };
-
-    let proposalOpt = Array.find(proposals, func(p) = p.id == proposalId);
+    let proposalOpt = Array.find<Proposal>(proposals, func(p) = p.id == proposalId);
     switch (proposalOpt) {
       case null { #err("Proposal not found") };
       case (?prop) {
@@ -163,7 +147,7 @@ persistent actor Governance {
         let votePower = Voting.convictionVotes(tokens, timeHeld);
         let newVotes = prop.votes + votePower;
         let updated = { prop with votes = newVotes };
-        proposals := Array.map(proposals, func(p) = if (p.id == proposalId) updated else p);
+        proposals := Array.map<Proposal>(proposals, func(p) = if (p.id == proposalId) updated else p);
         #ok(votePower)
       };
     };
@@ -175,7 +159,7 @@ persistent actor Governance {
   };
 
   // Query functions
-  public query func getGovernanceStatus() : async { paused: Bool; totalVotingPower: Nat; voteThresholdPercentage: Nat; maxVotingPowerPercentage: Nat } {
-    { paused; totalVotingPower; voteThresholdPercentage; maxVotingPowerPercentage }
+  public query func getGovernanceStatus() : async { paused: Bool; totalVotingPower: Nat; voteThresholdPercentage: Nat } {
+    { paused; totalVotingPower; voteThresholdPercentage }
   };
 }

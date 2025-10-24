@@ -1,0 +1,29 @@
+/home/nutarzz/Downloads/workspace-e5eeb2a6-645a-4754-ae0b-bdbe6089f89a
+├── components.json
+├── db
+│   └── custom.db
+├── eslint.config.mjs
+├── examples
+│   └── websocket
+├── next.config.ts
+├── package.json
+├── package-lock.json
+├── postcss.config.mjs
+├── prisma
+│   └── schema.prisma
+├── public
+│   ├── logo.svg
+│   └── robots.txt
+├── README.md
+├── scripts
+│   └── mobile-dev.js
+├── server.ts
+├── src
+│   ├── app
+│   ├── components
+│   ├── hooks
+│   └── lib
+├── tailwind.config.ts
+└── tsconfig.json
+
+12 directories, 15 files

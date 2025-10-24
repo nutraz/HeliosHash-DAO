@@ -1,0 +1,25 @@
+// Version: 1.0.0
+type ComputeMode__210142382 = {#AI; #Bitcoin; #Hybrid};
+type ComputeStats__1050040447 =
+  {
+    aiWorkloads : Nat;
+    efficiency : Float;
+    hashRate : Float;
+    lastUpdated : Int;
+    mode : ComputeMode__210142382;
+    powerConsumption : Float;
+    revenue : Float
+  };
+type PivotDecision__648397865 =
+  {
+    estimatedImpact : Float;
+    newMode : ComputeMode__210142382;
+    threshold : Float;
+    timestamp : Int;
+    trigger : Text
+  };
+actor {
+  stable var computeStatsEntries : [(Principal, ComputeStats__1050040447)];
+  stable var currentMode : {#AI; #Bitcoin; #Hybrid};
+  stable var pivotHistoryEntries : [(Nat, PivotDecision__648397865)]
+};

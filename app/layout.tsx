@@ -1,31 +1,24 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import Header from '@/components/Header';
 import { AuthProvider } from '@/hooks/useAuthContext';
-import { ThemeProvider } from './providers';
+import { Inter } from 'next/font/google';
+import type { ReactNode } from 'react';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: 'HeliosHash DAO - Solar Energy Community',
-  description: "India's node of the One World Project - Building solar-energy communities",
+export const metadata = {
+  title: 'HeliosHash DAO',
+  description: 'Decentralized solar + community governance',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning={true}>
+    <html lang="en">
       <body className={inter.className}>
-        <ThemeProvider>
-          <AuthProvider>
-            <div className="min-h-screen bg-gradient-to-br from-[#FF9933]/5 via-white to-[#138808]/5">
-              {children}
-            </div>
-          </AuthProvider>
-        </ThemeProvider>
+        <AuthProvider>
+          <Header />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,0 +1,90 @@
+// Version: 1.0.0
+type AccessLevel__46200497 =
+  {#DAO; #Private; #Public; #Restricted : [Principal]};
+type DocumentShare__832920966 =
+  {
+    accessLevel : ShareAccessLevel__270130252;
+    createdAt : Int;
+    documentId : Text;
+    expiresAt : ?Int;
+    sharedBy : Principal;
+    sharedWith : Principal
+  };
+type DocumentStatus__793354765 =
+  {#Approved; #Archived; #Draft; #Rejected; #Submitted; #UnderReview};
+type DocumentType__767085854 =
+  {
+    #Certificate;
+    #Environmental;
+    #Financial;
+    #Image;
+    #Legal;
+    #Other : Text;
+    #Report;
+    #Technical;
+    #Video
+  };
+type DocumentVersion__582344056 =
+  {
+    changeNote : ?Text;
+    changedBy : Principal;
+    documentId : Text;
+    hash : Text;
+    timestamp : Int;
+    version : Nat
+  };
+type DocumentWorkflow__102909931 =
+  {
+    assignedTo : ?Principal;
+    completedAt : ?Int;
+    createdAt : Int;
+    createdBy : Principal;
+    currentStep : Nat;
+    documentId : Text;
+    id : Nat;
+    status : WorkflowStatus__724572883;
+    steps : [WorkflowStep__535205746];
+    workflowType : WorkflowType__593222767
+  };
+type Document__275376596 =
+  {
+    accessLevel : AccessLevel__46200497;
+    createdAt : Int;
+    description : ?Text;
+    documentType : DocumentType__767085854;
+    hash : Text;
+    id : Text;
+    metadata : [(Text, Text)];
+    mimeType : Text;
+    name : Text;
+    owner : Principal;
+    size : Nat;
+    status : DocumentStatus__793354765;
+    tags : [Text];
+    updatedAt : Int;
+    version : Nat
+  };
+type ShareAccessLevel__270130252 = {#Comment; #Edit; #Read};
+type StepStatus__234345665 = {#Completed; #InProgress; #NotStarted; #Skipped};
+type WorkflowStatus__724572883 =
+  {#Cancelled; #Completed; #InProgress; #Pending};
+type WorkflowStep__535205746 =
+  {
+    assignedTo : ?Principal;
+    comments : ?Text;
+    completedAt : ?Int;
+    description : Text;
+    id : Nat;
+    name : Text;
+    required : Bool;
+    status : StepStatus__234345665
+  };
+type WorkflowType__593222767 =
+  {#Approval; #Audit; #Certification; #Custom : Text; #Review};
+actor {
+  stable var documentEntries : [(Text, Document__275376596)];
+  stable var shareEntries : [(Text, DocumentShare__832920966)];
+  stable var versionEntries : [(Text, [DocumentVersion__582344056])];
+  stable var workflowCounter : Nat;
+  stable var workflowEntries : [(Nat, DocumentWorkflow__102909931)]
+};

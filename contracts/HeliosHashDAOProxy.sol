@@ -129,27 +129,17 @@ contract HeliosHashDAOProxy is
      * @param proofMethod "USSD" or "SMS"
      * @param signature Oracle verification signature
      */
-    // Multi-oracle (3-of-5) signatures, per-phone rate limiting, geo/biometric hooks
-    mapping(string => uint256) public lastProxyVoteTime; // phoneHash => timestamp
-    uint256 public constant PROXY_VOTE_INTERVAL = 5 * 60; // 5 min per phone
-
     function submitProxyVote(
         bytes32 voteHash,
         string calldata phoneHash,
         uint256 proposalId,
         uint8 support,
         string calldata proofMethod,
-        bytes[] calldata signatures, // Multi-oracle signatures
-        string calldata geoHash, // Optional: geo verification
-        bytes calldata biometricProof // Optional: biometric
+        bytes calldata signature
     ) external nonReentrant {
         require(support <= 2, "Invalid vote type");
         require(proxyVotes[voteHash].voteHash == bytes32(0), "Vote already exists");
         require(proposalProxyVotes[proposalId].length < MAX_PROXY_VOTES_PER_PROPOSAL, "Too many proxy votes");
-
-        // Rate limit per phone
-        require(block.timestamp > lastProxyVoteTime[phoneHash] + PROXY_VOTE_INTERVAL, "Rate limit: wait before voting again");
-        lastProxyVoteTime[phoneHash] = block.timestamp;
 
         ProxyVoter memory voter = proxyVoters[phoneHash];
         require(voter.isActive && voter.isVerified, "Voter not authorized");
@@ -157,22 +147,10 @@ contract HeliosHashDAOProxy is
         // Verify proposal is active
         require(state(proposalId) == ProposalState.Active, "Proposal not active");
 
-        // Multi-oracle verification (3-of-5)
+        // Verify oracle signature
         bytes32 message = keccak256(abi.encodePacked(voteHash, phoneHash, proposalId, support));
-        uint256 valid = 0;
-        address[5] memory seen;
-        for (uint256 i = 0; i < signatures.length && i < 5; i++) {
-            address signer = message.toEthSignedMessageHash().recover(signatures[i]);
-            bool duplicate = false;
-            for (uint256 j = 0; j < valid; j++) if (seen[j] == signer) duplicate = true;
-            if (!duplicate && authorizedOracles[signer]) {
-                seen[valid] = signer;
-                valid++;
-            }
-        }
-        require(valid >= 3, "At least 3 valid oracle signatures required");
-
-        // TODO: Geo verification (geoHash) and biometricProof (future)
+        address signer = message.toEthSignedMessageHash().recover(signature);
+        require(authorizedOracles[signer], "Invalid verification signature");
 
         // Calculate voting weight based on NFT tier
         uint256 weight = getVotingWeight(voter.nftTokenId);

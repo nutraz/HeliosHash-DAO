@@ -1,0 +1,6 @@
+// Version: 1.0.0
+actor {
+  stable var nextDisputeId : Nat;
+  stable var nextEvidenceId : Nat;
+  stable var nextSessionId : Nat
+};

@@ -1,0 +1,52 @@
+name: helioshash_dao
+<<<<<<< HEAD
+version: 1.0.0+1
+description: HeliosHash DAO Flutter app
+publish_to: 'none'
+environment:
+  sdk: '>=2.17.0 <3.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+=======
+description: HeliosHash DAO - Community-owned solar infrastructure and governance
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0  # Updated to match lottie requirements
+  provider: ^6.0.5
+  # internet_identity: ^0.2.0
+  webview_flutter: ^4.4.2
+  url_launcher: ^6.1.14
+  shared_preferences: ^2.2.0
+  web3dart: ^3.0.1
+  flutter_svg: ^2.0.7
+  lottie: ^3.3.2
+  google_fonts: ^6.1.0
+  intl: ^0.20.2
+  flutter_staggered_grid_view: ^0.7.0
+  ic_dart:
+    path: packages/ic_dart
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/animations/
+>>>>>>> audit-clean

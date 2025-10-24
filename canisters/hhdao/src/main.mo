@@ -1,34 +1,4 @@
 
-/**
- * HeliosHash DAO Canister — Security & Upgrade Controls (2025-10-23)
- *
- * ## Upgrade & Admin Security Model
- * - **Multi-sig Admin:** All critical admin actions (pause, unpause, setMultisig, executeProposal) require multi-sig approval. Signers and quorum are set via `setMultisig`.
- * - **RBAC:** Only principals in the `ms_signers` list (multi-sig) can approve or execute admin actions. No single-owner pattern exists.
- * - **Timelock:** Proposal execution is subject to a timelock (see `executeAfter` in proposals; enforced in `canExecute`).
- * - **Upgrade Controls:**
- *   - Canister upgrades must be performed by a principal in the multi-sig set, with quorum approval.
- *   - All upgrade attempts should be logged via `logEvent` for auditability.
- *   - Before upgrade, pause the canister (`pause`) and ensure all multi-sig signers approve the upgrade opId.
- *   - After upgrade, unpause and verify state integrity.
- * - **Audit Log:** All admin and multi-sig actions are recorded in the `events` ring buffer (see `logEvent`).
- * - **Emergency Controls:** Any multi-sig signer can propose and approve emergency actions (pause, unpause, etc.) with quorum.
- *
- * ## Operator Procedures
- * 1. **Propose Admin Action:** Call the relevant admin method (e.g., `pause`, `setMultisig`, `executeProposal`) with a unique opId.
- * 2. **Multi-sig Approval:** Each signer calls `msApprove(opId)` until quorum is reached.
- * 3. **Execute:** Once quorum is met, the action is executed (see `executeProposal`).
- * 4. **Upgrade:** For upgrades, follow DFINITY best practices: pause, backup state, upgrade, unpause, and verify.
- *
- * ## Security Notes
- * - No single-principal admin. All critical actions require multi-sig.
- * - All admin actions and upgrades are auditable via `getEvents`.
- * - RBAC is enforced in all shared admin methods.
- * - Proposal execution is subject to timelock and multi-sig.
- *
- * For more, see CANISTERS.md and README.md.
- */
-
 
 import HHDAOLib "lib";
 import Principal "mo:base/Principal";
@@ -42,135 +12,12 @@ import Cycles "mo:base/ExperimentalCycles";
 // Inter-canister communication with optional injected principals (removes hard-coded IDs)
 
 
-actor class HHDAO(
+persistent actor class HHDAO(
   daoPrincipal : ?Principal,
   identityPrincipal : ?Principal,
   telemetryPrincipal : ?Principal,
   documentsPrincipal : ?Principal,
 ) {
-	// --- Security controls (scaffolding) ---
-	stable var paused : Bool = false;
-	// simple reentrancy guard for new sensitive methods
-	transient var _lock : Bool = false;
-	func withLock<T>(f : () -> async T) : async T {
-		if (_lock) { assert false; }; // trap on reentrancy
-		_lock := true;
-		let r = await f();
-		_lock := false;
-		r
-	};
-
-	// Multi-sig settings (admin-controlled)
-	stable var ms_signers : [Principal] = [];
-	stable var ms_quorum : Nat = 0;
-	// approvals keyed by op id (Text) -> unique principals
-	stable var ms_ops : [(Text, [Principal])] = [];
-		// Simple audit log ring buffer
-		stable var events : [(Int, Principal, Text)] = [];
-		let MAX_EVENTS : Nat = 1000;
-		func logEvent(kind : Text, who : Principal, details : Text) : () {
-			let now = Time.now();
-			let entry = (now, who, kind # ":" # details);
-			if (events.size() >= MAX_EVENTS) {
-				// drop oldest
-				events := Array.tabulate<(Int, Principal, Text)>(MAX_EVENTS - 1, func(i) { events[i + 1] });
-			};
-			events := Array.append(events, [entry]);
-		};
-
-	public query func isPaused() : async Bool { paused };
-	public shared ({ caller }) func pause() : async Result.Result<Text, Text> {
-		// require caller in signers and quorum==1 or assume single-admin for now
-		if (Array.find<Principal>(ms_signers, func(p) { p == caller }) == null and ms_quorum > 0) {
-			return #err("Not authorized");
-		};
-			paused := true; logEvent("pause", caller, ""); #ok("paused")
-	};
-	public shared ({ caller }) func unpause() : async Result.Result<Text, Text> {
-		if (Array.find<Principal>(ms_signers, func(p) { p == caller }) == null and ms_quorum > 0) {
-			return #err("Not authorized");
-		};
-			paused := false; logEvent("unpause", caller, ""); #ok("unpaused")
-	};
-
-	public shared ({ caller }) func setMultisig(signers : [Principal], quorum : Nat) : async Result.Result<Text, Text> {
-		// rudimentary owner check: first set allows any, subsequent requires existing signer
-		if (ms_quorum > 0 and Array.find<Principal>(ms_signers, func(p) { p == caller }) == null) {
-			return #err("Not authorized");
-		};
-			ms_signers := signers;
-			ms_quorum := quorum;
-			logEvent("multisig:update", caller, "q=" # Nat.toText(quorum));
-		#ok("updated")
-	};
-
-	public shared ({ caller }) func msApprove(opId : Text) : async Result.Result<Nat, Text> {
-		if (Array.find<Principal>(ms_signers, func(p) { p == caller }) == null) { return #err("Not a signer") };
-		// append unique approval
-		var found = false;
-		var updated : [(Text, [Principal])] = [];
-		for ((k, arr) in Array.vals(ms_ops)) {
-			if (k == opId) {
-				found := true;
-				let exists = Array.find<Principal>(arr, func(p) { p == caller }) != null;
-				updated := Array.append(updated, [(k, if (exists) arr else Array.append(arr, [caller]))]);
-			} else { updated := Array.append(updated, [(k, arr)]) };
-		};
-		if (not found) { updated := Array.append(updated, [(opId, [caller])]) };
-			ms_ops := updated;
-		// return current approval count
-		let count = switch (Array.find<(Text,[Principal])>(ms_ops, func(t) { t.0 == opId })) { case (?t) { t.1.size() }; case null { 0 } };
-			logEvent("multisig:approve", caller, opId # ":" # Nat.toText(count));
-		#ok(count)
-	};
-
-	public query func msApprovals(opId : Text) : async Nat {
-		switch (Array.find<(Text,[Principal])>(ms_ops, func(t) { t.0 == opId })) { case (?t) { t.1.size() }; case null { 0 } }
-	};
-
-		   /// Returns up to 100 recent events (pagination required for more)
-		   public query func getEvents(limit : Nat) : async [(Int, Principal, Text)] {
-			   let n = events.size();
-			   let maxLimit = 100;
-			   let take = if (limit < Nat.fromIntWrap(n) and limit <= maxLimit) { limit } else if (Nat.fromIntWrap(n) < maxLimit) { Nat.fromIntWrap(n) } else { maxLimit };
-			   if (n == 0) { return [] };
-			   let start = n - Nat.toInt(take);
-			   Array.tabulate<(Int, Principal, Text)>(Nat.toInt(take), func(i) { events[start + i] });
-		   };
-
-		// Nonce tracking (optional, not enforced yet)
-		stable var nonces : [(Principal, Nat)] = [];
-		func getNonceInternal(p : Principal) : Nat {
-			switch (Array.find<(Principal,Nat)>(nonces, func(t) { t.0 == p })) { case (?t) { t.1 }; case null { 0 } }
-		};
-		public query func getNonce() : async Nat { getNonceInternal(Principal.fromActor(this)) };
-		public shared ({ caller }) func bumpNonce(nonce : Nat) : async Result.Result<Nat, Text> {
-			let expected = getNonceInternal(caller) + 1;
-			if (nonce != expected) { return #err("Bad nonce") };
-			// update
-			var updated : [(Principal,Nat)] = [];
-			var found = false;
-			for (t in Array.vals(nonces)) {
-				if (t.0 == caller) { updated := Array.append(updated, [(caller, nonce)]); found := true } else { updated := Array.append(updated, [t]) };
-			};
-			if (not found) { updated := Array.append(updated, [(caller, nonce)]) };
-			nonces := updated;
-			#ok(nonce)
-		};
-
-		// Execute a local proposal with multisig + timelock
-		public shared ({ caller }) func executeProposal(proposalId : Nat, opId : Text) : async Result.Result<Text, Text> {
-			if (paused) { return #err("paused") };
-			let okQuorum = if (ms_quorum == 0) { true } else { await msApprovals(opId) >= ms_quorum };
-			if (not okQuorum) { return #err("insufficient approvals") };
-			return await withLock<Result.Result<Text, Text>>(func () : async Result.Result<Text, Text> {
-				if (not HHDAOLib.canExecute(proposalId)) { return #err("not ready") };
-				if (HHDAOLib.markExecuted(proposalId)) {
-					logEvent("proposal:executed", caller, Nat.toText(proposalId));
-					#ok("executed")
-				} else { #err("execute failed") }
-			});
-		};
 	// Canister references built lazily from provided principals
 	transient let dao_canister = switch daoPrincipal {
 		case (?p) { ?(actor (Principal.toText(p)) : actor {
@@ -301,18 +148,9 @@ actor class HHDAO(
 		case null { null };
 	};
 
-	   // Local state for project management
-	   // Local state (not stable yet; add persistence later)
-	   transient let state = HHDAOLib.HHDAOState();
-
-	   /// Returns up to 100 projects owned by the user (pagination required for more)
-	   public query func getUserProjectsPaginated(user : Principal, limit : Nat, offset : Nat) : async [HHDAOLib.Project] {
-		   let all = state.getUserProjects(user);
-		   let maxLimit = 100;
-		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
-		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
-		   Array.tabulate<HHDAOLib.Project>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
-	   }
+	// Local state for project management
+	// Local state (not stable yet; add persistence later)
+	transient let state = HHDAOLib.HHDAOState();
 
 	// Enhanced project creation with integrated services
 	public shared ({ caller }) func createProject(
@@ -456,105 +294,58 @@ actor class HHDAO(
 		}
 	};
 
-	   // Dashboard data aggregation
-	   public shared ({ caller }) func getDashboardData() : async {
-		   userProfile: ?{
-			   principal: Principal;
-			   username: ?Text;
-			   email: ?Text;
-			   displayName: ?Text;
-			   bio: ?Text;
-			   avatar: ?Text;
-			   location: ?Text;
-			   website: ?Text;
-			   createdAt: Int;
-			   updatedAt: Int;
-			   isVerified: Bool;
-			   verificationLevel: {#Basic; #Email; #KYC; #Enhanced};
-		   };
-		   projects: [HHDAOLib.Project];
-		   devices: [{
-			   id: Text;
-			   name: Text;
-			   deviceType: {#SolarPanel; #Inverter; #Battery; #EnergyMeter; #WeatherStation; #GridConnection};
-			   location: {latitude: Float; longitude: Float; address: ?Text; region: ?Text};
-			   owner: Principal;
-			   status: {#Online; #Offline; #Maintenance; #Error};
-			   registeredAt: Int;
-			   lastPing: Int;
-			   metadata: [(Text, Text)];
-		   }];
-		   documents: [{
-			   id: Text;
-			   name: Text;
-			   description: ?Text;
-			   documentType: {#Legal; #Technical; #Financial; #Environmental; #Certificate; #Report; #Image; #Video; #Other: Text};
-			   mimeType: Text;
-			   size: Nat;
-			   hash: Text;
-			   owner: Principal;
-			   status: {#Draft; #Submitted; #UnderReview; #Approved; #Rejected; #Archived};
-			   accessLevel: {#Public; #Private; #DAO; #Restricted: [Principal]};
-			   createdAt: Int;
-			   updatedAt: Int;
-			   version: Nat;
-			   tags: [Text];
-			   metadata: [(Text, Text)];
-		   }];
-	   } {
-		   let userProfile = switch (identity_canister) { case (?idc) { await idc.getProfile(caller) }; case null { null } };
-		   let userProjects = state.getUserProjects(caller);
-		   let userDevices = switch (telemetry_canister) { case (?tc) { await tc.getMyDevices() }; case null { [] } };
-		   let userDocuments = switch (documents_canister) { case (?dc) { await dc.getMyDocuments() }; case null { [] } };
-		   { userProfile = userProfile; projects = userProjects; devices = userDevices; documents = userDocuments; }
-	   };
-
-	   /// Returns up to 100 animal reports (pagination required for more)
-	   public query func getAnimalReportsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.AnimalReport] {
-		   let all = state.getAllAnimalReports();
-		   let maxLimit = 100;
-		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
-		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
-		   Array.tabulate<HHDAOLib.AnimalReport>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
-	   };
-
-	   /// Submit an animal care report
-	   public shared ({ caller }) func submitAnimalReport(
-		   location : Text,
-		   description : Text,
-		   photos : [Text],
-		   votesRequired : ?Nat
-	   ) : async Nat {
-		   state.submitAnimalReport(location, description, photos, votesRequired, caller);
-	   };
-
-	   /// Vote on an animal care report
-	   public shared ({ caller }) func voteOnAnimalReport(reportId : Nat, inFavor : Bool) : async Bool {
-		   state.voteOnAnimalReport(reportId, inFavor);
-	   };
-
-	   /// Get a specific animal report
-	   public query func getAnimalReport(reportId : Nat) : async ?HHDAOLib.AnimalReport {
-		   state.getAnimalReport(reportId);
-	   };
-
-	   /// Returns up to 100 proposals (pagination required for more)
-	   public query func getProposalsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.Proposal] {
-		   let all = state.getAllProposals();
-		   let maxLimit = 100;
-		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
-		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
-		   Array.tabulate<HHDAOLib.Proposal>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
-	   };
-
-	   /// Returns up to 100 NFTs (pagination required for more)
-	   public query func getNFTsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.NFT] {
-		   let all = state.getAllNFTs();
-		   let maxLimit = 100;
-		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
-		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
-		   Array.tabulate<HHDAOLib.NFT>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
-	   };
+	// Dashboard data aggregation
+	public shared ({ caller }) func getDashboardData() : async {
+		userProfile: ?{
+			principal: Principal;
+			username: ?Text;
+			email: ?Text;
+			displayName: ?Text;
+			bio: ?Text;
+			avatar: ?Text;
+			location: ?Text;
+			website: ?Text;
+			createdAt: Int;
+			updatedAt: Int;
+			isVerified: Bool;
+			verificationLevel: {#Basic; #Email; #KYC; #Enhanced};
+		};
+		projects: [HHDAOLib.Project];
+		devices: [{
+			id: Text;
+			name: Text;
+			deviceType: {#SolarPanel; #Inverter; #Battery; #EnergyMeter; #WeatherStation; #GridConnection};
+			location: {latitude: Float; longitude: Float; address: ?Text; region: ?Text};
+			owner: Principal;
+			status: {#Online; #Offline; #Maintenance; #Error};
+			registeredAt: Int;
+			lastPing: Int;
+			metadata: [(Text, Text)];
+		}];
+		documents: [{
+			id: Text;
+			name: Text;
+			description: ?Text;
+			documentType: {#Legal; #Technical; #Financial; #Environmental; #Certificate; #Report; #Image; #Video; #Other: Text};
+			mimeType: Text;
+			size: Nat;
+			hash: Text;
+			owner: Principal;
+			status: {#Draft; #Submitted; #UnderReview; #Approved; #Rejected; #Archived};
+			accessLevel: {#Public; #Private; #DAO; #Restricted: [Principal]};
+			createdAt: Int;
+			updatedAt: Int;
+			version: Nat;
+			tags: [Text];
+			metadata: [(Text, Text)];
+		}];
+	} {
+		let userProfile = switch (identity_canister) { case (?idc) { await idc.getProfile(caller) }; case null { null } };
+		let userProjects = state.getUserProjects(caller);
+		let userDevices = switch (telemetry_canister) { case (?tc) { await tc.getMyDevices() }; case null { [] } };
+		let userDocuments = switch (documents_canister) { case (?dc) { await dc.getMyDocuments() }; case null { [] } };
+		{ userProfile = userProfile; projects = userProjects; devices = userDevices; documents = userDocuments; }
+	};
 
 	// Original project functions (maintained for backward compatibility)
 	public query func getProjects() : async [HHDAOLib.Project] {
@@ -705,6 +496,8 @@ actor class HHDAO(
 	};
 
 	public query func getCyclesBalance() : async Nat { Cycles.balance() };
+<<<<<<< HEAD
+=======
 
 	// Seed data method for development and testing
 	public shared ({ caller }) func seed_data() : async Text {
@@ -985,92 +778,5 @@ actor class HHDAO(
 
 		summary
 	};
-
-		// --- Governance actions: slash with multisig gating and event logging ---
-		stable var penalties : [(Principal, Nat)] = [];
-		func addPenalty(target : Principal, amount : Nat) : () {
-			var updated : [(Principal, Nat)] = [];
-			var found = false;
-			for (t in Array.vals(penalties)) {
-				if (t.0 == target) {
-					updated := Array.append(updated, [(target, t.1 + amount)]);
-					found := true;
-				} else {
-					updated := Array.append(updated, [t]);
-				}
-			};
-			if (not found) { updated := Array.append(updated, [(target, amount)]) };
-			penalties := updated;
-		};
-
-		public shared ({ caller }) func slash(target : Principal, amount : Nat, reason : Text, opId : Text) : async Result.Result<Text, Text> {
-			if (paused) { return #err("paused") };
-			if (amount == 0) { return #err("amount must be > 0") };
-			let okQuorum = if (ms_quorum == 0) { true } else { await msApprovals(opId) >= ms_quorum };
-			if (not okQuorum) { return #err("insufficient approvals") };
-			return await withLock<Result.Result<Text, Text>>(func () : async Result.Result<Text, Text> {
-				addPenalty(target, amount);
-				logEvent("slash", caller, Principal.toText(target) # "," # Nat.toText(amount) # "," # reason);
-				#ok("slash recorded")
-			});
-		};
-
-		public query func getPenalty(target : Principal) : async Nat {
-			switch (Array.find<(Principal,Nat)>(penalties, func (t) { t.0 == target })) { case (?t) { t.1 }; case null { 0 } }
-		};
-
-		// --- Nonce enforcement helpers ---
-		func enforceAndBumpNonce(p : Principal, provided : Nat) : Result.Result<Nat, Text> {
-			let expected = getNonceInternal(p) + 1;
-			if (provided != expected) { return #err("Bad nonce: expected " # Nat.toText(expected)) };
-			var updated : [(Principal,Nat)] = [];
-			var found = false;
-			for (t in Array.vals(nonces)) {
-				if (t.0 == p) { updated := Array.append(updated, [(p, provided)]); found := true } else { updated := Array.append(updated, [t]) };
-			};
-			if (not found) { updated := Array.append(updated, [(p, provided)]) };
-			nonces := updated;
-			#ok(provided)
-		};
-
-		// Secure variants with nonce enforcement
-		public shared ({ caller }) func createProjectSecure(
-			name : Text,
-			location : Text,
-			capacity : Nat,
-			description : Text,
-			estimatedCost : Nat,
-			completionDate : ?Int,
-			nonce : Nat
-		) : async Result.Result<HHDAOLib.Project, Text> {
-			switch (enforceAndBumpNonce(caller, nonce)) { case (#err(e)) { return #err(e) }; case (#ok(_)) {} };
-			let res = await createProject(name, location, capacity, description, estimatedCost, completionDate);
-			switch (res) { case (#ok(p)) { logEvent("project:create", caller, Nat.toText(p.id)); #ok(p) }; case (#err(e)) { #err(e) } }
-		};
-
-		public shared ({ caller }) func updateProjectStatusSecure(
-			id : Nat,
-			status : HHDAOLib.ProjectStatus,
-			nonce : Nat
-		) : async Result.Result<Bool, Text> {
-			switch (enforceAndBumpNonce(caller, nonce)) { case (#err(e)) { return #err(e) }; case (#ok(_)) {} };
-			let ok = await updateProjectStatus(id, status);
-			if (ok) { logEvent("project:update_status", caller, Nat.toText(id)); #ok(true) } else { #err("update failed") }
-		};
-
-		public shared ({ caller }) func uploadProjectDocumentSecure(
-			projectId: Nat,
-			documentName: Text,
-			description: ?Text,
-			documentType: {#Legal; #Technical; #Financial; #Environmental; #Certificate; #Report; #Image; #Video; #Other: Text},
-			mimeType: Text,
-			size: Nat,
-			hash: Text,
-			isPublic: Bool,
-			nonce : Nat
-		) : async Result.Result<Text, Text> {
-			switch (enforceAndBumpNonce(caller, nonce)) { case (#err(e)) { return #err(e) }; case (#ok(_)) {} };
-			let res = await uploadProjectDocument(projectId, documentName, description, documentType, mimeType, size, hash, isPublic);
-			switch (res) { case (#ok(msg)) { logEvent("document:upload", caller, Nat.toText(projectId)); #ok(msg) }; case (#err(e)) { #err(e) } }
-		};
+>>>>>>> audit-clean
 }

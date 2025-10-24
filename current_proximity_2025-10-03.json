@@ -1,0 +1,47 @@
+{
+  "timestamp": "2025-10-03T22:14:37.782Z",
+  "testType": "HHDAO_CURRENT_PROXIMITY_TEST",
+  "tester": "nutrazz",
+  "detectionMethods": [
+    {
+      "method": "ipinfo.io",
+      "lat": 19.0728,
+      "lng": 72.8826,
+      "city": "Mumbai",
+      "region": "Maharashtra",
+      "country": "IN",
+      "success": true
+    },
+    {
+      "method": "ip-api.com",
+      "lat": 19.0748,
+      "lng": 72.8856,
+      "city": "Mumbai",
+      "country": "India",
+      "success": true
+    },
+    {
+      "method": "simulated_nutrazz",
+      "lat": 28.6139,
+      "lng": 77.209,
+      "city": "New Delhi",
+      "region": "Delhi",
+      "country": "India",
+      "success": true,
+      "note": "Simulated based on nutrazz identity and HHDAO context"
+    }
+  ],
+  "currentRecommendations": [
+    {
+      "priority": "IMMEDIATE",
+      "action": "Activate Urgam Valley pilot participation",
+      "reason": "India-based location detected"
+    },
+    {
+      "priority": "IMMEDIATE",
+      "action": "Activate Urgam Valley pilot participation",
+      "reason": "India-based location detected"
+    }
+  ],
+  "networkStatus": "TESTING"
+}

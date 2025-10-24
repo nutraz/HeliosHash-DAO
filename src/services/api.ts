@@ -2,7 +2,6 @@
 // Connects frontend components with Internet Computer canisters
 
 import { getCanisterActors } from '@/lib/canister-actors';
-import { withCsrfHeaders } from '@/lib/csrf';
 
 const API_BASE =
   process.env.NODE_ENV === 'production'
@@ -98,14 +97,11 @@ export const projectsApi = {
     estimatedCost: number;
   }): Promise<ApiResponse<SolarProject>> {
     try {
-      const response = await fetch(
-        `${API_BASE}/projects`,
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(project),
-        })
-      );
+      const response = await fetch(`${API_BASE}/projects`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(project),
+      });
       return await response.json();
     } catch (error) {
       return {
@@ -170,14 +166,11 @@ export const governanceApi = {
     executionData?: string;
   }): Promise<ApiResponse<Proposal>> {
     try {
-      const response = await fetch(
-        `${API_BASE}/dao/proposals`,
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(proposal),
-        })
-      );
+      const response = await fetch(`${API_BASE}/dao/proposals`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(proposal),
+      });
       return await response.json();
     } catch (error) {
       return {
@@ -202,14 +195,11 @@ export const governanceApi = {
     }>
   > {
     try {
-      const response = await fetch(
-        `${API_BASE}/dao/vote`,
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ proposalId, vote }),
-        })
-      );
+      const response = await fetch(`${API_BASE}/dao/vote`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ proposalId, vote }),
+      });
       return await response.json();
     } catch (error) {
       return {
@@ -296,14 +286,11 @@ export const nftApi = {
     }>
   > {
     try {
-      const response = await fetch(
-        `${API_BASE}/nft`,
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nftId, buyerPrincipal }),
-        })
-      );
+      const response = await fetch(`${API_BASE}/nft`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nftId, buyerPrincipal }),
+      });
       return await response.json();
     } catch (error) {
       return {
@@ -357,14 +344,11 @@ export const cyclesApi = {
     }>
   > {
     try {
-      const response = await fetch(
-        `${API_BASE}/cycles`,
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ canister, amount }),
-        })
-      );
+      const response = await fetch(`${API_BASE}/cycles`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ canister, amount }),
+      });
       return await response.json();
     } catch (error) {
       return {

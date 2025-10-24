@@ -5,18 +5,17 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
-import { withCsrfHeaders } from '@/lib/csrf';
 import {
-    Activity,
-    AlertTriangle,
-    Battery,
-    Download,
-    MapPin,
-    RefreshCw,
-    Sun,
-    Thermometer,
-    Wind,
-    Zap,
+  Activity,
+  AlertTriangle,
+  Battery,
+  Download,
+  MapPin,
+  RefreshCw,
+  Sun,
+  Thermometer,
+  Wind,
+  Zap,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
@@ -118,14 +117,11 @@ export function ThermalManagementDashboard() {
 
   const exportBIMData = async () => {
     try {
-      const response = await fetch(
-        '/api/thermal',
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'export-bim' }),
-        })
-      );
+      const response = await fetch('/api/thermal', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'export-bim' }),
+      });
 
       const result = await response.json();
 

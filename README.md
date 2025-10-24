@@ -57,20 +57,23 @@ Before participating in ANY capacity, consult with qualified legal counsel regar
 
 ---
 
-## 📋 Essential Documentation
+## 📋 Security & Development Documentation
 
 - [Production Readiness Assessment](docs/production-readiness-2025-10-20.md) - Comprehensive gap analysis
-- [AI Copilot Instructions](.github/copilot-instructions.md) - Developer agent guidance
 - [Security Policy](SECURITY.md) - Responsible disclosure guidelines
 - [Manual Testing Guide](MANUAL_TESTING_GUIDE.md) - QA procedures
 
 ---
 
-# 🏔️ HeliosHash DAO
+# 🚧 HeliosHash DAO - EARLY ALPHA DEVELOPMENT PROJECT
 
-### Transforming Uttarakhand's Remote Valleys Through Solar-Powered Decentralized Governance
+**🖥️ Desktop**: `http://localhost:3001` (Testnet) | **📱 Mobile**: `http://<LAN_IP>:3003` (Local Testing)  
+**⚡ Status**: Building 50kW co-ownership prototype | **🎯 Goal**: Research, testing, and community feedback (NOT investment solicitation)  
+**⏱️ Production Timeline**: 8-12 months (pending funding and audits)
 
-**India's Node of the One World Project (1WP)**
+### Transforming Uttarakhand's Remote Valleys | India Extension of One World Project (1WP)
+
+**Solar Infrastructure DAO | OWP Token Integration | Decentralized Community Governance**
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/nutraz/HeliosHash-DAO) 
 [![Status](https://img.shields.io/badge/status-alpha-red.svg)](https://github.com/nutraz/HeliosHash-DAO)
@@ -81,340 +84,482 @@ Before participating in ANY capacity, consult with qualified legal counsel regar
 
 ---
 
-## 🎯 Project Vision
+## 🏔️ **Project Vision: UrgamU Valley Transformation**
 
-**HeliosHash DAO (HHDAO)** is pioneering the transformation of **Urgam Valley, Uttarakhand** — a remote, disconnected Himalayan region — into a **self-sustained, solar-powered smart community** governed by decentralized blockchain technology.
+**HeliosHash DAO (HHDAO)** is the **India extension of the global One World Project (1WP)**, pioneering the transformation of **Urgam Valley, Uttarakhand** - a disconnected, remote, difficult-to-reach valley - into a **futuristic, self-sustained community** powered by renewable energy and decentralized governance.
 
-As the **India extension of the global One World Project (1WP)**, we're building the infrastructure to prove that renewable energy + community ownership + transparent governance can create sustainable prosperity in the world's most challenging environments.
-
-**⚠️ IMPORTANT:** This is a **research and development project** in early alpha stage. No pilot has launched. No funds should be deposited. All features are for testing and community feedback only.
+**⚠️ IMPORTANT:** This is a **research and development project** in early alpha stage. No pilot has launched. No funds should be deposited. All features are for testing and feedback only.
 
 ---
 
-## 🌟 The Urgam Valley Challenge
+## 🚨 **SYSTEM STATUS: EARLY ALPHA - NOT PRODUCTION READY** (October 2025)
 
-**Current Reality:**
-- 🏔️ Remote valley disconnected from power grid
-- 📡 Limited internet connectivity
-- 💼 Limited economic opportunities
-- 🚶 Young people migrating to cities
-- 🌍 Vulnerable to climate change impacts
+**Current Development Phase:** Testnet Deployment & Community Feedback  
+**Production Readiness Score:** 3.9/10 (See [Full Assessment](docs/production-readiness-2025-10-20.md))  
+**Estimated Timeline to Mainnet:** 8-12 months (contingent on securing funding)
 
-**Our Vision:**
-- ⚡ 100% renewable solar energy infrastructure
-- 💻 High-speed internet via solar-powered micro data centers
-- 💰 Community revenue from mining/compute operations
-- 🏛️ Transparent DAO governance with OWP tokens
-- 🌱 Replicable model for remote communities worldwide
+### ✅ **DEVELOPMENT ACHIEVEMENTS (October 2025)**
 
-**⚠️ REALITY CHECK:** This is our long-term vision. Current status: early development, no active deployment.
+#### 🎯 **Complete Mobile E2E Experience (Testnet)**
 
----
+- **📱 Full Mobile HHDAO Server**: Network-accessible mobile interface with QR codes (local testing only)
+- **🔍 Data Integration**: Test identity and mock balances (NO REAL FUNDS - test data only)
+- **📋 Mobile User Journey**: Scan → Login → Dashboard → Solar Projects → Governance → Rewards (demo flow)
+- **🎨 Responsive Design**: Touch-optimized interface for complete mobile functionality testing
 
-## 🚀 Proposed Strategy: Pilot → Scale → Replicate
+#### 🏔️ **Urgam Valley Pilot Automation (Development Scripts)**
 
-### 🔬 Phase 1: Pilot Project (Q1-Q2 2026 - Pending Funding)
-- Deploy initial **50kW solar farm** (scalable to 500kW)
-- Location: Selected site in Uttarakhand region
-- **Status:** ⚠️ Planning phase only - NO ACTIVE DEPLOYMENT
-- **Blockers:** Requires ~$100k-160k in audits, legal compliance, regulatory approvals
+- **🚀 Automated Pilot Launch Scripts**: `launch_pilot.py` - Development tooling for future deployment
+- **📍 Location Intelligence**: Mumbai proximity detection (19.0728°N, 72.8826°E) for planning purposes
+- **🤝 Delhi Partner Integration**: Onboarding system prototypes (no active partnerships)
+- **📊 Real-time Monitoring Dashboard**: System health and status reporting (development environment)
 
-### 💰 Phase 2: Revenue Generation (Proposed Model - Not Validated)
-- Solar powers **micro data centers** or **Bitcoin mining operations**
-- Community income via **edge compute infrastructure**
-- **⚠️ CRITICAL:** Theoretical model only, not guaranteed, not investment advice
-- **Status:** Economic projections are preliminary and unvalidated
+#### 🧪 **Comprehensive Testing Infrastructure**
 
-### 🏛️ Phase 3: 1WP Treasury Integration (Framework Designed)
-- Revenue flows through **One World Project OWP tokens**
-- Transparent treasury management on **1WP DAO platform**
-- **Status:** Testnet integration only - NOT TESTED WITH REAL FUNDS
+- **✅ 82 Unit Tests Passing**: Frontend components, hooks, utilities validated (targeting 95%+ coverage)
+- **🎭 E2E Browser Testing**: Playwright automation for complete user workflows
+- **📱 Mobile Test Coverage**: QR access, responsive design, network connectivity validation
+- **🔍 Canister Integration Testing**: Motoko backend testing framework (testnet only)
 
-### 📈 Phase 4: Replication Blueprint (Long-term Vision)
-- Proven system becomes template for **remote valley transformation**
-- Scale across Himalayan regions and similar communities globally
-- **Status:** Future planning - contingent on successful pilot
+#### 🏗️ **Development Infrastructure**
 
----
+- **🖥️ Multi-Server Setup**: Desktop (3001) + Mobile (3003) + Test (3002) servers
+- **⚡ Real-time Health Monitoring**: Live canister status at `/api/status`
+- **🔗 Network Accessibility**: Mobile network interface binding for local testing
+- **📊 Comprehensive Logging**: Development and test server monitoring
 
-## 🔗 1WP Ecosystem Integration
+### 🔧 **Technical Stack (October 2025)**
 
-HeliosHash DAO is built on the **One World Project** global infrastructure:
+- **Frontend**: Next.js 15.5.4, React, TypeScript, Tailwind CSS, Shadcn/UI
+- **Backend**: Motoko canisters on Internet Computer (IC) - 9 canisters (UNAUDITED ⚠️)
+- **Testing**: Playwright 1.55.1 (E2E), Vitest 3.2.4 (Unit), Custom Motoko framework
+- **Mobile**: Native mobile server + QR code generation + network accessibility
+- **Development**: DFX 0.29.1, pnpm 10.15.1, Node.js, Socket.IO integration
+- **Infrastructure**: Multi-port server architecture, real-time health monitoring
 
-- **🌍 [One World Project](https://www.oneworldproject.io/)** - Global renewable energy + blockchain framework
+### 🚀 **Mission: Valley-to-Future Transformation**
+
+Transform **Urgam Valley, Uttarakhand** from a disconnected remote region into a **living showcase** of how renewable energy, decentralized governance (OWP tokens), and community-owned infrastructure create sustainable prosperity.
+
+**⚠️ NOTE:** This is the long-term vision. Current project is in research/development phase with no active deployment.
+
+### ⚡ **Proposed Strategy: Pilot → Scale → Replicate**
+
+**🔬 Phase 1: Pilot Project (Q1-Q2 2026 - Pending Funding & Audits)**
+- Deploy initial **50kW solar farm** (scalable to 500kW over 3 years) at selected India location
+- Subject to completion of security audits, legal compliance, and regulatory approvals
+- Requires ~$100k-160k in professional services before deployment
+- **Status:** Planning phase only, NO ACTIVE DEPLOYMENT
+
+**💰 Phase 2: Revenue Generation Model (Proposed - Not Validated)**
+- Solar powers **micro data centers** or **Bitcoin mining operations** for community income
+- Revenue model requires validation through pilot deployment
+- Economic projections are preliminary and not guaranteed
+- **Status:** Theoretical model only
+
+**🏛️ Phase 3: 1WP Integration (Framework Designed)**
+- Utilize **One World Project treasury management** and **OWP tokenomics**
+- Integration framework built, but not tested with real funds
+- **Status:** Testnet integration only
+
+**📈 Phase 4: Replication Model (Long-term Vision)**
+- Proven system becomes template for remote valley transformation across India
+- Contingent on successful pilot completion and regulatory approval
+- **Status:** Future planning
+
+### 🏔️ **UrgamU Valley: The Ultimate Vision**
+
+**Uttarakhand's Remote Valley → Self-Sustained Smart Community**
+
+- **Energy Independence**: 100% renewable solar infrastructure (target)
+- **Digital Connectivity**: High-speed internet via micro data centers (proposed)
+- **Economic Sustainability**: Mining revenue + community opportunities via OWP tokens (model)
+- **Governance Model**: Transparent DAO decision-making using 1WP platform (framework)
+
+**⚠️ REALITY CHECK:** This is the aspirational end-state. Current project is in early development with significant work required before any deployment.
+
+🔗 **1WP Ecosystem Integration**:
+
+- **🌍 [One World Project](https://www.oneworldproject.io/)** - Global infrastructure framework & OWP token
 - **🏛️ [1WP DAO Platform](https://dapp.oneworldproject.io/)** - Decentralized governance & treasury management
-- **🏔️ [UrgamU Smart City DAO](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)** - Uttarakhand transformation project (concept)
-- **📖 [UrgamU Documentation](https://sites.google.com/view/urgam-u/helioshash-dao)** - Detailed roadmap & vision
-- **🎨 [1WP NFT Collection](https://opensea.io/collection/one-world-project)** - Community identity & rewards
+- **🏔️ [UrgamU Smart City DAO](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)** - Uttarakhand valley transformation project (concept)
+- **📖 [UrgamU Documentation](https://sites.google.com/view/urgam-u/helioshash-dao)** - Detailed project roadmap & vision
+- **🎨 [1WP NFT Collection](https://opensea.io/collection/one-world-project)** - Community identity & rewards system
 
-**🪙 Token:** **OWP** (One World Project) - Powers HHDAO treasury, governance, and community rewards
-
-**⚠️ NOTE:** Integration framework built and tested on testnet only. NO REAL FUNDS should flow through system until production audit complete.
+**🪙 Token**: **OWP** (One World Project) - Powers HHDAO treasury, governance, and community rewards (integration framework built, not production-tested)
 
 ---
 
-## 💡 Key Platform Features
+## 2. 🌟 Key Features & Platform Capabilities
 
 **⚠️ ALL FEATURES ARE FOR TESTING/DEVELOPMENT ONLY - NOT PRODUCTION USE**
 
-### ⚡ Solar Infrastructure & Revenue Models (PROPOSED)
-- **🏔️ Urgam Valley Focus:** 50kW initial deployment (scalable to 500kW)
-- **💻 Edge Compute:** Micro data centers powered by solar
-- **⛏️ Bitcoin Mining:** Community revenue generation (theoretical)
-- **📊 IoT Monitoring:** Real-time energy production tracking (planned)
-- **⚠️ STATUS:** Research phase only - NO ACTIVE DEPLOYMENT
+### 📱 **Mobile E2E Experience**
 
-### 🏛️ DAO Governance & Community Management
-- **🗳️ Democratic Decision-Making:** Token-based voting on proposals
-- **💰 Treasury Management:** Transparent fund allocation via 1WP
-- **📋 Proposal System:** Community-driven project evolution
-- **👥 Women's Incentive Program:** 1.2x rewards multiplier for female participants
-- **⚠️ STATUS:** Testnet framework - NOT managing real funds
+**Status**: 🔬 **TESTNET ONLY** — Mobile ecosystem available for local testing and development (NOT production ready)
 
-### 📱 Mobile-First Community Platform
-- **🎯 Job Board:** Community opportunities and skill matching
-- **💬 Social Features:** On-chain profiles, posts, achievements
-- **🎮 Progressive Onboarding:** Gamified level system (1-5)
-- **📲 QR Code Access:** Rapid mobile testing via local network
-- **⚠️ STATUS:** Local testing only - mock data for UI/UX validation
+- **📱 Native Mobile Server**: Complete HHDAO interface accessible via QR codes (local network only)
+- **🔍 Data Integration**: Test identity and mock balances (NO REAL FUNDS - test data only)
+- **📋 Complete User Journey**: Scan → Login → Dashboard → Solar Projects → Governance → Rewards (demo)
+- **🌐 Network Accessibility**: Mobile server accessible via `http://<LAN_IP>:3003` for local testing
+- **⚡ Real-time Sync**: Live synchronization with desktop experience and canister backends (testnet)
 
-### 🤝 Government & Local Body Integration (PROPOSED)
-- **🏛️ Gram Panchayat:** Village council information sharing
-- **📊 Progress Dashboards:** Energy metrics, community impact
-- **📋 Compliance Framework:** Trust-building with authorities
-- **🌱 Smart Village Model:** Replicable blueprint for India
-- **⚠️ STATUS:** Planning phase - NO government partnerships exist
+### 🎯 **Community Opportunities Platform**
 
-### 🔐 Identity & Access Management
-- **👤 KYC Verification:** Onfido integration (planned, not implemented)
-- **🔒 Secure Authentication:** Internet Computer identity system
-- **♀️ Gender-Inclusive:** Women's incentive tracking
-- **⚠️ STATUS:** Testnet implementation - DO NOT submit real KYC documents
+**Status**: ⚙️ **DEVELOPMENT/TESTING ONLY** - Features under active development for testing and feedback
+
+- **📱 Mobile-First Design**: Touch-optimized interface with QR code accessibility
+- **🔍 Smart Job Matching**: Advanced filtering by category, experience, location, skills
+- **📊 Interactive Statistics**: Click stats cards to filter (Featured, Urgent, Closing Soon)
+- **🔎 Real-Time Search**: Full-text search across titles, descriptions, skills, locations
+- **📝 Application Management**: Track applications, deadlines, job status (mock data)
+- **🏗️ Categories**: Engineering, Technology, Management, Security, Education, Construction
+
+**⚠️ NOTE:** All job listings are mock data for UI/UX testing. No real job opportunities exist.
+
+### 🔋 **Solar Infrastructure & Revenue Models (PROPOSED - NOT DEPLOYED)**
+
+**Status**: 🔬 **RESEARCH PHASE** — Exploring technical and operational models. NO ACTIVE DEPLOYMENT.
+
+- **🏔️ Urgam Valley Focus**: Remote Uttarakhand valley transformation concept with 50kW initial deployment
+- **📍 Location Intelligence**: Mumbai proximity (19.0728°N, 72.8826°E) used for planning simulations
+- **🤝 Partner Network**: Onboarding and coordination tools (development scripts only, no active partners)
+- **⚡ Scalable Infrastructure**: Architecture designed to scale, pending audits, funding, regulatory approvals
+- **💰 Revenue Models**: Research includes edge compute, micro data centers, Bitcoin mining
+  - **⚠️ CRITICAL:** These are theoretical models only, not guaranteed or validated
+  - **🚫 NOT AN INVESTMENT:** No revenue is being generated, no returns promised
+- **🎯 Automation Tools**: Pilot launch scripts (`launch_pilot.py`) for future deployment (not active)
+
+**🔴 IMPORTANT:** No pilot has been deployed. All infrastructure is conceptual pending funding, audits, and approvals.
+
+### 🪙 **1WP Treasury & OWP Token Integration**
+
+**Status**: 🏛️ **FRAMEWORK INTEGRATION** - Connected to One World Project ecosystem (testnet only)
+
+- **🏦 1WP Treasury Management**: Integration with One World Project financial infrastructure (framework)
+- **🪙 OWP Token Economics**: Revenue, governance, and rewards designed to flow through OWP tokens
+- **💱 Cross-Border Payments**: Low-cost remittance design from Indian diaspora via 1WP rails (proposed)
+- **🌐 Global Integration**: Connection framework with worldwide 1WP node network (testnet)
+- **📊 Transparent Operations**: Treasury movement tracking on 1WP DAO platform (when deployed)
+
+**⚠️ REALITY:** Token integration framework is built and tested on testnet only. NO REAL FUNDS should flow through system.
+
+### 🏛️ **DAO Governance & Community Management**
+
+**Status**: 🗳️ **TESTNET IMPLEMENTATION** - Governance framework for testing and feedback
+
+- Revenue and energy savings managed by **DAO treasury** (conceptual model)
+- Transparent, trust-based distribution to residents and local projects (framework only)
+- Voting mechanisms and proposal systems (testnet deployment)
+
+**⚠️ NOTE:** Governance system is for testing democratic decision-making concepts. Not managing real funds or projects.
+
+### 🏢 **Government & Local Body Integration (PROPOSED)**
+
+**Status**: 📋 **PLANNING PHASE** - Integration framework design only
+
+- Information-sharing framework with **Gram Panchayat, Tehsil, PWD, police, fire, environmental boards**
+- Dashboard concepts for **project progress, energy metrics, community impact**
+- Compliance framework for **trust-building** with state/national authorities
+- **Replicable model for smart villages** across India (concept)
+
+**⚠️ REALITY:** No government partnerships or approvals exist. This is the proposed integration model.
+
+### 📡 **IoT-Connected Infrastructure (PLANNED)**
+
+**Status**: 🔮 **FUTURE DEVELOPMENT** - Not yet implemented
+
+- Proposed monitoring of:
+  - Energy production & consumption
+  - Mining/data center operations
+  - Environmental impact
+- IoT sensor framework to feed data into **1WP platform**
+- Real-time insights for citizens, DAO members, authorities (concept)
+
+**⚠️ STATUS:** No IoT infrastructure deployed. This is the technical vision for future phases.
+
+### 👤 **Identity & Access**
+
+**Status**: 🔐 **TESTNET IMPLEMENTATION** - Testing identity framework
+
+- KYC verification framework (Onfido integration planned, not implemented)
+- Test accounts appear in development environment
+- Account recovery mechanisms (testnet)
+
+**⚠️ NOTE:** Identity system is for testing only. Do not submit real KYC documents.
+
+### 🌐 **Social Platform**
+
+**Status**: 📱 **BASIC IMPLEMENTATION** - Core social features for testing
+
+- User profiles, social feed, hashtags, posts, likes, comments (basic functionality)
+- **On-chain social interaction** (testnet deployment)
+
+### 🗳️ **DAO Governance**
+
+**Status**: 🏛️ **FRAMEWORK COMPLETE** - Governance system for testing
+
+- Token holders propose, vote, and shape project evolution (testnet)
+- **Community-driven upgrades** (framework)
+
+### 🎮 **Progressive Onboarding**
+
+**Status**: ✅ **IMPLEMENTED** - Gamification system for user engagement
+
+- **Gamified Level System (1–5)** unlocks features + rewards (test environment)
+- Smooth entry for new users (demo)
+
+### 🏆 **On-Chain Achievements**
+
+**Status**: ✅ **IMPLEMENTED** - Achievement tracking system
+
+- Badges, stats, and social milestones stored **on-chain** (testnet)
+- Publicly verifiable in user profiles (test data)
+
+### 🔓 **Open & Permissionless**
+
+**Status**: 🌐 **FRAMEWORK PRINCIPLE** - Design philosophy
+
+- No gatekeepers—**anyone can join** for testing and feedback
+- All logic/data on **Internet Computer blockchain** (testnet deployment)
+
+**⚠️ CRITICAL:** "Open and permissionless" refers to testing access, NOT production use or real fund handling.
 
 ---
 
-## 🚀 CI/CD Pipeline
+## 3. 🚀 Getting Started (Development/Testing Only)
 
-HeliosHash DAO uses comprehensive GitHub Actions for automated testing, security scanning, and deployment. The CI/CD setup includes 13+ specialized workflows covering:
+### 📋 **Prerequisites**
 
-### Core Pipelines
-- **Main CI** (`ci.yml`): Unit, integration, E2E, and canister tests
-- **Deployment** (`deploy.yml`): Automated Internet Computer deployment
-- **Enhanced Testing** (`enhanced-test-suite.yml`): Parallel testing with analytics
-- **Security Scanning**: Multiple security and dependency audits
-
-### Key Features
-- ✅ **Cross-platform testing**: Node.js 18/20/22, Flutter, Motoko
-- ✅ **Security integration**: Automated vulnerability scanning
-- ✅ **Performance monitoring**: Trend analysis and regression detection
-- ✅ **Artifact management**: Comprehensive test reports and logs
-- ✅ **Multi-environment**: Local, testnet, and mainnet deployments
-
-📖 **[Complete CI/CD Documentation](docs/ci-cd.md)**
-
----
-
-## 🗂️ Repository Structure
-=======
-
-### Core Stack
-- **Frontend:** Next.js 15.5.4 (App Router), React 19, TypeScript 5.7.3
-- **UI Framework:** Tailwind CSS 3.4.17, shadcn/ui
-- **Backend:** Motoko canisters on Internet Computer (9 canisters - **UNAUDITED ⚠️**)
-- **Blockchain Bridge:** Solidity ↔ Motoko (CBOR/JSON payloads)
-- **Testing:** Playwright 1.55.1 (E2E), Vitest 3.2.4 (Unit)
-- **Development:** DFX 0.29.1, pnpm 10.15.1, Node.js 18+
-
-### Infrastructure
-- **Desktop Dev Server:** `http://localhost:3001` (testnet)
-- **Mobile Dev Server:** `http://<LAN_IP>:3003` (local network testing)
-- **API Status Endpoint:** `/api/status` (health monitoring)
-
-### Design System
-- **Primary Colors:** Saffron `#FF9933`, Green `#138808`, Navy `#0A1A2F`
-- **Mobile-First:** Touch-optimized, QR accessibility
-- **Internationalization:** `react-i18next` (planned expansion)
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
 - Node.js 18+ and pnpm
 - DFX (Internet Computer SDK)
 - Git
 
-### Installation (Local Development Only)
+### ⚡ **Quick Start (October 2025 Update) - LOCAL TESTING ONLY**
 
 ```bash
-# Clone repository
+# Clone and setup
 git clone https://github.com/nutraz/HeliosHash-DAO.git
 cd HeliosHash-DAO
+pnpm install  # Updated to latest dependencies
 
-# Install dependencies
-pnpm install
+# Desktop Development Server (TESTNET)
+pnpm dev  # Available at http://localhost:3001
 
-# Start local IC replica
-dfx start --clean --background
+# Mobile E2E Server (LOCAL NETWORK TESTING ONLY)
+node mobile_hhdao_server.js  # Available at http://<YOUR_LOCAL_IP>:3003
 
-# Deploy canisters (testnet)
-dfx deploy
+# Generate Mobile QR Codes (FOR LOCAL TESTING)
+node generate_mobile_qr.js
 
-# Generate TypeScript declarations
-dfx generate
-
-# Start desktop dev server
-pnpm dev
-# → http://localhost:3001
-
-# (Optional) Start mobile dev server
-node mobile_hhdao_server.js
-# → http://<YOUR_LOCAL_IP>:3003
+# ⚠️ DO NOT RUN IN PRODUCTION - DEVELOPMENT SCRIPTS ONLY
+# Launch Urgam Valley Pilot (PLACEHOLDER - REQUIRES AUDITS/FUNDING)
+# python3 launch_pilot.py  # NOT FOR USE - AWAITING SECURITY CLEARANCE
 ```
 
 **🔴 CRITICAL WARNING:** These commands are for local development and testing ONLY. Do not deploy to production. Do not use with real funds.
 
-### Testing
+### 🎯 **Available Pages & Features (Testnet/Local Development)**
+
+| Route         | Feature                | Desktop Status | Mobile Status | Production Ready? |
+| ------------- | ---------------------- | -------------- | ------------- | ----------------- |
+| `/`           | Home & Auth Redirect   | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/dashboard`  | DAO Dashboard          | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/community`  | **Job Board Platform** | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/mining`     | Mining Operations      | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/partners`   | Partnership Management | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/wallet`     | Wallet Integration     | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/governance` | DAO Governance         | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/projects`   | Solar Projects         | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+| `/auth/login` | Authentication         | ✅ Testnet     | ✅ Local Test | ❌ NO             |
+
+**⚠️ ALL ROUTES ARE FOR TESTING ONLY - NOT PRODUCTION USE**
+
+### 🧪 **Testing the Platform (Development Environment)**
 
 ```bash
 # Run all tests
 pnpm test:all
 
-# Unit tests (Vitest)
-pnpm test:run
-
-# E2E tests (Playwright)
+# E2E tests (job board functionality)
 pnpm test:e2e
 
-# Canister tests
-pnpm test:canister
+# Unit tests
+pnpm test:run
+
+# Check manual testing guide
+cat MANUAL_TESTING_GUIDE.md
 ```
 
----
+### 📡 **Status Endpoint (Development Monitoring)**
 
-## 🧪 Current Development Status (October 2025)
+The application exposes a monitoring endpoint at `/api/status` that returns:
+- Runtime, build, and git information
+- IC replica reachability + latency
+- Canister summary (testnet health checks)
 
-### ✅ Completed Features (Testnet/Development)
-
-**Mobile E2E Experience:**
-- ✅ Full mobile server with QR code access
-- ✅ Touch-optimized responsive design
-- ✅ Complete user journey (Login → Dashboard → Projects → Governance)
-- ✅ Real-time sync with canister backends
-
-**Community Platform:**
-- ✅ Advanced job board with filtering/search
-- ✅ Interactive statistics dashboard
-- ✅ Mock application management system
-- ✅ Mobile-first UI components
-
-**Testing Infrastructure:**
-- ✅ 82 unit tests passing (targeting 95%+ coverage)
-- ✅ E2E browser automation (Playwright)
-- ✅ Mobile QR access validation
-- ✅ Canister integration testing framework
-
-**Development Tooling:**
-- ✅ Multi-server architecture (3001, 3002, 3003)
-- ✅ Real-time health monitoring (`/api/status`)
-- ✅ Automated pilot launch scripts (development only)
-
-### 🔄 In Progress
-
-- 🔄 Application management components
-- 🔄 DAO governance integration
-- 🔄 Test coverage expansion (82 → 95%+)
-
-### 🚧 Production Blockers (CRITICAL)
-
-| Blocker | Cost | Timeline | Priority |
-|---------|------|----------|----------|
-| **Smart Contract Audit** | $40-50k | 4-6 weeks | 🔴 CRITICAL |
-| **Penetration Testing** | $15-25k | 2-3 weeks | 🔴 CRITICAL |
-| **Legal Compliance Review** | $10-20k | 3-4 weeks | 🔴 CRITICAL |
-| **Securities Law Analysis** | $10-15k | 3-4 weeks | 🔴 CRITICAL |
-| **Team Expansion** | $20-50k/mo | Ongoing | 🟡 HIGH |
-
-**Production Readiness Score: 3.9/10** 🔴 **NOT READY FOR PRODUCTION**
-
-See [Full Assessment](docs/production-readiness-2025-10-20.md) for detailed gap analysis.
+**⚠️ NOTE:** Status endpoint is for development monitoring only. See [`docs/status.md`](docs/status.md) for details.
 
 ---
 
-## 🤝 Contributing
+## 4. 🏗️ Architecture & Development
 
-We welcome contributions from developers, designers, and domain experts!
+### 📁 **Project Structure**
 
-### Development Workflow
+```
+HeliosHash-DAO/
+├── src/
+│   ├── app/                     # Next.js App Router pages
+│   │   ├── community/           # Job board platform (testnet)
+│   │   ├── dashboard/           # DAO governance (testnet)
+│   │   └── ...
+│   ├── components/              # Reusable UI components
+│   │   ├── community/opportunities/  # Job board components
+│   │   │   ├── JobBoard.tsx     # Enhanced main job board
+│   │   │   ├── JobCard.tsx      # Individual job cards
+│   │   │   ├── JobDetails.tsx   # Job detail views
+│   │   │   └── filters/         # Advanced filtering system
+│   │   └── ui/                  # Shadcn/UI components
+│   ├── types/                   # TypeScript definitions
+│   └── hooks/                   # React hooks & utilities
+├── canisters/                   # Motoko backend canisters (UNAUDITED ⚠️)
+│   ├── hhdao/                   # Main DAO logic
+│   ├── dao/                     # Governance canister
+│   └── identity/                # User identity management
+├── e2e/                         # Playwright E2E tests
+├── docs/                        # Documentation
+│   └── production-readiness-2025-10-20.md  # ⚠️ READ THIS
+└── scripts/                     # Development/deployment scripts
+    └── launch_pilot.py          # ⚠️ NOT FOR PRODUCTION USE
+```
+
+### 🔄 **Development Workflow (Testnet Only)**
+
+1. **Feature Development** → Create feature branch from `main`
+2. **Component Building** → Build in `src/components/` with TypeScript
+3. **Testing** → Add unit tests (Vitest) and E2E tests (Playwright)
+4. **Canister Integration** → Connect with Motoko canisters via DFX (testnet)
+5. **Quality Assurance** → Use manual testing guides and automated tests
+6. **Testnet Deployment** → Deploy to IC testnet via `dfx deploy` (NEVER mainnet)
+
+**🔴 CRITICAL:** All development must occur on testnet. Mainnet deployment prohibited until audits complete.
+
+📖 **References**: 
+- [ICP Best Practices](https://internetcomputer.org/docs/building-apps/best-practices) 
+- [Next.js Docs](https://nextjs.org/docs)
+- [Production Readiness Assessment](docs/production-readiness-2025-10-20.md)
+
+---
+
+## 5. 🤝 Contributing & Development
+
+### 🎯 **Current Development Focus**
+
+**Phase 1: ✅ COMPLETE** - Enhanced Job Board UI/UX (Testnet)
+- ✅ Advanced search and filtering system
+- ✅ Interactive statistics and real-time updates
+- ✅ Mobile-responsive design with animations
+- ✅ Comprehensive testing framework
+
+**Phase 2: 🚧 IN PROGRESS** - Application Management (Testnet)
+- 🔄 ApplicationForm.tsx - Job application submissions (mock)
+- 🔄 MyApplications.tsx - User application tracking (test data)
+- 🔄 PostedJobs.tsx - Job poster management dashboard (demo)
+
+**Phase 3: 📋 PLANNED** - Security & Compliance (CRITICAL PRIORITY)
+- 🔴 **Professional smart contract audit** ($40-50k) - REQUIRED
+- 🔴 **Penetration testing** ($15-25k) - REQUIRED
+- 🔴 **Legal compliance review** ($10-20k) - REQUIRED
+- 🔴 **Team expansion** (Security, Legal, DevOps) - REQUIRED
+
+**Phase 4: 🔮 FUTURE** - DAO Integration & Production Prep (After Phase 3)
+- Connect job board with DAO governance system (post-audit)
+- Replace mock data with production-ready canister integration
+- Implement job approval workflows via DAO voting
+- Insurance and operational safeguards
+
+### 🛠️ **Development Commands (Testnet Only)**
 
 ```bash
-# 1. Create feature branch
-git checkout -b feature/your-feature-name
+# Development (LOCAL/TESTNET ONLY)
+pnpm dev                    # Start dev server (localhost:3001)
+pnpm build                  # Production build (FOR TESTING, NOT DEPLOYMENT)
+pnpm test:run              # Unit tests (Vitest)
+pnpm test:e2e              # E2E tests (Playwright)
+pnpm test:canister         # Motoko canister tests (testnet)
+pnpm test:all              # Run all tests
 
-# 2. Make changes and write tests
-# (See .github/copilot-instructions.md for patterns)
+# Deployment (TESTNET ONLY - DO NOT USE FOR MAINNET)
+dfx deploy --network ic_test  # Deploy to IC testnet
+# ⚠️ DO NOT RUN: dfx deploy --network ic  # MAINNET PROHIBITED
 
-# 3. Run test suite
-pnpm test:all
-
-# 4. Commit with conventional format
-git commit -m "feat(scope): description"
-
-# 5. Push and create PR
-git push origin feature/your-feature-name
+# Development Scripts (NOT FOR PRODUCTION)
+./deploy.sh                # Custom testnet deployment script
 ```
 
-### Contribution Guidelines
+**🔴 CRITICAL WARNING:** Never deploy to mainnet. All deployment commands are for IC testnet only.
 
-- ✅ Write unit + E2E tests for all features (target 95%+ coverage)
-- ✅ Follow TypeScript + Motoko best practices
-- ✅ Update documentation for API changes
-- ✅ Use conventional commit messages
-- ✅ Review [Production Readiness Assessment](docs/production-readiness-2025-10-20.md)
-- ❌ Never deploy to mainnet (testnet only)
-- ❌ Never commit secrets or real user data
+### 📋 **Contributing Guidelines**
 
-### Code Review Checklist
+1. **🌿 Feature Branches**: Use `feature/your-feature-name` naming
+2. **📝 Commit Style**: Follow `type(scope): description` format
+3. **🧪 Testing Required**: Add tests for all new features (target 95%+ coverage)
+4. **📖 Documentation**: Update relevant docs and README
+5. **✅ Code Review**: All PRs require review before merge
+6. **🔒 Security First**: Review [Production Readiness Assessment](docs/production-readiness-2025-10-20.md) before contributing
 
-- [ ] Tests pass locally (`pnpm test:all`)
-- [ ] No TypeScript errors (`pnpm tsc --noEmit`)
-- [ ] Mobile responsive (test with `?mobile=true`)
-- [ ] Documentation updated
-- [ ] Follows naming conventions
-- [ ] Security considerations addressed
+### 🐛 **Bug Reports & Feature Requests**
 
----
+- 🐛 **Bug Reports**: Use GitHub Issues with reproduction steps
+- 💡 **Feature Requests**: Discuss in GitHub Discussions first
+- 📚 **Documentation**: Check `MANUAL_TESTING_GUIDE.md` for testing procedures
+- 🔐 **Security Issues**: Follow responsible disclosure in `SECURITY.md` (DO NOT report as public issues)
 
-## 💰 Funding & Partnership Opportunities
+### 💰 **Funding & Partnership Opportunities**
 
 **We are actively seeking:**
+- **Security Audit Funding** ($40-50k) - Professional smart contract audit firms
+- **Legal Compliance Support** ($10-20k) - Securities law and regulatory expertise
+- **Technical Co-Founders** - Security engineers, smart contract auditors, DevOps specialists
+- **Advisors** - Web3 security, renewable energy, India regulatory landscape
+- **Grant Opportunities** - Blockchain infrastructure grants, renewable energy initiatives
 
-### Financial Support
-- **Security Audit Funding:** $40-50k (professional smart contract audit firms)
-- **Legal Compliance:** $10-20k (securities law, regulatory expertise)
-- **Grant Opportunities:** Blockchain infrastructure, renewable energy initiatives
+**Contact:** [Project contact information - add yours]
 
-### Human Capital
-- **Technical Co-Founders:** Security engineers, smart contract auditors, DevOps specialists
-- **Advisors:** Web3 security, renewable energy, India regulatory landscape
-- **Domain Experts:** Solar engineering, community governance, rural development
-
-### Strategic Partnerships
-- **Solar Energy Companies:** Hardware, installation, maintenance
-- **Government Bodies:** Gram Panchayat, state authorities, regulatory navigation
-- **Educational Institutions:** Research collaboration, pilot validation
-- **NGOs:** Community engagement, social impact measurement
-
-**⚠️ NOT SEEKING:** Retail investors, unaccredited participants, or anyone looking to deposit funds before production readiness is achieved.
-
-**Contact:** [Add your contact information]
+**⚠️ NOT SEEKING:** Retail investors, unaccredited participants, or anyone looking to deposit funds before production readiness.
 
 ---
 
-## 🗺️ Roadmap to Production
+## 6. 📊 Project Status & Roadmap to Production
 
-### 🔴 Phase 1: Critical Security & Legal (4-6 months)
+### 🎯 **Platform Development Status**
+
+| Component | Status | Production Ready? | Notes |
+|-----------|--------|-------------------|-------|
+| Frontend UI/UX | ✅ Complete | ❌ NO | Needs security review |
+| Mobile Experience | ✅ Complete | ❌ NO | Local testing only |
+| DAO Governance | ✅ Testnet | ❌ NO | Unaudited contracts |
+| 1WP Integration | ✅ Framework | ❌ NO | Testnet integration only |
+| Testing Infrastructure | ✅ 82 tests | ⚠️ Partial | Need 95%+ coverage |
+| Smart Contracts | ⚠️ Deployed (testnet) | ❌ NO | **UNAUDITED - CRITICAL** |
+| Security Audit | ❌ Not Started | ❌ NO | **$40-50k required** |
+| Legal Compliance | ❌ Not Started | ❌ NO | **$10-20k required** |
+| Team | ⚠️ Solo Dev | ❌ NO | Need security/legal/DevOps |
+
+**Overall Production Readiness: 3.9/10** 🔴 **NOT READY FOR PRODUCTION**
+
+### 🚀 **Roadmap to Production (Estimated 8-12 Months)**
+
+**🔴 Phase 1: Critical Security & Legal (4-6 months) - FUNDING REQUIRED**
 **Status:** 🔴 BLOCKED - Awaiting ~$100k-160k in funding
+
+| Milestone | Cost | Timeline | Priority | Status |
+|-----------|------|----------|----------|--------|
+| Professional Smart Contract Audit | $40-50k | 4-6 weeks | 🔴 Critical | ❌ Not Started |
+| Penetration Testing | $15-25k | 2-3 weeks | 🔴 Critical | ❌ Not Started |
+| Legal Compliance Review (India) | $10-20k | 3-4 weeks | 🔴 Critical | ❌ Not Started |
+| Securities Law Analysis | $10-15k | 3-4 weeks | 🔴 Critical | ❌ Not Started |
+| Bug Bounty Program Setup | $10k fund | 2 weeks | 🟡 High | ❌ Not Started |
 
 **Deliverables:**
 - ✅ Professional audit report from recognized firm (OpenZeppelin, Trail of Bits, etc.)
@@ -423,170 +568,14 @@ git push origin feature/your-feature-name
 - ✅ India regulatory compliance framework
 - ✅ All critical and high-severity vulnerabilities resolved
 
-**Estimated Cost:** $75-100k  
-**Timeline:** 4-6 months  
-**Priority:** 🔴 CRITICAL
+**⚠️ BLOCKER:** Cannot proceed to Phase 2 without completing Phase 1.
 
-### ⚠️ Phase 2: Technical Hardening (2-3 months, parallel)
+---
+
+**⚠️ Phase 2: Technical Hardening (2-3 months, parallel with Phase 1)**
 **Status:** 🟡 PARTIALLY IN PROGRESS
 
-**Deliverables:**
-- Expand test coverage to 95%+ (currently 82 tests)
-- Monitoring infrastructure (Grafana/Prometheus)
-- Production CI/CD pipelines
-- Load testing and performance optimization
-- Incident response procedures
-
-**Estimated Cost:** $10k + time  
-**Timeline:** 2-3 months  
-**Priority:** 🟡 HIGH
-
-### 🟢 Phase 3: Pilot Deployment (3-4 months)
-**Status:** 🟢 FUTURE - Cannot start until Phase 1 complete
-
-**Deliverables:**
-- Urgam Valley site selection and agreements
-- 50kW solar installation (physical infrastructure)
-- Community onboarding and KYC
-- Real-world testing with limited user base
-- Impact measurement and reporting
-
-**Estimated Cost:** $50-100k (infrastructure) + operational costs  
-**Timeline:** 3-4 months  
-**Priority:** 🟢 MEDIUM
-
-### 🔵 Phase 4: Scale & Replicate (12+ months)
-**Status:** 🔵 LONG-TERM VISION
-
-**Deliverables:**
-- Scale Urgam Valley to 500kW
-- Document replication blueprint
-- Expand to additional valleys
-- Build partner network
-- Sustainable operational model
-
-**Estimated Cost:** Variable (project-dependent)  
-**Timeline:** 12+ months  
-**Priority:** 🔵 FUTURE
-
----
-
-## 📊 Project Metrics
-
-### Development Progress
-- **Code Coverage:** 82% (target: 95%+)
-- **Test Suite:** 82 passing tests (unit + E2E + canister)
-- **Canister Count:** 9 Motoko canisters (**UNAUDITED ⚠️**)
-- **Frontend Components:** 50+ React components
-- **Documentation:** 10+ markdown files
-
-### Technical Debt
-- **Security Audit:** ❌ Not completed ($40-50k required)
-- **Legal Review:** ❌ Not completed ($10-20k required)
-- **Production Infrastructure:** ⚠️ Partial (monitoring, CI/CD needed)
-- **Team Size:** ⚠️ Solo developer (bus factor = 1)
-
-### Community
-- **GitHub Stars:** [Add current count]
-- **Contributors:** [Add current count]
-- **Open Issues:** [Add current count]
-- **Active Development:** Yes (alpha phase)
-
----
-
-## 📚 Documentation
-
-### For Developers
-- [AI Copilot Instructions](.github/copilot-instructions.md) - Development patterns and workflows
-- [Production Readiness Assessment](docs/production-readiness-2025-10-20.md) - Comprehensive gap analysis
-- [Manual Testing Guide](MANUAL_TESTING_GUIDE.md) - QA procedures
-- [Gender Incentives System](docs/GENDER_INCENTIVES_SYSTEM.md) - Women's bonus implementation
-
-### For Users
-- [UrgamU Documentation](https://sites.google.com/view/urgam-u/helioshash-dao) - Project vision and roadmap
-- [1WP DAO Platform Guide](https://dapp.oneworldproject.io/) - Governance and treasury
-
-### Security
-- [Security Policy](SECURITY.md) - Responsible disclosure guidelines
-- [Known Vulnerabilities](docs/production-readiness-2025-10-20.md#security-gaps) - Current risk assessment
-
----
-
-## 🛡️ Security
-
-**Current Security Status:** 🔴 **CRITICAL GAPS EXIST**
-
-We take security seriously, but **this project is NOT production-ready**:
-
-- ⚠️ Smart contracts are **UNAUDITED**
-- ⚠️ No professional penetration testing completed
-- ⚠️ Solo developer project (limited security review)
-- ⚠️ Testnet deployment only (do NOT use with real funds)
-
-### Responsible Disclosure
-
-If you discover a security vulnerability:
-
-1. **DO NOT** create a public GitHub issue
-2. **Email:** [Add security contact email]
-3. **Encrypt:** Use PGP key if possible (see SECURITY.md)
-4. **Wait:** Allow 90 days for remediation before public disclosure
-
-See [SECURITY.md](SECURITY.md) for full policy.
-
----
-
-## 📜 License
-
-This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file for details.
-
-**Important Notes:**
-- This license does NOT constitute investment advice
-- No warranties or guarantees of functionality
-- Use at your own risk (see legal disclaimers above)
-
----
-
-## 🙏 Acknowledgments
-
-- **[One World Project](https://www.oneworldproject.io/)** - Global infrastructure framework and OWP token ecosystem
-- **[Internet Computer](https://internetcomputer.org/)** - Blockchain infrastructure and Motoko language
-- **[DFINITY Foundation](https://dfinity.org/)** - Developer tools and ecosystem support
-- **Open Source Community** - Next.js, React, Tailwind CSS, shadcn/ui, and countless other projects
-
----
-
-## 📞 Contact & Community
-
-- **GitHub:** [nutraz/HeliosHash-DAO](https://github.com/nutraz/HeliosHash-DAO)
-- **1WP Platform:** [dapp.oneworldproject.io](https://dapp.oneworldproject.io/)
-- **Documentation:** [sites.google.com/view/urgam-u](https://sites.google.com/view/urgam-u/helioshash-dao)
-- **Issues:** [GitHub Issues](https://github.com/nutraz/HeliosHash-DAO/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/nutraz/HeliosHash-DAO/discussions)
-
----
-
-## ⚠️ FINAL REMINDER
-
-**THIS IS AN EARLY ALPHA RESEARCH PROJECT**
-
-- 🔴 **NOT PRODUCTION READY** — Testnet/local development only
-- 🔴 **UNAUDITED SMART CONTRACTS** — Professional audit required ($40-50k)
-- 🔴 **NO REAL FUNDS** — All features for testing/feedback only
-- 🔴 **8-12 MONTHS TO PRODUCTION** — Significant work required
-- 🔴 **DO NOT DEPLOY TO MAINNET** — Prohibited until audit complete
-- 🔴 **NOT AN INVESTMENT** — No solicitation, no guarantees, no returns
-
-**Production Readiness Score: 3.9/10**
-
-Before participating in ANY capacity, consult with qualified legal counsel regarding securities laws, tax implications, and regulatory requirements in your jurisdiction.
-
-See [Production Readiness Assessment](docs/production-readiness-2025-10-20.md) for full details.
-
----
-
-**Last Updated:** October 22, 2025  
-**Project Version:** Alpha Development Phase  
-**Status:** Research, testing, and community feedback only
-
-**Built with ❤️ for sustainable communities in the Himalayas**
+| Milestone | Cost | Timeline | Priority | Status |
+|-----------|------|----------|----------|--------|
+| Expand Test Coverage to 95%+ | Time | 2-3 weeks | 🟡 High | 🔄 In Progress (82 tests) |
+| Monitoring Infrastructure (Grafana/Prometheus) | Time/$5k | 2-3

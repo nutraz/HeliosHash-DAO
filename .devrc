@@ -1,39 +1,261 @@
-# HeliosHash-DAO Development RC
-# Loaded automatically by your terminal
+#!/bin/bash
 
-# ==========================
-# ENVIRONMENT
-# ==========================
-export NODE_ENV=development
-export NEXT_PUBLIC_APP_ENV=dev
-export NEXT_PUBLIC_DAO_NAME="HeliosHash"
-export NEXT_PUBLIC_CHAIN_ID=80001        # Polygon Mumbai
-export NEXT_PUBLIC_RPC_URL="https://rpc-mumbai.maticvigil.com"
-export NEXT_PUBLIC_OPENSEA_API="https://testnets-api.opensea.io"
-export NEXT_PUBLIC_IPFS_GATEWAY="https://ipfs.io/ipfs/"
-export NEXT_PUBLIC_PROJECT_ID="urgamU"
+# HeliosHash DAO Development Aliases & Functions
+# Add to your ~/.bashrc or ~/.zshrc
 
-# ==========================
-# WALLET / KYC SETTINGS
-# ==========================
-export ENABLE_AADHAAR_KYC=true
-export ENABLE_PAN_KYC=true
-export ENABLE_RETINA_SCAN=true
+# ==============================================
+# DFX & Internet Computer Development
+# ==============================================
 
-# ==========================
-# ALIASES
-# ==========================
-alias dev="npm run dev"
-alias build="npm run build"
-alias dao="npx hardhat"
-alias ipfs-start="ipfs daemon"
-alias mint-nft="node scripts/mint-nft.js"
-alias start-chain="npx hardhat node"
-alias deploy-dao="npx hardhat run scripts/deploy-dao.ts --network mumbai"
+# Basic DFX Operations
+alias dfx-start='dfx start --clean --background'
+alias dfx-stop='dfx stop'
+alias dfx-status='dfx ping'
+alias dfx-clean='dfx start --clean'
 
-# ==========================
-# PATH FIX
-# ==========================
-export PATH=$PATH:$(npm bin)
+# Canister Management
+alias dfx-deploy-all='dfx deploy'
+alias dfx-deploy-hhdao='dfx deploy hhdao'
+alias dfx-deploy-dao='dfx deploy hhdao_dao'
+alias dfx-deploy-identity='dfx deploy hhdao_identity'
+alias dfx-deploy-frontend='dfx deploy hhdao_frontend'
 
-echo '🎯 HeliosHash-DAO dev environment loaded successfully'
+# Canister Information
+alias dfx-canisters='dfx canister status --all'
+alias dfx-ids='dfx canister id --all'
+alias dfx-logs='dfx canister logs'
+
+# Development Server Shortcuts
+alias hhdao-dev='pnpm dev'
+alias hhdao-build='pnpm build'
+alias hhdao-test='pnpm test:all'
+alias hhdao-test-canisters='pnpm test:canister'
+
+# ==============================================
+# Advanced DFX Functions
+# ==============================================
+
+# Deploy specific canister with logs
+dfx-deploy-with-logs() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: dfx-deploy-with-logs <canister_name>"
+        return 1
+    fi
+    
+    echo "🚀 Deploying $1 canister..."
+    dfx deploy $1 --verbose
+    echo "📊 Getting canister status..."
+    dfx canister status $1
+}
+
+# Reset and redeploy all canisters
+dfx-reset-all() {
+    echo "🔄 Stopping DFX..."
+    dfx stop
+    
+    echo "🧹 Cleaning up..."
+    rm -rf .dfx/local
+    
+    echo "🚀 Starting DFX clean..."
+    dfx start --clean --background
+    
+    echo "⏳ Waiting for local replica..."
+    sleep 5
+    
+    echo "📦 Deploying all canisters..."
+    dfx deploy
+    
+    echo "✅ Reset and deployment complete!"
+    dfx canister status --all
+}
+
+# Quick canister call with error handling
+dfx-call() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: dfx-call <canister> <method> [args...]"
+        return 1
+    fi
+    
+    local canister=$1
+    local method=$2
+    shift 2
+    
+    echo "📞 Calling $canister.$method..."
+    dfx canister call $canister $method "$@" || echo "❌ Call failed"
+}
+
+# ==============================================
+# HeliosHash DAO Specific Functions
+# ==============================================
+
+# Initialize local development environment
+hhdao-init() {
+    echo "🏗️  Initializing HeliosHash DAO development environment..."
+    
+    # Start DFX
+    dfx start --clean --background
+    
+    # Install dependencies
+    echo "📦 Installing dependencies..."
+    pnpm install
+    
+    # Deploy canisters
+    echo "🚀 Deploying canisters..."
+    dfx deploy
+    
+    # Generate type declarations
+    echo "🔧 Generating TypeScript declarations..."
+    dfx generate
+    
+    echo "✅ Development environment ready!"
+    echo "🌐 Frontend: http://localhost:3000"
+    echo "🔗 Candid UI: http://localhost:4943/?canisterId=$(dfx canister id __Candid_UI)"
+}
+
+# Check all system status
+hhdao-status() {
+    echo "📊 HeliosHash DAO Development Status"
+    echo "=================================="
+    
+    # Check DFX status
+    echo "🔗 DFX Replica Status:"
+    dfx ping 2>/dev/null && echo "✅ Local replica running" || echo "❌ Local replica not running"
+    
+    # Check canisters
+    echo ""
+    echo "📦 Canister Status:"
+    dfx canister status --all 2>/dev/null || echo "❌ No canisters deployed"
+    
+    # Check Node.js dependencies
+    echo ""
+    echo "📚 Dependencies:"
+    [ -d "node_modules" ] && echo "✅ Node modules installed" || echo "❌ Run 'pnpm install'"
+    
+    # Check development server
+    echo ""
+    echo "🖥️  Development Server:"
+    curl -s http://localhost:3000 > /dev/null && echo "✅ Frontend server running" || echo "❌ Frontend server not running"
+}
+
+# Run Motoko tests
+hhdao-test-motoko() {
+    echo "🧪 Running Motoko tests..."
+    cd canisters/test-runner
+    ./run-tests.sh
+    cd ../..
+}
+
+# Generate TypeScript declarations from Candid
+hhdao-generate-types() {
+    echo "🔧 Generating TypeScript declarations..."
+    dfx generate
+    echo "✅ Type declarations updated in src/declarations/"
+}
+
+# ==============================================
+# Git & Project Management
+# ==============================================
+
+# Git shortcuts for blockchain development
+alias git-blockchain='git add . && git commit -m "feat: blockchain updates" && git push'
+alias git-canister='git add canisters/ && git commit -m "feat: canister updates"'
+alias git-frontend='git add src/ && git commit -m "feat: frontend updates"'
+
+# Project health check
+hhdao-health() {
+    echo "🏥 HeliosHash DAO Health Check"
+    echo "============================="
+    
+    # Check critical files
+    [ -f "dfx.json" ] && echo "✅ dfx.json" || echo "❌ dfx.json missing"
+    [ -f "package.json" ] && echo "✅ package.json" || echo "❌ package.json missing"
+    [ -d "canisters" ] && echo "✅ canisters directory" || echo "❌ canisters directory missing"
+    [ -d "src" ] && echo "✅ src directory" || echo "❌ src directory missing"
+    
+    # Check environment
+    command -v dfx >/dev/null && echo "✅ DFX installed" || echo "❌ DFX not installed"
+    command -v node >/dev/null && echo "✅ Node.js installed" || echo "❌ Node.js not installed"
+    command -v pnpm >/dev/null && echo "✅ pnpm installed" || echo "❌ pnpm not installed"
+}
+
+# ==============================================
+# Performance & Monitoring
+# ==============================================
+
+# Monitor canister cycles
+hhdao-cycles() {
+    echo "💰 Canister Cycles Status"
+    echo "========================"
+    
+    for canister in hhdao hhdao_dao hhdao_identity hhdao_telemetry hhdao_documents; do
+        if dfx canister id $canister >/dev/null 2>&1; then
+            echo "📊 $canister:"
+            dfx canister status $canister 2>/dev/null | grep "Balance:"
+        fi
+    done
+}
+
+# Clean build artifacts
+hhdao-clean() {
+    echo "🧹 Cleaning HeliosHash DAO build artifacts..."
+    
+    # Clean DFX artifacts
+    rm -rf .dfx/local
+    
+    # Clean Node.js artifacts
+    rm -rf node_modules/.cache
+    rm -rf .next
+    rm -rf dist
+    
+    # Clean test artifacts
+    rm -rf coverage
+    rm -rf test-results
+    
+    echo "✅ Cleanup complete!"
+}
+
+# ==============================================
+# Helpful Information
+# ==============================================
+
+# Show available commands
+hhdao-help() {
+    echo "🚀 HeliosHash DAO Development Commands"
+    echo "===================================="
+    echo ""
+    echo "🏗️  Setup & Initialization:"
+    echo "  hhdao-init          - Initialize development environment"
+    echo "  hhdao-status        - Check system status"
+    echo "  hhdao-health        - Run health check"
+    echo ""
+    echo "🔗 DFX & Canister Management:"
+    echo "  dfx-start           - Start local replica"
+    echo "  dfx-stop            - Stop local replica"
+    echo "  dfx-deploy-all      - Deploy all canisters"
+    echo "  dfx-deploy-hhdao    - Deploy main HHDAO canister"
+    echo "  dfx-reset-all       - Reset and redeploy everything"
+    echo ""
+    echo "🧪 Testing:"
+    echo "  hhdao-test          - Run all tests"
+    echo "  hhdao-test-motoko   - Run Motoko tests"
+    echo "  hhdao-test-canisters- Run canister tests"
+    echo ""
+    echo "💻 Development:"
+    echo "  hhdao-dev           - Start development server"
+    echo "  hhdao-build         - Build project"
+    echo "  hhdao-clean         - Clean build artifacts"
+    echo "  hhdao-generate-types- Generate TypeScript declarations"
+    echo ""
+    echo "📊 Monitoring:"
+    echo "  hhdao-cycles        - Check canister cycles"
+    echo "  dfx-canisters       - Show all canister status"
+    echo ""
+}
+
+# Export functions for use in subshells
+export -f dfx-deploy-with-logs dfx-reset-all dfx-call
+export -f hhdao-init hhdao-status hhdao-test-motoko hhdao-generate-types
+export -f hhdao-health hhdao-cycles hhdao-clean hhdao-help
+
+echo "🚀 HeliosHash DAO development aliases loaded!"
+echo "📚 Type 'hhdao-help' for available commands"

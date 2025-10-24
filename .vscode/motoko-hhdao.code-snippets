@@ -1,0 +1,124 @@
+{
+  // Motoko Snippets for HeliosHash DAO Development
+  "mo_actor": {
+    "prefix": "actor",
+    "body": ["actor ${1:ActorName} {", "    $2", "}"],
+    "description": "Create a Motoko actor",
+  },
+
+  "mo_public_func": {
+    "prefix": "pubfn",
+    "body": [
+      "public func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
+      "    $4",
+      "};",
+    ],
+    "description": "Create a public Motoko function",
+  },
+
+  "mo_shared_func": {
+    "prefix": "sharedfn",
+    "body": [
+      "public shared ({ caller }) func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
+      "    $4",
+      "};",
+    ],
+    "description": "Create a shared Motoko function with caller",
+  },
+
+  "mo_query_func": {
+    "prefix": "qfn",
+    "body": [
+      "public query func ${1:functionName}(${2:params}) : async ${3:ReturnType} {",
+      "    $4",
+      "};",
+    ],
+    "description": "Create a query Motoko function",
+  },
+
+  "mo_import_base": {
+    "prefix": "impbase",
+    "body": ["import ${1:Module} \"mo:base/${2:ModuleName}\";"],
+    "description": "Import Motoko base library",
+  },
+
+  "mo_import_local": {
+    "prefix": "implocal",
+    "body": ["import ${1:Module} \"${2:path}\";"],
+    "description": "Import local Motoko module",
+  },
+
+  "mo_result_type": {
+    "prefix": "result",
+    "body": ["Result.Result<${1:OkType}, ${2:ErrorType}>"],
+    "description": "Motoko Result type",
+  },
+
+  "mo_option_type": {
+    "prefix": "option",
+    "body": ["?${1:Type}"],
+    "description": "Motoko Option type",
+  },
+
+  "mo_hashmap": {
+    "prefix": "hashmap",
+    "body": [
+      "private stable var ${1:mapName} = HashMap.HashMap<${2:KeyType}, ${3:ValueType}>(${4:0}, ${5:KeyType}.equal, ${6:KeyType}.hash);",
+    ],
+    "description": "Create a HashMap",
+  },
+
+  "mo_stable_var": {
+    "prefix": "stable",
+    "body": ["private stable var ${1:varName} : ${2:Type} = ${3:defaultValue};"],
+    "description": "Create a stable variable",
+  },
+
+  "mo_dao_proposal": {
+    "prefix": "proposal",
+    "body": [
+      "public shared ({ caller }) func createProposal(",
+      "    title : Text,",
+      "    description : Text,",
+      "    proposalType : ProposalType",
+      ") : async Result.Result<Nat, Text> {",
+      "    // Validate caller permissions",
+      "    if (not isDAOMember(caller)) {",
+      "        return #err(\"Only DAO members can create proposals\");",
+      "    };",
+      "    ",
+      "    $1",
+      "};",
+    ],
+    "description": "HeliosHash DAO proposal creation pattern",
+  },
+
+  "mo_solar_project": {
+    "prefix": "solarproject",
+    "body": [
+      "public shared ({ caller }) func createSolarProject(",
+      "    name : Text,",
+      "    location : Text,",
+      "    capacity : Nat",
+      ") : async Result.Result<Project, Text> {",
+      "    // Validate project creator",
+      "    if (not hasProjectCreatePermission(caller)) {",
+      "        return #err(\"Insufficient permissions to create project\");",
+      "    };",
+      "    ",
+      "    let project : Project = {",
+      "        id = nextProjectId;",
+      "        name = name;",
+      "        location = location;",
+      "        capacity = capacity;",
+      "        creator = caller;",
+      "        status = #Planning;",
+      "        createdAt = Time.now();",
+      "    };",
+      "    ",
+      "    $1",
+      "};",
+    ],
+    "description": "HeliosHash solar project creation pattern",
+  },
+}

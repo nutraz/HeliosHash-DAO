@@ -2,6 +2,22 @@
 // Enforces ≥ consensusBps community approval for proposals (default 66%)
 // Supports non-financial contributions (mentorship, care, teaching)
 
+<<<<<<< HEAD
+
+=======
+import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
+import Result "mo:base/Result";
+import Text "mo:base/Text";
+import Time "mo:base/Time";
+import Int "mo:base/Int";
+import Nat "mo:base/Nat";
+import Array "mo:base/Array";
+import Iter "mo:base/Iter";
+import Option "mo:base/Option";
+import Buffer "mo:base/Buffer";
+import Error "mo:base/Error";
+>>>>>>> audit-clean
 
 persistent actor DAO {
   // === Versioning & Governance Parameters ===
@@ -18,25 +34,14 @@ persistent actor DAO {
   public type MemberId = Principal;
   public type ProposalId = Nat;
 
-persistent actor DAO {
-
-  #Other : Text;
+  public type ContributionType = {
+    #Mentorship;
+    #CommunityCare;
+    #Teaching;
+    #PanelMaintenance;
+    #DisputeResolution;
+    #Other : Text;
   };
-
-persistent actor DAO {
-  // === Versioning & Governance Parameters ===
-  var schemaVersion : Nat = 1; // increment when structural changes occur
-  // consensus threshold in basis points (6600 = 66.00%) replacing former hard-coded 60%
-  var consensusBps : Nat = 6600;
-  // default voting window (nanoseconds) - mutable in test mode only
-  var votingWindowNs : Time.Time = 7 * 24 * 60 * 60 * 1_000_000_000; // 7 days
-  // simple runtime test flag (can be toggled by test helper); not exposed in prod UI
-  var isTestMode : Bool = false;
-
-  // === Types ===
-
-  public type MemberId = Principal;
-  public type ProposalId = Nat;
 
   public type DisputeStatus = {
     #Pending;
@@ -101,7 +106,6 @@ persistent actor DAO {
     createdAt : Time.Time;
     votesFor : Nat;
     votesAgainst : Nat;
-    bond : Nat; // Proposal deposit
     // Deprecated fields (kept temporarily for backward stable layout if upgrading from earlier schema)
     finalized : Bool;
     approved : Bool;
@@ -131,10 +135,6 @@ persistent actor DAO {
   private var members : [Member] = [];
   private var proposals : [Proposal] = [];
   private var votes : [Vote] = [];
-  private let proposalBond : Nat = 1000; // OWP tokens required to propose
-  private let maxVotesPerMember : Nat = 10; // Anti-whale: cap max votes per member
-  private let minProposalInterval : Time.Time = 60 * 60 * 1_000_000_000; // 1 hour
-  private var lastProposalTime : HashMap.HashMap<MemberId, Time.Time> = HashMap.HashMap<MemberId, Time.Time>(10, Principal.equal, Principal.hash);
   // Future optimization: replace linear votes array with HashMap for O(1) lookups
   // private transient var voteMap = HashMap.HashMap<(ProposalId, MemberId), Bool>(10, func(a, b) { a == b }, func (key : (ProposalId, MemberId)) : Nat32 { Nat32.fromNat((key.0 * 31 + key.1)) });
   
@@ -169,67 +169,34 @@ persistent actor DAO {
   };
 
   private func hasVoted(proposalId : ProposalId, voter : MemberId) : Bool {
-    let count = Array.foldLeft<Vote, Nat>(votes, 0, func(acc, v) = if (Nat.equal(v.proposalId, proposalId) and Principal.equal(v.voter, voter)) acc + 1 else acc);
-    count >= maxVotesPerMember
-  };
-
-  // Quadratic voting: when casting a vote, add sqrt(votingPower) to votesFor/Against
-  public func castVote(proposalId : ProposalId, approve : Bool, votingPower : Nat, caller : Principal) : Result.Result<(), Text> {
-    if (hasVoted(proposalId, caller)) return #err("Vote cap reached");
-    let sqrtVotes = Nat64.toNat(Nat64.sqrt(votingPower));
-    let buffer = Buffer.fromArray<Proposal>(proposals);
-    var found = false;
-    for (i in Iter.range(0, buffer.size() - 1)) {
-      if (Nat.equal(buffer.get(i).id, proposalId)) {
-        let p = buffer.get(i);
-        if (approve) {
-          buffer.put(i, { p with votesFor = p.votesFor + sqrtVotes });
-        } else {
-          buffer.put(i, { p with votesAgainst = p.votesAgainst + sqrtVotes });
-        };
-        found := true;
-      }
-    };
-    if (not found) return #err("Proposal not found");
-    proposals := Buffer.toArray(buffer);
-    let vote : Vote = { proposalId = proposalId; voter = caller; approve = approve };
-    let vbuf = Buffer.fromArray<Vote>(votes);
-    vbuf.add(vote);
-    votes := Buffer.toArray(vbuf);
-    return #ok(());
+    switch (Array.find<Vote>(votes, func(v) = Nat.equal(v.proposalId, proposalId) and Principal.equal(v.voter, voter))) {
+      case null false;
+      case (?_) true;
+    }
   };
 
   private func getInternalMemberCount() : Nat {
     members.size()
   };
 
-  /// Calculates approval threshold with explicit rounding up to avoid undercounting
-  /// For example, 7 * 60 / 100 = 4.2, rounds up to 5
-  /// Precision: always rounds up, so threshold is never less than intended
   private func meetsApprovalThreshold(proposal : Proposal) : Bool {
     let total = getInternalMemberCount();
     if (total == 0) return false;
     // consensusBps e.g. 6600 => 66.00%
-    let raw = total * consensusBps;
-    let required = if (raw % 10_000 == 0) raw / 10_000 else (raw / 10_000) + 1;
-    // Note: This rounds up, so 7*60/100=4.2 becomes 5
+    let required = (total * consensusBps) / 10_000;
     proposal.votesFor >= required
   };
 
   // Determine if proposal can no longer mathematically pass.
-  /// Calculates cannotPass with explicit rounding up for threshold
   private func cannotPass(proposal : Proposal) : Bool {
     let totalMembers = getInternalMemberCount();
     if (totalMembers == 0) return false;
-    let raw = totalMembers * consensusBps;
-    let required = if (raw % 10_000 == 0) raw / 10_000 else (raw / 10_000) + 1;
+    let required = (totalMembers * consensusBps) / 10_000;
+    // Maximum possible for votes = current for + (remaining members not yet voting assumed for) simplified: if even if everyone else voted for it still falls short.
     let consumed : Nat = proposal.votesFor + proposal.votesAgainst;
     let remainingPotential = if (consumed >= totalMembers) 0 else Nat.sub(totalMembers, consumed);
     proposal.votesFor + remainingPotential < required
   };
-  /// NOTE: All threshold calculations use explicit rounding up to avoid undercounting.
-  /// Edge cases (1,2,3,99,100,1000 members) should be tested for correct threshold behavior.
-  /// Precision limitation: fractional thresholds always round up.
 
   private func isExpired(proposal : Proposal, now : Time.Time) : Bool {
     now >= proposal.votingDeadline
@@ -554,20 +521,12 @@ persistent actor DAO {
     getInternalMemberCount()
   };
 
-  /// Returns up to 100 proposals (pagination required for more)
-  public query func getProposalsPaginated(limit : Nat, offset : Nat) : async [Proposal] {
-    let maxLimit = 100;
-    let start = Nat.min(offset, Nat.fromIntWrap(proposals.size()));
-    let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(proposals.size()));
-    Array.tabulate<Proposal>(Nat.toInt(end - start), func(i) { proposals[Nat.toInt(start) + i] });
+  public query func getAllProposals() : async [Proposal] {
+    proposals
   };
 
-  /// Returns up to 100 members (pagination required for more)
-  public query func getMembersPaginated(limit : Nat, offset : Nat) : async [Member] {
-    let maxLimit = 100;
-    let start = Nat.min(offset, Nat.fromIntWrap(members.size()));
-    let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(members.size()));
-    Array.tabulate<Member>(Nat.toInt(end - start), func(i) { members[Nat.toInt(start) + i] });
+  public query func getAllMembers() : async [Member] {
+    members
   };
 
   public query func getVoteCount(proposalId : ProposalId) : async ?(Nat, Nat) {

@@ -7,17 +7,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { withCsrfHeaders } from '@/lib/csrf';
 import {
-    AlertCircle,
-    CheckCircle,
-    CreditCard,
-    FileText,
-    MessageSquare,
-    Phone,
-    QrCode,
-    Shield,
-    Smartphone,
+  AlertCircle,
+  CheckCircle,
+  CreditCard,
+  FileText,
+  MessageSquare,
+  Phone,
+  QrCode,
+  Shield,
+  Smartphone,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -122,14 +121,11 @@ export default function OfflineEnrollment() {
 
     try {
       // Simulate phone verification API call
-      const response = await fetch(
-        '/api/verify-phone',
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phoneNumber: registration.phoneNumber }),
-        })
-      );
+      const response = await fetch('/api/verify-phone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: registration.phoneNumber }),
+      });
 
       if (response.ok) {
         const data = await response.json();
@@ -154,17 +150,14 @@ export default function OfflineEnrollment() {
 
     try {
       // Simulate Aadhaar verification
-      const response = await fetch(
-        '/api/verify-identity',
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            phoneNumber: registration.phoneNumber,
-            aadhaarLast4: registration.aadhaarLast4,
-          }),
-        })
-      );
+      const response = await fetch('/api/verify-identity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phoneNumber: registration.phoneNumber,
+          aadhaarLast4: registration.aadhaarLast4,
+        }),
+      });
 
       if (response.ok) {
         enrollmentSteps[1].completed = true;
@@ -191,14 +184,11 @@ export default function OfflineEnrollment() {
 
     try {
       // Test USSD connectivity
-      const response = await fetch(
-        '/api/test-ussd',
-        await withCsrfHeaders({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ phoneNumber: registration.phoneNumber }),
-        })
-      );
+      const response = await fetch('/api/test-ussd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phoneNumber: registration.phoneNumber }),
+      });
 
       if (response.ok) {
         enrollmentSteps[4].completed = true;

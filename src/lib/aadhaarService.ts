@@ -5,7 +5,6 @@
  */
 
 import * as CryptoJS from 'crypto-js';
-import { randomBytes } from 'crypto';
 
 export interface AadhaarVerificationRequest {
   aadhaarNumber: string;
@@ -316,9 +315,7 @@ export class AadhaarService {
 
   // Private helper methods
   private generateVerificationId(): string {
-    // Use static import for crypto at the top of the file
-    const rand = randomBytes(9).toString('hex');
-    return `aadhaar_${Date.now()}_${rand}`;
+    return `aadhaar_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
 
   private isValidAadhaarFormat(aadhaarNumber: string): boolean {
@@ -375,11 +372,9 @@ export class AadhaarService {
   }
 
   private recordConsent(request: AadhaarVerificationRequest): ConsentRecord {
-    const crypto = require('crypto');
-    const rand = crypto.randomBytes(6).toString('hex');
     const consentRecord: ConsentRecord = {
       userId: this.generateVerificationHash(request.aadhaarNumber),
-      consentId: `consent_${Date.now()}_${rand}`,
+      consentId: `consent_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
       purposeOfVerification: request.purposeOfVerification,
       consentGiven: request.consentGiven,
       consentTimestamp: new Date(),

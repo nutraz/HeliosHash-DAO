@@ -10,7 +10,11 @@ import Array "mo:base/Array";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
 
+<<<<<<< HEAD
+module {
+=======
 module HHDAOLib {
+>>>>>>> audit-clean
   public type ProjectStatus = {
     #Planning;
     #Construction;
@@ -41,7 +45,6 @@ module HHDAOLib {
     votesFor : Nat;
     votesAgainst : Nat;
     status : Status;
-    executeAfter : Int; // timelock (ns)
   };
 
   public type Category = {
@@ -54,7 +57,6 @@ module HHDAOLib {
     #Open;
     #Passed;
     #Rejected;
-    #Executed;
   };
 
   public type NFT = {
@@ -236,6 +238,29 @@ module HHDAOLib {
       switch (Array.find(projects, func (p : Project) : Bool { p.id == id })) {
         case (?project) {
           if (project.owner != caller) {
+<<<<<<< HEAD
+            return false;
+          };
+          let updatedProject = {
+            id = project.id;
+            name = project.name;
+            location = project.location;
+            capacity = project.capacity;
+            status = status;
+            owner = project.owner;
+            createdAt = project.createdAt;
+            governmentApprovals = project.governmentApprovals;
+            telemetryId = project.telemetryId;
+            description = project.description;
+            estimatedCost = project.estimatedCost;
+            completionDate = project.completionDate;
+          };
+          projects := Array.filter<Project>(projects, func (p : Project) : Bool {
+            p.id != id
+          });
+          projects := Array.append(projects, [updatedProject]);
+          true
+=======
             false
           } else {
             let updatedProject = {
@@ -258,6 +283,7 @@ module HHDAOLib {
             projects := Array.append(projects, [updatedProject]);
             true
           }
+>>>>>>> audit-clean
         };
         case (null) { false };
       }
@@ -290,8 +316,6 @@ module HHDAOLib {
     }) : Nat {
       let id = nextProposalId;
       nextProposalId += 1;
-      let now = Time.now();
-      let defaultDelay = 24 * 60 * 60 * 1_000_000_000; // 24h in ns
       let newProposal : Proposal = {
         id = id;
         title = proposal.title;
@@ -301,7 +325,6 @@ module HHDAOLib {
         votesFor = 0;
         votesAgainst = 0;
         status = #Open;
-        executeAfter = now + defaultDelay;
       };
       proposals.put(id, newProposal);
       id;
@@ -311,6 +334,27 @@ module HHDAOLib {
       switch (proposals.get(proposalId)) {
         case (?proposal) {
           if (proposal.status != #Open) {
+<<<<<<< HEAD
+            return false;
+          };
+          let updatedProposal : Proposal = {
+            id = proposal.id;
+            title = proposal.title;
+            description = proposal.description;
+            votesRequired = proposal.votesRequired;
+            category = proposal.category;
+            votesFor = if (inFavor) proposal.votesFor + 1 else proposal.votesFor;
+            votesAgainst = if (not inFavor) proposal.votesAgainst + 1 else proposal.votesAgainst;
+            status = proposal.status;
+          };
+          let newStatus : Status = 
+            if (updatedProposal.votesFor >= proposal.votesRequired) #Passed
+            else if (updatedProposal.votesAgainst >= proposal.votesRequired) #Rejected
+            else #Open;
+          let finalProposal = { updatedProposal with status = newStatus };
+          proposals.put(proposalId, finalProposal);
+          true;
+=======
             false
           } else {
             let updatedProposal : Proposal = {
@@ -331,6 +375,7 @@ module HHDAOLib {
             proposals.put(proposalId, finalProposal);
             true
           }
+>>>>>>> audit-clean
         };
         case (null) {
           false;
@@ -340,26 +385,6 @@ module HHDAOLib {
 
     public func getProposal(proposalId : Nat) : ?Proposal {
       proposals.get(proposalId);
-    };
-
-    // Timelock helpers
-    public func canExecute(proposalId : Nat) : Bool {
-      switch (proposals.get(proposalId)) {
-        case (?p) { p.status == #Passed and Time.now() >= p.executeAfter };
-        case null { false };
-      }
-    };
-
-    public func markExecuted(proposalId : Nat) : Bool {
-      switch (proposals.get(proposalId)) {
-        case (?p) {
-          if (p.status != #Passed or Time.now() < p.executeAfter) { return false };
-          let updated : Proposal = { p with status = #Executed };
-          proposals.put(proposalId, updated);
-          true
-        };
-        case null { false };
-      }
     };
 
     public func mintMembershipNFT(request : {
@@ -498,6 +523,19 @@ module HHDAOLib {
       switch (applications.get(applicationId)) {
         case (?application) {
           if (application.applicantId != uploader) {
+<<<<<<< HEAD
+            return false; // Only applicant can upload documents
+          };
+          
+          let updatedApplication : Application = {
+            application with 
+            uploadedDocuments = Array.append(application.uploadedDocuments, [document]);
+            lastUpdatedAt = Time.now();
+          };
+          
+          applications.put(applicationId, updatedApplication);
+          true;
+=======
             false // Only applicant can upload documents
           } else {
             let updatedApplication : Application = {
@@ -509,6 +547,7 @@ module HHDAOLib {
             applications.put(applicationId, updatedApplication);
             true
           }
+>>>>>>> audit-clean
         };
         case (null) {
           false;
@@ -624,7 +663,11 @@ module HHDAOLib {
       let id = nextReportId;
       nextReportId += 1;
       let now = Time.now();
-  let required = switch (votesRequired) { case (?v) { v }; case (null) { 3 } }; // default 3 votes
+<<<<<<< HEAD
+      let required = switch (votesRequired) { case (?v) { v } case (null) { 3 } }; // default 3 votes
+=======
+      let required = switch (votesRequired) { case (?v) { v }; case (null) { 3 } }; // default 3 votes
+>>>>>>> audit-clean
       let report : AnimalReport = {
         id = id;
         reporter = reporter;
@@ -645,6 +688,22 @@ module HHDAOLib {
 
     private func tryIssueReward(report : AnimalReport) : Bool {
       // low-risk reward path: mint a short-duration membership NFT to recognise the reporter
+<<<<<<< HEAD
+      if (report.rewardIssued) { return false }; // already issued
+      // Mint a community-tier NFT for 30 days as recognition
+      let mintReq = {
+        recipient = report.reporter;
+        tier = #Community;
+        durationDays = 30 : Nat;
+      };
+      // ignore result; if mint fails we still mark rewardIssued=false
+      switch (mintMembershipNFT(mintReq)) {
+        case (#ok(_tokenId)) {
+          true
+        };
+        case (#err(_e)) {
+          false
+=======
       if (report.rewardIssued) {
         false // already issued
       } else {
@@ -662,6 +721,7 @@ module HHDAOLib {
           case (#err(_e)) {
             false
           };
+>>>>>>> audit-clean
         };
       };
     };
@@ -669,6 +729,44 @@ module HHDAOLib {
     public func voteOnAnimalReport(reportId : Nat, inFavor : Bool) : Bool {
       switch (animalReports.get(reportId)) {
         case (?report) {
+<<<<<<< HEAD
+          if (report.status != #Submitted and report.status != #Open) { return false }; 
+          let updated : AnimalReport = {
+            id = report.id;
+            reporter = report.reporter;
+            location = report.location;
+            description = report.description;
+            photos = report.photos;
+            votesFor = if (inFavor) report.votesFor + 1 else report.votesFor;
+            votesAgainst = if (not inFavor) report.votesAgainst + 1 else report.votesAgainst;
+            votesRequired = report.votesRequired;
+            status = report.status;
+            createdAt = report.createdAt;
+            validatedAt = report.validatedAt;
+            rewardIssued = report.rewardIssued;
+          };
+
+          let newStatus : ReportStatus =
+            if (updated.votesFor >= report.votesRequired) #Validated
+            else if (updated.votesAgainst >= report.votesRequired) #Rejected
+            else #Open;
+
+          let final = { updated with status = newStatus };
+          // store
+          animalReports.put(reportId, final);
+
+          // On validation, attempt reward issuance (best-effort)
+          if (newStatus == #Validated and not final.rewardIssued) {
+            let issued = tryIssueReward(final);
+            if (issued) {
+              let now = Time.now();
+              let withReward : AnimalReport = { final with rewardIssued = true; validatedAt = ?now };
+              animalReports.put(reportId, withReward);
+            };
+          };
+
+          true;
+=======
           if (report.status != #Submitted and report.status != #Open) {
             false
           } else {
@@ -708,6 +806,7 @@ module HHDAOLib {
 
             true
           }
+>>>>>>> audit-clean
         };
         case (null) { false };
       };

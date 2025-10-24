@@ -8,6 +8,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+<<<<<<< HEAD
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['src/test/index.test.ts', 'src/test/integration/**'],
+=======
     include: ['src/**/*.{test,spec}.{ts,tsx}', 'src/**/*.{integration,test}.{js,jsx,ts,tsx}'],
     exclude: [
       'src/test/index.test.ts',
@@ -18,6 +22,7 @@ export default defineConfig({
       'dist/**',
       '.dfx/**',
     ],
+>>>>>>> audit-clean
     coverage: {
       reporter: ['text', 'html'],
     },

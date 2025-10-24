@@ -1,0 +1,39 @@
+# HeliosHash-DAO Development RC
+# Loaded automatically by your terminal
+
+# ==========================
+# ENVIRONMENT
+# ==========================
+export NODE_ENV=development
+export NEXT_PUBLIC_APP_ENV=dev
+export NEXT_PUBLIC_DAO_NAME="HeliosHash"
+export NEXT_PUBLIC_CHAIN_ID=80001        # Polygon Mumbai
+export NEXT_PUBLIC_RPC_URL="https://rpc-mumbai.maticvigil.com"
+export NEXT_PUBLIC_OPENSEA_API="https://testnets-api.opensea.io"
+export NEXT_PUBLIC_IPFS_GATEWAY="https://ipfs.io/ipfs/"
+export NEXT_PUBLIC_PROJECT_ID="urgamU"
+
+# ==========================
+# WALLET / KYC SETTINGS
+# ==========================
+export ENABLE_AADHAAR_KYC=true
+export ENABLE_PAN_KYC=true
+export ENABLE_RETINA_SCAN=true
+
+# ==========================
+# ALIASES
+# ==========================
+alias dev="npm run dev"
+alias build="npm run build"
+alias dao="npx hardhat"
+alias ipfs-start="ipfs daemon"
+alias mint-nft="node scripts/mint-nft.js"
+alias start-chain="npx hardhat node"
+alias deploy-dao="npx hardhat run scripts/deploy-dao.ts --network mumbai"
+
+# ==========================
+# PATH FIX
+# ==========================
+export PATH=$PATH:$(npm bin)
+
+echo '🎯 HeliosHash-DAO dev environment loaded successfully'

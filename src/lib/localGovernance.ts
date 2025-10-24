@@ -301,10 +301,10 @@ export class LocalGovernanceService {
           member.age
         );
 
+        const crypto = require('crypto');
+        const rand = crypto.randomBytes(9).toString('hex');
         const profile: BeneficiaryProfile = {
-          id: `SHG-${shgDetails.groupCode}-${Date.now()}-${Math.random()
-            .toString(36)
-            .substr(2, 9)}`,
+          id: `SHG-${shgDetails.groupCode}-${Date.now()}-${rand}`,
           personalInfo: {
             name: member.name,
             fatherName: '', // To be filled during onboarding

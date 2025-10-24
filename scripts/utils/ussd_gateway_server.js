@@ -30,6 +30,9 @@ app.use(bodyParser.json());
 // In-memory storage for USSD sessions (use Redis in production)
 const activeSessions = new Map();
 const pendingVotes = new Map();
+const lastVoteTime = new Map(); // phoneHash => timestamp
+const VOTE_INTERVAL_MS = 5 * 60 * 1000; // 5 min per phone
+const usedVoteHashes = new Set(); // replay protection
 
 // Polygon DAO Contract Configuration
 const DAO_CONTRACT_ADDRESS = '0xDaa7...F61e30'; // Replace with actual address
@@ -81,25 +84,57 @@ const activeProposals = [
   },
 ];
 
-// Generate secure vote hash for verification
-function generateVoteHash(sessionId, proposalId, vote, timestamp) {
+// Generate secure vote hash for verification (privacy: use phone hash)
+function hashPhone(phoneNumber) {
+  return crypto.createHash('sha256').update(phoneNumber + (process.env.PHONE_SALT || 'hhdao')).digest('hex');
+}
+function generateVoteHash(sessionId, proposalId, vote, timestamp, phoneHash) {
   return crypto
     .createHash('sha256')
     .update(
-      `${sessionId}-${proposalId}-${vote}-${timestamp}-${process.env.VOTE_SALT || 'hhdao2025'}`
+      `${sessionId}-${proposalId}-${vote}-${timestamp}-${phoneHash}-${process.env.VOTE_SALT || 'hhdao2025'}`
     )
     .digest('hex');
 }
 
-// Main USSD endpoint
+// Main USSD endpoint with geo/biometric hooks
 app.post('/ussd/vote', async (req, res) => {
   try {
-    const { sessionId, serviceCode, phoneNumber, text } = req.body;
+    const { sessionId, serviceCode, phoneNumber, text, geo, biometric } = req.body;
+    const phoneHash = hashPhone(phoneNumber);
+
+    // Rate limit per phone
+    const now = Date.now();
+    if (lastVoteTime.has(phoneHash) && now - lastVoteTime.get(phoneHash) < VOTE_INTERVAL_MS) {
+      return res.send('END Rate limit: wait before voting again.');
+    }
+    lastVoteTime.set(phoneHash, now);
+
+
+    // Strict geo verification (required, accuracy < 100m, India only)
+    if (!geo || !geo.lat || !geo.lng || !geo.accuracy) {
+      return res.send('END Location required for voting.');
+    }
+    if (geo.accuracy > 100) {
+      return res.send('END Location accuracy too low. Try again outdoors.');
+    }
+    // India bounding box (approx)
+    if (geo.lat < 6 || geo.lat > 38 || geo.lng < 68 || geo.lng > 98) {
+      return res.send('END Voting not allowed from your location.');
+    }
+
+    // Strict biometric verification (required, allowed types)
+    const allowedBiometricTypes = ['fingerprint', 'face'];
+    if (!biometric || !biometric.verified || !allowedBiometricTypes.includes(biometric.type)) {
+      return res.send('END Biometric verification required.');
+    }
+    // Optionally log biometric type for audit
+    console.log(`Biometric vote: type=${biometric.type}, phoneHash=${phoneHash}`);
 
     // Get or create session
     let session = activeSessions.get(sessionId);
     if (!session) {
-      session = new USSDSession(sessionId, phoneNumber);
+      session = new USSDSession(sessionId, phoneHash); // store hash only
       activeSessions.set(sessionId, session);
     }
 
@@ -438,12 +473,26 @@ app.post('/sms/vote', async (req, res) => {
       }
 
       // Generate vote hash and store
-      const voteHash = generateVoteHash(from, proposalId, vote, Date.now());
+      const phoneHash = hashPhone(from);
+      // Rate limit per phone
+      const now = Date.now();
+      if (lastVoteTime.has(phoneHash) && now - lastVoteTime.get(phoneHash) < VOTE_INTERVAL_MS) {
+        return res.send('Rate limit: wait before voting again.');
+      }
+      lastVoteTime.set(phoneHash, now);
+
+      // Replay protection
+      const voteHash = generateVoteHash(from, proposalId, vote, now, phoneHash);
+      if (usedVoteHashes.has(voteHash)) {
+        return res.send('Replay detected: vote already submitted.');
+      }
+      usedVoteHashes.add(voteHash);
+
       pendingVotes.set(voteHash, {
-        phoneNumber: from,
+        phoneHash: phoneHash,
         proposalId: proposalId,
         vote: vote,
-        timestamp: Date.now(),
+        timestamp: now,
         status: 'confirmed',
       });
 

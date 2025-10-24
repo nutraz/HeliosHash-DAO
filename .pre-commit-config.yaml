@@ -1,0 +1,13 @@
+# Detect secrets and sensitive keys before commit
+repos:
+  - repo: https://github.com/zricethezav/gitleaks
+    rev: v8.18.2
+    hooks:
+      - id: gitleaks
+        stages: [commit, push]
+        args: ["--no-git", "--no-banner"]
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        stages: [commit, push]

@@ -193,7 +193,29 @@ HeliosHash DAO is built on the **One World Project** global infrastructure:
 
 ---
 
-## 🛠️ Technical Architecture
+## 🚀 CI/CD Pipeline
+
+HeliosHash DAO uses comprehensive GitHub Actions for automated testing, security scanning, and deployment. The CI/CD setup includes 13+ specialized workflows covering:
+
+### Core Pipelines
+- **Main CI** (`ci.yml`): Unit, integration, E2E, and canister tests
+- **Deployment** (`deploy.yml`): Automated Internet Computer deployment
+- **Enhanced Testing** (`enhanced-test-suite.yml`): Parallel testing with analytics
+- **Security Scanning**: Multiple security and dependency audits
+
+### Key Features
+- ✅ **Cross-platform testing**: Node.js 18/20/22, Flutter, Motoko
+- ✅ **Security integration**: Automated vulnerability scanning
+- ✅ **Performance monitoring**: Trend analysis and regression detection
+- ✅ **Artifact management**: Comprehensive test reports and logs
+- ✅ **Multi-environment**: Local, testnet, and mainnet deployments
+
+📖 **[Complete CI/CD Documentation](docs/ci-cd.md)**
+
+---
+
+## 🗂️ Repository Structure
+=======
 
 ### Core Stack
 - **Frontend:** Next.js 15.5.4 (App Router), React 19, TypeScript 5.7.3

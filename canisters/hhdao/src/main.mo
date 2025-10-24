@@ -1,4 +1,34 @@
 
+/**
+ * HeliosHash DAO Canister — Security & Upgrade Controls (2025-10-23)
+ *
+ * ## Upgrade & Admin Security Model
+ * - **Multi-sig Admin:** All critical admin actions (pause, unpause, setMultisig, executeProposal) require multi-sig approval. Signers and quorum are set via `setMultisig`.
+ * - **RBAC:** Only principals in the `ms_signers` list (multi-sig) can approve or execute admin actions. No single-owner pattern exists.
+ * - **Timelock:** Proposal execution is subject to a timelock (see `executeAfter` in proposals; enforced in `canExecute`).
+ * - **Upgrade Controls:**
+ *   - Canister upgrades must be performed by a principal in the multi-sig set, with quorum approval.
+ *   - All upgrade attempts should be logged via `logEvent` for auditability.
+ *   - Before upgrade, pause the canister (`pause`) and ensure all multi-sig signers approve the upgrade opId.
+ *   - After upgrade, unpause and verify state integrity.
+ * - **Audit Log:** All admin and multi-sig actions are recorded in the `events` ring buffer (see `logEvent`).
+ * - **Emergency Controls:** Any multi-sig signer can propose and approve emergency actions (pause, unpause, etc.) with quorum.
+ *
+ * ## Operator Procedures
+ * 1. **Propose Admin Action:** Call the relevant admin method (e.g., `pause`, `setMultisig`, `executeProposal`) with a unique opId.
+ * 2. **Multi-sig Approval:** Each signer calls `msApprove(opId)` until quorum is reached.
+ * 3. **Execute:** Once quorum is met, the action is executed (see `executeProposal`).
+ * 4. **Upgrade:** For upgrades, follow DFINITY best practices: pause, backup state, upgrade, unpause, and verify.
+ *
+ * ## Security Notes
+ * - No single-principal admin. All critical actions require multi-sig.
+ * - All admin actions and upgrades are auditable via `getEvents`.
+ * - RBAC is enforced in all shared admin methods.
+ * - Proposal execution is subject to timelock and multi-sig.
+ *
+ * For more, see CANISTERS.md and README.md.
+ */
+
 
 import HHDAOLib "lib";
 import Principal "mo:base/Principal";
@@ -12,7 +42,7 @@ import Cycles "mo:base/ExperimentalCycles";
 // Inter-canister communication with optional injected principals (removes hard-coded IDs)
 
 
-persistent actor class HHDAO(
+actor class HHDAO(
   daoPrincipal : ?Principal,
   identityPrincipal : ?Principal,
   telemetryPrincipal : ?Principal,
@@ -98,13 +128,15 @@ persistent actor class HHDAO(
 		switch (Array.find<(Text,[Principal])>(ms_ops, func(t) { t.0 == opId })) { case (?t) { t.1.size() }; case null { 0 } }
 	};
 
-		public query func getEvents(limit : Nat) : async [(Int, Principal, Text)] {
-			let n = events.size();
-			let take = if (limit < Nat.fromIntWrap(n)) { limit } else { Nat.fromIntWrap(n) };
-			if (n == 0) { return [] };
-			let start = n - Nat.toInt(take);
-			Array.tabulate<(Int, Principal, Text)>(Nat.toInt(take), func(i) { events[start + i] });
-		};
+		   /// Returns up to 100 recent events (pagination required for more)
+		   public query func getEvents(limit : Nat) : async [(Int, Principal, Text)] {
+			   let n = events.size();
+			   let maxLimit = 100;
+			   let take = if (limit < Nat.fromIntWrap(n) and limit <= maxLimit) { limit } else if (Nat.fromIntWrap(n) < maxLimit) { Nat.fromIntWrap(n) } else { maxLimit };
+			   if (n == 0) { return [] };
+			   let start = n - Nat.toInt(take);
+			   Array.tabulate<(Int, Principal, Text)>(Nat.toInt(take), func(i) { events[start + i] });
+		   };
 
 		// Nonce tracking (optional, not enforced yet)
 		stable var nonces : [(Principal, Nat)] = [];
@@ -269,9 +301,18 @@ persistent actor class HHDAO(
 		case null { null };
 	};
 
-	// Local state for project management
-	// Local state (not stable yet; add persistence later)
-	transient let state = HHDAOLib.HHDAOState();
+	   // Local state for project management
+	   // Local state (not stable yet; add persistence later)
+	   transient let state = HHDAOLib.HHDAOState();
+
+	   /// Returns up to 100 projects owned by the user (pagination required for more)
+	   public query func getUserProjectsPaginated(user : Principal, limit : Nat, offset : Nat) : async [HHDAOLib.Project] {
+		   let all = state.getUserProjects(user);
+		   let maxLimit = 100;
+		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
+		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
+		   Array.tabulate<HHDAOLib.Project>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
+	   }
 
 	// Enhanced project creation with integrated services
 	public shared ({ caller }) func createProject(
@@ -415,58 +456,105 @@ persistent actor class HHDAO(
 		}
 	};
 
-	// Dashboard data aggregation
-	public shared ({ caller }) func getDashboardData() : async {
-		userProfile: ?{
-			principal: Principal;
-			username: ?Text;
-			email: ?Text;
-			displayName: ?Text;
-			bio: ?Text;
-			avatar: ?Text;
-			location: ?Text;
-			website: ?Text;
-			createdAt: Int;
-			updatedAt: Int;
-			isVerified: Bool;
-			verificationLevel: {#Basic; #Email; #KYC; #Enhanced};
-		};
-		projects: [HHDAOLib.Project];
-		devices: [{
-			id: Text;
-			name: Text;
-			deviceType: {#SolarPanel; #Inverter; #Battery; #EnergyMeter; #WeatherStation; #GridConnection};
-			location: {latitude: Float; longitude: Float; address: ?Text; region: ?Text};
-			owner: Principal;
-			status: {#Online; #Offline; #Maintenance; #Error};
-			registeredAt: Int;
-			lastPing: Int;
-			metadata: [(Text, Text)];
-		}];
-		documents: [{
-			id: Text;
-			name: Text;
-			description: ?Text;
-			documentType: {#Legal; #Technical; #Financial; #Environmental; #Certificate; #Report; #Image; #Video; #Other: Text};
-			mimeType: Text;
-			size: Nat;
-			hash: Text;
-			owner: Principal;
-			status: {#Draft; #Submitted; #UnderReview; #Approved; #Rejected; #Archived};
-			accessLevel: {#Public; #Private; #DAO; #Restricted: [Principal]};
-			createdAt: Int;
-			updatedAt: Int;
-			version: Nat;
-			tags: [Text];
-			metadata: [(Text, Text)];
-		}];
-	} {
-		let userProfile = switch (identity_canister) { case (?idc) { await idc.getProfile(caller) }; case null { null } };
-		let userProjects = state.getUserProjects(caller);
-		let userDevices = switch (telemetry_canister) { case (?tc) { await tc.getMyDevices() }; case null { [] } };
-		let userDocuments = switch (documents_canister) { case (?dc) { await dc.getMyDocuments() }; case null { [] } };
-		{ userProfile = userProfile; projects = userProjects; devices = userDevices; documents = userDocuments; }
-	};
+	   // Dashboard data aggregation
+	   public shared ({ caller }) func getDashboardData() : async {
+		   userProfile: ?{
+			   principal: Principal;
+			   username: ?Text;
+			   email: ?Text;
+			   displayName: ?Text;
+			   bio: ?Text;
+			   avatar: ?Text;
+			   location: ?Text;
+			   website: ?Text;
+			   createdAt: Int;
+			   updatedAt: Int;
+			   isVerified: Bool;
+			   verificationLevel: {#Basic; #Email; #KYC; #Enhanced};
+		   };
+		   projects: [HHDAOLib.Project];
+		   devices: [{
+			   id: Text;
+			   name: Text;
+			   deviceType: {#SolarPanel; #Inverter; #Battery; #EnergyMeter; #WeatherStation; #GridConnection};
+			   location: {latitude: Float; longitude: Float; address: ?Text; region: ?Text};
+			   owner: Principal;
+			   status: {#Online; #Offline; #Maintenance; #Error};
+			   registeredAt: Int;
+			   lastPing: Int;
+			   metadata: [(Text, Text)];
+		   }];
+		   documents: [{
+			   id: Text;
+			   name: Text;
+			   description: ?Text;
+			   documentType: {#Legal; #Technical; #Financial; #Environmental; #Certificate; #Report; #Image; #Video; #Other: Text};
+			   mimeType: Text;
+			   size: Nat;
+			   hash: Text;
+			   owner: Principal;
+			   status: {#Draft; #Submitted; #UnderReview; #Approved; #Rejected; #Archived};
+			   accessLevel: {#Public; #Private; #DAO; #Restricted: [Principal]};
+			   createdAt: Int;
+			   updatedAt: Int;
+			   version: Nat;
+			   tags: [Text];
+			   metadata: [(Text, Text)];
+		   }];
+	   } {
+		   let userProfile = switch (identity_canister) { case (?idc) { await idc.getProfile(caller) }; case null { null } };
+		   let userProjects = state.getUserProjects(caller);
+		   let userDevices = switch (telemetry_canister) { case (?tc) { await tc.getMyDevices() }; case null { [] } };
+		   let userDocuments = switch (documents_canister) { case (?dc) { await dc.getMyDocuments() }; case null { [] } };
+		   { userProfile = userProfile; projects = userProjects; devices = userDevices; documents = userDocuments; }
+	   };
+
+	   /// Returns up to 100 animal reports (pagination required for more)
+	   public query func getAnimalReportsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.AnimalReport] {
+		   let all = state.getAllAnimalReports();
+		   let maxLimit = 100;
+		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
+		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
+		   Array.tabulate<HHDAOLib.AnimalReport>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
+	   };
+
+	   /// Submit an animal care report
+	   public shared ({ caller }) func submitAnimalReport(
+		   location : Text,
+		   description : Text,
+		   photos : [Text],
+		   votesRequired : ?Nat
+	   ) : async Nat {
+		   state.submitAnimalReport(location, description, photos, votesRequired, caller);
+	   };
+
+	   /// Vote on an animal care report
+	   public shared ({ caller }) func voteOnAnimalReport(reportId : Nat, inFavor : Bool) : async Bool {
+		   state.voteOnAnimalReport(reportId, inFavor);
+	   };
+
+	   /// Get a specific animal report
+	   public query func getAnimalReport(reportId : Nat) : async ?HHDAOLib.AnimalReport {
+		   state.getAnimalReport(reportId);
+	   };
+
+	   /// Returns up to 100 proposals (pagination required for more)
+	   public query func getProposalsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.Proposal] {
+		   let all = state.getAllProposals();
+		   let maxLimit = 100;
+		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
+		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
+		   Array.tabulate<HHDAOLib.Proposal>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
+	   };
+
+	   /// Returns up to 100 NFTs (pagination required for more)
+	   public query func getNFTsPaginated(limit : Nat, offset : Nat) : async [HHDAOLib.NFT] {
+		   let all = state.getAllNFTs();
+		   let maxLimit = 100;
+		   let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
+		   let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
+		   Array.tabulate<HHDAOLib.NFT>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
+	   };
 
 	// Original project functions (maintained for backward compatibility)
 	public query func getProjects() : async [HHDAOLib.Project] {
@@ -897,7 +985,6 @@ persistent actor class HHDAO(
 
 		summary
 	};
-}
 
 		// --- Governance actions: slash with multisig gating and event logging ---
 		stable var penalties : [(Principal, Nat)] = [];

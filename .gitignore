@@ -1,9 +1,14 @@
-# Logs & temp
+# Logs & temp files
 *.log
 *.tmp
+*.cache
+*.temp
 dev-server.log
 mobile_server.log
 mobile_diagnostic/
+response_*.json
+dev.log
+mobile_diagnostics.json
 
 # Build outputs
 .next/
@@ -11,21 +16,68 @@ out/
 build/
 artifacts/
 cache/
+dist/
+target/
+.dfx/local/
+.dfx/networks/local/
 
-# IDE
+# IDE & Editor files
 .idea/
 *.iml
-.vscode/
+.vscode/settings.json
 *.swp
 *.swo
+*~
 
-# Env
-.env*.backup
-.env*.old
-.env*.new
+# Environment & Secrets
+.env*
+.env.*
+*.env*
+*.env.*
+secrets.*
+*.secret*
+*.key*
+*.pem
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.bak
+*.backup
+*.old
+*.new
 
 # Mobile/Flutter (if not used)
 android/
 ios/
 flutter_assets/
-node_modules
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+vitest-report.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary development files
+*.tmp
+*.temp
+temp/
+tmp/

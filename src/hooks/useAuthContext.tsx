@@ -1,53 +1,45 @@
-'use client';
+"use client";
 
-import { AuthClient } from '@dfinity/auth-client';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState, ReactNode } from "react";
 
-type AuthContextType = {
+interface AuthContextType {
   isAuthenticated: boolean;
-  principal: string | null;
-  login: () => Promise<void>;
-};
+  user: any;
+  login: () => void;
+  logout: () => void;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }): React.ReactElement {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [principal, setPrincipal] = useState<string | null>(null);
+  const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    AuthClient.create().then(async client => {
-      const authenticated = await client.isAuthenticated();
-      setIsAuthenticated(authenticated);
-      if (authenticated) {
-        setPrincipal(client.getIdentity().getPrincipal().toString());
-      }
-    });
-  }, []);
+  const login = () => {
+    setIsAuthenticated(true);
+    setUser({
+      id: "test-user",
+      name: "Test User",
+      isWoman: false,
+    } as any);
+  };
 
-  const login = async () => {
-    const client = await AuthClient.create();
-    await client.login({
-      onSuccess: () => {
-        setIsAuthenticated(true);
-        setPrincipal(client.getIdentity().getPrincipal().toString());
-      },
-    });
+  const logout = () => {
+    setIsAuthenticated(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, principal, login }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
-export const useAuthContext = () => {
+export function useAuthContext() {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error('useAuthContext must be used within AuthProvider');
+  if (context === undefined) {
+    throw new Error("useAuthContext must be used within an AuthProvider");
   }
-  return {
-    user: context.isAuthenticated ? { principal: context.principal } : null,
-  };
-};
+  return context;
+}

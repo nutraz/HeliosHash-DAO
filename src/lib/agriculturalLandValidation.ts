@@ -717,15 +717,21 @@ export class AgriculturalLandValidationService {
 
   // Helper methods
   private generateRequestId(): string {
-    return `REQ_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const crypto = require('crypto');
+    const rand = crypto.randomBytes(9).toString('hex');
+    return `REQ_${Date.now()}_${rand}`;
   }
 
   private generateAgreementId(): string {
-    return `AGR_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const crypto = require('crypto');
+    const rand = crypto.randomBytes(9).toString('hex');
+    return `AGR_${Date.now()}_${rand}`;
   }
 
   private generateFarmerId(): string {
-    return `FARMER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const crypto = require('crypto');
+    const rand = crypto.randomBytes(9).toString('hex');
+    return `FARMER_${Date.now()}_${rand}`;
   }
 }
 

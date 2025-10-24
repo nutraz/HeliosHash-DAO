@@ -12,7 +12,7 @@ import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Text "mo:base/Text";
 
-module Multisig {
+persistent actor Multisig {
   public type ProposalId = Nat;
 
   public type Proposal = {
@@ -27,22 +27,22 @@ module Multisig {
     note : ?Text;
   };
 
-  public var nextProposalId : Nat = 1;
-  public var proposals : [Proposal] = [];
+  public let nextProposalId : Nat = 1;
+  public let proposals : [Proposal] = [];
 
   // Governance parameters
-  public var threshold : Nat = 3; // require 3-of-5 approvals
-  public var guardians : [Principal] = [];
+  public let threshold : Nat = 3; // require 3-of-5 approvals
+  public let guardians : [Principal] = [];
 
   // Optional treasury canister that will be called to execute transfers.
-  public var treasuryCanister : ?Principal = null;
+  public let treasuryCanister : ?Principal = null;
 
   // Timelock configuration (nanoseconds)
-  public var timelockDelayNs : Int = 48 * 60 * 60 * 1_000_000_000; // 48 hours
-  public var timelockAmountThreshold : Nat = 1_000_000; // amounts >= threshold require timelock
+  public let timelockDelayNs : Int = 48 * 60 * 60 * 1_000_000_000; // 48 hours
+  public let timelockAmountThreshold : Nat = 1_000_000; // amounts >= threshold require timelock
 
   // Emergency pause
-  public var paused : Bool = false;
+  public let paused : Bool = false;
 
   // ===== Helpers =====
   private func findProposal(id : ProposalId) : ?Proposal {
@@ -231,5 +231,4 @@ module Multisig {
       };
     }
   };
-
-}
+};

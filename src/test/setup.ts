@@ -188,7 +188,8 @@ Object.defineProperty(window, 'crypto', {
   value: {
     getRandomValues: vi.fn().mockImplementation((arr: any) => {
       for (let i = 0; i < arr.length; i++) {
-        arr[i] = Math.floor(Math.random() * 256);
+  const { randomBytes } = require('crypto');
+  arr.set(randomBytes(256));
       }
       return arr;
     }),
@@ -230,7 +231,11 @@ global.testUtils = {
 
   // Helper to simulate Bitcoin transactions
   createMockBitcoinTx: (overrides = {}) => ({
-    txid: 'mock-bitcoin-tx-' + Math.random().toString(36).substr(2, 9),
+  ...(() => {
+    const crypto = require('crypto');
+    const rand = crypto.randomBytes(9).toString('hex');
+    return { txid: 'mock-bitcoin-tx-' + rand };
+  })(),
     inputs: [],
     outputs: [],
     fee: 10000,

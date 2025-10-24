@@ -118,16 +118,37 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user from localStorage on mount
+  // Load user from secure, server-side session
   useEffect(() => {
-    const savedUserId = localStorage.getItem('hhdao-user-id');
-    if (savedUserId && mockUsers[savedUserId]) {
-      setUser(mockUsers[savedUserId]);
-    }
-    setIsLoading(false);
+    fetch('/api/session')
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          // Map session user to full User type
+          const fullUser: User = {
+            id: data.user.id,
+            username: data.user.name.toLowerCase().replace(' ', '_'),
+            email: data.user.email,
+            displayName: data.user.name,
+            role: 'Community', // Default role
+            secondaryRoles: [],
+            location: 'India', // Default
+            aadhaarVerified: true,
+            owpBalance: data.user.balance,
+            joinDate: '2024-01-01',
+            prefersDuoValidation: false,
+            principal: 'mock-principal',
+          };
+          setUser(fullUser);
+        } else {
+          setUser(null);
+        }
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   const hasRole = (role: UserRole): boolean => {
@@ -135,63 +156,30 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return user.role === role || user.secondaryRoles.includes(role);
   };
 
+
   const login = async (credentials: any) => {
     setIsLoading(true);
-
     try {
-      let userId: string | undefined;
-
-      if (credentials.type === 'wallet') {
-        // For wallet login, use default community user for demo
-        console.log(`🔌 Wallet login with ${credentials.walletType}`);
-        userId = 'community1';
-      } else if (credentials.type === 'social') {
-        // For social login, simulate OAuth flow and use investor user
-        console.log(`🌐 Social login with ${credentials.provider}`);
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate OAuth redirect
-        userId = 'investor1';
-      } else if (credentials.type === 'email') {
-        // For email login, simulate OTP verification and use authority user
-        console.log(`📧 Email login with ${credentials.email}`);
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate email sending
-        alert(`Login code sent to ${credentials.email}! Using demo code: 123456`);
-        userId = 'authority1';
-      } else if (credentials === 'internet-identity') {
-        // Internet Identity login
-        console.log('🛡️ Internet Identity login');
-        userId = 'dao1';
-      } else {
-        // Legacy mock login - find user by username/email
-        userId = Object.keys(mockUsers).find((key) => {
-          const u = mockUsers[key];
-          return (
-            u.username === credentials.username ||
-            u.email === credentials.email ||
-            u.username === credentials.identifier ||
-            u.email === credentials.identifier
-          );
-        });
-      }
-
-      if (userId && mockUsers[userId]) {
-        const foundUser = mockUsers[userId];
-        setUser(foundUser);
-        localStorage.setItem('hhdao-user-id', userId);
-        console.log(`✅ Login successful for ${foundUser.displayName} (${foundUser.role})`);
-      } else {
-        throw new Error('Invalid credentials or user not found');
-      }
-    } catch (error) {
-      console.error('❌ Login failed:', error);
-      throw error;
+      // Demo: POST userId, in real app use credentials
+      const userId = credentials.userId || 'community1';
+      await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
+      });
+      // Fetch user from session
+      const res = await fetch('/api/session');
+      const data = await res.json();
+      setUser(data.user || null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
+
+  const logout = async () => {
+    await fetch('/api/logout', { method: 'POST' });
     setUser(null);
-    localStorage.removeItem('hhdao-user-id');
   };
 
   const updateProfile = async (updates: Partial<User>) => {

@@ -1,3 +1,11 @@
+    /// Returns up to 100 holders (pagination required for more)
+    public query func getHoldersPaginated(limit : Nat, offset : Nat) : async [(Principal, Nat)] {
+        let all = Trie.toArray(ledger);
+        let maxLimit = 100;
+        let start = Nat.min(offset, Nat.fromIntWrap(all.size()));
+        let end = Nat.min(start + Nat.min(limit, maxLimit), Nat.fromIntWrap(all.size()));
+        Array.tabulate<(Principal, Nat)>(Nat.toInt(end - start), func(i) { all[Nat.toInt(start) + i] });
+    }
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Trie "mo:base/Trie";

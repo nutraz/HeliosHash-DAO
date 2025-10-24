@@ -1,8 +1,3 @@
-
-<<<<<<< HEAD
-
-
-=======
 import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
@@ -14,7 +9,6 @@ import Nat32 "mo:base/Nat32";
 import Array "mo:base/Array";
 import Iter "mo:base/Iter";
 import Option "mo:base/Option";
->>>>>>> audit-clean
 
 persistent actor Documents {
     // Data Types

@@ -3,10 +3,12 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "@openzeppelin/contracts/security/TimelockController.sol";
+import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./HeliosToken.sol";
 
-contract Bridge is ReentrancyGuard, AccessControl {
+contract Bridge is ReentrancyGuard, AccessControl, Pausable {
     bytes32 public constant BRIDGE_OPERATOR_ROLE = keccak256("BRIDGE_OPERATOR_ROLE");
 
     HeliosToken public immutable heliosToken;
@@ -37,10 +39,16 @@ contract Bridge is ReentrancyGuard, AccessControl {
     event BridgeFeeUpdated(uint256 newFee);
     event EmergencyWithdrawal(address token, uint256 amount);
 
-    constructor(HeliosToken _heliosToken) {
+    bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
+
+    constructor(HeliosToken _heliosToken, address[] memory _multisigSigners) {
         heliosToken = _heliosToken;
-        _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
-        _grantRole(BRIDGE_OPERATOR_ROLE, msg.sender);
+        require(_multisigSigners.length >= 3, "At least 3 multisig signers");
+        for (uint256 i = 0; i < _multisigSigners.length; i++) {
+            _grantRole(MULTISIG_ROLE, _multisigSigners[i]);
+        }
+        _grantRole(DEFAULT_ADMIN_ROLE, _multisigSigners[0]);
+        _grantRole(BRIDGE_OPERATOR_ROLE, _multisigSigners[0]);
     }
 
     /**
@@ -50,9 +58,13 @@ contract Bridge is ReentrancyGuard, AccessControl {
         uint256 amount,
         uint256 targetChainId,
         address targetRecipient
-    ) external payable nonReentrant {
+    ) external payable nonReentrant whenNotPaused {
         require(amount > 0, "Amount must be positive");
         require(msg.value >= bridgeFee, "Insufficient bridge fee");
+
+        // State update BEFORE external call
+        lockedTokens[msg.sender] += amount;
+        totalLocked += amount;
 
         // Transfer tokens from user to bridge
         require(heliosToken.transferFrom(msg.sender, address(this), amount), "Transfer failed");
@@ -68,9 +80,6 @@ contract Bridge is ReentrancyGuard, AccessControl {
             )
         );
 
-        lockedTokens[msg.sender] += amount;
-        totalLocked += amount;
-
         emit TokensLocked(msg.sender, amount, targetChainId, targetRecipient, transactionId);
     }
 
@@ -82,14 +91,16 @@ contract Bridge is ReentrancyGuard, AccessControl {
         uint256 amount,
         uint256 sourceChainId,
         bytes32 transactionId
-    ) external onlyRole(BRIDGE_OPERATOR_ROLE) nonReentrant {
+    ) external nonReentrant whenNotPaused {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can unlock");
         require(!processedTransactions[transactionId], "Transaction already processed");
         require(amount > 0, "Amount must be positive");
 
         processedTransactions[transactionId] = true;
 
         // Mint tokens to recipient (assuming this is the home chain)
-        heliosToken.mintForEnergy(recipient, amount);
+        // Use multi-sig mintForEnergy (opHash = transactionId)
+        heliosToken.mintForEnergy(recipient, amount, transactionId);
 
         emit TokensUnlocked(recipient, amount, sourceChainId, transactionId);
     }
@@ -97,7 +108,8 @@ contract Bridge is ReentrancyGuard, AccessControl {
     /**
      * @dev Update bridge fee (governance function)
      */
-    function setBridgeFee(uint256 newFee) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function setBridgeFee(uint256 newFee) external {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can set fee");
         bridgeFee = newFee;
         emit BridgeFeeUpdated(newFee);
     }
@@ -107,8 +119,8 @@ contract Bridge is ReentrancyGuard, AccessControl {
      */
     function emergencyWithdraw(address token, uint256 amount)
         external
-        onlyRole(DEFAULT_ADMIN_ROLE)
     {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can withdraw");
         IERC20(token).transfer(msg.sender, amount);
         emit EmergencyWithdrawal(token, amount);
     }
@@ -116,9 +128,20 @@ contract Bridge is ReentrancyGuard, AccessControl {
     /**
      * @dev Withdraw collected bridge fees
      */
-    function withdrawFees() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    function withdrawFees() external {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can withdraw fees");
         uint256 balance = address(this).balance;
         payable(msg.sender).transfer(balance);
+    }
+
+    // Emergency pause/unpause
+    function pauseBridge() external {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can pause");
+        _pause();
+    }
+    function unpauseBridge() external {
+        require(hasRole(MULTISIG_ROLE, msg.sender), "Only multisig can unpause");
+        _unpause();
     }
 
     /**

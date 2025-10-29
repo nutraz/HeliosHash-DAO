@@ -99,3 +99,9 @@ node_modules
 **/*.dill
 apps/mobile/packages/
 apps/mobile/third_party/
+
+# Flutter ephemeral files (build artifacts)
+**/ephemeral/
+**/linux/flutter/ephemeral/
+**/windows/flutter/ephemeral/
+**/macos/Flutter/ephemeral/

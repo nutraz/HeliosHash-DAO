@@ -105,3 +105,15 @@ apps/mobile/third_party/
 **/linux/flutter/ephemeral/
 **/windows/flutter/ephemeral/
 **/macos/Flutter/ephemeral/
+
+# ============================================================================
+# Flutter Build Artifacts (Additional)
+# ============================================================================
+**/ephemeral/
+**/GeneratedPluginRegistrant.*
+**/linux/flutter/
+**/windows/flutter/
+**/macos/Flutter/ephemeral/
+**/*.so
+**/*.dylib
+**/*.dll

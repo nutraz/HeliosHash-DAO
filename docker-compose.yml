@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Development service
+  hhdao-dev:
+    build:
+      context: .
+      target: development
+    container_name: hhdao-dev
+    ports:
+      - '3000:3000'
+      - '9229:9229' # Node.js debugger
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      # Use anonymous volumes for node_modules to avoid conflicts
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true # Enable polling for file changes in Docker
+    command: pnpm dev:next
+    restart: unless-stopped
+    networks:
+      - hhdao-network
+
+  # Production service (for testing production builds)
+  hhdao-prod:
+    build:
+      context: .
+      target: runner
+    container_name: hhdao-prod
+    ports:
+      - '3001:3000' # Host 3001 -> container 3000 (current build exposes Next.js on 3000 internally)
+      # If custom server inside container listens directly on 3001, change to:
+      # - '3001:3001'
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    restart: unless-stopped
+    networks:
+      - hhdao-network
+    profiles:
+      - production
+
+  # DFX Internet Computer local network (if needed)
+  dfx-network:
+    image: dfinity/sdk:latest
+    container_name: hhdao-dfx
+    ports:
+      - '4943:4943'
+      - '8080:8080'
+    volumes:
+      - ./canisters:/workspace/canisters
+      - ./dfx.json:/workspace/dfx.json
+      - dfx-data:/root/.cache/dfinity
+    working_dir: /workspace
+    command: dfx start --host 0.0.0.0
+    restart: unless-stopped
+    networks:
+      - hhdao-network
+    profiles:
+      - dfx
+
+networks:
+  hhdao-network:
+    driver: bridge
+
+volumes:
+  dfx-data:
+    driver: local

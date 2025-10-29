@@ -1,0 +1,122 @@
+type Time = int;
+type Result_2 = 
+ variant {
+   err: text;
+   ok: DisputeId;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: nat;
+ };
+type MediationSession = 
+ record {
+   completed: bool;
+   disputeId: DisputeId;
+   mediator: principal;
+   notes: opt text;
+   outcome: opt text;
+   participants: vec principal;
+   scheduledTime: Time;
+   sessionId: nat;
+ };
+type EvidenceType = 
+ variant {
+   Communication;
+   Document;
+   Other: text;
+   TechnicalLog;
+   Testimony;
+   Transaction;
+ };
+type Evidence = 
+ record {
+   content: text;
+   evidenceType: EvidenceType;
+   id: nat;
+   submitter: principal;
+   timestamp: Time;
+   verified: bool;
+ };
+type DisputeStatus = 
+ variant {
+   Closed;
+   CommunityVoting;
+   Escalated;
+   Filed;
+   Mediation;
+   Resolved;
+   UnderReview;
+ };
+type DisputePriority = 
+ variant {
+   Critical;
+   High;
+   Low;
+   Medium;
+ };
+type DisputeId = nat;
+type DisputeCategory = 
+ variant {
+   ContractDispute;
+   GovernanceDispute;
+   MembershipDispute;
+   ProjectDispute;
+   TechnicalDispute;
+   TreasuryDispute;
+ };
+type Dispute = 
+ record {
+   category: DisputeCategory;
+   description: text;
+   evidence: vec Evidence;
+   filedAt: Time;
+   filer: principal;
+   finalOutcome: opt text;
+   id: DisputeId;
+   lastUpdated: Time;
+   mediators: vec principal;
+   priority: DisputePriority;
+   resolutionProposal: opt text;
+   respondent: opt principal;
+   status: DisputeStatus;
+   title: text;
+ };
+service : {
+  acceptMediationRole: (disputeId: DisputeId) -> (Result_1);
+  applyToBeMediator: () -> (Result_1);
+  fileDispute: (title: text, description: text, category: DisputeCategory,
+   priority: DisputePriority, respondent: opt principal) -> (Result_2);
+  finalizeDispute: (disputeId: DisputeId, outcome: text, wasApproved:
+   bool) -> (Result_1);
+  getAllDisputes: () -> (vec Dispute) query;
+  getDispute: (id: DisputeId) -> (opt Dispute) query;
+  getDisputeStats: () ->
+   (record {
+      activeDisputes: nat;
+      disputesByCategory: vec record {
+                                DisputeCategory;
+                                nat;
+                              };
+      resolvedDisputes: nat;
+      totalDisputes: nat;
+      totalMediators: nat;
+    }) query;
+  getDisputesByCategory: (category: DisputeCategory) -> (vec Dispute) query;
+  getDisputesByStatus: (status: DisputeStatus) -> (vec Dispute) query;
+  getMediationSessions: (disputeId: DisputeId) ->
+   (vec MediationSession) query;
+  getMyDisputes: ("principal": principal) -> (vec Dispute) query;
+  isMediator: ("principal": principal) -> (bool) query;
+  proposeResolution: (disputeId: DisputeId, resolutionProposal: text) ->
+   (Result_1);
+  scheduleMediationSession: (disputeId: DisputeId, scheduledTime: Time,
+   participants: vec principal) -> (Result);
+  submitEvidence: (disputeId: DisputeId, content: text, evidenceType:
+   EvidenceType) -> (Result);
+}

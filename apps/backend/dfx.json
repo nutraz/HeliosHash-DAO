@@ -1,0 +1,41 @@
+{
+  "canisters": {
+    "helioshash_backend_backend": {
+      "declarations": {
+        "node_compatibility": true
+      },
+      "main": "src/helioshash_backend_backend/main.mo",
+      "type": "motoko"
+    },
+    "helioshash_backend_frontend": {
+      "dependencies": ["helioshash_backend_backend"],
+      "source": ["src/helioshash_backend_frontend/dist"],
+      "type": "assets",
+      "workspace": "helioshash_backend_frontend"
+    },
+    "internet_identity": {
+      "candid": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity.did",
+      "frontend": {},
+      "remote": {
+        "id": {
+          "ic": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+        }
+      },
+      "type": "custom",
+      "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
+    }
+  },
+  "defaults": {
+    "bitcoin": {
+      "enabled": true,
+      "log_level": "info",
+      "nodes": ["127.0.0.1:18444"]
+    },
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

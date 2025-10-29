@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: HeliosHash DAO API
+  version: 0.1.0
+  description: Developer API for local dev/testing. Not for production.
+servers:
+  - url: http://localhost:3001
+paths:
+  /api/status:
+    get:
+      summary: Server status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+  /api/csrf:
+    get:
+      summary: Issue CSRF token (double-submit cookie)
+      responses:
+        '200':
+          description: Token issued
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+              description: csrfToken cookie
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /api/cycles:
+    get:
+      summary: Get cycles status
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Top up cycles
+      security:
+        - CsrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                canister:
+                  type: string
+                amount:
+                  type: string
+      responses:
+        '200':
+          description: OK
+  /api/dao/proposals:
+    get:
+      summary: List proposals
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Create proposal
+      security:
+        - CsrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+                proposalType: { type: string, enum: [Project, Governance, Treasury, Community] }
+      responses:
+        '200': { description: OK }
+  /api/dao/vote:
+    post:
+      summary: Cast vote
+      security:
+        - CsrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                proposalId: { type: integer }
+                vote: { type: boolean }
+      responses:
+        '200': { description: OK }
+  /api/nft:
+    get:
+      summary: List NFTs
+      responses:
+        '200': { description: OK }
+    post:
+      summary: Purchase NFT
+      security:
+        - CsrfHeader: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nftId: { type: integer }
+                buyerPrincipal: { type: string }
+      responses:
+        '200': { description: OK }
+components:
+  securitySchemes:
+    CsrfHeader:
+      type: apiKey
+      in: header
+      name: x-csrf-token

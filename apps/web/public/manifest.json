@@ -1,0 +1,19 @@
+{
+  "name": "HeliosHash DAO",
+  "short_name": "HHDAO",
+  "icons": [
+    {
+      "src": "/icons/ic_launcher.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/ic_launcher.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#FF9933",
+  "background_color": "#0A1A2F",
+  "display": "standalone"
+}

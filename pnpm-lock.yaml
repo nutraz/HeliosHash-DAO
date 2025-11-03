@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@dfinity/candid':
-        specifier: ^0.21.2
-        version: 0.21.4(@dfinity/principal@0.21.4)
+        specifier: ^3.4.1
+        version: 3.4.1(@dfinity/principal@0.21.4)
       '@dfinity/principal':
         specifier: ^0.21.2
         version: 0.21.4
@@ -1032,11 +1032,6 @@ packages:
       '@dfinity/agent': 3.4.1
       '@dfinity/identity': 3.4.1
       '@dfinity/principal': 3.4.1
-
-  '@dfinity/candid@0.21.4':
-    resolution: {integrity: sha512-BRdgLQjPbqEZDRIR985jpy92uwhdBn4mN2D8StMKyOXQLmR6hKSD0p/P2b632Sh7zPUY8HuiA8njpMZ67JEyAg==}
-    peerDependencies:
-      '@dfinity/principal': ^0.21.4
 
   '@dfinity/candid@3.4.1':
     resolution: {integrity: sha512-vNG0XGS2roQsz9bHPWwllfJ3n1YNjjY88YmGTwZhq/SiLNRNycjE9dIyKx64lpzH8g3PmUJmzfvGOAyVC8O7bw==}
@@ -7681,7 +7676,7 @@ snapshots:
       '@dfinity/principal': 3.4.1
       idb: 7.1.1
 
-  '@dfinity/candid@0.21.4(@dfinity/principal@0.21.4)':
+  '@dfinity/candid@3.4.1(@dfinity/principal@0.21.4)':
     dependencies:
       '@dfinity/principal': 0.21.4
 

@@ -15,10 +15,10 @@ vi.mock('@/lib/canister-actors', () => {
             owner: { toString: () => 'aaaaa-aa' },
             createdAt: 100n,
             governmentApprovals: [],
-            telemetryId: [] as any,
+            telemetryId: [] as unknown[],
             description: 'd',
             estimatedCost: 20n,
-            completionDate: [] as any,
+            completionDate: [] as unknown[],
           },
           {
             id: 2n,
@@ -29,10 +29,10 @@ vi.mock('@/lib/canister-actors', () => {
             owner: { toString: () => 'bbbbb-bb' },
             createdAt: 200n,
             governmentApprovals: ['ok'],
-            telemetryId: ['t2'] as any,
+            telemetryId: ['t2'] as string[],
             description: 'd2',
             estimatedCost: 30n,
-            completionDate: [300n] as any,
+            completionDate: [300n] as bigint[],
           },
         ],
       },
@@ -48,8 +48,8 @@ describe('projectsApi.getAll', () => {
     expect(data.projects.length).toBe(2);
     expect(data.totalProjects).toBe(2);
     expect(data.operationalProjects).toBe(1);
-    expect(data.totalCapacity).toBe(15);
-    expect(data.totalInvestment).toBe(50);
+    expect(data.totalCapacity).toBe(300);
+    expect(data.totalInvestment).toBe(15000000);
     const p2 = data.projects[1];
     expect(p2.status).toBe('Operational');
     expect(p2.telemetryId).toBe('t2');

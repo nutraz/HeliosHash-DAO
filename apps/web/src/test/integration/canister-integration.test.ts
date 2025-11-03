@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, beforeAll, vi } from "vitest";
 /**
  * Integration tests for canister-to-canister communication
  * Tests the interaction between DAO, dispute resolution, and other canisters
@@ -17,7 +18,7 @@ describe('Canister Integration Tests', () => {
     disputeActor = actors.dispute;
 
     // Create a test principal
-    testPrincipal = Principal.fromText('rdmx6-jaaaa-aaaah-qdrpq-cai');
+    testPrincipal = Principal.fromText("aaaaa-aa");
   });
 
   describe('DAO and Dispute Resolution Integration', () => {

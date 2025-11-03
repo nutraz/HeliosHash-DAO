@@ -1,0 +1,8 @@
+.dhamma-chakra {
+  animation: flare 1.9s ease-in-out infinite alternate;
+  animation-delay: 0s;
+}
+
+@keyframes flare {
+  /* your animation keyframes */
+}

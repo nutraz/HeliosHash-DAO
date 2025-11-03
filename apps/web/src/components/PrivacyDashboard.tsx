@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { Alert, AlertDescription } from '../components/ui/alert';
-import { GDPRComplianceService } from '../lib/compliance';
+// import { GDPRComplianceService } from '../lib/compliance';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';

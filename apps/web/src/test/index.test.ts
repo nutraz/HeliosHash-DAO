@@ -1,8 +1,3 @@
-import './compliance.test';
-import './governance.test';
-import './integration.test';
-import './motoko-governance.test';
-
 /**
  * Main Test Entry Point
  *

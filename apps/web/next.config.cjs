@@ -1,13 +1,15 @@
-/** Minimal Next.js config to avoid build errors and workspace confusion */
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['@helioshash/shared'],
   experimental: {
-    optimizeCss: true,
+    // Disable static optimization for error pages
+    optimizeCss: false,
   },
-  output: 'standalone',
-};
+  // Ensure error pages are client-rendered
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
+}
 
-module.exports = nextConfig;
+module.exports = nextConfig

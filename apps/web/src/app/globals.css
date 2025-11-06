@@ -1,170 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* DhammaChakra helper classes (extracted from inline styles) */
-.dhamma-chakra {
-  position: relative;
-  width: 20rem; /* 320px */
-  height: 20rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.dhamma-chakra-inner {
-  position: relative;
-  width: 16rem; /* 256px */
-  height: 16rem;
-}
-
-.dhamma-chakra-flame {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 0.75rem; /* 12px */
-  height: 4rem; /* 64px */
-  background: linear-gradient(to top, #dc2626, #fb923c, transparent);
-  border-radius: 9999px;
-  filter: blur(4px);
-  transform: translateX(-50%) translateY(-20px);
-}
-
-.dhamma-chakra-flame-outer {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 0.5rem; /* 8px */
-  height: 5rem; /* 80px */
-  background: linear-gradient(to top, #dc2626, #f97316, transparent);
-  border-radius: 9999px;
-  filter: blur(5px);
-  transform: translateX(-50%) translateY(-25px);
-}
-
-@keyframes flare {
-  0% {
-    opacity: 0.4;
-    transform: translateX(-50%) translateY(-20px) scaleY(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(-40px) scaleY(1.3);
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
   }
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  min-height: 100vh;
-  width: 100vw;
-  box-sizing: border-box;
-}
-
-body {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 60%, #0f0f0f 100%);
-  color: #ffffff;
-  min-height: 100vh;
-  width: 100vw;
-  overflow-x: hidden;
-}
-
-@media (max-width: 600px) {
-  html, body {
-    font-size: 16px;
+@layer base {
+  /* Removed an invalid Tailwind utility `border-border` which caused a PostCSS error during dev/build.
+     If you have a custom border token, define it in your Tailwind theme or a `@layer utilities` rule.
+     For now we keep global reset minimal. */
+  body {
+    @apply bg-background text-foreground;
   }
-}
-
-/* Utility classes for dark theme */
-.text-saffron { color: #FF9933 !important; }
-.text-green { color: #138808 !important; }
-.text-navy { color: #ffffff !important; }
-.text-gray { color: #cccccc !important; }
-.text-light { color: #ffffff !important; }
-.bg-saffron { background: #FF9933 !important; }
-.bg-green { background: #138808 !important; }
-.bg-navy { background: #1a1a1a !important; }
-.bg-dark { background: #2d2d2d !important; }
-.bg-darker { background: #0f0f0f !important; }
-.drop-shadow { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
-
-/* Button and card tweaks for mobile */
-button, .btn, .Button {
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: background 0.2s, color 0.2s;
-  background: #FF9933;
-  color: #ffffff;
-  border: none;
-}
-
-button:hover, .btn:hover, .Button:hover {
-  background: #e6892e;
-}
-
-@media (max-width: 600px) {
-  button, .btn, .Button {
-    width: 100%;
-    font-size: 1.1rem;
-    padding: 1rem 0.5rem;
-  }
-}
-
-/* Card styles for dark theme */
-.card {
-  background: #2d2d2d;
-  border: 1px solid #444444;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-/* Input styles */
-input, textarea, select {
-  background: #1a1a1a;
-  color: #ffffff;
-  border: 1px solid #444444;
-  border-radius: 0.5rem;
-  padding: 0.5rem;
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: none;
-  border-color: #FF9933;
-}
-
-/* EMERGENCY: Force hide navigation on splash and auth routes */
-body[data-route="/"] nav,
-body[data-route="/splash"] nav,
-body[data-route="/auth"] nav,
-body[data-route="/onboarding"] nav,
-body[data-route="/kyc"] nav {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
-}
-
-/* Also hide any header elements */
-body[data-route="/"] header,
-body[data-route="/splash"] header,
-body[data-route="/auth"] header,
-body[data-route="/onboarding"] header,
-body[data-route="/kyc"] header {
-  display: none !important;
-}
-
-/* Ensure splash screen takes full space */
-.splash-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9999;
 }

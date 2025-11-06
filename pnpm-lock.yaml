@@ -29,7 +29,7 @@ importers:
         version: 0.294.0(react@18.3.1)
       next:
         specifier: 14.0.0
-        version: 14.0.0(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -12576,7 +12576,7 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
-  next@14.0.0(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.0.0
       '@swc/helpers': 0.5.2

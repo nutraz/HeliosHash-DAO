@@ -1,94 +1,84 @@
-'use client';
+'use client'
 
-import { User, authService } from '@/services/authService';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+
+interface User {
+  id: string
+  name: string
+  email: string
+  avatar?: string
+  walletAddress?: string
+}
 
 interface AuthContextType {
   user: User | null
-  login: (provider: string) => Promise<void>
+  isAuthenticated: boolean
+  login: (userData: User) => void
   logout: () => void
-  completeOnboarding: () => void
-  completeKYC: () => void
+  isLoading: boolean
+  // Backwards-compatible fields for legacy wallet components
+  isConnected: boolean
+  walletType: string | null
+  principal: string | null
+  connect: (type: string) => void
+  disconnect: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Check for existing auth state on mount using your existing service
-    const checkAuth = async () => {
-      try {
-        // Assuming your authService has a way to get current user
-        // If not, we'll use localStorage as fallback
-        const authState = localStorage.getItem('helioshash-auth')
-        if (authState) {
-          const savedUser = JSON.parse(authState)
-          setUser(savedUser)
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error)
+    // Check for stored auth on mount
+    try {
+      const storedUser = localStorage.getItem('helioshash-user')
+      if (storedUser) {
+        setUser(JSON.parse(storedUser))
       }
+    } catch (e) {
+      // ignore parse errors
+      console.warn('Failed to read stored user', e)
     }
-    checkAuth()
+    setIsLoading(false)
   }, [])
 
-  const login = async (provider: string) => {
+  const login = (userData: User) => {
+    setUser(userData)
     try {
-      // Use your existing auth service
-      const userData = await authService.mockLogin(provider)
-      const userWithOnboarding = {
-        ...userData,
-        // Add onboarding fields if they don't exist
-        hasCompletedOnboarding: userData.hasCompletedOnboarding || false,
-        hasCompletedKYC: userData.hasCompletedKYC || false
-      }
-      setUser(userWithOnboarding)
-      localStorage.setItem('helioshash-auth', JSON.stringify(userWithOnboarding))
-    } catch (error) {
-      console.error('Login failed:', error)
+      localStorage.setItem('helioshash-user', JSON.stringify(userData))
+    } catch (e) {
+      console.warn('Failed to persist user', e)
     }
   }
 
   const logout = () => {
     setUser(null)
-    localStorage.removeItem('helioshash-auth')
-  }
-
-  const completeOnboarding = () => {
-    if (user) {
-      const updatedUser = {
-        ...user,
-        hasCompletedOnboarding: true
-      }
-      setUser(updatedUser)
-      localStorage.setItem('helioshash-auth', JSON.stringify(updatedUser))
+    try {
+      localStorage.removeItem('helioshash-user')
+    } catch (e) {
+      console.warn('Failed to remove stored user', e)
     }
   }
 
-  const completeKYC = () => {
-    if (user) {
-      const updatedUser = {
-        ...user,
-        hasCompletedKYC: true
-      }
-      setUser(updatedUser)
-      localStorage.setItem('helioshash-auth', JSON.stringify(updatedUser))
-    }
+  const value = {
+    user,
+    isAuthenticated: !!user,
+    login,
+    logout,
+    isLoading,
+    // legacy compatibility fields
+    isConnected: !!user,
+    walletType: user?.walletAddress ? 'wallet' : null,
+    principal: null,
+    connect: (type: string) => {
+      console.log('connect called', type)
+    },
+    disconnect: logout,
   }
 
-  return (
-    <AuthContext.Provider value={{
-      user,
-      login,
-      logout,
-      completeOnboarding,
-      completeKYC
-    }}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {

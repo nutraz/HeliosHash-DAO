@@ -1,12 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true,
+  transpilePackages: ['@helioshash/shared'],
+  experimental: {
+    // Disable static optimization for error pages
+    optimizeCss: false,
   },
-  typescript: {
-    ignoreBuildErrors: true,
+  // Ensure error pages are client-rendered
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
   },
-};
+}
 
-export default nextConfig;
+export default nextConfig

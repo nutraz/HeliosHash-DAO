@@ -8,14 +8,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<Map<String, String>> _messages = [];
+  final List<Map<String, String>> _messages = <Map<String, String>>[];
   final TextEditingController _controller = TextEditingController();
 
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
     setState(() {
-      _messages.add({'user': 'You', 'text': text});
+      _messages.add(<String, String>{'user': 'You', 'text': text});
     });
     _controller.clear();
     // TODO: Integrate with backend for real-time chat
@@ -26,12 +26,12 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Community Chat')),
       body: Column(
-        children: [
+        children: <dynamic>[
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
               itemBuilder: (context, idx) {
-                final msg = _messages[idx];
+                final Map<String, String> msg = _messages[idx];
                 return ListTile(
                   title: Text(msg['user'] ?? ''),
                   subtitle: Text(msg['text'] ?? ''),
@@ -42,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: TextField(
                     controller: _controller,

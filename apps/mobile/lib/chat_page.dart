@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
 
 class ChatPage extends StatefulWidget {
-  final String conversationId;
-  final String otherUserName;
 
   const ChatPage({
     super.key,
     required this.conversationId,
     required this.otherUserName,
   });
+  final String conversationId;
+  final String otherUserName;
 
   @override
   State<ChatPage> createState() => _ChatPageState();
@@ -18,23 +18,23 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final List<Map<String, dynamic>> _messages = [
-    {
+  final List<Map<String, dynamic>> _messages = <Map<String, dynamic>>[
+    <String, dynamic>{
       'text': 'Hello! How are you?',
       'isMe': false,
       'timestamp': DateTime.now().subtract(const Duration(minutes: 5)),
     },
-    {
-      'text': 'Hi! I\'m doing well, thanks. How about you?',
+    <String, dynamic>{
+      'text': "Hi! I'm doing well, thanks. How about you?",
       'isMe': true,
       'timestamp': DateTime.now().subtract(const Duration(minutes: 4)),
     },
-    {
+    <String, dynamic>{
       'text': 'Great! I wanted to discuss the project proposal.',
       'isMe': false,
       'timestamp': DateTime.now().subtract(const Duration(minutes: 3)),
     },
-    {
+    <String, dynamic>{
       'text': 'Sure, what would you like to know?',
       'isMe': true,
       'timestamp': DateTime.now().subtract(const Duration(minutes: 2)),
@@ -52,7 +52,7 @@ class _ChatPageState extends State<ChatPage> {
     if (_messageController.text.trim().isEmpty) return;
 
     setState(() {
-      _messages.add({
+      _messages.add(<String, dynamic>{
         'text': _messageController.text.trim(),
         'isMe': true,
         'timestamp': DateTime.now(),
@@ -76,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          children: [
+          children: <dynamic>[
             CircleAvatar(
               backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
               child: Text(
@@ -93,7 +93,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -103,7 +103,7 @@ class _ChatPageState extends State<ChatPage> {
         ],
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Messages List
           Expanded(
             child: ListView.builder(
@@ -111,7 +111,7 @@ class _ChatPageState extends State<ChatPage> {
               padding: const EdgeInsets.all(16),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
-                final message = _messages[index];
+                final Map<String, dynamic> message = _messages[index];
                 return _buildMessageBubble(message);
               },
             ),
@@ -127,7 +127,7 @@ class _ChatPageState extends State<ChatPage> {
               ),
             ),
             child: Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: TextField(
                     controller: _messageController,
@@ -166,15 +166,15 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Widget _buildMessageBubble(Map<String, dynamic> message) {
-    final isMe = message['isMe'] as bool;
-    final text = message['text'] as String;
-    final timestamp = message['timestamp'] as DateTime;
+    final bool isMe = message['isMe'] as bool;
+    final String text = message['text'] as String;
+    final DateTime timestamp = message['timestamp'] as DateTime;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           Container(
             constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width * 0.7,
@@ -191,7 +191,7 @@ class _ChatPageState extends State<ChatPage> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <dynamic>[
                 Text(
                   text,
                   style: TextStyle(
@@ -216,8 +216,8 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(time);
 
     if (difference.inDays > 0) {
       return '${time.hour}:${time.minute.toString().padLeft(2, '0')}';

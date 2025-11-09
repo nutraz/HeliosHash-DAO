@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CacheService extends ChangeNotifier {
-  final Map<String, dynamic> _cache = {};
+  final Map<String, dynamic> _cache = <String, dynamic>{};
 
   T? get<T>(String key) => _cache[key] as T?;
 

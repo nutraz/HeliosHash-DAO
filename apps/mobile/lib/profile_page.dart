@@ -12,7 +12,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   late TabController _tabController;
 
   // Mock user data
-  final Map<String, dynamic> _user = {
+  final Map<String, dynamic> _user = <String, dynamic>{
     'name': 'Alice Johnson',
     'email': 'alice.johnson@example.com',
     'avatar': 'A',
@@ -20,30 +20,30 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     'joinDate': DateTime(2023, 6, 15),
     'location': 'San Francisco, CA',
     'website': 'https://alicejohnson.dev',
-    'skills': ['Solidity', 'React', 'Web3', 'DAO Governance', 'Smart Contracts'],
-    'stats': {
+    'skills': <String>['Solidity', 'React', 'Web3', 'DAO Governance', 'Smart Contracts'],
+    'stats': <String, num>{
       'projectsContributed': 12,
       'proposalsCreated': 8,
       'votesCast': 156,
       'reputation': 4.8,
     },
-    'achievements': [
-      {'name': 'Top Contributor', 'description': 'Contributed to 10+ projects', 'icon': Icons.star},
-      {'name': 'Proposal Master', 'description': 'Created 5+ successful proposals', 'icon': Icons.gavel},
-      {'name': 'Active Voter', 'description': 'Voted in 100+ governance decisions', 'icon': Icons.how_to_vote},
+    'achievements': <Map<String, dynamic>>[
+      <String, dynamic>{'name': 'Top Contributor', 'description': 'Contributed to 10+ projects', 'icon': Icons.star},
+      <String, dynamic>{'name': 'Proposal Master', 'description': 'Created 5+ successful proposals', 'icon': Icons.gavel},
+      <String, dynamic>{'name': 'Active Voter', 'description': 'Voted in 100+ governance decisions', 'icon': Icons.how_to_vote},
     ],
-    'recentActivity': [
-      {
+    'recentActivity': <Map<String, Object>>[
+      <String, Object>{
         'type': 'project',
         'title': 'Contributed to Decentralized Identity System',
         'timestamp': DateTime.now().subtract(const Duration(days: 2)),
       },
-      {
+      <String, Object>{
         'type': 'proposal',
         'title': 'Created proposal: Community Treasury Allocation',
         'timestamp': DateTime.now().subtract(const Duration(days: 5)),
       },
-      {
+      <String, Object>{
         'type': 'vote',
         'title': 'Voted on Governance Parameter Change',
         'timestamp': DateTime.now().subtract(const Duration(days: 7)),
@@ -70,7 +70,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         title: const Text('Profile'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
@@ -87,7 +87,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
+          return <dynamic>[
             SliverToBoxAdapter(
               child: _buildProfileHeader(),
             ),
@@ -96,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               delegate: _SliverAppBarDelegate(
                 TabBar(
                   controller: _tabController,
-                  tabs: const [
+                  tabs: const <dynamic>[
                     Tab(text: 'Overview'),
                     Tab(text: 'Activity'),
                     Tab(text: 'Achievements'),
@@ -111,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         },
         body: TabBarView(
           controller: _tabController,
-          children: [
+          children: <dynamic>[
             _buildOverviewTab(),
             _buildActivityTab(),
             _buildAchievementsTab(),
@@ -132,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         ),
       ),
       child: Column(
-        children: [
+        children: <dynamic>[
           // Avatar
           CircleAvatar(
             radius: 50,
@@ -187,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           // Location and Join Date
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <dynamic>[
               Icon(Icons.location_on, size: 16, color: Colors.white.withOpacity(0.8)),
               const SizedBox(width: 4),
               Text(
@@ -210,11 +210,11 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             ],
           ),
 
-          if (_user['website'] != null) ...[
+          if (_user['website'] != null) ...<dynamic>[
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <dynamic>[
                 Icon(Icons.link, size: 16, color: Colors.white.withOpacity(0.8)),
                 const SizedBox(width: 4),
                 Text(
@@ -238,7 +238,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           // Stats Grid
           const Text(
             'Statistics',
@@ -254,7 +254,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            children: [
+            children: <dynamic>[
               _buildStatCard(
                 'Projects',
                 _user['stats']['projectsContributed'].toString(),
@@ -296,7 +296,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: (_user['skills'] as List<String>).map((skill) {
+            children: (_user['skills'] as List<String>).map((String skill) {
               return Chip(
                 label: Text(skill),
                 backgroundColor: AppConstants.primaryColor.withOpacity(0.1),
@@ -351,7 +351,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             padding: const EdgeInsets.all(16),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <dynamic>[
                 Icon(
                   achievement['icon'],
                   size: 32,
@@ -389,7 +389,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(icon, size: 32, color: color),
             const SizedBox(height: 8),
             Text(
@@ -427,8 +427,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays} days ago';
@@ -443,9 +443,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
 
   _SliverAppBarDelegate(this.tabBar);
+  final TabBar tabBar;
 
   @override
   double get minExtent => tabBar.preferredSize.height;

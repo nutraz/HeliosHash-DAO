@@ -23,14 +23,14 @@ class _RewardsScreenState extends State<RewardsScreen> {
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <dynamic>[
                 // Current Balance Card
                 Card(
                   elevation: 4,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
-                      children: [
+                      children: <dynamic>[
                         const Icon(
                           Icons.account_balance_wallet,
                           size: 48,
@@ -56,7 +56,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                         const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                          children: <dynamic>[
                             ElevatedButton.icon(
                               onPressed: daoProvider.isLoading ? null : () => _claimRewards(context),
                               icon: const Icon(Icons.download),
@@ -141,7 +141,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <dynamic>[
                         const Text(
                           'Exchange Rate',
                           style: TextStyle(
@@ -237,7 +237,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Row(
-          children: [
+          children: <dynamic>[
             CircleAvatar(
               backgroundColor: color.withOpacity(0.1),
               child: Icon(icon, color: color),
@@ -246,7 +246,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <dynamic>[
                   Text(
                     title,
                     style: const TextStyle(
@@ -334,7 +334,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
           title: const Text('Exchange Tokens'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <dynamic>[
               const Text(
                 'Exchange your HHDAO tokens for ETH.\n\nRate: 1 HHDAO = 0.05 ETH',
                 style: TextStyle(fontSize: 14),
@@ -358,7 +358,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
               ),
             ],
           ),
-          actions: [
+          actions: <dynamic>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Cancel'),

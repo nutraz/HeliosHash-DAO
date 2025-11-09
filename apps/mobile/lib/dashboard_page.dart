@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/stat_card.dart';
+import 'package:helios_hash_dao/mock_data.dart';
 import 'package:helios_hash_dao/project_card.dart';
 import 'package:helios_hash_dao/proposal_card.dart';
-import 'package:helios_hash_dao/mock_data.dart';
+import 'package:helios_hash_dao/stat_card.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -13,29 +13,29 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final List<Map<String, dynamic>> _stats = [
-    {
+  final List<Map<String, dynamic>> _stats = <Map<String, dynamic>>[
+    <String, dynamic>{
       'title': 'Total Members',
       'value': '15,420',
       'icon': Icons.people,
       'color': Colors.blue,
       'change': 12.5,
     },
-    {
+    <String, dynamic>{
       'title': 'Active Projects',
       'value': '23',
       'icon': Icons.work,
       'color': Colors.green,
       'change': 8.2,
     },
-    {
+    <String, dynamic>{
       'title': 'Treasury Balance',
-      'value': '\$2.5M',
+      'value': r'$2.5M',
       'icon': Icons.account_balance_wallet,
       'color': Colors.purple,
       'change': 15.3,
     },
-    {
+    <String, dynamic>{
       'title': 'Active Proposals',
       'value': '8',
       'icon': Icons.gavel,
@@ -52,7 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
@@ -76,7 +76,7 @@ class _DashboardPageState extends State<DashboardPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Welcome Section
               Container(
                 padding: const EdgeInsets.all(20),
@@ -89,7 +89,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     const Text(
                       'Welcome back!',
                       style: TextStyle(
@@ -100,7 +100,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Here\'s what\'s happening in your DAO today',
+                      "Here's what's happening in your DAO today",
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.8),
@@ -115,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     const Text(
                       'DAO Statistics',
                       style: TextStyle(
@@ -135,7 +135,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       itemCount: _stats.length,
                       itemBuilder: (context, index) {
-                        final stat = _stats[index];
+                        final Map<String, dynamic> stat = _stats[index];
                         return StatCard(
                           title: stat['title'],
                           value: stat['value'],
@@ -152,7 +152,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Recent Projects Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <dynamic>[
                         const Text(
                           'Recent Projects',
                           style: TextStyle(
@@ -195,7 +195,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Active Proposals Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                      children: <dynamic>[
                         const Text(
                           'Active Proposals',
                           style: TextStyle(

@@ -1,7 +1,8 @@
-import 'package:provider/provider.dart';
-import '../providers/governance_provider.dart';
-import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/dao/proposal.dart';
+import '../providers/governance_provider.dart';
 
 class CreateProposalDialog extends StatefulWidget {
   const CreateProposalDialog({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <dynamic>[
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(
@@ -72,7 +73,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
                   labelText: 'Category',
                   border: OutlineInputBorder(),
                 ),
-                items: ProposalCategory.values.map((category) {
+                items: ProposalCategory.values.map((ProposalCategory category) {
                   return DropdownMenuItem(
                     value: category,
                     child: Text(category.name.toUpperCase()),
@@ -100,7 +101,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
           ),
         ),
       ),
-      actions: [
+      actions: <dynamic>[
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.pop(context),
           child: const Text('Cancel'),

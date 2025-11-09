@@ -2,14 +2,6 @@ enum TransactionType { investment, withdrawal, reward, governance }
 enum TransactionStatus { pending, confirmed, failed }
 
 class Transaction {
-  final String id;
-  final TransactionType type;
-  final String from;
-  final String to;
-  final BigInt amount;
-  final TransactionStatus status;
-  final DateTime timestamp;
-  final String? txHash;
 
   Transaction({
     required this.id,
@@ -21,6 +13,14 @@ class Transaction {
     required this.timestamp,
     this.txHash,
   });
+  final String id;
+  final TransactionType type;
+  final String from;
+  final String to;
+  final BigInt amount;
+  final TransactionStatus status;
+  final DateTime timestamp;
+  final String? txHash;
 
   String get shortTxHash {
     if (txHash == null) return '';

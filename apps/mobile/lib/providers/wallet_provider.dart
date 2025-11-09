@@ -1,8 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/web3dart.dart';
-import 'package:http/http.dart' as http;
-import 'dart:math';
 
 class WalletProvider with ChangeNotifier {
   EthereumAddress? _address;
@@ -12,7 +13,7 @@ class WalletProvider with ChangeNotifier {
   EtherAmount _tokenBalance = EtherAmount.zero();
   bool _isConnected = false;
   bool _isLoading = false;
-  String _network = 'Sepolia Testnet';
+  final String _network = 'Sepolia Testnet';
 
   // Getters
   EthereumAddress? get address => _address;
@@ -33,13 +34,13 @@ class WalletProvider with ChangeNotifier {
 
     try {
       // Initialize Web3 client (use your RPC endpoint)
-      final rpcUrl = 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY';
+      const String rpcUrl = 'https://sepolia.infura.io/v3/YOUR_INFURA_KEY';
       _client = Web3Client(rpcUrl, http.Client());
 
       // Check for saved wallet
       final prefs = await SharedPreferences.getInstance();
       final savedPrivateKey = prefs.getString('wallet_private_key');
-      
+
       if (savedPrivateKey != null) {
         await _restoreWallet(savedPrivateKey);
       }

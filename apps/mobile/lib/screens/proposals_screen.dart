@@ -8,15 +8,15 @@ class ProposalsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final governanceProvider = Provider.of<GovernanceProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Governance Proposals'),
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: governanceProvider.isLoading 
-                ? null 
+            onPressed: governanceProvider.isLoading
+                ? null
                 : () => governanceProvider.fetchProposals(),
           ),
           IconButton(

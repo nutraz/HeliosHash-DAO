@@ -54,7 +54,7 @@ void main() {
 
     final TextEditingController controller = tester
         .firstWidget<TextField>(find.byType(TextField))
-        .controller!;
+        .controller;
 
     final TextSelection selection = controller.selection;
     final RenderEditable renderEditable = _findRenderEditable(tester);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/proposal_card.dart';
 import 'package:helios_hash_dao/mock_data.dart';
+import 'package:helios_hash_dao/proposal_card.dart';
 import 'package:helios_hash_dao/proposal_model.dart';
 
 class GovernancePage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
   String _searchQuery = '';
   String _selectedCategory = 'All';
 
-  final List<String> _categories = [
+  final List<String> _categories = <String>[
     'All',
     'Finance',
     'Governance',
@@ -62,13 +62,10 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
         break;
       case 1: // Active Proposals
         proposals = proposals.where((proposal) => proposal.isActive).toList();
-        break;
       case 2: // Passed Proposals
         proposals = proposals.where((proposal) => proposal.status == ProposalStatus.passed).toList();
-        break;
       case 3: // Rejected Proposals
         proposals = proposals.where((proposal) => proposal.status == ProposalStatus.rejected).toList();
-        break;
     }
 
     return proposals;
@@ -85,7 +82,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(text: 'All'),
             Tab(text: 'Active'),
             Tab(text: 'Passed'),
@@ -97,13 +94,13 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
         ),
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Search and Filter Section
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.grey[50],
             child: Column(
-              children: [
+              children: <dynamic>[
                 // Search Bar
                 TextField(
                   controller: _searchController,
@@ -144,8 +141,8 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
                     itemBuilder: (context, index) {
-                      final category = _categories[index];
-                      final isSelected = category == _selectedCategory;
+                      final String category = _categories[index];
+                      final bool isSelected = category == _selectedCategory;
 
                       return Container(
                         margin: const EdgeInsets.only(right: 8),
@@ -173,7 +170,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
+              children: <dynamic>[
                 _buildProposalsList(),
                 _buildProposalsList(),
                 _buildProposalsList(),
@@ -194,13 +191,13 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
   }
 
   Widget _buildProposalsList() {
-    final proposals = _getFilteredProposals();
+    final List<dynamic> proposals = _getFilteredProposals();
 
     if (proposals.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(
               Icons.gavel,
               size: 64,
@@ -258,21 +255,21 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <dynamic>[
               Text(proposal.description),
               const SizedBox(height: 16),
               Text('Type: ${_getProposalTypeText(proposal.type)}'),
               Text('Status: ${proposal.status.toString().split('.').last}'),
               Text('Proposer: ${proposal.proposerId}'),
               Text('Created: ${_formatDate(proposal.createdAt)}'),
-              if (proposal.isActive) ...[
+              if (proposal.isActive) ...<dynamic>[
                 const SizedBox(height: 8),
                 Text('Voting ends: ${_formatDate(proposal.votingEndDate)}'),
                 Text('Yes votes: ${proposal.yesVotes}'),
                 Text('No votes: ${proposal.noVotes}'),
                 Text('Abstain votes: ${proposal.abstainVotes}'),
               ],
-              if (proposal.parameters != null && proposal.parameters!.isNotEmpty) ...[
+              if (proposal.parameters != null && proposal.parameters!.isNotEmpty) ...<dynamic>[
                 const SizedBox(height: 8),
                 const Text('Parameters:', style: TextStyle(fontWeight: FontWeight.bold)),
                 ...proposal.parameters!.entries.map((entry) =>
@@ -282,7 +279,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
             ],
           ),
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Close'),

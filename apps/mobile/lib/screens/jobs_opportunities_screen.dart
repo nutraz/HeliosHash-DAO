@@ -6,42 +6,42 @@ class JobsOpportunitiesScreen extends StatefulWidget {
 }
 
 class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
-  List<Map<String, dynamic>> _jobs = [
-    {
+  final List<Map<String, dynamic>> _jobs = <Map<String, dynamic>>[
+    <String, dynamic>{
       'title': 'Solar Engineer',
       'company': 'HeliosHash Energy',
       'location': 'Urgam Valley, Uttarakhand',
       'type': 'Full-time',
       'salary': '₹8-12 LPA',
       'posted': '2 days ago',
-      'skills': ['Solar Design', 'Project Management', 'AutoCAD'],
+      'skills': <String>['Solar Design', 'Project Management', 'AutoCAD'],
     },
-    {
+    <String, dynamic>{
       'title': 'Community Outreach Coordinator',
       'company': 'Solar Community Initiative',
       'location': 'Dharampur, Gujarat',
       'type': 'Part-time',
       'salary': '₹4-6 LPA',
       'posted': '1 week ago',
-      'skills': ['Community Engagement', 'Event Planning', 'Public Speaking'],
+      'skills': <String>['Community Engagement', 'Event Planning', 'Public Speaking'],
     },
-    {
+    <String, dynamic>{
       'title': 'Solar Technician',
       'company': 'GreenTech Solutions',
       'location': 'Multiple Locations',
       'type': 'Contract',
       'salary': '₹3-5 LPA',
       'posted': '3 days ago',
-      'skills': ['Installation', 'Maintenance', 'Troubleshooting'],
+      'skills': <String>['Installation', 'Maintenance', 'Troubleshooting'],
     },
-    {
+    <String, dynamic>{
       'title': 'Project Manager',
       'company': 'Solar Infrastructure Co.',
       'location': 'Mumbai, Maharashtra',
       'type': 'Full-time',
       'salary': '₹15-20 LPA',
       'posted': '5 days ago',
-      'skills': ['PMP Certified', 'Team Leadership', 'Budget Management'],
+      'skills': <String>['PMP Certified', 'Team Leadership', 'Budget Management'],
     },
   ];
 
@@ -52,13 +52,13 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         title: Text('Jobs & Opportunities'),
         backgroundColor: Colors.blue.shade600,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(icon: Icon(Icons.filter_list), onPressed: () => _showFilterDialog()),
           IconButton(icon: Icon(Icons.add), onPressed: () => _showPostJobDialog()),
         ],
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           _buildSearchBar(),
           _buildStatsRow(),
           Expanded(
@@ -98,13 +98,13 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
-        children: [
+        children: <dynamic>[
           Expanded(
             child: Card(
               child: Padding(
                 padding: EdgeInsets.all(12),
                 child: Column(
-                  children: [
+                  children: <dynamic>[
                     Text('24', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     Text('Active Jobs', style: TextStyle(color: Colors.grey)),
                   ],
@@ -118,7 +118,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
               child: Padding(
                 padding: EdgeInsets.all(12),
                 child: Column(
-                  children: [
+                  children: <dynamic>[
                     Text('156', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     Text('Applications', style: TextStyle(color: Colors.grey)),
                   ],
@@ -132,7 +132,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
               child: Padding(
                 padding: EdgeInsets.all(12),
                 child: Column(
-                  children: [
+                  children: <dynamic>[
                     Text('8', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     Text('New This Week', style: TextStyle(color: Colors.grey)),
                   ],
@@ -152,9 +152,9 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: Text(job['title'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
@@ -169,7 +169,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
             Text(job['company'], style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
             SizedBox(height: 8),
             Row(
-              children: [
+              children: <dynamic>[
                 Icon(Icons.location_on, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
                 Text(job['location'], style: TextStyle(color: Colors.grey)),
@@ -188,7 +188,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
             ),
             SizedBox(height: 16),
             Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => _showJobDetails(job),
@@ -218,27 +218,27 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         title: Text('Filter Jobs'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             DropdownButtonFormField<String>(
               decoration: InputDecoration(labelText: 'Job Type'),
-              items: ['All', 'Full-time', 'Part-time', 'Contract', 'Internship'].map((type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
+              items: <String>['All', 'Full-time', 'Part-time', 'Contract', 'Internship'].map((String type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
               onChanged: (value) {},
             ),
             SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(labelText: 'Location'),
-              items: ['All', 'Urgam Valley', 'Dharampur', 'Mumbai', 'Remote'].map((loc) => DropdownMenuItem(value: loc, child: Text(loc))).toList(),
+              items: <String>['All', 'Urgam Valley', 'Dharampur', 'Mumbai', 'Remote'].map((String loc) => DropdownMenuItem(value: loc, child: Text(loc))).toList(),
               onChanged: (value) {},
             ),
             SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(labelText: 'Experience Level'),
-              items: ['All', 'Entry Level', 'Mid Level', 'Senior', 'Executive'].map((level) => DropdownMenuItem(value: level, child: Text(level))).toList(),
+              items: <String>['All', 'Entry Level', 'Mid Level', 'Senior', 'Executive'].map((String level) => DropdownMenuItem(value: level, child: Text(level))).toList(),
               onChanged: (value) {},
             ),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('Apply Filters')),
         ],
@@ -253,7 +253,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         title: Text('Post New Job'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             TextField(decoration: InputDecoration(labelText: 'Job Title')),
             SizedBox(height: 12),
             TextField(decoration: InputDecoration(labelText: 'Company')),
@@ -265,7 +265,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
             TextField(decoration: InputDecoration(labelText: 'Salary Range')),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(
             onPressed: () {
@@ -293,7 +293,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         title: Text('Apply for ${job['title']}'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             TextField(decoration: InputDecoration(labelText: 'Full Name')),
             SizedBox(height: 12),
             TextField(decoration: InputDecoration(labelText: 'Email')),
@@ -302,10 +302,10 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
             SizedBox(height: 12),
             TextField(decoration: InputDecoration(labelText: 'Cover Letter'), maxLines: 3),
             SizedBox(height: 12),
-            Row(children: [Icon(Icons.attach_file), SizedBox(width: 8), Text('Upload Resume')]),
+            Row(children: <dynamic>[Icon(Icons.attach_file), SizedBox(width: 8), Text('Upload Resume')]),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(
             onPressed: () {
@@ -321,8 +321,8 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
 }
 
 class JobDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> job;
   JobDetailScreen({required this.job});
+  final Map<String, dynamic> job;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -335,13 +335,13 @@ class JobDetailScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Text(job['title'], style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
             Text(job['company'], style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
             SizedBox(height: 16),
             Row(
-              children: [
+              children: <dynamic>[
                 Icon(Icons.location_on, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
                 Text(job['location'], style: TextStyle(color: Colors.grey)),

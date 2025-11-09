@@ -14,7 +14,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   final TextEditingController _contentController = TextEditingController();
 
   String _selectedCategory = 'General';
-  final List<String> _categories = [
+  final List<String> _categories = <String>[
     'General',
     'Projects',
     'Governance',
@@ -60,7 +60,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
         title: const Text('Create Post'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           TextButton(
             onPressed: _isLoading ? null : _submitPost,
             child: _isLoading
@@ -88,7 +88,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Category Selection
               const Text(
                 'Category',
@@ -104,7 +104,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                items: _categories.map((category) {
+                items: _categories.map((String category) {
                   return DropdownMenuItem(
                     value: category,
                     child: Text(category),
@@ -182,7 +182,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
               // Anonymous Option
               Row(
-                children: [
+                children: <dynamic>[
                   Checkbox(
                     value: _isAnonymous,
                     onChanged: (value) {
@@ -208,9 +208,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Row(
-                      children: [
+                      children: <dynamic>[
                         Icon(Icons.info_outline, color: Colors.blue[700]),
                         const SizedBox(width: 8),
                         Text(

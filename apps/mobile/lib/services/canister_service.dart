@@ -2,16 +2,16 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CanisterService {
-  final String _canisterId = "rrkah-fqaaa-aaaaa-aaaaq-cai"; // Replace with your canister ID
-  final String _backendUrl = "https://your-nextjs-backend.com"; // Your backend URL
+  final String _canisterId = 'rrkah-fqaaa-aaaaa-aaaaq-cai'; // Replace with your canister ID
+  final String _backendUrl = 'https://your-nextjs-backend.com'; // Your backend URL
 
   // For read-only queries (direct to canister)
   Future<List<Map<String, dynamic>>> getProposals() async {
     try {
       final response = await http.post(
         Uri.parse('https://$_canisterId.ic0.app/getProposals'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({}), // Empty arguments
+        headers: <String, String>{'Content-Type': 'application/json'},
+        body: jsonEncode(<dynamic, dynamic>{}), // Empty arguments
       );
 
       if (response.statusCode == 200) {
@@ -21,8 +21,8 @@ class CanisterService {
         throw Exception('Failed to load proposals: \\n${response.body}');
       }
     } catch (e) {
-      print("Error fetching proposals: $e");
-      throw Exception("Failed to fetch proposals");
+      print('Error fetching proposals: $e');
+      throw Exception('Failed to fetch proposals');
     }
   }
 
@@ -36,11 +36,11 @@ class CanisterService {
     try {
       final response = await http.post(
         Uri.parse('$_backendUrl/api/createProposal'),
-        headers: {
+        headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $authToken',
         },
-        body: jsonEncode({
+        body: jsonEncode(<String, Object>{
           'title': title,
           'description': description,
           'deadline': deadline,
@@ -54,8 +54,8 @@ class CanisterService {
         throw Exception('Failed to create proposal: \\n${response.body}');
       }
     } catch (e) {
-      print("Error creating proposal: $e");
-      throw Exception("Failed to create proposal");
+      print('Error creating proposal: $e');
+      throw Exception('Failed to create proposal');
     }
   }
 
@@ -68,22 +68,19 @@ class CanisterService {
     try {
       final response = await http.post(
         Uri.parse('$_backendUrl/api/voteProposal'),
-        headers: {
+        headers: <String, String>{
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $authToken',
         },
-        body: jsonEncode({
-          'proposalId': proposalId,
-          'vote': voteYes,
-        }),
+        body: jsonEncode(<String, Object>{'proposalId': proposalId, 'vote': voteYes}),
       );
 
       if (response.statusCode != 200) {
         throw Exception('Failed to vote: \\n${response.body}');
       }
     } catch (e) {
-      print("Error voting: $e");
-      throw Exception("Failed to vote");
+      print('Error voting: $e');
+      throw Exception('Failed to vote');
     }
   }
 }

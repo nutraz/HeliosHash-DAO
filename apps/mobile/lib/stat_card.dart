@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
 class StatCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final IconData icon;
-  final Color color;
-  final String? subtitle;
-  final double? change;
-  final String? changeLabel;
 
   const StatCard({
     super.key,
@@ -19,6 +12,13 @@ class StatCard extends StatelessWidget {
     this.change,
     this.changeLabel,
   });
+  final String title;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final String? subtitle;
+  final double? change;
+  final String? changeLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -32,16 +32,16 @@ class StatCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
-            colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
+            colors: <dynamic>[color.withOpacity(0.1), color.withOpacity(0.05)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class StatCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            if (subtitle != null) ...[
+            if (subtitle != null) ...<dynamic>[
               const SizedBox(height: 2),
               Flexible(
                 child: Text(
@@ -102,12 +102,12 @@ class StatCard extends StatelessWidget {
   }
 
   Widget _buildChangeIndicator() {
-    final isPositive = change! >= 0;
+    final bool isPositive = change! >= 0;
     final changeColor = isPositive ? Colors.green : Colors.red;
     final changeIcon = isPositive ? Icons.trending_up : Icons.trending_down;
 
     return Row(
-      children: [
+      children: <dynamic>[
         Icon(
           changeIcon,
           size: 16,

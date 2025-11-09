@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../models/project/solar_project.dart';
 import '../providers/dao_provider.dart';
 import '../providers/wallet_provider.dart';
-import '../models/project/solar_project.dart';
 import '../widgets/project_card.dart';
 
 class ProjectsScreen extends StatefulWidget {
@@ -21,14 +22,14 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
 		final theme = Theme.of(context);
 		final daoProvider = context.watch<DAOProvider>();
 
-		List<SolarProject> filteredProjects = _filter == 'all'
+		final List<SolarProject> filteredProjects = _filter == 'all'
 				? daoProvider.projects
 				: daoProvider.projects.where((p) => p.status.name == _filter).toList();
 
 		return Scaffold(
 			appBar: AppBar(
 				title: const Text('Solar Projects'),
-				actions: [
+				actions: <dynamic>[
 					PopupMenuButton<String>(
 						icon: const Icon(Icons.filter_list),
 						onSelected: (value) {
@@ -36,7 +37,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
 								_filter = value;
 							});
 						},
-						itemBuilder: (context) => [
+						itemBuilder: (context) => <dynamic>[
 							const PopupMenuItem(value: 'all', child: Text('All Projects')),
 							const PopupMenuItem(value: 'active', child: Text('Active')),
 							const PopupMenuItem(value: 'pending', child: Text('Pending')),
@@ -51,7 +52,7 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
 						? Center(
 								child: Column(
 									mainAxisAlignment: MainAxisAlignment.center,
-									children: [
+									children: <dynamic>[
 										Icon(Icons.wb_sunny_outlined, size: 64, color: Colors.grey[400]),
 										const SizedBox(height: 16),
 										Text(
@@ -94,9 +95,9 @@ class _ProjectsScreenState extends State<ProjectsScreen> {
 }
 
 class ProjectDetailsSheet extends StatefulWidget {
-	final SolarProject project;
 
 	const ProjectDetailsSheet({Key? key, required this.project}) : super(key: key);
+	final SolarProject project;
 
 	@override
 	State<ProjectDetailsSheet> createState() => _ProjectDetailsSheetState();
@@ -128,7 +129,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 					padding: const EdgeInsets.all(24),
 					child: Column(
 						crossAxisAlignment: CrossAxisAlignment.start,
-						children: [
+						children: <dynamic>[
 							// Handle
 							Center(
 								child: Container(
@@ -148,7 +149,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 								decoration: BoxDecoration(
 									borderRadius: BorderRadius.circular(16),
 									gradient: const LinearGradient(
-										colors: [Color(0xFFFFA726), Color(0xFFFF7043)],
+										colors: <dynamic>[Color(0xFFFFA726), Color(0xFFFF7043)],
 									),
 								),
 								child: Center(
@@ -190,7 +191,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 
 							// Location
 							Row(
-								children: [
+								children: <dynamic>[
 									Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
 									const SizedBox(width: 4),
 									Text(
@@ -208,7 +209,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 							const SizedBox(height: 24),
 
 							// Performance metrics
-							if (widget.project.status == ProjectStatus.active) ...[
+							if (widget.project.status == ProjectStatus.active) ...<dynamic>[
 								Text(
 									'Performance Metrics',
 									style: theme.textTheme.titleMedium?.copyWith(
@@ -227,7 +228,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 							],
 
 							// Investment section
-							if (walletProvider.isConnected) ...[
+							if (walletProvider.isConnected) ...<dynamic>[
 								Text(
 									'Invest in Project',
 									style: theme.textTheme.titleMedium?.copyWith(
@@ -254,7 +255,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 									),
 									child: const Text('Invest Now'),
 								),
-							] else ...[
+							] else ...<dynamic>[
 								FilledButton(
 									onPressed: () {
 										Navigator.pop(context);
@@ -281,16 +282,16 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 				borderRadius: BorderRadius.circular(16),
 			),
 			child: Column(
-				children: [
+				children: <dynamic>[
 					Row(
-						children: [
+						children: <dynamic>[
 							Expanded(child: _buildStatItem('Capacity', '${format.format(project.capacity)} MW', theme)),
 							Expanded(child: _buildStatItem('Generation', '${format.format(project.currentGeneration)} MW', theme)),
 						],
 					),
 					const SizedBox(height: 16),
 					Row(
-						children: [
+						children: <dynamic>[
 							Expanded(child: _buildStatItem('Total Investment', '${project.investment} ETH', theme)),
 							Expanded(child: _buildStatItem('Investors', '${project.investors}', theme)),
 						],
@@ -303,7 +304,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 	Widget _buildStatItem(String label, String value, ThemeData theme) {
 		return Column(
 			crossAxisAlignment: CrossAxisAlignment.start,
-			children: [
+			children: <dynamic>[
 				Text(
 					label,
 					style: theme.textTheme.bodySmall?.copyWith(
@@ -326,7 +327,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 			padding: const EdgeInsets.only(bottom: 8),
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.spaceBetween,
-				children: [
+				children: <dynamic>[
 					Text(label, style: theme.textTheme.bodyMedium),
 					Text(
 						value,
@@ -354,7 +355,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 	}
 
 	Future<void> _invest(BuildContext context) async {
-		final amount = double.tryParse(_amountController.text);
+		final double? amount = double.tryParse(_amountController.text);
 		if (amount == null || amount <= 0) {
 			ScaffoldMessenger.of(context).showSnackBar(
 				const SnackBar(content: Text('Please enter a valid amount')),

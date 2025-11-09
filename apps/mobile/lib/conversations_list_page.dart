@@ -13,8 +13,8 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<Map<String, dynamic>> _conversations = [
-    {
+  final List<Map<String, dynamic>> _conversations = <Map<String, dynamic>>[
+    <String, dynamic>{
       'id': '1',
       'name': 'Alice Johnson',
       'lastMessage': 'Thanks for the update!',
@@ -22,7 +22,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 2,
       'avatar': 'A',
     },
-    {
+    <String, dynamic>{
       'id': '2',
       'name': 'Bob Smith',
       'lastMessage': 'When is the next meeting?',
@@ -30,7 +30,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 0,
       'avatar': 'B',
     },
-    {
+    <String, dynamic>{
       'id': '3',
       'name': 'Carol Davis',
       'lastMessage': 'I agree with the proposal',
@@ -38,7 +38,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 1,
       'avatar': 'C',
     },
-    {
+    <String, dynamic>{
       'id': '4',
       'name': 'David Wilson',
       'lastMessage': 'Let me check the documentation',
@@ -51,10 +51,10 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   List<Map<String, dynamic>> get _filteredConversations {
     if (_searchQuery.isEmpty) return _conversations;
 
-    return _conversations.where((conversation) {
-      final name = conversation['name'].toString().toLowerCase();
-      final lastMessage = conversation['lastMessage'].toString().toLowerCase();
-      final query = _searchQuery.toLowerCase();
+    return _conversations.where((Map<String, dynamic> conversation) {
+      final String name = conversation['name'].toString().toLowerCase();
+      final String lastMessage = conversation['lastMessage'].toString().toLowerCase();
+      final String query = _searchQuery.toLowerCase();
 
       return name.contains(query) || lastMessage.contains(query);
     }).toList();
@@ -73,7 +73,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         title: const Text('Messages'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
@@ -83,7 +83,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         ],
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(16),
@@ -124,7 +124,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: <dynamic>[
                         Icon(
                           Icons.chat_bubble_outline,
                           size: 64,
@@ -152,7 +152,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 : ListView.builder(
                     itemCount: _filteredConversations.length,
                     itemBuilder: (context, index) {
-                      final conversation = _filteredConversations[index];
+                      final Map<String, dynamic> conversation = _filteredConversations[index];
                       return _buildConversationTile(conversation);
                     },
                   ),
@@ -170,11 +170,11 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   }
 
   Widget _buildConversationTile(Map<String, dynamic> conversation) {
-    final name = conversation['name'] as String;
-    final lastMessage = conversation['lastMessage'] as String;
-    final timestamp = conversation['timestamp'] as DateTime;
-    final unreadCount = conversation['unreadCount'] as int;
-    final avatar = conversation['avatar'] as String;
+    final String name = conversation['name'] as String;
+    final String lastMessage = conversation['lastMessage'] as String;
+    final DateTime timestamp = conversation['timestamp'] as DateTime;
+    final int unreadCount = conversation['unreadCount'] as int;
+    final String avatar = conversation['avatar'] as String;
 
     return ListTile(
       leading: CircleAvatar(
@@ -188,7 +188,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         ),
       ),
       title: Row(
-        children: [
+        children: <dynamic>[
           Expanded(
             child: Text(
               name,
@@ -247,8 +247,8 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   }
 
   String _formatTime(DateTime time) {
-    final now = DateTime.now();
-    final difference = now.difference(time);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(time);
 
     if (difference.inDays > 0) {
       return '${time.day}/${time.month}';

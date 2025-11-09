@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart'; // TODO: Re-enable for mobile only
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Conditional import: mobile implementation uses native WebView, web uses a stub.
 // The mobile file imports `webview_flutter`, so keep that plugin out of web builds.
@@ -24,7 +24,7 @@ class AuthenticationService {
           content: const Text(
             'WebView-based login is not supported on web. Returning a mock token for development.',
           ),
-          actions: [
+          actions: <dynamic>[
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('OK'),
@@ -33,7 +33,7 @@ class AuthenticationService {
         ),
       );
 
-      final mockToken = 'mock_web_token';
+      const String mockToken = 'mock_web_token';
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', mockToken);
       return mockToken;

@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/reward_provider.dart';
+
 import '../models/reward_model.dart';
+import '../providers/reward_provider.dart';
 // import '../providers/dao_provider.dart'; // To get the user's token balance
 
 class RewardsExchangeScreen extends StatelessWidget {
-  static const routeName = '/rewards-exchange';
   const RewardsExchangeScreen({super.key});
+  static const String routeName = '/rewards-exchange';
 
   @override
   Widget build(BuildContext context) {
@@ -62,8 +63,8 @@ class RewardsExchangeScreen extends StatelessWidget {
 }
 
 class RewardCard extends StatelessWidget {
-  final RewardModel reward;
   const RewardCard({super.key, required this.reward});
+  final RewardModel reward;
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +75,10 @@ class RewardCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Icon(
-              reward.category == 'travel' ? Icons.flight : 
-              reward.category == 'food' ? Icons.restaurant : 
+              reward.category == 'travel' ? Icons.flight :
+              reward.category == 'food' ? Icons.restaurant :
               Icons.card_giftcard,
               size: 48,
               color: Theme.of(context).primaryColor,
@@ -125,7 +126,7 @@ class RewardCard extends StatelessWidget {
         key: ValueKey('reward-redeem-dialog-${reward.id}'),
         title: Text('Redeem ￿{reward.name}?', key: ValueKey('reward-redeem-title-${reward.id}')),
         content: Text('Confirm spending ￿{reward.pointsCost} HHC for this reward?', key: ValueKey('reward-redeem-content-${reward.id}')),
-        actions: [
+        actions: <dynamic>[
           TextButton(
             key: ValueKey('reward-redeem-cancel-btn-${reward.id}'),
             onPressed: () => Navigator.of(ctx).pop(),
@@ -136,7 +137,7 @@ class RewardCard extends StatelessWidget {
             onPressed: () async {
               Navigator.of(ctx).pop(); // Close dialog
               final success = await Provider.of<RewardProvider>(context, listen: false).redeemReward(reward);
-              
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(success ? 'Successfully redeemed reward!' : 'Redemption failed. Check balance.'),

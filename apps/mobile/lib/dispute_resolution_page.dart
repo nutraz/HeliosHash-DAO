@@ -14,8 +14,8 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<Map<String, dynamic>> _disputes = [
-    {
+  final List<Map<String, dynamic>> _disputes = <Map<String, dynamic>>[
+    <String, dynamic>{
       'id': 'DIS-001',
       'title': 'Project Milestone Payment Dispute',
       'description': 'Contractor claims milestone completion but client disputes quality.',
@@ -28,7 +28,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       'respondent': 'Bob Smith',
       'mediator': 'Carol Davis',
     },
-    {
+    <String, dynamic>{
       'id': 'DIS-002',
       'title': 'Governance Proposal Rejection',
       'description': 'Community member disputes the rejection of their proposal.',
@@ -41,7 +41,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       'respondent': 'DAO Council',
       'mediator': 'Eve Martinez',
     },
-    {
+    <String, dynamic>{
       'id': 'DIS-003',
       'title': 'Reward Distribution Error',
       'description': 'Incorrect reward calculation for community contribution.',
@@ -54,7 +54,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       'respondent': 'Reward System',
       'mediator': 'Grace Lee',
     },
-    {
+    <String, dynamic>{
       'id': 'DIS-004',
       'title': 'Membership Fee Refund',
       'description': 'Member requests refund for unused membership period.',
@@ -83,14 +83,14 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
   }
 
   List<Map<String, dynamic>> _getFilteredDisputes() {
-    var disputes = _disputes;
+    List<Map<String, dynamic>> disputes = _disputes;
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      disputes = disputes.where((dispute) {
-        final title = dispute['title'].toString().toLowerCase();
-        final description = dispute['description'].toString().toLowerCase();
-        final query = _searchQuery.toLowerCase();
+      disputes = disputes.where((Map<String, dynamic> dispute) {
+        final String title = dispute['title'].toString().toLowerCase();
+        final String description = dispute['description'].toString().toLowerCase();
+        final String query = _searchQuery.toLowerCase();
 
         return title.contains(query) || description.contains(query);
       }).toList();
@@ -101,15 +101,12 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       case 0: // All Disputes
         break;
       case 1: // Open
-        disputes = disputes.where((dispute) => dispute['status'] == 'Open').toList();
-        break;
+        disputes = disputes.where((Map<String, dynamic> dispute) => dispute['status'] == 'Open').toList();
       case 2: // In Progress
-        disputes = disputes.where((dispute) => dispute['status'] == 'In Progress').toList();
-        break;
+        disputes = disputes.where((Map<String, dynamic> dispute) => dispute['status'] == 'In Progress').toList();
       case 3: // Resolved/Closed
-        disputes = disputes.where((dispute) =>
+        disputes = disputes.where((Map<String, dynamic> dispute) =>
             dispute['status'] == 'Resolved' || dispute['status'] == 'Closed').toList();
-        break;
     }
 
     return disputes;
@@ -154,7 +151,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(text: 'All'),
             Tab(text: 'Open'),
             Tab(text: 'In Progress'),
@@ -166,7 +163,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
         ),
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Search and Filter Section
           Container(
             padding: const EdgeInsets.all(16),
@@ -206,7 +203,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
+              children: <dynamic>[
                 _buildDisputesList(),
                 _buildDisputesList(),
                 _buildDisputesList(),
@@ -228,13 +225,13 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
   }
 
   Widget _buildDisputesList() {
-    final disputes = _getFilteredDisputes();
+    final List<Map<String, dynamic>> disputes = _getFilteredDisputes();
 
     if (disputes.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(
               Icons.gavel,
               size: 64,
@@ -270,7 +267,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
         padding: const EdgeInsets.all(16),
         itemCount: disputes.length,
         itemBuilder: (context, index) {
-          final dispute = disputes[index];
+          final Map<String, dynamic> dispute = disputes[index];
           return _buildDisputeCard(dispute);
         },
       ),
@@ -293,9 +290,9 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: Text(
                       dispute['title'],
@@ -337,7 +334,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
               ),
               const SizedBox(height: 12),
               Row(
-                children: [
+                children: <dynamic>[
                   _buildPriorityChip(dispute['priority']),
                   const SizedBox(width: 8),
                   Text(
@@ -347,7 +344,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                       fontSize: 14,
                     ),
                   ),
-                  if (dispute['amount'] != null) ...[
+                  if (dispute['amount'] != null) ...<dynamic>[
                     const SizedBox(width: 8),
                     Text(
                       '\$${dispute['amount']}',
@@ -361,7 +358,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
               ),
               const SizedBox(height: 8),
               Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.person, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
@@ -375,7 +372,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
               ),
               const SizedBox(height: 4),
               Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
@@ -416,8 +413,8 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

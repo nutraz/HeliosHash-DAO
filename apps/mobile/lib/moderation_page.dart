@@ -13,8 +13,8 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<Map<String, dynamic>> _reports = [
-    {
+  final List<Map<String, dynamic>> _reports = <Map<String, dynamic>>[
+    <String, dynamic>{
       'id': 'REP-001',
       'type': 'Post',
       'title': 'Inappropriate content in community post',
@@ -27,7 +27,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       'createdAt': DateTime.now().subtract(const Duration(hours: 2)),
       'content': 'This is the reported post content...',
     },
-    {
+    <String, dynamic>{
       'id': 'REP-002',
       'type': 'Comment',
       'title': 'Spam comment on proposal',
@@ -40,7 +40,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       'createdAt': DateTime.now().subtract(const Duration(hours: 5)),
       'content': 'Check out my amazing service at...',
     },
-    {
+    <String, dynamic>{
       'id': 'REP-003',
       'type': 'User',
       'title': 'Suspicious account activity',
@@ -69,15 +69,15 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
   }
 
   List<Map<String, dynamic>> _getFilteredReports() {
-    var reports = _reports;
+    List<Map<String, dynamic>> reports = _reports;
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      reports = reports.where((report) {
-        final title = report['title'].toString().toLowerCase();
-        final description = report['description'].toString().toLowerCase();
-        final reportedUser = report['reportedUser'].toString().toLowerCase();
-        final query = _searchQuery.toLowerCase();
+      reports = reports.where((Map<String, dynamic> report) {
+        final String title = report['title'].toString().toLowerCase();
+        final String description = report['description'].toString().toLowerCase();
+        final String reportedUser = report['reportedUser'].toString().toLowerCase();
+        final String query = _searchQuery.toLowerCase();
 
         return title.contains(query) ||
                description.contains(query) ||
@@ -90,11 +90,9 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       case 0: // All Reports
         break;
       case 1: // Pending
-        reports = reports.where((report) => report['status'] == 'Pending').toList();
-        break;
+        reports = reports.where((Map<String, dynamic> report) => report['status'] == 'Pending').toList();
       case 2: // Under Review
-        reports = reports.where((report) => report['status'] == 'Under Review').toList();
-        break;
+        reports = reports.where((Map<String, dynamic> report) => report['status'] == 'Under Review').toList();
     }
 
     return reports;
@@ -138,7 +136,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(text: 'All'),
             Tab(text: 'Pending'),
             Tab(text: 'Under Review'),
@@ -149,7 +147,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
         ),
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Search Section
           Container(
             padding: const EdgeInsets.all(16),
@@ -189,7 +187,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
+              children: <dynamic>[
                 _buildReportsList(),
                 _buildReportsList(),
                 _buildReportsList(),
@@ -202,13 +200,13 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
   }
 
   Widget _buildReportsList() {
-    final reports = _getFilteredReports();
+    final List<Map<String, dynamic>> reports = _getFilteredReports();
 
     if (reports.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(
               Icons.report_problem,
               size: 64,
@@ -244,7 +242,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
         padding: const EdgeInsets.all(16),
         itemCount: reports.length,
         itemBuilder: (context, index) {
-          final report = reports[index];
+          final Map<String, dynamic> report = reports[index];
           return _buildReportCard(report);
         },
       ),
@@ -262,9 +260,9 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: Text(
                       report['title'],
@@ -306,7 +304,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
               ),
               const SizedBox(height: 12),
               Row(
-                children: [
+                children: <dynamic>[
                   _buildPriorityChip(report['priority']),
                   const SizedBox(width: 8),
                   Text(
@@ -329,7 +327,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
               ),
               const SizedBox(height: 8),
               Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.person, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
@@ -388,7 +386,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <dynamic>[
               Text('Type: ${report['type']}'),
               Text('Category: ${report['category']}'),
               Text('Priority: ${report['priority']}'),
@@ -400,7 +398,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(report['description']),
-              if (report['content'] != null) ...[
+              if (report['content'] != null) ...<dynamic>[
                 const SizedBox(height: 16),
                 const Text(
                   'Reported Content:',
@@ -418,7 +416,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
             ],
           ),
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Dismiss'),
@@ -440,8 +438,8 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

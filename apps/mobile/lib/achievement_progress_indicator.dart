@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 
 class AchievementProgressIndicator extends StatelessWidget {
-  final String title;
-  final String description;
-  final double progress;
-  final Color progressColor;
-  final IconData icon;
 
   const AchievementProgressIndicator({
     super.key,
@@ -15,6 +10,11 @@ class AchievementProgressIndicator extends StatelessWidget {
     this.progressColor = Colors.blue,
     required this.icon,
   });
+  final String title;
+  final String description;
+  final double progress;
+  final Color progressColor;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +25,9 @@ class AchievementProgressIndicator extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 Icon(icon, size: 24, color: progressColor),
                 const SizedBox(width: 12),
                 Expanded(

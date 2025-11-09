@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/project_model.dart';
 
 class ProjectCard extends StatelessWidget {
-  final Project project;
-  final VoidCallback? onTap;
-  final bool showVoteButtons;
 
   const ProjectCard({
     super.key,
@@ -13,6 +10,9 @@ class ProjectCard extends StatelessWidget {
     this.onTap,
     this.showVoteButtons = true,
   });
+  final Project project;
+  final VoidCallback? onTap;
+  final bool showVoteButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ProjectCard extends StatelessWidget {
           height: 280, // Fixed height for consistent card sizing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Project Image
               if (project.imageUrl != null)
                 ClipRRect(
@@ -57,10 +57,10 @@ class ProjectCard extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <dynamic>[
                       // Title and Status
                       Row(
-                        children: [
+                        children: <dynamic>[
                           Expanded(
                             child: Text(
                               project.title,
@@ -93,7 +93,7 @@ class ProjectCard extends StatelessWidget {
 
                       // Category and Budget
                       Row(
-                        children: [
+                        children: <dynamic>[
                           Chip(
                             label: Text(
                               project.category,
@@ -139,10 +139,10 @@ class ProjectCard extends StatelessWidget {
                       // Vote buttons and stats
                       if (showVoteButtons)
                         Row(
-                          children: [
+                          children: <dynamic>[
                             Expanded(
                               child: Row(
-                                children: [
+                                children: <dynamic>[
                                   IconButton(
                                     onPressed: () {
                                       // Handle upvote
@@ -186,7 +186,7 @@ class ProjectCard extends StatelessWidget {
                       // Team members
                       if (!showVoteButtons)
                         Row(
-                          children: [
+                          children: <dynamic>[
                             const Icon(Icons.people, size: 14, color: Colors.grey),
                             const SizedBox(width: 4),
                             Text(
@@ -217,19 +217,15 @@ class ProjectCard extends StatelessWidget {
       case 'active':
         chipColor = Colors.green;
         statusText = 'Active';
-        break;
       case 'completed':
         chipColor = Colors.blue;
         statusText = 'Completed';
-        break;
       case 'draft':
         chipColor = Colors.orange;
         statusText = 'Draft';
-        break;
       case 'cancelled':
         chipColor = Colors.red;
         statusText = 'Cancelled';
-        break;
       default:
         chipColor = Colors.grey;
         statusText = 'Unknown';

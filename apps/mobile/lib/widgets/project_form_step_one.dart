@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepOne extends StatelessWidget {
-  final TextEditingController nameController;
-  final TextEditingController descriptionController;
-  final TextEditingController locationController;
 
   const ProjectFormStepOne({
     super.key,
@@ -11,12 +8,15 @@ class ProjectFormStepOne extends StatelessWidget {
     required this.descriptionController,
     required this.locationController,
   });
+  final TextEditingController nameController;
+  final TextEditingController descriptionController;
+  final TextEditingController locationController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <dynamic>[
         const Text(
           'Basic Project Information',
           style: TextStyle(
@@ -83,7 +83,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: Border.all(color: Colors.blue.shade200),
           ),
           child: const Row(
-            children: [
+            children: <dynamic>[
               Icon(Icons.info, color: Colors.blue),
               SizedBox(width: 8),
               Expanded(

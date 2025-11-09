@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerLoading extends StatelessWidget {
-  final Widget child;
-  final Color? baseColor;
-  final Color? highlightColor;
 
   const ShimmerLoading({
     super.key,
@@ -12,6 +9,9 @@ class ShimmerLoading extends StatelessWidget {
     this.baseColor,
     this.highlightColor,
   });
+  final Widget child;
+  final Color? baseColor;
+  final Color? highlightColor;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,7 @@ class ProjectCardShimmer extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Image placeholder
               Container(
                 height: 100,
@@ -70,7 +70,7 @@ class ProjectCardShimmer extends StatelessWidget {
               ),
               // Tags and budget
               Row(
-                children: [
+                children: <dynamic>[
                   Container(
                     height: 24,
                     width: 60,
@@ -108,10 +108,10 @@ class ProposalCardShimmer extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Title and status
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: Container(
                       height: 20,
@@ -141,7 +141,7 @@ class ProposalCardShimmer extends StatelessWidget {
               ),
               // Type and category
               Row(
-                children: [
+                children: <dynamic>[
                   Container(
                     height: 24,
                     width: 80,
@@ -165,7 +165,7 @@ class ProposalCardShimmer extends StatelessWidget {
               ),
               // Vote buttons
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: Container(
                       height: 36,
@@ -212,9 +212,9 @@ class StatCardShimmer extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               Row(
-                children: [
+                children: <dynamic>[
                   Container(
                     width: 40,
                     height: 40,
@@ -249,14 +249,14 @@ class StatCardShimmer extends StatelessWidget {
 }
 
 class ListShimmer extends StatelessWidget {
-  final int itemCount;
-  final double itemHeight;
 
   const ListShimmer({
     super.key,
     this.itemCount = 5,
     this.itemHeight = 60,
   });
+  final int itemCount;
+  final double itemHeight;
 
   @override
   Widget build(BuildContext context) {
@@ -274,7 +274,7 @@ class ListShimmer extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
-                children: [
+                children: <dynamic>[
                   Container(
                     width: 40,
                     height: 40,
@@ -285,7 +285,7 @@ class ListShimmer extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: <dynamic>[
                         Container(
                           height: 14,
                           width: 150,

@@ -13,7 +13,7 @@ class ProjectCreationScreen extends StatefulWidget {
 
 class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
   int _currentStep = 0;
-  final Map<String, dynamic> _projectData = {};
+  final Map<String, dynamic> _projectData = <String, dynamic>{};
 
   // Controllers for Step 1
   final TextEditingController _nameController = TextEditingController();
@@ -70,7 +70,7 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Step> steps = [
+    final List<Step> steps = <dynamic>[
       Step(
         title: const Text('Project Details'),
         content: ProjectFormStepOne(

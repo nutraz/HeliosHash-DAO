@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/project/solar_project.dart';
 
 class ProjectCard extends StatelessWidget {
-  final SolarProject project;
-  final VoidCallback? onTap;
 
   const ProjectCard({
     Key? key,
     required this.project,
     this.onTap,
   }) : super(key: key);
+  final SolarProject project;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class ProjectCard extends StatelessWidget {
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             // Project image/placeholder
             Container(
               height: 120,
@@ -30,14 +30,14 @@ class ProjectCard extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
+                  colors: <dynamic>[
                     const Color(0xFFFFA726),
                     const Color(0xFFFF7043),
                   ],
                 ),
               ),
               child: Stack(
-                children: [
+                children: <dynamic>[
                   Center(
                     child: Icon(
                       Icons.wb_sunny,
@@ -71,7 +71,7 @@ class ProjectCard extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <dynamic>[
                   Text(
                     project.name,
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -80,7 +80,7 @@ class ProjectCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    children: [
+                    children: <dynamic>[
                       Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
                       const SizedBox(width: 4),
                       Text(
@@ -94,7 +94,7 @@ class ProjectCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <dynamic>[
                       _buildMetric('Capacity', '${project.capacity} MW', theme),
                       _buildMetric('Investors', '${project.investors}', theme),
                     ],
@@ -111,7 +111,7 @@ class ProjectCard extends StatelessWidget {
   Widget _buildMetric(String label, String value, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <dynamic>[
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(

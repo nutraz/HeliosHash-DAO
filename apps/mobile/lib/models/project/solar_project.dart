@@ -1,19 +1,6 @@
 enum ProjectStatus { active, pending, completed, maintenance }
 
 class SolarProject {
-  final String id;
-  final String name;
-  final String location;
-  final double capacity; // MW
-  final double currentGeneration; // MW
-  final double totalGeneration; // MWh
-  final int efficiency; // percentage
-  final ProjectStatus status;
-  final DateTime installDate;
-  BigInt investment; // ETH in wei
-  BigInt returns; // ETH in wei
-  int investors;
-  final String imageUrl;
 
   SolarProject({
     required this.id,
@@ -30,6 +17,19 @@ class SolarProject {
     required this.investors,
     required this.imageUrl,
   });
+  final String id;
+  final String name;
+  final String location;
+  final double capacity; // MW
+  final double currentGeneration; // MW
+  final double totalGeneration; // MWh
+  final int efficiency; // percentage
+  final ProjectStatus status;
+  final DateTime installDate;
+  BigInt investment; // ETH in wei
+  BigInt returns; // ETH in wei
+  int investors;
+  final String imageUrl;
 
   double get utilizationRate {
     if (capacity == 0) return 0;

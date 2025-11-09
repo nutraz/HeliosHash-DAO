@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          children: [
+          children: <dynamic>[
             GestureDetector(
               onTap: () {
                 // TODO: Add avatar picker

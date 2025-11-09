@@ -12,7 +12,7 @@ class _ProjectSubmissionScreenState extends State<ProjectSubmissionScreen> {
   final _budgetController = TextEditingController();
   final _locationController = TextEditingController();
   String _selectedCategory = 'Solar Farm';
-  List<String> _categories = ['Solar Farm', 'Microgrid', 'School Electrification', 'Community Center'];
+  final List<String> _categories = <String>['Solar Farm', 'Microgrid', 'School Electrification', 'Community Center'];
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class _ProjectSubmissionScreenState extends State<ProjectSubmissionScreen> {
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               Text('Project Details', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(height: 20),
               TextFormField(
@@ -40,7 +40,7 @@ class _ProjectSubmissionScreenState extends State<ProjectSubmissionScreen> {
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
                 decoration: InputDecoration(labelText: 'Project Category', border: OutlineInputBorder()),
-                items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                items: _categories.map((String c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
                 onChanged: (v) => setState(() => _selectedCategory = v!),
               ),
               SizedBox(height: 16),
@@ -73,7 +73,7 @@ class _ProjectSubmissionScreenState extends State<ProjectSubmissionScreen> {
               Card(child: ListTile(leading: Icon(Icons.calculate), title: Text('Budget Breakdown'), subtitle: Text('Detailed cost estimation'), trailing: Icon(Icons.add_photo_alternate))),
               SizedBox(height: 32),
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),

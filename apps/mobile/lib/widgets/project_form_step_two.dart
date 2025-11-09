@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepTwo extends StatelessWidget {
-  final TextEditingController fundingGoalController;
-  final TextEditingController tokenAllocationController;
-  final TextEditingController capacityController;
 
   const ProjectFormStepTwo({
     super.key,
@@ -11,12 +8,15 @@ class ProjectFormStepTwo extends StatelessWidget {
     required this.tokenAllocationController,
     required this.capacityController,
   });
+  final TextEditingController fundingGoalController;
+  final TextEditingController tokenAllocationController;
+  final TextEditingController capacityController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <dynamic>[
         const Text(
           'Funding & Technical Details',
           style: TextStyle(
@@ -40,7 +40,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Capacity is required';
             }
-            final capacity = double.tryParse(value);
+            final double? capacity = double.tryParse(value);
             if (capacity == null || capacity <= 0) {
               return 'Please enter a valid capacity';
             }
@@ -62,7 +62,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Funding goal is required';
             }
-            final goal = double.tryParse(value);
+            final double? goal = double.tryParse(value);
             if (goal == null || goal <= 0) {
               return 'Please enter a valid funding goal';
             }
@@ -85,7 +85,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Token allocation is required';
             }
-            final tokens = double.tryParse(value);
+            final double? tokens = double.tryParse(value);
             if (tokens == null || tokens <= 0) {
               return 'Please enter a valid token amount';
             }
@@ -102,9 +102,9 @@ class ProjectFormStepTwo extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               const Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.lightbulb, color: Colors.green),
                   SizedBox(width: 8),
                   Text(

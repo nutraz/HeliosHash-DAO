@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:helioshash_dao/l10n/app_localizations.dart';
+import 'package:helioshash_dao/models/project/solar_project.dart';
+import 'package:helioshash_dao/providers/dao_provider.dart';
 import 'package:helioshash_dao/providers/governance_provider.dart';
+import 'package:helioshash_dao/providers/wallet_provider.dart';
+import 'package:helioshash_dao/widgets/create_proposal_dialog.dart';
+import 'package:helioshash_dao/widgets/energy_chart.dart';
 import 'package:helioshash_dao/widgets/project_card.dart';
 import 'package:helioshash_dao/widgets/proposal_card.dart';
-import 'package:helioshash_dao/widgets/energy_chart.dart';
-import 'package:helioshash_dao/models/project/solar_project.dart';
-import 'package:helioshash_dao/widgets/create_proposal_dialog.dart';
-import 'package:helioshash_dao/providers/dao_provider.dart';
-import 'package:helioshash_dao/providers/wallet_provider.dart';
-import 'package:helioshash_dao/l10n/app_localizations.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -40,7 +40,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       appBar: AppBar(
   title: const Text('HeliosHash DAO Dashboard'),
         backgroundColor: Colors.green.shade700,
-        actions: [
+        actions: <dynamic>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
@@ -60,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
         ],
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(icon: Icon(Icons.dashboard), text: 'Overview'),
             Tab(icon: Icon(Icons.business), text: 'Projects'),
             Tab(icon: Icon(Icons.gavel), text: 'Governance'),
@@ -70,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: <dynamic>[
           _buildOverviewTab(),
           _buildProjectsTab(),
           _buildGovernanceTab(),
@@ -86,20 +86,20 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           const Text(
             'DAO Overview',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
           Row(
-            children: [
+            children: <dynamic>[
               Expanded(
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      children: [
+                      children: <dynamic>[
                         const Icon(Icons.people, size: 48, color: Colors.green),
                         const SizedBox(height: 8),
                         const Text('Total Members'),
@@ -118,7 +118,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
-                      children: [
+                      children: <dynamic>[
                         const Icon(Icons.business, size: 48, color: Colors.blue),
                         const SizedBox(height: 8),
                         const Text('Active Projects'),
@@ -205,7 +205,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       builder: (context, governanceProvider, child) {
         return ListView(
           padding: const EdgeInsets.all(16.0),
-          children: [
+          children: <dynamic>[
             const Text(
               'Active Proposals',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -231,7 +231,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           const Text(
             'Wallet Balance',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -241,7 +241,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                children: [
+                children: <dynamic>[
                   const Text('Total Balance'),
                   Text(
                     '1,250.75 HHDAO',
@@ -250,7 +250,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                    children: <dynamic>[
                       ElevatedButton(
                         onPressed: () {},
                         child: const Text('Send'),
@@ -297,7 +297,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: [
+        children: <dynamic>[
           DrawerHeader(
             decoration: const BoxDecoration(
               color: Colors.green,
@@ -408,9 +408,9 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
 }
 
 class ProjectDetailsSheet extends StatefulWidget {
-  final SolarProject project;
 
   const ProjectDetailsSheet({Key? key, required this.project}) : super(key: key);
+  final SolarProject project;
 
   @override
   State<ProjectDetailsSheet> createState() => _ProjectDetailsSheetState();
@@ -442,7 +442,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
           padding: const EdgeInsets.all(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Handle
               Center(
                 child: Container(
@@ -462,7 +462,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   gradient: const LinearGradient(
-                    colors: [Color(0xFFFFA726), Color(0xFFFF7043)],
+                    colors: <dynamic>[Color(0xFFFFA726), Color(0xFFFF7043)],
                   ),
                 ),
                 child: Center(
@@ -504,7 +504,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
 
               // Location
               Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
@@ -522,7 +522,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
               const SizedBox(height: 24),
 
               // Performance metrics
-              if (widget.project.status == ProjectStatus.active) ...[
+              if (widget.project.status == ProjectStatus.active) ...<dynamic>[
                 Text(
                   'Performance Metrics',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -541,7 +541,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
               ],
 
               // Investment section
-              if (walletProvider.isConnected) ...[
+              if (walletProvider.isConnected) ...<dynamic>[
                 Text(
                   'Invest in Project',
                   style: theme.textTheme.titleMedium?.copyWith(
@@ -568,7 +568,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
                   ),
                   child: const Text('Invest Now'),
                 ),
-              ] else ...[
+              ] else ...<dynamic>[
                 FilledButton(
                   onPressed: () {
                     Navigator.pop(context);
@@ -595,16 +595,16 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
-        children: [
+        children: <dynamic>[
           Row(
-            children: [
+            children: <dynamic>[
               Expanded(child: _buildStatItem('Capacity', '${format.format(project.capacity)} MW', theme)),
               Expanded(child: _buildStatItem('Generation', '${format.format(project.currentGeneration)} MW', theme)),
             ],
           ),
           const SizedBox(height: 16),
           Row(
-            children: [
+            children: <dynamic>[
               Expanded(child: _buildStatItem('Total Investment', '${project.investment} ETH', theme)),
               Expanded(child: _buildStatItem('Investors', '${project.investors}', theme)),
             ],
@@ -617,7 +617,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
   Widget _buildStatItem(String label, String value, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <dynamic>[
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
@@ -640,7 +640,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+        children: <dynamic>[
           Text(label, style: theme.textTheme.bodyMedium),
           Text(
             value,
@@ -668,7 +668,7 @@ class _ProjectDetailsSheetState extends State<ProjectDetailsSheet> {
   }
 
   Future<void> _invest(BuildContext context) async {
-    final amount = double.tryParse(_amountController.text);
+    final double? amount = double.tryParse(_amountController.text);
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a valid amount')),

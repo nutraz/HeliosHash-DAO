@@ -1,10 +1,8 @@
-import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
 
+import '../models/dao/proposal.dart';
+
 class ProposalCard extends StatelessWidget {
-  final Proposal proposal;
-  final Function(bool)? onVote;
-  final VoidCallback? onTap;
 
   const ProposalCard({
     Key? key,
@@ -12,6 +10,9 @@ class ProposalCard extends StatelessWidget {
     this.onVote,
     this.onTap,
   }) : super(key: key);
+  final Proposal proposal;
+  final Function(bool)? onVote;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,10 @@ class ProposalCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <dynamic>[
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
@@ -72,11 +73,11 @@ class ProposalCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: <dynamic>[
                         Text(
                           'For: ${(proposal.votesFor / proposal.totalVotes * 100).toStringAsFixed(1)}%',
                           style: theme.textTheme.bodySmall,
@@ -98,7 +99,7 @@ class ProposalCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Row(
-                children: [
+                children: <dynamic>[
                   Expanded(
                     child: ElevatedButton(
                       onPressed: onVote != null ? () => onVote!(true) : null,

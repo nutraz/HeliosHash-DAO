@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       curve: Curves.linear,
     ));
 
-    _glowAnimation = TweenSequence<double>([
+    _glowAnimation = TweenSequence<double>(<dynamic>[
       TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 1.5), weight: 1),
       TweenSequenceItem(tween: Tween<double>(begin: 1.5, end: 1.0), weight: 1),
     ]).animate(CurvedAnimation(
@@ -40,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller.repeat();
 
-    Timer(Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, '/auth-options');
     });
   }
@@ -58,13 +59,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       body: Center(
         child: Stack(
           alignment: Alignment.center,
-          children: [
+          children: <dynamic>[
             AnimatedBuilder(
-              animation: Listenable.merge([_rotationAnimation, _glowAnimation]),
+              animation: Listenable.merge(<dynamic>[_rotationAnimation, _glowAnimation]),
               builder: (context, child) {
                 return Stack(
                   alignment: Alignment.center,
-                  children: [
+                  children: <dynamic>[
                     // Fiery Sudarshan Chakra outer glow
                     Container(
                       width: 200 * _glowAnimation.value,
@@ -72,14 +73,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: RadialGradient(
-                          colors: [
+                          colors: <dynamic>[
                             Colors.orange.withOpacity(0.8),
                             Colors.red.withOpacity(0.6),
                             Colors.transparent,
                           ],
-                          stops: [0.1, 0.5, 1.0],
+                          stops: <double>[0.1, 0.5, 1.0],
                         ),
-                        boxShadow: [
+                        boxShadow: <dynamic>[
                           BoxShadow(
                             color: Colors.orange.withOpacity(0.5),
                             blurRadius: 30 * _glowAnimation.value,
@@ -140,7 +141,7 @@ class DharmaChakraPainter extends CustomPainter {
 
     // Draw 24 spokes (Ashoka Chakra)
     for (int i = 0; i < 24; i++) {
-      final angle = 2 * pi * i / 24;
+      final double angle = 2 * pi * i / 24;
       final x1 = center.dx + radius * 0.7 * cos(angle);
       final y1 = center.dy + radius * 0.7 * sin(angle);
       final x2 = center.dx + radius * 0.9 * cos(angle);

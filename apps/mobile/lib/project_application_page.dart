@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/project_model.dart';
 import 'package:helios_hash_dao/mock_data.dart';
+import 'package:helios_hash_dao/project_model.dart';
 
 class ProjectApplicationPage extends StatefulWidget {
-  final Project project;
 
   const ProjectApplicationPage({super.key, required this.project});
+  final Project project;
 
   @override
   State<ProjectApplicationPage> createState() => _ProjectApplicationPageState();
@@ -24,7 +24,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
   String _selectedRole = '';
   bool _isLoading = false;
 
-  final List<String> _availableRoles = [
+  final List<String> _availableRoles = <String>[
     'Smart Contract Developer',
     'Frontend Developer',
     'Backend Developer',
@@ -87,14 +87,14 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <dynamic>[
               // Project Info Card
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <dynamic>[
                       Text(
                         widget.project.title,
                         style: const TextStyle(
@@ -112,7 +112,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                       ),
                       const SizedBox(height: 12),
                       Row(
-                        children: [
+                        children: <dynamic>[
                           Icon(Icons.attach_money, size: 16, color: Colors.green),
                           const SizedBox(width: 4),
                           Text(
@@ -133,7 +133,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
 
               // Role Selection
               const Text(
-                'Role You\'re Applying For',
+                "Role You're Applying For",
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                items: _availableRoles.map((role) {
+                items: _availableRoles.map((String role) {
                   return DropdownMenuItem(
                     value: role,
                     child: Text(role),
@@ -179,7 +179,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
               TextFormField(
                 controller: _coverLetterController,
                 decoration: const InputDecoration(
-                  hintText: 'Tell us why you\'re interested in this project and what you can contribute...',
+                  hintText: "Tell us why you're interested in this project and what you can contribute...",
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -247,7 +247,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                   if (value == null || value.isEmpty) {
                     return 'Please specify your availability';
                   }
-                  final hours = int.tryParse(value);
+                  final int? hours = int.tryParse(value);
                   if (hours == null || hours <= 0) {
                     return 'Please enter a valid number of hours';
                   }
@@ -270,7 +270,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                 controller: _proposedRateController,
                 decoration: const InputDecoration(
                   hintText: 'Rate per hour in USD (optional)',
-                  prefixText: '\$',
+                  prefixText: r'$',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -289,9 +289,9 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Row(
-                      children: [
+                      children: <dynamic>[
                         Icon(Icons.info_outline, color: Colors.blue[700]),
                         const SizedBox(width: 8),
                         Text(
@@ -306,7 +306,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                     const SizedBox(height: 8),
                     Text(
                       '• All applications are subject to review by project maintainers\n'
-                      '• You agree to follow the project\'s code of conduct\n'
+                      "• You agree to follow the project's code of conduct\n"
                       '• Payment terms will be discussed separately if accepted\n'
                       '• You can withdraw your application at any time',
                       style: TextStyle(

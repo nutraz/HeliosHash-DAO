@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:web3dart/web3dart.dart';
 import 'package:http/http.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:web3dart/web3dart.dart';
 
 enum WalletProvider {
   metamask,
@@ -52,28 +52,28 @@ class WalletService extends ChangeNotifier {
           name: 'HeliosHash DAO',
           description: 'Decentralized Autonomous Organization',
           url: 'https://helioshash.io',
-          icons: ['https://i.postimg.cc/1XxQvGCg/image.png'],
+          icons: <String>['https://i.postimg.cc/1XxQvGCg/image.png'],
         ),
       );
 
       final session = await _wcClient!.connect(
-        requiredNamespaces: {
+        requiredNamespaces: <String, dynamic>{
           'eip155': const RequiredNamespace(
-            chains: ['eip155:1'],
-            methods: [
+            chains: <String>['eip155:1'],
+            methods: <String>[
               'eth_sendTransaction',
               'eth_signTransaction',
               'eth_sign',
               'personal_sign',
               'eth_signTypedData',
             ],
-            events: ['chainChanged', 'accountsChanged'],
+            events: <String>['chainChanged', 'accountsChanged'],
           ),
         },
       );
 
       if (session != null) {
-        final accounts = session.namespaces['eip155']?.accounts ?? [];
+        final accounts = session.namespaces['eip155']?.accounts ?? <dynamic>[];
         if (accounts.isNotEmpty) {
           final addressString = accounts.first.split(':').last;
           _userAddress = EthereumAddress.fromHex(addressString);
@@ -133,7 +133,7 @@ class WalletService extends ChangeNotifier {
     if (address != null && providerString != null) {
       _userAddress = EthereumAddress.fromHex(address);
       _connectedProvider = WalletProvider.values.firstWhere(
-        (p) => p.toString() == providerString,
+        (WalletProvider p) => p.toString() == providerString,
       );
       _initWeb3Client('https://mainnet.infura.io/v3/YOUR_INFURA_KEY');
       await _updateBalance();

@@ -61,7 +61,7 @@ class _BottomAppBarDemoState extends State<BottomAppBarDemo> with RestorationMix
 
   void _onFabLocationChanged(int? value) {
     setState(() {
-      _currentFabLocation.value = value!;
+      _currentFabLocation.value = value;
     });
   }
 
@@ -116,18 +116,17 @@ class _BottomAppBarDemoState extends State<BottomAppBarDemo> with RestorationMix
           ),
         ],
       ),
-      floatingActionButton:
-          _showFab.value
-              ? Semantics(
-                container: true,
-                sortKey: const OrdinalSortKey(0),
-                child: FloatingActionButton(
-                  onPressed: () {},
-                  tooltip: localizations.buttonTextCreate,
-                  child: const Icon(Icons.add),
-                ),
-              )
-              : null,
+      floatingActionButton: _showFab.value
+          ? Semantics(
+              container: true,
+              sortKey: const OrdinalSortKey(0),
+              child: FloatingActionButton(
+                onPressed: () {},
+                tooltip: localizations.buttonTextCreate,
+                child: const Icon(Icons.add),
+              ),
+            )
+          : null,
       floatingActionButtonLocation: _fabLocations[_currentFabLocation.value],
       bottomNavigationBar: _DemoBottomAppBar(
         fabLocation: _fabLocations[_currentFabLocation.value],

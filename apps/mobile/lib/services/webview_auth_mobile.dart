@@ -39,11 +39,11 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
   }
 
   void _handleAuthSuccess(String url) {
-    final uri = Uri.parse(url);
-    final fragment = uri.fragment;
-    final parts = fragment.split('delegation=');
+    final Uri uri = Uri.parse(url);
+    final String fragment = uri.fragment;
+    final List<String> parts = fragment.split('delegation=');
     if (parts.length > 1) {
-      final delegation = parts[1].split('&')[0];
+      final String delegation = parts[1].split('&')[0];
       Navigator.pop(context, delegation);
     }
   }
@@ -55,7 +55,7 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
         title: const Text('Internet Identity Authentication'),
       ),
       body: Stack(
-        children: [
+        children: <dynamic>[
           WebViewWidget(controller: _controller),
           if (_isLoading)
             const Center(

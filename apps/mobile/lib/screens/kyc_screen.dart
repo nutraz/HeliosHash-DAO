@@ -10,7 +10,7 @@ class KycScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Text('Aadhaar Consent & KYC Choice',
                 style: TextStyle(fontSize: 22, color: Colors.white)),
             SizedBox(height: 24),

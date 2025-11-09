@@ -41,7 +41,7 @@ class RawMenuAnchorSubmenuAnimationExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return Menu(
       panelBuilder: (BuildContext context, AnimationStatus animationStatus) {
-        final MenuController rootMenuController = MenuController.maybeOf(context)!;
+        final MenuController rootMenuController = MenuController.maybeOf(context);
         return Align(
           alignment: Alignment.topRight,
           child: Column(

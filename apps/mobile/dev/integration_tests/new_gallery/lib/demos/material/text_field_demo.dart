@@ -102,10 +102,9 @@ class _PasswordFieldState extends State<PasswordField> with RestorationMixin {
           hoverColor: Colors.transparent,
           icon: Icon(
             _obscureText.value ? Icons.visibility : Icons.visibility_off,
-            semanticLabel:
-                _obscureText.value
-                    ? GalleryLocalizations.of(context)!.demoTextFieldShowPasswordLabel
-                    : GalleryLocalizations.of(context)!.demoTextFieldHidePasswordLabel,
+            semanticLabel: _obscureText.value
+                ? GalleryLocalizations.of(context)!.demoTextFieldShowPasswordLabel
+                : GalleryLocalizations.of(context)!.demoTextFieldHidePasswordLabel,
           ),
         ),
       ),
@@ -158,7 +157,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> with RestorationMi
   final _UsNumberTextInputFormatter _phoneNumberFormatter = _UsNumberTextInputFormatter();
 
   void _handleSubmitted() {
-    final FormState form = _formKey.currentState!;
+    final FormState form = _formKey.currentState;
     if (!form.validate()) {
       _autoValidateModeIndex.value =
           AutovalidateMode.always.index; // Start validating on every change.
@@ -193,7 +192,7 @@ class TextFormFieldDemoState extends State<TextFormFieldDemo> with RestorationMi
   }
 
   String? _validatePassword(String? value) {
-    final FormFieldState<String> passwordField = _passwordFieldKey.currentState!;
+    final FormFieldState<String> passwordField = _passwordFieldKey.currentState;
     if (passwordField.value == null || passwordField.value!.isEmpty) {
       return GalleryLocalizations.of(context)!.demoTextFieldEnterPassword;
     }

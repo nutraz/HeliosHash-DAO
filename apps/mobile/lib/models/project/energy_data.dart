@@ -1,8 +1,4 @@
-class EnergyData {
-  final DateTime date;
-  final double generation; // kWh
-  final double consumption; // kWh
-  final int efficiency; // percentage
+class EnergyData { // percentage
 
   EnergyData({
     required this.date,
@@ -10,6 +6,10 @@ class EnergyData {
     required this.consumption,
     required this.efficiency,
   });
+  final DateTime date;
+  final double generation; // kWh
+  final double consumption; // kWh
+  final int efficiency;
 
   double get surplus => generation - consumption;
 }

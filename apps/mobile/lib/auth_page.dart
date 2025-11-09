@@ -78,7 +78,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
+            colors: <dynamic>[
               AppConstants.primaryColor,
               AppConstants.primaryColor.withOpacity(0.8),
             ],
@@ -86,13 +86,13 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
         ),
         child: SafeArea(
           child: Column(
-            children: [
+            children: <dynamic>[
               // Logo/Title Section
               Expanded(
                 flex: 2,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: <dynamic>[
                     Icon(
                       Icons.account_balance_wallet,
                       size: 80,
@@ -132,11 +132,11 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                     ),
                   ),
                   child: Column(
-                    children: [
+                    children: <dynamic>[
                       // Tab Bar
                       TabBar(
                         controller: _tabController,
-                        tabs: const [
+                        tabs: const <dynamic>[
                           Tab(text: 'Login'),
                           Tab(text: 'Sign Up'),
                         ],
@@ -151,7 +151,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                       Expanded(
                         child: TabBarView(
                           controller: _tabController,
-                          children: [
+                          children: <dynamic>[
                             // Login Tab
                             _buildLoginForm(),
 
@@ -176,7 +176,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
       key: _loginFormKey,
       child: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <dynamic>[
             TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(
@@ -268,7 +268,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
       key: _signupFormKey,
       child: SingleChildScrollView(
         child: Column(
-          children: [
+          children: <dynamic>[
             TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(

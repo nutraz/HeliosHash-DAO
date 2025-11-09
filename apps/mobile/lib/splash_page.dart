@@ -48,7 +48,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _startAnimation();
   }
 
-  void _startAnimation() async {
+  Future<void> _startAnimation() async {
     await Future.delayed(const Duration(milliseconds: 500));
     _logoController.forward();
 
@@ -81,7 +81,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
+            colors: <dynamic>[
               Color(0xFF6200EE),
               Color(0xFF3700B3),
             ],
@@ -90,7 +90,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <dynamic>[
               // Logo Animation
               AnimatedBuilder(
                 animation: _logoAnimation,
@@ -103,7 +103,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30),
-                        boxShadow: [
+                        boxShadow: <dynamic>[
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
                             blurRadius: 20,
@@ -130,7 +130,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                   return Opacity(
                     opacity: _textAnimation.value,
                     child: Column(
-                      children: [
+                      children: <dynamic>[
                         Text(
                           AppConstants.appName,
                           style: const TextStyle(

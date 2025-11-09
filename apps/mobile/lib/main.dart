@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/supabaseConstant.dart';
 import 'package:helios_hash_dao/splash_page.dart';
+import 'package:helios_hash_dao/supabaseConstant.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

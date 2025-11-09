@@ -37,7 +37,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
           indicatorColor: Colors.white,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(text: 'Posts'),
             Tab(text: 'Discussions'),
             Tab(text: 'Events'),
@@ -46,7 +46,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
+        children: <dynamic>[
           _buildPostsTab(),
           _buildDiscussionsTab(),
           _buildEventsTab(),
@@ -81,9 +81,9 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <dynamic>[
                   Row(
-                    children: [
+                    children: <dynamic>[
                       CircleAvatar(
                         backgroundColor: AppConstants.primaryColor,
                         child: Text(
@@ -95,7 +95,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <dynamic>[
                             Text(
                               post.author,
                               style: const TextStyle(
@@ -117,7 +117,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                         onSelected: (value) {
                           // Handle menu actions
                         },
-                        itemBuilder: (context) => [
+                        itemBuilder: (context) => <dynamic>[
                           const PopupMenuItem(
                             value: 'report',
                             child: Text('Report'),
@@ -138,7 +138,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  if (post.content.isNotEmpty) ...[
+                  if (post.content.isNotEmpty) ...<dynamic>[
                     const SizedBox(height: 8),
                     Text(
                       post.content,
@@ -150,7 +150,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                   ],
                   const SizedBox(height: 12),
                   Row(
-                    children: [
+                    children: <dynamic>[
                       IconButton(
                         onPressed: () {
                           // Handle like
@@ -200,8 +200,8 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
   }
 
   String _formatTimeAgo(DateTime dateTime) {
-    final now = DateTime.now();
-    final difference = now.difference(dateTime);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

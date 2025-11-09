@@ -1,13 +1,6 @@
 // lib/models/reward_model.dart
 
-class RewardModel {
-  final String id;
-  final String name;
-  final String description;
-  final int pointsCost; // Cost in your DAO token/points
-  final String category; // e.g., 'hotel', 'food', 'travel', 'store'
-  final String imageUrl; // Image for the reward
-  final String partnerName; // e.g., 'Hilton', 'Uber Eats', 'Amazon'
+class RewardModel { // e.g., 'Hilton', 'Uber Eats', 'Amazon'
 
   RewardModel({
     required this.id,
@@ -31,4 +24,11 @@ class RewardModel {
       partnerName: json['partnerName'] as String,
     );
   }
+  final String id;
+  final String name;
+  final String description;
+  final int pointsCost; // Cost in your DAO token/points
+  final String category; // e.g., 'hotel', 'food', 'travel', 'store'
+  final String imageUrl; // Image for the reward
+  final String partnerName;
 }

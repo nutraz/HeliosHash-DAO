@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
 
 class UserProfilePage extends StatefulWidget {
-  final String userId;
 
   const UserProfilePage({super.key, required this.userId});
+  final String userId;
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -14,7 +14,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   late TabController _tabController;
 
   // Mock user data - in real app, fetch based on userId
-  final Map<String, dynamic> _user = {
+  final Map<String, dynamic> _user = <String, dynamic>{
     'id': 'user-123',
     'name': 'Bob Smith',
     'email': 'bob.smith@example.com',
@@ -23,48 +23,48 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
     'joinDate': DateTime(2023, 3, 10),
     'location': 'New York, NY',
     'website': 'https://bobsmith.dev',
-    'skills': ['React', 'Node.js', 'Solidity', 'TypeScript', 'Web3', 'Smart Contracts', 'DeFi'],
-    'stats': {
+    'skills': <String>['React', 'Node.js', 'Solidity', 'TypeScript', 'Web3', 'Smart Contracts', 'DeFi'],
+    'stats': <String, num>{
       'projectsContributed': 8,
       'proposalsCreated': 5,
       'votesCast': 89,
       'reputation': 4.6,
     },
-    'achievements': [
-      {'name': 'Code Contributor', 'description': 'Contributed to 5+ projects', 'icon': Icons.code},
-      {'name': 'Proposal Creator', 'description': 'Created 3+ proposals', 'icon': Icons.lightbulb},
-      {'name': 'Active Member', 'description': 'Voted in 50+ decisions', 'icon': Icons.verified},
+    'achievements': <Map<String, dynamic>>[
+      <String, dynamic>{'name': 'Code Contributor', 'description': 'Contributed to 5+ projects', 'icon': Icons.code},
+      <String, dynamic>{'name': 'Proposal Creator', 'description': 'Created 3+ proposals', 'icon': Icons.lightbulb},
+      <String, dynamic>{'name': 'Active Member', 'description': 'Voted in 50+ decisions', 'icon': Icons.verified},
     ],
-    'recentActivity': [
-      {
+    'recentActivity': <Map<String, Object>>[
+      <String, Object>{
         'type': 'project',
         'title': 'Contributed to Community Governance Platform',
         'timestamp': DateTime.now().subtract(const Duration(days: 1)),
       },
-      {
+      <String, Object>{
         'type': 'proposal',
         'title': 'Created proposal: Developer Incentive Program',
         'timestamp': DateTime.now().subtract(const Duration(days: 3)),
       },
-      {
+      <String, Object>{
         'type': 'vote',
         'title': 'Voted on Treasury Allocation Proposal',
         'timestamp': DateTime.now().subtract(const Duration(days: 5)),
       },
-      {
+      <String, Object>{
         'type': 'comment',
         'title': 'Commented on Sustainable Finance Protocol',
         'timestamp': DateTime.now().subtract(const Duration(days: 7)),
       },
     ],
-    'projects': [
-      {
+    'projects': <Map<String, String>>[
+      <String, String>{
         'id': '1',
         'title': 'Decentralized Identity System',
         'role': 'Frontend Developer',
         'status': 'Active',
       },
-      {
+      <String, String>{
         'id': '2',
         'title': 'Community Governance Platform',
         'role': 'Full Stack Developer',
@@ -106,7 +106,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         title: Text(_user['name']),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -117,7 +117,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
+          return <dynamic>[
             SliverToBoxAdapter(
               child: _buildProfileHeader(),
             ),
@@ -126,7 +126,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
               delegate: _SliverAppBarDelegate(
                 TabBar(
                   controller: _tabController,
-                  tabs: const [
+                  tabs: const <dynamic>[
                     Tab(text: 'Overview'),
                     Tab(text: 'Activity'),
                     Tab(text: 'Projects'),
@@ -141,7 +141,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         },
         body: TabBarView(
           controller: _tabController,
-          children: [
+          children: <dynamic>[
             _buildOverviewTab(),
             _buildActivityTab(),
             _buildProjectsTab(),
@@ -156,7 +156,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       padding: const EdgeInsets.all(20),
       color: Colors.white,
       child: Column(
-        children: [
+        children: <dynamic>[
           // Avatar
           CircleAvatar(
             radius: 50,
@@ -176,7 +176,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Name and Follow Button
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <dynamic>[
               Text(
                 _user['name'],
                 style: const TextStyle(
@@ -217,7 +217,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Location and Join Date
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <dynamic>[
               Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
               const SizedBox(width: 4),
               Text(
@@ -240,11 +240,11 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
             ],
           ),
 
-          if (_user['website'] != null) ...[
+          if (_user['website'] != null) ...<dynamic>[
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <dynamic>[
                 Icon(Icons.link, size: 16, color: Colors.grey[600]),
                 const SizedBox(width: 4),
                 Text(
@@ -268,7 +268,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           // Stats Grid
           const Text(
             'Statistics',
@@ -284,7 +284,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            children: [
+            children: <dynamic>[
               _buildStatCard(
                 'Projects',
                 _user['stats']['projectsContributed'].toString(),
@@ -326,7 +326,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: (_user['skills'] as List<String>).map((skill) {
+            children: (_user['skills'] as List<String>).map((String skill) {
               return Chip(
                 label: Text(skill),
                 backgroundColor: AppConstants.primaryColor.withOpacity(0.1),
@@ -346,7 +346,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
             ),
           ),
           const SizedBox(height: 16),
-          ...(_user['achievements'] as List<Map<String, dynamic>>).map((achievement) {
+          ...(_user['achievements'] as List<Map<String, dynamic>>).map((Map<String, dynamic> achievement) {
             return Card(
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
@@ -390,13 +390,13 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   }
 
   Widget _buildProjectsTab() {
-    final projects = _user['projects'] as List<Map<String, dynamic>>;
+    final List<Map<String, dynamic>> projects = _user['projects'] as List<Map<String, dynamic>>;
 
     if (projects.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(
               Icons.work_off,
               size: 64,
@@ -419,7 +419,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       padding: const EdgeInsets.all(16),
       itemCount: projects.length,
       itemBuilder: (context, index) {
-        final project = projects[index];
+        final Map<String, dynamic> project = projects[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
@@ -458,7 +458,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(icon, size: 32, color: color),
             const SizedBox(height: 8),
             Text(
@@ -498,8 +498,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays} days ago';
@@ -514,9 +514,9 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
 
   _SliverAppBarDelegate(this.tabBar);
+  final TabBar tabBar;
 
   @override
   double get minExtent => tabBar.preferredSize.height;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/project_card.dart';
 import 'package:helios_hash_dao/mock_data.dart';
+import 'package:helios_hash_dao/project_card.dart';
 import 'package:helios_hash_dao/project_model.dart';
 
 class ProjectsPage extends StatefulWidget {
@@ -17,7 +17,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   String _searchQuery = '';
   String _selectedCategory = 'All';
 
-  final List<String> _categories = [
+  final List<String> _categories = <String>[
     'All',
     'Infrastructure',
     'Environment',
@@ -63,10 +63,8 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         break;
       case 1: // Active Projects
         projects = projects.where((project) => project.status == 'active').toList();
-        break;
       case 2: // Draft Projects
         projects = projects.where((project) => project.status == 'draft').toList();
-        break;
     }
 
     return projects;
@@ -82,7 +80,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          tabs: const [
+          tabs: const <dynamic>[
             Tab(text: 'All'),
             Tab(text: 'Active'),
             Tab(text: 'Draft'),
@@ -93,13 +91,13 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         ),
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           // Search and Filter Section
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.grey[50],
             child: Column(
-              children: [
+              children: <dynamic>[
                 // Search Bar
                 TextField(
                   controller: _searchController,
@@ -140,8 +138,8 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
                     itemBuilder: (context, index) {
-                      final category = _categories[index];
-                      final isSelected = category == _selectedCategory;
+                      final String category = _categories[index];
+                      final bool isSelected = category == _selectedCategory;
 
                       return Container(
                         margin: const EdgeInsets.only(right: 8),
@@ -169,7 +167,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: [
+              children: <dynamic>[
                 _buildProjectsList(),
                 _buildProjectsList(),
                 _buildProjectsList(),
@@ -189,13 +187,13 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   }
 
   Widget _buildProjectsList() {
-    final projects = _getFilteredProjects();
+    final List<dynamic> projects = _getFilteredProjects();
 
     if (projects.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(
               Icons.work_off,
               size: 64,
@@ -253,20 +251,20 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: [
+            children: <dynamic>[
               Text(project.description),
               const SizedBox(height: 16),
               Text('Budget: \$${project.budget.toStringAsFixed(0)}'),
               Text('Team Members: ${project.teamMembers.length}'),
               Text('Upvotes: ${project.upvotes}'),
-              if (project.githubUrl != null) ...[
+              if (project.githubUrl != null) ...<dynamic>[
                 const SizedBox(height: 8),
                 Text('GitHub: ${project.githubUrl}'),
               ],
             ],
           ),
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Close'),

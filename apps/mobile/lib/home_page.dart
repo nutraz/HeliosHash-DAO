@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/dashboard_page.dart';
-import 'package:helios_hash_dao/projects_page.dart';
-import 'package:helios_hash_dao/governance_page.dart';
 import 'package:helios_hash_dao/community_page.dart';
-import 'package:helios_hash_dao/wallet_page.dart';
+import 'package:helios_hash_dao/dashboard_page.dart';
+import 'package:helios_hash_dao/governance_page.dart';
+import 'package:helios_hash_dao/projects_page.dart';
 import 'package:helios_hash_dao/rewards_page.dart';
+import 'package:helios_hash_dao/wallet_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

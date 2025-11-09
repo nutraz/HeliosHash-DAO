@@ -6,11 +6,11 @@ class DisputeResolutionScreen extends StatefulWidget {
 }
 
 class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
-  List<Map<String, dynamic>> _disputes = [
-    {
+  final List<Map<String, dynamic>> _disputes = <Map<String, dynamic>>[
+    <String, dynamic>{
       'id': 'DSP-001',
       'title': 'Land Ownership Dispute',
-      'parties': ['Community Group A', 'Community Group B'],
+      'parties': <String>['Community Group A', 'Community Group B'],
       'status': 'Under Review',
       'category': 'Land',
       'date': '2024-01-15',
@@ -18,10 +18,10 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
       'votes': 45,
       'totalVotes': 100,
     },
-    {
+    <String, dynamic>{
       'id': 'DSP-002',
       'title': 'Budget Allocation',
-      'parties': ['Project Team', 'Finance Committee'],
+      'parties': <String>['Project Team', 'Finance Committee'],
       'status': 'Voting',
       'category': 'Financial',
       'date': '2024-01-20',
@@ -29,10 +29,10 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
       'votes': 78,
       'totalVotes': 100,
     },
-    {
+    <String, dynamic>{
       'id': 'DSP-003',
       'title': 'Contract Violation',
-      'parties': ['Contractor', 'Project Manager'],
+      'parties': <String>['Contractor', 'Project Manager'],
       'status': 'Resolved',
       'category': 'Contract',
       'date': '2024-01-10',
@@ -49,12 +49,12 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         title: Text('Dispute Resolution'),
         backgroundColor: Colors.orange.shade600,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           IconButton(icon: Icon(Icons.add), onPressed: () => _showNewDisputeDialog()),
         ],
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           _buildHeader(),
           _buildCategoryFilter(),
           Expanded(
@@ -83,18 +83,18 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Colors.orange.shade600, Colors.orange.shade800],
+          colors: <dynamic>[Colors.orange.shade600, Colors.orange.shade800],
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           Text('Dispute Resolution Center', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
           SizedBox(height: 8),
           Text('Resolve conflicts through transparent community governance', style: TextStyle(fontSize: 16, color: Colors.orange.shade100)),
           SizedBox(height: 16),
           Row(
-            children: [
+            children: <dynamic>[
               _buildStat('3', 'Active Disputes'),
               SizedBox(width: 32),
               _buildStat('1', 'Under Voting'),
@@ -110,7 +110,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   Widget _buildStat(String value, String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <dynamic>[
         Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
         Text(label, style: TextStyle(fontSize: 14, color: Colors.orange.shade100)),
       ],
@@ -118,13 +118,13 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   }
 
   Widget _buildCategoryFilter() {
-    final categories = ['All', 'Land', 'Financial', 'Contract', 'Technical'];
+    final List<String> categories = <String>['All', 'Land', 'Financial', 'Contract', 'Technical'];
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: categories.map((category) {
+          children: categories.map((String category) {
             return Padding(
               padding: EdgeInsets.only(right: 8),
               child: FilterChip(
@@ -150,9 +150,9 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: Text(dispute['title'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
@@ -167,7 +167,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
             Text(dispute['description'], style: TextStyle(color: Colors.grey.shade700)),
             SizedBox(height: 12),
             Row(
-              children: [
+              children: <dynamic>[
                 Icon(Icons.group, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
                 Text(dispute['parties'].join(' vs '), style: TextStyle(color: Colors.grey)),
@@ -178,9 +178,9 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
               ],
             ),
             SizedBox(height: 12),
-            if (dispute['status'] != 'Resolved') ...[
+            if (dispute['status'] != 'Resolved') ...<dynamic>[
               Row(
-                children: [
+                children: <dynamic>[
                   Icon(Icons.how_to_vote, size: 16, color: Colors.grey),
                   SizedBox(width: 4),
                   Text('${dispute['votes']} / ${dispute['totalVotes']} votes', style: TextStyle(color: Colors.grey)),
@@ -195,7 +195,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
             ],
             SizedBox(height: 16),
             Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => _showDisputeDetails(dispute),
@@ -203,7 +203,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
                   ),
                 ),
                 SizedBox(width: 8),
-                if (dispute['status'] == 'Voting') ...[
+                if (dispute['status'] == 'Voting') ...<dynamic>[
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _showVotingDialog(dispute),
@@ -211,7 +211,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
                       style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade600, foregroundColor: Colors.white),
                     ),
                   ),
-                ] else if (dispute['status'] == 'Under Review') ...[
+                ] else if (dispute['status'] == 'Under Review') ...<dynamic>[
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _showCommentDialog(dispute),
@@ -235,12 +235,12 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         title: Text('Raise New Dispute'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             TextField(decoration: InputDecoration(labelText: 'Dispute Title', border: OutlineInputBorder())),
             SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
-              items: ['Land', 'Financial', 'Contract', 'Technical'].map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+              items: <String>['Land', 'Financial', 'Contract', 'Technical'].map((String cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
               onChanged: (value) {},
             ),
             SizedBox(height: 16),
@@ -252,7 +252,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
             ),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(
             onPressed: () {
@@ -280,13 +280,13 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         title: Text('Vote on Dispute'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             Text(dispute['title']),
             SizedBox(height: 16),
             Text('How do you vote on this dispute?'),
             SizedBox(height: 16),
             Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
@@ -312,7 +312,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
             ),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
         ],
       ),
@@ -326,7 +326,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
         title: Text('Add Comment'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <dynamic>[
             Text(dispute['title']),
             SizedBox(height: 16),
             TextField(
@@ -335,7 +335,7 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
             ),
           ],
         ),
-        actions: [
+        actions: <dynamic>[
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(
             onPressed: () {
@@ -351,8 +351,8 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
 }
 
 class DisputeDetailScreen extends StatelessWidget {
-  final Map<String, dynamic> dispute;
   DisputeDetailScreen({required this.dispute});
+  final Map<String, dynamic> dispute;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -365,13 +365,13 @@ class DisputeDetailScreen extends StatelessWidget {
         padding: EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Card(
               child: Padding(
                 padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Text('Dispute Information', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 16),
                     _buildInfoRow('ID', dispute['id']),
@@ -389,7 +389,7 @@ class DisputeDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
                     Text(dispute['description']),
@@ -403,7 +403,7 @@ class DisputeDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Text('Voting Progress', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 16),
                     LinearProgressIndicator(
@@ -423,7 +423,7 @@ class DisputeDetailScreen extends StatelessWidget {
                 padding: EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Text('Comments', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
                     _buildCommentCard('Community Member', 'We need more transparency in this process.', '2 hours ago'),
@@ -452,7 +452,7 @@ class DisputeDetailScreen extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <dynamic>[
           SizedBox(width: 100, child: Text('$label:', style: TextStyle(fontWeight: FontWeight.bold))),
           Expanded(child: Text(value)),
         ],
@@ -467,14 +467,14 @@ class DisputeDetailScreen extends StatelessWidget {
         padding: EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 CircleAvatar(backgroundColor: Colors.orange.shade100, child: Icon(Icons.person, color: Colors.orange.shade600)),
                 SizedBox(width: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Text(author, style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(time, style: TextStyle(color: Colors.grey, fontSize: 12)),
                   ],

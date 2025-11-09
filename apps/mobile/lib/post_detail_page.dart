@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:helios_hash_dao/app_constant.dart';
 
 class PostDetailPage extends StatefulWidget {
-  final String postId;
 
   const PostDetailPage({super.key, required this.postId});
+  final String postId;
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -14,10 +14,11 @@ class _PostDetailPageState extends State<PostDetailPage> {
   final TextEditingController _commentController = TextEditingController();
 
   // Mock post data
-  final Map<String, dynamic> _post = {
+  final Map<String, dynamic> _post = <String, dynamic>{
     'id': 'POST-001',
     'title': 'Proposal for Community Treasury Allocation',
-    'content': '''I believe we should allocate 25% of our treasury to fund environmental projects. Here's why:
+    'content': '''
+I believe we should allocate 25% of our treasury to fund environmental projects. Here's why:
 
 1. **Environmental Impact**: Our DAO has grown significantly, and with that growth comes responsibility to give back to the community and planet.
 
@@ -31,7 +32,7 @@ The proposed allocation would be:
 - 5% to environmental education programs
 
 I welcome your thoughts and feedback on this proposal.''',
-    'author': {
+    'author': <String, Object>{
       'name': 'Alice Johnson',
       'avatar': 'A',
       'role': 'Community Member',
@@ -40,45 +41,45 @@ I welcome your thoughts and feedback on this proposal.''',
     'category': 'Governance',
     'createdAt': DateTime.now().subtract(const Duration(days: 2)),
     'updatedAt': DateTime.now().subtract(const Duration(hours: 5)),
-    'tags': ['Treasury', 'Environment', 'Sustainability'],
+    'tags': <String>['Treasury', 'Environment', 'Sustainability'],
     'upvotes': 42,
     'downvotes': 3,
-    'comments': [
-      {
+    'comments': <Map<String, Object>>[
+      <String, Object>{
         'id': '1',
         'author': 'Bob Smith',
-        'content': 'I fully support this initiative. The environmental focus aligns perfectly with our DAO\'s values.',
+        'content': "I fully support this initiative. The environmental focus aligns perfectly with our DAO's values.",
         'createdAt': DateTime.now().subtract(const Duration(days: 1)),
         'upvotes': 12,
-        'replies': [
-          {
+        'replies': <Map<String, Object>>[
+          <String, Object>{
             'id': '1-1',
             'author': 'Alice Johnson',
-            'content': 'Thank you for your support! I\'m glad you see the alignment with our values.',
+            'content': "Thank you for your support! I'm glad you see the alignment with our values.",
             'createdAt': DateTime.now().subtract(const Duration(hours: 20)),
             'upvotes': 3,
           },
         ],
       },
-      {
+      <String, Object>{
         'id': '2',
         'author': 'Carol Davis',
         'content': 'What specific projects do you have in mind for the reforestation allocation?',
         'createdAt': DateTime.now().subtract(const Duration(hours: 18)),
         'upvotes': 8,
-        'replies': [],
+        'replies': <dynamic>[],
       },
-      {
+      <String, Object>{
         'id': '3',
         'author': 'David Wilson',
-        'content': 'While I support environmental causes, I\'m concerned about the 25% allocation. Could we start with a smaller percentage to test the waters?',
+        'content': "While I support environmental causes, I'm concerned about the 25% allocation. Could we start with a smaller percentage to test the waters?",
         'createdAt': DateTime.now().subtract(const Duration(hours: 12)),
         'upvotes': 15,
-        'replies': [
-          {
+        'replies': <Map<String, Object>>[
+          <String, Object>{
             'id': '3-1',
             'author': 'Alice Johnson',
-            'content': 'That\'s a valid concern. We could certainly start with a pilot program and scale up based on results.',
+            'content': "That's a valid concern. We could certainly start with a pilot program and scale up based on results.",
             'createdAt': DateTime.now().subtract(const Duration(hours: 10)),
             'upvotes': 7,
           },
@@ -100,13 +101,13 @@ I welcome your thoughts and feedback on this proposal.''',
     if (_commentController.text.trim().isEmpty) return;
 
     setState(() {
-      _post['comments'].add({
+      _post['comments'].add(<String, dynamic>{
         'id': DateTime.now().millisecondsSinceEpoch.toString(),
         'author': 'Current User', // In real app, get from auth
         'content': _commentController.text.trim(),
         'createdAt': DateTime.now(),
         'upvotes': 0,
-        'replies': [],
+        'replies': <dynamic>[],
       });
     });
 
@@ -152,12 +153,12 @@ I welcome your thoughts and feedback on this proposal.''',
         title: const Text('Post'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: [
+        actions: <dynamic>[
           PopupMenuButton<String>(
             onSelected: (value) {
               // Handle menu actions
             },
-            itemBuilder: (context) => [
+            itemBuilder: (context) => <dynamic>[
               const PopupMenuItem(
                 value: 'share',
                 child: Text('Share'),
@@ -175,16 +176,16 @@ I welcome your thoughts and feedback on this proposal.''',
         ],
       ),
       body: Column(
-        children: [
+        children: <dynamic>[
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <dynamic>[
                   // Post Header
                   Row(
-                    children: [
+                    children: <dynamic>[
                       CircleAvatar(
                         backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
                         child: Text(
@@ -199,7 +200,7 @@ I welcome your thoughts and feedback on this proposal.''',
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: <dynamic>[
                             Text(
                               _post['author']['name'],
                               style: const TextStyle(
@@ -235,7 +236,7 @@ I welcome your thoughts and feedback on this proposal.''',
 
                   // Post Category and Tags
                   Row(
-                    children: [
+                    children: <dynamic>[
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
@@ -252,7 +253,7 @@ I welcome your thoughts and feedback on this proposal.''',
                         ),
                       ),
                       const SizedBox(width: 8),
-                      ...(_post['tags'] as List<String>).map((tag) => Container(
+                      ...(_post['tags'] as List<String>).map((String tag) => Container(
                         margin: const EdgeInsets.only(right: 4),
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
@@ -285,7 +286,7 @@ I welcome your thoughts and feedback on this proposal.''',
 
                   // Voting Actions
                   Row(
-                    children: [
+                    children: <dynamic>[
                       IconButton(
                         onPressed: _toggleUpvote,
                         icon: Icon(
@@ -339,7 +340,7 @@ I welcome your thoughts and feedback on this proposal.''',
                   const SizedBox(height: 16),
 
                   ...(_post['comments'] as List<Map<String, dynamic>>).map(
-                    (comment) => _buildCommentCard(comment),
+                    (Map<String, dynamic> comment) => _buildCommentCard(comment),
                   ),
                 ],
               ),
@@ -356,7 +357,7 @@ I welcome your thoughts and feedback on this proposal.''',
               ),
             ),
             child: Row(
-              children: [
+              children: <dynamic>[
                 Expanded(
                   child: TextField(
                     controller: _commentController,
@@ -401,9 +402,9 @@ I welcome your thoughts and feedback on this proposal.''',
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Row(
-              children: [
+              children: <dynamic>[
                 CircleAvatar(
                   radius: 16,
                   backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
@@ -420,7 +421,7 @@ I welcome your thoughts and feedback on this proposal.''',
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <dynamic>[
                       Text(
                         comment['author'],
                         style: const TextStyle(
@@ -439,7 +440,7 @@ I welcome your thoughts and feedback on this proposal.''',
                   ),
                 ),
                 Row(
-                  children: [
+                  children: <dynamic>[
                     IconButton(
                       onPressed: () {
                         // Upvote comment
@@ -463,7 +464,7 @@ I welcome your thoughts and feedback on this proposal.''',
               comment['content'],
               style: const TextStyle(height: 1.4),
             ),
-            if ((comment['replies'] as List).isNotEmpty) ...[
+            if ((comment['replies'] as List).isNotEmpty) ...<dynamic>[
               const SizedBox(height: 12),
               ...comment['replies'].map<Widget>((reply) => Container(
                 margin: const EdgeInsets.only(left: 24, top: 8),
@@ -474,9 +475,9 @@ I welcome your thoughts and feedback on this proposal.''',
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <dynamic>[
                     Row(
-                      children: [
+                      children: <dynamic>[
                         Text(
                           reply['author'],
                           style: const TextStyle(
@@ -513,8 +514,8 @@ I welcome your thoughts and feedback on this proposal.''',
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

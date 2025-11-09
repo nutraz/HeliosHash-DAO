@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:helioshash_dao/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -11,14 +12,14 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final langProvider = Provider.of<LanguageProvider>(context);
     final themeProvider = Provider.of<ThemeProvider>(context);
-    final l10n = AppLocalizations.of(context)!;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.settings),
       ),
       body: ListView(
-        children: [
+        children: <dynamic>[
           // --- Theme Selection Tile (NEW SECTION) ---
           ListTile(
             title: const Text('Dark Mode'),
@@ -29,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
                   themeProvider.setThemeMode(newValue);
                 }
               },
-              items: const [
+              items: const <dynamic>[
                 DropdownMenuItem(
                   value: ThemeMode.system,
                   child: Text('System Default'),
@@ -55,7 +56,7 @@ class SettingsScreen extends StatelessWidget {
                   langProvider.setLocale(Locale(newValue, ''));
                 }
               },
-              items: const [
+              items: const <dynamic>[
                 DropdownMenuItem(
                   value: 'en',
                   child: Text('English'),

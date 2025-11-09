@@ -8,7 +8,7 @@ class OnboardingScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <dynamic>[
             Icon(Icons.flash_on, size: 80, color: Colors.amber),
             SizedBox(height: 24),
             Text('Start earning HHU — simple tasks, local projects, real INR payouts.', style: TextStyle(fontSize: 20, color: Colors.white)),

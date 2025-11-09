@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 
 class RewardTile extends StatelessWidget {
-  final String title;
-  final String description;
-  final int points;
-  final String icon;
-  final bool isUnlocked;
-  final DateTime? unlockedAt;
-  final VoidCallback? onTap;
 
   const RewardTile({
     super.key,
@@ -19,6 +12,13 @@ class RewardTile extends StatelessWidget {
     this.unlockedAt,
     this.onTap,
   });
+  final String title;
+  final String description;
+  final int points;
+  final String icon;
+  final bool isUnlocked;
+  final DateTime? unlockedAt;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class RewardTile extends StatelessWidget {
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <dynamic>[
             Text(
               description,
               style: TextStyle(
@@ -71,7 +71,7 @@ class RewardTile extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
+          children: <dynamic>[
             Text(
               '+$points',
               style: TextStyle(
@@ -123,8 +123,8 @@ class RewardTile extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(date);
 
     if (difference.inDays == 0) {
       return 'today';
@@ -133,13 +133,13 @@ class RewardTile extends StatelessWidget {
     } else if (difference.inDays < 7) {
       return '${difference.inDays} days ago';
     } else if (difference.inDays < 30) {
-      final weeks = (difference.inDays / 7).floor();
+      final int weeks = (difference.inDays / 7).floor();
       return '$weeks week${weeks > 1 ? 's' : ''} ago';
     } else if (difference.inDays < 365) {
-      final months = (difference.inDays / 30).floor();
+      final int months = (difference.inDays / 30).floor();
       return '$months month${months > 1 ? 's' : ''} ago';
     } else {
-      final years = (difference.inDays / 365).floor();
+      final int years = (difference.inDays / 365).floor();
       return '$years year${years > 1 ? 's' : ''} ago';
     }
   }

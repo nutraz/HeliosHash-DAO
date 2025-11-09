@@ -86,8 +86,8 @@ class AppConstants {
 
   // File Upload
   static const int maxFileSize = 10 * 1024 * 1024; // 10MB
-  static const List<String> allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-  static const List<String> allowedDocumentExtensions = ['pdf', 'doc', 'docx', 'txt'];
+  static const List<String> allowedImageExtensions = <String>['jpg', 'jpeg', 'png', 'gif'];
+  static const List<String> allowedDocumentExtensions = <String>['pdf', 'doc', 'docx', 'txt'];
 
   // Notification Settings
   static const String notificationChannelId = 'helios_dao_channel';

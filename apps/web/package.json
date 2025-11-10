@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@dfinity/agent": "^3.4.1",
-    "@dfinity/auth-client": "^3.4.1",
+    "@dfinity/auth-client": "^3.4.2",
     "@dfinity/candid": "^3.4.1",
     "@dfinity/principal": "^3.4.1",
     "@radix-ui/react-dialog": "^1.1.15",

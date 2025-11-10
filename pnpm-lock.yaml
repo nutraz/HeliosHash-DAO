@@ -124,8 +124,8 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)
       '@dfinity/auth-client':
-        specifier: ^3.4.1
-        version: 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)
+        specifier: ^3.4.2
+        version: 3.4.2(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)
       '@dfinity/candid':
         specifier: ^3.4.1
         version: 3.4.1(@dfinity/principal@3.4.1)
@@ -1040,12 +1040,12 @@ packages:
       '@dfinity/principal': 3.4.1
       '@noble/hashes': ^1.8.0
 
-  '@dfinity/auth-client@3.4.1':
-    resolution: {integrity: sha512-HlzJtI325B6rflE2oWcmwHaZuWqJDgyYwfLOalIPxt9SpM/9h+twRC/cpGMaJ+renlswd+Ax8Ka1NTDZTGp/Kg==}
+  '@dfinity/auth-client@3.4.2':
+    resolution: {integrity: sha512-DsRBVhY4Dq7gEwpBjEHH/pujU8JNaxyGvi2G5MZUdiLXAYeHDObuC7ucDWCFVjtfChSvcX1D0k9gYrxW9bDcyw==}
     peerDependencies:
-      '@dfinity/agent': 3.4.1
-      '@dfinity/identity': 3.4.1
-      '@dfinity/principal': 3.4.1
+      '@dfinity/agent': 3.4.2
+      '@dfinity/identity': 3.4.2
+      '@dfinity/principal': 3.4.2
 
   '@dfinity/candid@0.21.4':
     resolution: {integrity: sha512-BRdgLQjPbqEZDRIR985jpy92uwhdBn4mN2D8StMKyOXQLmR6hKSD0p/P2b632Sh7zPUY8HuiA8njpMZ67JEyAg==}
@@ -7601,7 +7601,7 @@ snapshots:
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
 
-  '@dfinity/auth-client@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)':
+  '@dfinity/auth-client@3.4.2(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)':
     dependencies:
       '@dfinity/agent': 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)
       '@dfinity/identity': 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0)

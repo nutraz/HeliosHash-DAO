@@ -109,3 +109,31 @@ notes/
 **/GeneratedPluginRegistrant.*
 **/*.snapshot
 **/*.dill
+
+# Flutter
+apps/mobile/ios/Flutter/.last_build_id
+apps/mobile/ios/Flutter/Flutter.podspec
+apps/mobile/ios/Flutter/App.framework/
+apps/mobile/ios/Flutter/Flutter.framework/
+apps/mobile/ios/Flutter/Generated.xcconfig
+apps/mobile/ios/Flutter/ephemeral/
+
+# Android
+apps/mobile/android/.gradle/
+apps/mobile/android/local.properties
+apps/mobile/android/**/GeneratedPluginRegistrant.*
+
+# Build outputs
+apps/mobile/build/
+apps/mobile/android/app/build/
+apps/mobile/ios/Runner/GeneratedPluginRegistrant.m
+
+# Examples (shouldn't be in main app)
+apps/mobile/examples/
+apps/mobile/dev/
+
+# Node modules in app directories
+apps/*/node_modules/
+
+# Declaration files
+apps/backend/src/declarations/

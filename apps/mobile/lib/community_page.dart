@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/mock_data.dart';
+import 'app_constant.dart';
+import 'mock_data.dart';
+
+import 'post_model.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -46,11 +48,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
       ),
       body: TabBarView(
         controller: _tabController,
-        children: <dynamic>[
-          _buildPostsTab(),
-          _buildDiscussionsTab(),
-          _buildEventsTab(),
-        ],
+        children: <dynamic>[_buildPostsTab(), _buildDiscussionsTab(), _buildEventsTab()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -63,7 +61,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
   }
 
   Widget _buildPostsTab() {
-    final posts = MockData.getMockPosts();
+    final List<Post> posts = MockData.getMockPosts();
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -73,8 +71,8 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: posts.length,
-        itemBuilder: (context, index) {
-          final post = posts[index];
+        itemBuilder: (BuildContext context, int index) {
+          final Post post = posts[index];
           return Card(
             margin: const EdgeInsets.only(bottom: 16),
             child: Padding(
@@ -98,34 +96,22 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                           children: <dynamic>[
                             Text(
                               post.author,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             Text(
                               _formatTimeAgo(post.createdAt),
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 12,
-                              ),
+                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
                             ),
                           ],
                         ),
                       ),
                       PopupMenuButton<String>(
-                        onSelected: (value) {
+                        onSelected: (String value) {
                           // Handle menu actions
                         },
-                        itemBuilder: (context) => <dynamic>[
-                          const PopupMenuItem(
-                            value: 'report',
-                            child: Text('Report'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'hide',
-                            child: Text('Hide'),
-                          ),
+                        itemBuilder: (BuildContext context) => <dynamic>[
+                          const PopupMenuItem(value: 'report', child: Text('Report')),
+                          const PopupMenuItem(value: 'hide', child: Text('Hide')),
                         ],
                       ),
                     ],
@@ -133,20 +119,11 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                   const SizedBox(height: 12),
                   Text(
                     post.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   if (post.content.isNotEmpty) ...<dynamic>[
                     const SizedBox(height: 8),
-                    Text(
-                      post.content,
-                      style: TextStyle(
-                        color: Colors.grey[700],
-                        height: 1.5,
-                      ),
-                    ),
+                    Text(post.content, style: TextStyle(color: Colors.grey[700], height: 1.5)),
                   ],
                   const SizedBox(height: 12),
                   Row(
@@ -188,15 +165,11 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
   }
 
   Widget _buildDiscussionsTab() {
-    return const Center(
-      child: Text('Discussions - Coming Soon'),
-    );
+    return const Center(child: Text('Discussions - Coming Soon'));
   }
 
   Widget _buildEventsTab() {
-    return const Center(
-      child: Text('Events - Coming Soon'),
-    );
+    return const Center(child: Text('Events - Coming Soon'));
   }
 
   String _formatTimeAgo(DateTime dateTime) {

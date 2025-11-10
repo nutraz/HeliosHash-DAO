@@ -3,18 +3,13 @@ import 'package:flutter/material.dart';
 import '../models/project/solar_project.dart';
 
 class ProjectCard extends StatelessWidget {
-
-  const ProjectCard({
-    Key? key,
-    required this.project,
-    this.onTap,
-  }) : super(key: key);
+  const ProjectCard({super.key, required this.project, this.onTap});
   final SolarProject project;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return Card(
       clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -26,24 +21,17 @@ class ProjectCard extends StatelessWidget {
             // Project image/placeholder
             Container(
               height: 120,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: <dynamic>[
-                    const Color(0xFFFFA726),
-                    const Color(0xFFFF7043),
-                  ],
+                  colors: <dynamic>[Color(0xFFFFA726), Color(0xFFFF7043)],
                 ),
               ),
               child: Stack(
                 children: <dynamic>[
                   Center(
-                    child: Icon(
-                      Icons.wb_sunny,
-                      size: 40,
-                      color: Colors.white.withOpacity(0.7),
-                    ),
+                    child: Icon(Icons.wb_sunny, size: 40, color: Colors.white.withOpacity(0.7)),
                   ),
                   Positioned(
                     top: 8,
@@ -74,9 +62,7 @@ class ProjectCard extends StatelessWidget {
                 children: <dynamic>[
                   Text(
                     project.name,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 4),
                   Row(
@@ -118,12 +104,7 @@ class ProjectCard extends StatelessWidget {
             color: theme.colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
-        Text(
-          value,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
+        Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
       ],
     );
   }

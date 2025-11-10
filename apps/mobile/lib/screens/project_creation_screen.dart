@@ -27,10 +27,12 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
 
   void _nextStep() {
     if (_currentStep == 0) {
-      if (_nameController.text.isEmpty || _descriptionController.text.isEmpty || _locationController.text.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please fill in all required fields')),
-        );
+      if (_nameController.text.isEmpty ||
+          _descriptionController.text.isEmpty ||
+          _locationController.text.isEmpty) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Please fill in all required fields')));
         return;
       }
       _projectData['name'] = _nameController.text;
@@ -46,10 +48,12 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
   }
 
   void _submitProjectProposal() {
-    if (_fundingGoalController.text.isEmpty || _tokenAllocationController.text.isEmpty || _capacityController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all required fields')),
-      );
+    if (_fundingGoalController.text.isEmpty ||
+        _tokenAllocationController.text.isEmpty ||
+        _capacityController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Please fill in all required fields')));
       return;
     }
 
@@ -57,7 +61,7 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
     _projectData['tokenAllocation'] = double.tryParse(_tokenAllocationController.text) ?? 0.0;
     _projectData['capacity'] = double.tryParse(_capacityController.text) ?? 0.0;
 
-    final daoProvider = Provider.of<DAOProvider>(context, listen: false);
+    final DAOProvider daoProvider = Provider.of<DAOProvider>(context, listen: false);
 
     // Submit as a proposal that needs governance approval
     daoProvider.proposeSolarProject(_projectData);
@@ -97,7 +101,6 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
         backgroundColor: Colors.green,
       ),
       body: Stepper(
-        type: StepperType.vertical,
         currentStep: _currentStep,
         onStepContinue: () {
           if (_currentStep == steps.length - 1) {
@@ -116,7 +119,7 @@ class _ProjectCreationScreenState extends State<ProjectCreationScreen> {
           }
         },
         steps: steps,
-        controlsBuilder: (context, details) {
+        controlsBuilder: (BuildContext context, ControlsDetails details) {
           return Padding(
             padding: const EdgeInsets.only(top: 16.0),
             child: Row(

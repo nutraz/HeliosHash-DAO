@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class ChatPage extends StatefulWidget {
-
-  const ChatPage({
-    super.key,
-    required this.conversationId,
-    required this.otherUserName,
-  });
+  const ChatPage({super.key, required this.conversationId, required this.otherUserName});
   final String conversationId;
   final String otherUserName;
 
@@ -81,7 +76,7 @@ class _ChatPageState extends State<ChatPage> {
               backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
               child: Text(
                 widget.otherUserName[0].toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppConstants.primaryColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -110,7 +105,7 @@ class _ChatPageState extends State<ChatPage> {
               controller: _scrollController,
               padding: const EdgeInsets.all(16),
               itemCount: _messages.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 final Map<String, dynamic> message = _messages[index];
                 return _buildMessageBubble(message);
               },
@@ -122,9 +117,7 @@ class _ChatPageState extends State<ChatPage> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Colors.grey[200]!),
-              ),
+              border: Border(top: BorderSide(color: Colors.grey[200]!)),
             ),
             child: Row(
               children: <dynamic>[
@@ -139,10 +132,7 @@ class _ChatPageState extends State<ChatPage> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                     maxLines: null,
                     textInputAction: TextInputAction.send,
@@ -176,9 +166,7 @@ class _ChatPageState extends State<ChatPage> {
         mainAxisAlignment: isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: <dynamic>[
           Container(
-            constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.7,
-            ),
+            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.7),
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               color: isMe ? AppConstants.primaryColor : Colors.grey[200],
@@ -194,10 +182,7 @@ class _ChatPageState extends State<ChatPage> {
               children: <dynamic>[
                 Text(
                   text,
-                  style: TextStyle(
-                    color: isMe ? Colors.white : Colors.black,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: isMe ? Colors.white : Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 4),
                 Text(

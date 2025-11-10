@@ -1,6 +1,18 @@
-# HeliosHash DAO
+<div align="center">
+  <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400"/>
+  
+  # HeliosHash DAO
+  
+  **Decentralized Renewable Energy Platform on Internet Computer**
+  
+  [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/flutter-ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
+  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+  
+</div>
 
-A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.
+---
+
+A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend and Flutter mobile app. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.
 
 ## 🚀 Quick Start
 
@@ -19,140 +31,100 @@ dfx deploy
 pnpm dev
 ```
 
-Visit [http://localhost:3001](http://localhost:3001) to see your app.
+Visit [http://localhost:3002](http://localhost:3002) to see your app.
 
 ## 🏗️ Architecture
 
 ### Backend: Internet Computer
 - **Language**: Motoko
 - **Canisters**: Modular smart contracts for DAO functionality
-- **Location**: `/canisters/` directory
+- **Location**: `/apps/backend/` directory
 
-### Frontend: Next.js Application  
+### Frontend: Next.js Web Application  
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
-- **Location**: `/app/`, `/src/` directories
+- **Location**: `/apps/web/` directory
 
-### Key Components
+### Mobile: Flutter Application
+- **Framework**: Flutter 3.35.7
+- **Language**: Dart
+- **Platforms**: Android, iOS, Linux desktop
+- **Location**: `/apps/mobile/` directory
+
+### Key Features
 - **DAO Governance**: Proposal creation, voting, execution
 - **Token Management**: HHU token distribution and rewards
 - **Project Hub**: Renewable energy project coordination
 - **Identity System**: Multi-modal authentication and KYC
+- **Mobile Access**: Full-featured Flutter mobile app
+- **Social Integration**: Community engagement framework
 
 **Key Components**:
-- Entry system with Ashok Chakra animation
+- Entry system with animated splash screen
 - Authentication flow with validation
 - Role selection with KYC requirements
 - Main dashboard with navigation
 - Project management interface
+- Mobile-first responsive design
 
 ## 💻 Development
 
-### Prerequisites
-
-- **Node.js** 18+ 
-- **DFX SDK** (Internet Computer)
-- **pnpm** package manager
-
-### Scripts
-
+### Web Development
 ```bash
-# Development
-pnpm dev              # Start development server
-pnpm build            # Production build
-pnpm start            # Start production server
-
-# Testing
-pnpm test:run         # Run unit tests
-pnpm test:e2e         # Run E2E tests
-pnpm test:canister    # Run Motoko tests
-
-# Internet Computer
-dfx start             # Start local IC replica
-dfx deploy            # Deploy canisters
-dfx generate          # Generate type declarations
-
-# Utilities
-pnpm setup            # Automated environment setup
-pnpm clean            # Clean build artifacts
+cd apps/web
+pnpm install
+pnpm dev  # Runs on port 3002
 ```
 
-### Project Structure
-
-```
-canisters/              # Motoko backend canisters
-├── hhdao/             # Main DAO logic
-├── governance/        # Governance canister
-├── treasury/          # Treasury management
-└── test-runner/       # Test utilities
-
-app/                   # Next.js frontend (App Router)
-├── (dashboard)/       # Dashboard routes
-├── auth/             # Authentication pages
-├── projects/         # Project management
-└── globals.css       # Global styles
-
-src/
-├── components/        # React components
-├── hooks/            # Custom React hooks
-├── declarations/     # Generated canister bindings
-└── lib/              # Utility functions
-
-docs/                  # Documentation
-scripts/               # Development scripts
+### Mobile Development
+```bash
+cd apps/mobile
+flutter pub get
+flutter run  # For Android/iOS
+flutter run -d linux  # For Linux desktop
 ```
 
-## 🧪 Testing
+### Backend Development
+```bash
+cd apps/backend
+dfx start --background
+dfx deploy
+```
 
-- **Unit Tests**: Vitest with React Testing Library
-- **E2E Tests**: Playwright for full application flows  
-- **Canister Tests**: Custom Motoko test runner
-- **Type Checking**: TypeScript strict mode
+## 🔧 CI/CD
 
-## 📚 Documentation
+GitHub Actions workflows automatically build and test on every push:
+- **Flutter CI**: Builds Android APK, runs analysis
+- **Web CI**: Builds Next.js production bundle
+- **Backend CI**: Deploys IC canisters
 
-Comprehensive documentation in [`docs/`](docs/):
+View workflow status: [GitHub Actions](https://github.com/nutraz/HeliosHash-DAO/actions)
 
-- [`docs/architecture.md`](docs/architecture.md) - System architecture
-- [`docs/development-setup.md`](docs/development-setup.md) - Development guide
-- [`docs/API_DESIGN.md`](docs/API_DESIGN.md) - API specifications
-- [`docs/SMART_CONTRACT_ARCHITECTURE.md`](docs/SMART_CONTRACT_ARCHITECTURE.md) - Canister design
+## 📱 Platforms
 
-## 🤝 Contributing
+- **Web**: Desktop and mobile browsers
+- **Android**: Native mobile app
+- **iOS**: Native mobile app (requires macOS for build)
+- **Linux**: Desktop application
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Install dependencies: `pnpm install`
-4. Start development: `pnpm dev`
-5. Run tests: `pnpm test:run`
-6. Commit changes: `git commit -m 'feat: add amazing feature'`
-7. Push to branch: `git push origin feature/amazing-feature`
-8. Open a Pull Request
+## �� Contributing
 
-### Development Workflow
-
-- Use [Conventional Commits](https://conventionalcommits.org/)
-- Run tests before submitting PRs
-- Update documentation for new features
-- Follow TypeScript strict mode guidelines
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Apache 2.0 - See [LICENSE](LICENSE) for details.
 
 ## 🔗 Links
 
-- [Internet Computer Documentation](https://internetcomputer.org/docs/current/developer-docs/quickstart/hello10mins)
-- [Motoko Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Next.js Documentation](https://nextjs.org/docs)
+- **Documentation**: [Full Docs](docs/)
+- **API Design**: [API_DESIGN.md](API_DESIGN.md)
+- **Development Status**: [DEVELOPMENT_STATUS.md](DEVELOPMENT_STATUS.md)
+- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
-1. Follow TypeScript best practices
-2. Use proper type definitions (no `any` types)
-3. Implement error handling and validation
-4. Write clean, maintainable code
-5. Test thoroughly before submitting PRs
+---
 
-## License
-
-MIT License - See LICENSE file for details
+<div align="center">
+  Made with ❤️ by the HeliosHash DAO community
+</div>

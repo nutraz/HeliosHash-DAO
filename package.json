@@ -57,7 +57,7 @@
     "@testing-library/user-event": "^14.4.3",
     "jsdom": "^27.1.0",
     "@playwright/test": "^1.40.0",
-    "@vitejs/plugin-react": "^4.0.0"
+    "@vitejs/plugin-react": "^5.1.0"
   },
   "pnpm": {
     "overrides": {

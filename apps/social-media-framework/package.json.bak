@@ -1,0 +1,38 @@
+{
+  "name": "social-media-framework",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test": "vitest run",
+    "dev": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
+{
+  "name": "social-media-framework",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test": "vitest run",
+    "dev": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}
+{
+  "name": "social-media-framework",
+  "version": "1.0.0",
+  "scripts": {
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test": "vitest run",
+    "dev": "vitest"
+  },
+  "devDependencies": {
+    "vitest": "^1.0.0"
+  }
+}

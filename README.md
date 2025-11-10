@@ -28,7 +28,7 @@ Visit [http://localhost:3001](http://localhost:3001) to see your app.
 - **Canisters**: Modular smart contracts for DAO functionality
 - **Location**: `/canisters/` directory
 
-### Frontend: Next.js Application  
+### Frontend: Next.js Application
 - **Framework**: Next.js 14 with App Router
 - **Language**: TypeScript
 - **Styling**: TailwindCSS
@@ -51,7 +51,7 @@ Visit [http://localhost:3001](http://localhost:3001) to see your app.
 
 ### Prerequisites
 
-- **Node.js** 18+ 
+- **Node.js** 18+
 - **DFX SDK** (Internet Computer)
 - **pnpm** package manager
 
@@ -106,7 +106,7 @@ scripts/               # Development scripts
 ## 🧪 Testing
 
 - **Unit Tests**: Vitest with React Testing Library
-- **E2E Tests**: Playwright for full application flows  
+- **E2E Tests**: Playwright for full application flows
 - **Canister Tests**: Custom Motoko test runner
 - **Type Checking**: TypeScript strict mode
 

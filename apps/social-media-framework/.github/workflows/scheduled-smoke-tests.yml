@@ -1,0 +1,79 @@
+name: Scheduled Smoke Tests
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
+on:
+  schedule:
+    - cron: "0 8 * * *" # daily at 08:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: smoke-tests
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      SAFE_MODE: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Enable corepack (pnpm)
+        run: |
+          corepack enable
+          corepack prepare pnpm@8.6.0 --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: apps/social-media-framework
+
+      - name: Run smoke tests (read-only)
+        id: smoke
+        continue-on-error: true
+        run: pnpm run smoke-test
+        working-directory: apps/social-media-framework
+
+      - name: Create or update issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '[HeliosHash] Social Media Framework smoke test failed';
+            const runUrl = `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`;
+            const body = `Smoke test failed for run: ${process.env.GITHUB_RUN_ID}\n\nWorkflow: ${process.env.GITHUB_WORKFLOW}\n\nView run: ${runUrl}`;
+
+            // Look for an existing open issue with the same title
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'smoke-test-failure',
+            });
+
+            const found = existing.data.find(i => i.title === title);
+            if (!found) {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ['smoke-test-failure','triage'],
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: found.number,
+                body: `Smoke test failed again: run ${process.env.GITHUB_RUN_ID} - <${runUrl}>`,
+              });
+            }

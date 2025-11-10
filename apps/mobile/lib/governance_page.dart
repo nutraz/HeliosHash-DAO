@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/mock_data.dart';
-import 'package:helios_hash_dao/proposal_card.dart';
-import 'package:helios_hash_dao/proposal_model.dart';
+import 'app_constant.dart';
+import 'mock_data.dart';
+import 'proposal_card.dart';
+import 'proposal_model.dart';
 
 class GovernancePage extends StatefulWidget {
   const GovernancePage({super.key});
@@ -40,20 +40,27 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
   }
 
   List<Proposal> _getFilteredProposals() {
-    var proposals = MockData.getMockProposals();
+    List<Proposal> proposals = MockData.getMockProposals();
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      proposals = proposals.where((proposal) =>
-          proposal.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          proposal.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          proposal.tags.any((tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()))
-      ).toList();
+      proposals = proposals
+          .where(
+            (Proposal proposal) =>
+                proposal.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                proposal.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                proposal.tags.any(
+                  (String tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()),
+                ),
+          )
+          .toList();
     }
 
     // Filter by category
     if (_selectedCategory != 'All') {
-      proposals = proposals.where((proposal) => proposal.category == _selectedCategory).toList();
+      proposals = proposals
+          .where((Proposal proposal) => proposal.category == _selectedCategory)
+          .toList();
     }
 
     // Filter by tab
@@ -61,11 +68,15 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
       case 0: // All Proposals
         break;
       case 1: // Active Proposals
-        proposals = proposals.where((proposal) => proposal.isActive).toList();
+        proposals = proposals.where((Proposal proposal) => proposal.isActive).toList();
       case 2: // Passed Proposals
-        proposals = proposals.where((proposal) => proposal.status == ProposalStatus.passed).toList();
+        proposals = proposals
+            .where((Proposal proposal) => proposal.status == ProposalStatus.passed)
+            .toList();
       case 3: // Rejected Proposals
-        proposals = proposals.where((proposal) => proposal.status == ProposalStatus.rejected).toList();
+        proposals = proposals
+            .where((Proposal proposal) => proposal.status == ProposalStatus.rejected)
+            .toList();
     }
 
     return proposals;
@@ -88,7 +99,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
             Tab(text: 'Passed'),
             Tab(text: 'Rejected'),
           ],
-          onTap: (index) {
+          onTap: (int index) {
             setState(() {});
           },
         ),
@@ -125,7 +136,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (value) {
+                  onChanged: (String value) {
                     setState(() {
                       _searchQuery = value;
                     });
@@ -140,7 +151,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
-                    itemBuilder: (context, index) {
+                    itemBuilder: (BuildContext context, int index) {
                       final String category = _categories[index];
                       final bool isSelected = category == _selectedCategory;
 
@@ -149,7 +160,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
                         child: FilterChip(
                           label: Text(category),
                           selected: isSelected,
-                          onSelected: (selected) {
+                          onSelected: (bool selected) {
                             setState(() {
                               _selectedCategory = selected ? category : 'All';
                             });
@@ -198,26 +209,13 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <dynamic>[
-            Icon(
-              Icons.gavel,
-              size: 64,
-              color: Colors.grey[400],
-            ),
+            Icon(Icons.gavel, size: 64, color: Colors.grey[400]),
             const SizedBox(height: 16),
-            Text(
-              'No proposals found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text('No proposals found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -232,7 +230,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: proposals.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           final proposal = proposals[index];
           return ProposalCard(
             proposal: proposal,
@@ -249,7 +247,7 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
   void _showProposalDetailDialog(BuildContext context, Proposal proposal) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: Text(proposal.title),
         content: SingleChildScrollView(
           child: Column(
@@ -272,18 +270,15 @@ class _GovernancePageState extends State<GovernancePage> with TickerProviderStat
               if (proposal.parameters != null && proposal.parameters!.isNotEmpty) ...<dynamic>[
                 const SizedBox(height: 8),
                 const Text('Parameters:', style: TextStyle(fontWeight: FontWeight.bold)),
-                ...proposal.parameters!.entries.map((entry) =>
-                  Text('${entry.key}: ${entry.value}')
+                ...proposal.parameters!.entries.map(
+                  (MapEntry<String, dynamic> entry) => Text('${entry.key}: ${entry.value}'),
                 ),
               ],
             ],
           ),
         ),
         actions: <dynamic>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
           if (proposal.canVote)
             ElevatedButton(
               onPressed: () {

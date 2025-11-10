@@ -10,14 +10,12 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final langProvider = Provider.of<LanguageProvider>(context);
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    final LanguageProvider langProvider = Provider.of<LanguageProvider>(context);
+    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
     final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.settings),
-      ),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: ListView(
         children: <dynamic>[
           // --- Theme Selection Tile (NEW SECTION) ---
@@ -31,18 +29,9 @@ class SettingsScreen extends StatelessWidget {
                 }
               },
               items: const <dynamic>[
-                DropdownMenuItem(
-                  value: ThemeMode.system,
-                  child: Text('System Default'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.light,
-                  child: Text('Light'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.dark,
-                  child: Text('Dark'),
-                ),
+                DropdownMenuItem(value: ThemeMode.system, child: Text('System Default')),
+                DropdownMenuItem(value: ThemeMode.light, child: Text('Light')),
+                DropdownMenuItem(value: ThemeMode.dark, child: Text('Dark')),
               ],
             ),
           ),
@@ -57,25 +46,13 @@ class SettingsScreen extends StatelessWidget {
                 }
               },
               items: const <dynamic>[
-                DropdownMenuItem(
-                  value: 'en',
-                  child: Text('English'),
-                ),
-                DropdownMenuItem(
-                  value: 'hi',
-                  child: Text('हिन्दी'),
-                ),
+                DropdownMenuItem(value: 'en', child: Text('English')),
+                DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
               ],
             ),
           ),
-          const ListTile(
-            title: Text('Notification Preferences'),
-            subtitle: Text('Coming Soon'),
-          ),
-          const ListTile(
-            title: Text('About'),
-            subtitle: Text('Version 1.0.0'),
-          ),
+          const ListTile(title: Text('Notification Preferences'), subtitle: Text('Coming Soon')),
+          const ListTile(title: Text('About'), subtitle: Text('Version 1.0.0')),
         ],
       ),
     );

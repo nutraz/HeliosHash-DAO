@@ -36,6 +36,19 @@ lerna-debug.log*
 .env.test.local
 .env.production.local
 
+# Personal documents
+Signed Approved Delhi Docs an Testimonial*/
+
+# Build systems
+apps/mobile/**/.gradle/
+.turbo/
+
+# IDE
+*.iml
+
+# Local environment files (but keep .env.example)
+.env
+
 # Testing & Coverage
 coverage/
 .nyc_output/

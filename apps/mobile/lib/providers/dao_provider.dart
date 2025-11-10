@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DAOProvider with ChangeNotifier {
-
   DAOProvider() {
     _loadUserData();
     _fetchData();
   }
+
   /// Mock method for project investment.
   /// In a real app, this would involve a Web3 transaction.
   Future<bool> investInProject({required String projectId, required BigInt amount}) async {
     // 1. Log the action (for mock data visibility)
-    print('DAOProvider: Received investment request for project $projectId '
-        'with amount $amount tokens.');
+    print(
+      'DAOProvider: Received investment request for project $projectId '
+      'with amount $amount tokens.',
+    );
 
     // 2. Mock delay to simulate network latency
     await Future.delayed(const Duration(milliseconds: 500));
@@ -28,6 +30,7 @@ class DAOProvider with ChangeNotifier {
       return false; // Investment failed
     }
   }
+
   bool _isLoading = false;
   bool _isConnected = false;
   String _userAddress = '';
@@ -46,7 +49,7 @@ class DAOProvider with ChangeNotifier {
   List<Map<String, dynamic>> get communityMembers => _communityMembers;
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     _isConnected = prefs.getBool('isConnected') ?? false;
     _userAddress = prefs.getString('userAddress') ?? '';
     _tokenBalance = prefs.getDouble('tokenBalance') ?? 0.0;
@@ -54,7 +57,7 @@ class DAOProvider with ChangeNotifier {
   }
 
   Future<void> _saveUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isConnected', _isConnected);
     await prefs.setString('userAddress', _userAddress);
     await prefs.setDouble('tokenBalance', _tokenBalance);
@@ -102,9 +105,17 @@ class DAOProvider with ChangeNotifier {
         'beneficiaries': 150,
         'co2Reduced': 45.2,
         'updates': <Map<String, String>>[
-          <String, String>{'title': 'Land Acquisition Complete', 'date': '2 days ago', 'description': 'Successfully acquired 2 acres of land'},
-          <String, String>{'title': 'Environmental Approval Received', 'date': '1 week ago', 'description': 'All necessary clearances obtained'},
-        ]
+          <String, String>{
+            'title': 'Land Acquisition Complete',
+            'date': '2 days ago',
+            'description': 'Successfully acquired 2 acres of land',
+          },
+          <String, String>{
+            'title': 'Environmental Approval Received',
+            'date': '1 week ago',
+            'description': 'All necessary clearances obtained',
+          },
+        ],
       },
       <String, dynamic>{
         'id': 'PRJ-002',
@@ -119,9 +130,17 @@ class DAOProvider with ChangeNotifier {
         'beneficiaries': 200,
         'co2Reduced': 62.8,
         'updates': <Map<String, String>>[
-          <String, String>{'title': 'Community Survey Completed', 'date': '3 days ago', 'description': 'Surveyed 200 households'},
-          <String, String>{'title': 'Technical Feasibility Study', 'date': '1 week ago', 'description': 'Study confirms viability'},
-        ]
+          <String, String>{
+            'title': 'Community Survey Completed',
+            'date': '3 days ago',
+            'description': 'Surveyed 200 households',
+          },
+          <String, String>{
+            'title': 'Technical Feasibility Study',
+            'date': '1 week ago',
+            'description': 'Study confirms viability',
+          },
+        ],
       },
       <String, dynamic>{
         'id': 'PRJ-003',
@@ -136,10 +155,18 @@ class DAOProvider with ChangeNotifier {
         'beneficiaries': 5000,
         'co2Reduced': 120.5,
         'updates': <Map<String, String>>[
-          <String, String>{'title': 'First 10 Schools Completed', 'date': '1 day ago', 'description': 'All systems operational'},
-          <String, String>{'title': 'Teacher Training Program', 'date': '1 week ago', 'description': 'Teachers trained on system maintenance'},
-        ]
-      }
+          <String, String>{
+            'title': 'First 10 Schools Completed',
+            'date': '1 day ago',
+            'description': 'All systems operational',
+          },
+          <String, String>{
+            'title': 'Teacher Training Program',
+            'date': '1 week ago',
+            'description': 'Teachers trained on system maintenance',
+          },
+        ],
+      },
     ];
     _proposals = <Map<String, dynamic>>[
       <String, dynamic>{
@@ -153,9 +180,17 @@ class DAOProvider with ChangeNotifier {
         'endDate': '2024-02-15',
         'category': 'Infrastructure',
         'comments': <Map<String, String>>[
-          <String, String>{'author': 'Rajesh Kumar', 'content': 'This expansion will benefit our community greatly', 'date': '2 hours ago'},
-          <String, String>{'author': 'Priya Sharma', 'content': 'We need more details about the cost breakdown', 'date': '5 hours ago'},
-        ]
+          <String, String>{
+            'author': 'Rajesh Kumar',
+            'content': 'This expansion will benefit our community greatly',
+            'date': '2 hours ago',
+          },
+          <String, String>{
+            'author': 'Priya Sharma',
+            'content': 'We need more details about the cost breakdown',
+            'date': '5 hours ago',
+          },
+        ],
       },
       <String, dynamic>{
         'id': 'PROP-002',
@@ -168,9 +203,17 @@ class DAOProvider with ChangeNotifier {
         'endDate': '2024-02-20',
         'category': 'Governance',
         'comments': <Map<String, String>>[
-          <String, String>{'author': 'Amit Patel', 'content': 'The guidelines look comprehensive', 'date': '1 day ago'},
-          <String, String>{'author': 'Sunita Devi', 'content': 'We need more transparency in fund allocation', 'date': '2 days ago'},
-        ]
+          <String, String>{
+            'author': 'Amit Patel',
+            'content': 'The guidelines look comprehensive',
+            'date': '1 day ago',
+          },
+          <String, String>{
+            'author': 'Sunita Devi',
+            'content': 'We need more transparency in fund allocation',
+            'date': '2 days ago',
+          },
+        ],
       },
       <String, dynamic>{
         'id': 'PROP-003',
@@ -183,10 +226,18 @@ class DAOProvider with ChangeNotifier {
         'endDate': '2024-02-10',
         'category': 'Membership',
         'comments': <Map<String, String>>[
-          <String, String>{'author': 'Vikram Singh', 'content': 'Great initiative for community engagement', 'date': '3 days ago'},
-          <String, String>{'author': 'Meera Patel', 'content': 'The benefits are well structured', 'date': '4 days ago'},
-        ]
-      }
+          <String, String>{
+            'author': 'Vikram Singh',
+            'content': 'Great initiative for community engagement',
+            'date': '3 days ago',
+          },
+          <String, String>{
+            'author': 'Meera Patel',
+            'content': 'The benefits are well structured',
+            'date': '4 days ago',
+          },
+        ],
+      },
     ];
     _communityMembers = <Map<String, dynamic>>[
       <String, dynamic>{
@@ -197,7 +248,7 @@ class DAOProvider with ChangeNotifier {
         'tokens': 250.0,
         'avatar': 'assets/images/rajesh.jpg',
         'projects': <String>['Urgam Valley Solar Farm', 'Dharampur Microgrid'],
-        'skills': <String>['Solar Engineering', 'Project Management', 'Community Training']
+        'skills': <String>['Solar Engineering', 'Project Management', 'Community Training'],
       },
       <String, dynamic>{
         'name': 'Priya Sharma',
@@ -207,7 +258,7 @@ class DAOProvider with ChangeNotifier {
         'tokens': 375.0,
         'avatar': 'assets/images/priya.jpg',
         'projects': <String>['Community Outreach', 'Education Programs'],
-        'skills': <String>['Community Organization', 'Public Speaking', 'Event Planning']
+        'skills': <String>['Community Organization', 'Public Speaking', 'Event Planning'],
       },
       <String, dynamic>{
         'name': 'Amit Patel',
@@ -217,7 +268,7 @@ class DAOProvider with ChangeNotifier {
         'tokens': 180.0,
         'avatar': 'assets/images/amit.jpg',
         'projects': <String>['Land Acquisition', 'Community Engagement'],
-        'skills': <String>['Agriculture', 'Community Relations', 'Local Knowledge']
+        'skills': <String>['Agriculture', 'Community Relations', 'Local Knowledge'],
       },
       <String, dynamic>{
         'name': 'Sunita Devi',
@@ -227,8 +278,8 @@ class DAOProvider with ChangeNotifier {
         'tokens': 425.0,
         'avatar': 'assets/images/sunita.jpg',
         'projects': <String>['School Electrification', 'Teacher Training'],
-        'skills': <String>['Education', 'Training', 'Curriculum Development']
-      }
+        'skills': <String>['Education', 'Training', 'Curriculum Development'],
+      },
     ];
     _isLoading = false;
     notifyListeners();
@@ -254,7 +305,9 @@ class DAOProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
-    final int proposalIndex = _proposals.indexWhere((Map<String, dynamic> p) => p['id'] == proposalId);
+    final int proposalIndex = _proposals.indexWhere(
+      (Map<String, dynamic> p) => p['id'] == proposalId,
+    );
     if (proposalIndex != -1) {
       _proposals[proposalIndex]['votes'] += voteFor ? 1 : 0;
       _tokenBalance += 10.0;
@@ -276,7 +329,7 @@ class DAOProvider with ChangeNotifier {
       'tokens': 50.0,
       'avatar': 'assets/images/default_avatar.jpg',
       'projects': <dynamic>[],
-      'skills': expertise.split(',').map((String e) => e.trim()).toList()
+      'skills': expertise.split(',').map((String e) => e.trim()).toList(),
     });
     _tokenBalance += 50.0;
     await _saveUserData();
@@ -314,7 +367,8 @@ class DAOProvider with ChangeNotifier {
     final Map<String, Object> newProposal = <String, Object>{
       'id': 'PROP-${DateTime.now().millisecondsSinceEpoch}',
       'title': 'New Solar Project: ${projectData['name']}',
-      'description': 'Proposal to fund and implement ${projectData['name']} - ${projectData['description']}\n\n'
+      'description':
+          'Proposal to fund and implement ${projectData['name']} - ${projectData['description']}\n\n'
           'Location: ${projectData['location']}\n'
           'Capacity: ${projectData['capacity']} MW\n'
           'Funding Goal: ${projectData['fundingGoal']} ETH\n'

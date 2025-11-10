@@ -1,15 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/project_model.dart';
+import 'project_model.dart';
 
 class ProjectCard extends StatelessWidget {
-
-  const ProjectCard({
-    super.key,
-    required this.project,
-    this.onTap,
-    this.showVoteButtons = true,
-  });
+  const ProjectCard({super.key, required this.project, this.onTap, this.showVoteButtons = true});
   final Project project;
   final VoidCallback? onTap;
   final bool showVoteButtons;
@@ -19,9 +12,7 @@ class ProjectCard extends StatelessWidget {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -29,26 +20,16 @@ class ProjectCard extends StatelessWidget {
           height: 280, // Fixed height for consistent card sizing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: <Widget>[
               // Project Image
               if (project.imageUrl != null)
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: CachedNetworkImage(
-                    imageUrl: project.imageUrl!,
+                  child: Container(
                     height: 120,
                     width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      height: 120,
-                      color: Colors.grey[300],
-                      child: const Center(child: CircularProgressIndicator()),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: 120,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported, size: 40),
-                    ),
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image, size: 40, color: Colors.grey),
                   ),
                 ),
 
@@ -64,10 +45,7 @@ class ProjectCard extends StatelessWidget {
                           Expanded(
                             child: Text(
                               project.title,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -81,10 +59,7 @@ class ProjectCard extends StatelessWidget {
                       // Description
                       Text(
                         project.description,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -95,10 +70,7 @@ class ProjectCard extends StatelessWidget {
                       Row(
                         children: <dynamic>[
                           Chip(
-                            label: Text(
-                              project.category,
-                              style: const TextStyle(fontSize: 10),
-                            ),
+                            label: Text(project.category, style: const TextStyle(fontSize: 10)),
                             backgroundColor: Colors.blue[50],
                             labelStyle: TextStyle(color: Colors.blue[700]),
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -123,19 +95,20 @@ class ProjectCard extends StatelessWidget {
                         Wrap(
                           spacing: 2,
                           runSpacing: 2,
-                          children: project.tags.take(2).map((tag) => Chip(
-                            label: Text(
-                              tag,
-                              style: const TextStyle(fontSize: 8),
-                            ),
-                            backgroundColor: Colors.grey[200],
-                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            padding: EdgeInsets.zero,
-                          )).toList(),
+                          children: project.tags
+                              .take(2)
+                              .map(
+                                (String tag) => Chip(
+                                  label: Text(tag, style: const TextStyle(fontSize: 8)),
+                                  backgroundColor: Colors.grey[200],
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  padding: EdgeInsets.zero,
+                                ),
+                              )
+                              .toList(),
                         ),
 
                       const Spacer(), // Push content to bottom
-
                       // Vote buttons and stats
                       if (showVoteButtons)
                         Row(
@@ -175,10 +148,7 @@ class ProjectCard extends StatelessWidget {
                             ),
                             Text(
                               '${project.teamMembers.length} members',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey[600],
-                              ),
+                              style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                             ),
                           ],
                         ),
@@ -191,10 +161,7 @@ class ProjectCard extends StatelessWidget {
                             const SizedBox(width: 4),
                             Text(
                               '${project.teamMembers.length} members',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey[600],
-                              ),
+                              style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                             ),
                           ],
                         ),
@@ -232,10 +199,7 @@ class ProjectCard extends StatelessWidget {
     }
 
     return Chip(
-      label: Text(
-        statusText,
-        style: const TextStyle(fontSize: 10, color: Colors.white),
-      ),
+      label: Text(statusText, style: const TextStyle(fontSize: 10, color: Colors.white)),
       backgroundColor: chipColor,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: EdgeInsets.zero,

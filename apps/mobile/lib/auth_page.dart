@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -10,13 +10,13 @@ class AuthPage extends StatefulWidget {
 
 class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
   late TabController _tabController;
-  final _loginFormKey = GlobalKey<FormState>();
-  final _signupFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _loginFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _signupFormKey = GlobalKey<FormState>();
 
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   bool _isLoading = false;
   bool _obscurePassword = true;
@@ -93,11 +93,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <dynamic>[
-                    Icon(
-                      Icons.account_balance_wallet,
-                      size: 80,
-                      color: Colors.white,
-                    ),
+                    const Icon(Icons.account_balance_wallet, size: 80, color: Colors.white),
                     const SizedBox(height: 16),
                     const Text(
                       'HeliosHash DAO',
@@ -110,10 +106,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                     const SizedBox(height: 8),
                     Text(
                       'Decentralized Autonomous Organization',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8)),
                     ),
                   ],
                 ),
@@ -185,7 +178,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
@@ -212,7 +205,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 border: const OutlineInputBorder(),
               ),
               obscureText: _obscurePassword,
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
                 }
@@ -233,9 +226,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.primaryColor,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
@@ -252,7 +243,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
               onPressed: () {
                 // Handle forgot password
               },
-              child: Text(
+              child: const Text(
                 'Forgot Password?',
                 style: TextStyle(color: AppConstants.primaryColor),
               ),
@@ -276,7 +267,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 prefixIcon: Icon(Icons.person),
                 border: OutlineInputBorder(),
               ),
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your full name';
                 }
@@ -294,7 +285,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 border: OutlineInputBorder(),
               ),
               keyboardType: TextInputType.emailAddress,
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
@@ -321,7 +312,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 border: const OutlineInputBorder(),
               ),
               obscureText: _obscurePassword,
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your password';
                 }
@@ -348,7 +339,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 border: const OutlineInputBorder(),
               ),
               obscureText: _obscureConfirmPassword,
-              validator: (value) {
+              validator: (String? value) {
                 if (value == null || value.isEmpty) {
                   return 'Please confirm your password';
                 }
@@ -369,9 +360,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppConstants.primaryColor,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
                 child: _isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
@@ -386,10 +375,7 @@ class _AuthPageState extends State<AuthPage> with TickerProviderStateMixin {
 
             Text(
               'By signing up, you agree to our Terms of Service and Privacy Policy',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
           ],

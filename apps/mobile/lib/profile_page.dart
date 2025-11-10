@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,7 +16,8 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     'name': 'Alice Johnson',
     'email': 'alice.johnson@example.com',
     'avatar': 'A',
-    'bio': 'Passionate about blockchain technology and decentralized governance. Community member since 2023.',
+    'bio':
+        'Passionate about blockchain technology and decentralized governance. Community member since 2023.',
     'joinDate': DateTime(2023, 6, 15),
     'location': 'San Francisco, CA',
     'website': 'https://alicejohnson.dev',
@@ -28,9 +29,21 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
       'reputation': 4.8,
     },
     'achievements': <Map<String, dynamic>>[
-      <String, dynamic>{'name': 'Top Contributor', 'description': 'Contributed to 10+ projects', 'icon': Icons.star},
-      <String, dynamic>{'name': 'Proposal Master', 'description': 'Created 5+ successful proposals', 'icon': Icons.gavel},
-      <String, dynamic>{'name': 'Active Voter', 'description': 'Voted in 100+ governance decisions', 'icon': Icons.how_to_vote},
+      <String, dynamic>{
+        'name': 'Top Contributor',
+        'description': 'Contributed to 10+ projects',
+        'icon': Icons.star,
+      },
+      <String, dynamic>{
+        'name': 'Proposal Master',
+        'description': 'Created 5+ successful proposals',
+        'icon': Icons.gavel,
+      },
+      <String, dynamic>{
+        'name': 'Active Voter',
+        'description': 'Voted in 100+ governance decisions',
+        'icon': Icons.how_to_vote,
+      },
     ],
     'recentActivity': <Map<String, Object>>[
       <String, Object>{
@@ -86,11 +99,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         ],
       ),
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <dynamic>[
-            SliverToBoxAdapter(
-              child: _buildProfileHeader(),
-            ),
+            SliverToBoxAdapter(child: _buildProfileHeader()),
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
@@ -111,11 +122,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         },
         body: TabBarView(
           controller: _tabController,
-          children: <dynamic>[
-            _buildOverviewTab(),
-            _buildActivityTab(),
-            _buildAchievementsTab(),
-          ],
+          children: <dynamic>[_buildOverviewTab(), _buildActivityTab(), _buildAchievementsTab()],
         ),
       ),
     );
@@ -124,9 +131,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
   Widget _buildProfileHeader() {
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppConstants.primaryColor,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
         ),
@@ -139,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             backgroundColor: Colors.white,
             child: Text(
               _user['avatar'],
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
                 color: AppConstants.primaryColor,
@@ -152,21 +159,14 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           // Name and Email
           Text(
             _user['name'],
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
 
           const SizedBox(height: 4),
 
           Text(
             _user['email'],
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white.withOpacity(0.8),
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8)),
           ),
 
           const SizedBox(height: 12),
@@ -174,11 +174,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           // Bio
           Text(
             _user['bio'],
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.white.withOpacity(0.9),
-              height: 1.4,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.9), height: 1.4),
             textAlign: TextAlign.center,
           ),
 
@@ -192,20 +188,14 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               const SizedBox(width: 4),
               Text(
                 _user['location'],
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withOpacity(0.8),
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.8)),
               ),
               const SizedBox(width: 16),
               Icon(Icons.calendar_today, size: 16, color: Colors.white.withOpacity(0.8)),
               const SizedBox(width: 4),
               Text(
                 'Joined ${_formatDate(_user['joinDate'])}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withOpacity(0.8),
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.8)),
               ),
             ],
           ),
@@ -240,13 +230,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <dynamic>[
           // Stats Grid
-          const Text(
-            'Statistics',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          const Text('Statistics', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
@@ -287,10 +271,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           // Skills
           const Text(
             'Skills & Expertise',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
           Wrap(
@@ -300,7 +281,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
               return Chip(
                 label: Text(skill),
                 backgroundColor: AppConstants.primaryColor.withOpacity(0.1),
-                labelStyle: TextStyle(color: AppConstants.primaryColor),
+                labelStyle: const TextStyle(color: AppConstants.primaryColor),
               );
             }).toList(),
           ),
@@ -313,18 +294,15 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: _user['recentActivity'].length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         final activity = _user['recentActivity'][index];
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
-            leading: Icon(
-              _getActivityIcon(activity['type']),
-              color: AppConstants.primaryColor,
-            ),
+            leading: Icon(_getActivityIcon(activity['type']), color: AppConstants.primaryColor),
             title: Text(activity['title']),
             subtitle: Text(_formatDate(activity['timestamp'])),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
               // Navigate to activity detail
             },
@@ -344,7 +322,7 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
         childAspectRatio: 1.2,
       ),
       itemCount: _user['achievements'].length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         final achievement = _user['achievements'][index];
         return Card(
           child: Padding(
@@ -352,27 +330,17 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <dynamic>[
-                Icon(
-                  achievement['icon'],
-                  size: 32,
-                  color: AppConstants.primaryColor,
-                ),
+                Icon(achievement['icon'], size: 32, color: AppConstants.primaryColor),
                 const SizedBox(height: 8),
                 Text(
                   achievement['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   achievement['description'],
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -392,21 +360,9 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
           children: <dynamic>[
             Icon(icon, size: 32, color: color),
             const SizedBox(height: 8),
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text(title, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
           ],
         ),
       ),
@@ -443,7 +399,6 @@ class _ProfilePageState extends State<ProfilePage> with TickerProviderStateMixin
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-
   _SliverAppBarDelegate(this.tabBar);
   final TabBar tabBar;
 
@@ -455,10 +410,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
-      child: tabBar,
-    );
+    return ColoredBox(color: Colors.white, child: tabBar);
   }
 
   @override

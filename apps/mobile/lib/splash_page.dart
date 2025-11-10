@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/home_page.dart';
+import 'app_constant.dart';
+import 'home_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -19,31 +19,19 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    _logoController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    );
+    _logoController = AnimationController(duration: const Duration(seconds: 2), vsync: this);
 
     _logoAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _logoController,
-      curve: Curves.elasticOut,
-    ));
+    ).animate(CurvedAnimation(parent: _logoController, curve: Curves.elasticOut));
 
-    _textController = AnimationController(
-      duration: const Duration(seconds: 1),
-      vsync: this,
-    );
+    _textController = AnimationController(duration: const Duration(seconds: 1), vsync: this);
 
     _textAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _textController,
-      curve: Curves.easeInOut,
-    ));
+    ).animate(CurvedAnimation(parent: _textController, curve: Curves.easeInOut));
 
     _startAnimation();
   }
@@ -60,9 +48,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   }
 
   void _navigateToHome() {
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => const HomePage()),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => const HomePage()));
   }
 
   @override
@@ -81,10 +69,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: <dynamic>[
-              Color(0xFF6200EE),
-              Color(0xFF3700B3),
-            ],
+            colors: <dynamic>[Color(0xFF6200EE), Color(0xFF3700B3)],
           ),
         ),
         child: Center(
@@ -94,7 +79,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               // Logo Animation
               AnimatedBuilder(
                 animation: _logoAnimation,
-                builder: (context, child) {
+                builder: (BuildContext context, Widget? child) {
                   return Transform.scale(
                     scale: _logoAnimation.value,
                     child: Container(
@@ -126,14 +111,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               // App Name Animation
               AnimatedBuilder(
                 animation: _textAnimation,
-                builder: (context, child) {
+                builder: (BuildContext context, Widget? child) {
                   return Opacity(
                     opacity: _textAnimation.value,
                     child: Column(
                       children: <dynamic>[
-                        Text(
+                        const Text(
                           AppConstants.appName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -167,10 +152,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
               Text(
                 'Initializing...',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.white.withOpacity(0.7),
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.white.withOpacity(0.7)),
               ),
             ],
           ),

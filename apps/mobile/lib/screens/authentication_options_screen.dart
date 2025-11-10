@@ -25,8 +25,8 @@ class AuthenticationOptionsScreen extends StatelessWidget {
               'assets/icons/hhdaologo.svg',
               height: 32,
               width: 32,
-              fit: BoxFit.contain,
-              placeholderBuilder: (context) => const Icon(Icons.broken_image, color: Colors.white),
+              placeholderBuilder: (BuildContext context) =>
+                  const Icon(Icons.broken_image, color: Colors.white),
             ),
           ),
         ],
@@ -40,7 +40,8 @@ class AuthenticationOptionsScreen extends StatelessWidget {
                 'assets/icons/hhdaologo.svg',
                 height: 120,
                 width: 120,
-                placeholderBuilder: (context) => const Icon(Icons.broken_image, size: 80, color: Colors.teal),
+                placeholderBuilder: (BuildContext context) =>
+                    const Icon(Icons.broken_image, size: 80, color: Colors.teal),
               ),
               const SizedBox(height: 32),
               ElevatedButton.icon(
@@ -107,14 +108,8 @@ class AuthenticationOptionsScreen extends StatelessWidget {
                         }
                       },
                       items: const <dynamic>[
-                        DropdownMenuItem(
-                          value: 'en',
-                          child: Text('English'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'hi',
-                          child: Text('हिन्दी'),
-                        ),
+                        DropdownMenuItem(value: 'en', child: Text('English')),
+                        DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
                       ],
                     ),
                   ],

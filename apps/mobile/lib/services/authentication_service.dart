@@ -19,22 +19,19 @@ class AuthenticationService {
     if (kIsWeb) {
       await showDialog<void>(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
           title: const Text('Web Login'),
           content: const Text(
             'WebView-based login is not supported on web. Returning a mock token for development.',
           ),
           actions: <dynamic>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
           ],
         ),
       );
 
       const String mockToken = 'mock_web_token';
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', mockToken);
       return mockToken;
     }
@@ -48,13 +45,13 @@ class AuthenticationService {
       if (result != null && result is String) {
         // Use secure storage for mobile, SharedPreferences for web
         if (kIsWeb) {
-          final prefs = await SharedPreferences.getInstance();
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
           await prefs.setString('auth_token', result);
-        // } else {
-        //   const storage = FlutterSecureStorage();
-        //   await storage.write(key: 'auth_token', value: result);
-        // }
-        return result;
+          // } else {
+          //   const storage = FlutterSecureStorage();
+          //   await storage.write(key: 'auth_token', value: result);
+          // }
+          return result;
         }
       }
       return null;
@@ -66,7 +63,7 @@ class AuthenticationService {
 
   Future<String?> getAuthToken() async {
     if (kIsWeb) {
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       return prefs.getString('auth_token');
     } else {
       // const storage = FlutterSecureStorage();
@@ -77,7 +74,7 @@ class AuthenticationService {
 
   Future<void> logout() async {
     if (kIsWeb) {
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.remove('auth_token');
     } else {
       // const storage = FlutterSecureStorage();
@@ -86,4 +83,3 @@ class AuthenticationService {
     }
   }
 }
-

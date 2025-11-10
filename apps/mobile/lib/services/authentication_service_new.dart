@@ -18,22 +18,19 @@ class AuthenticationService {
     if (kIsWeb) {
       await showDialog<void>(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (BuildContext context) => AlertDialog(
           title: const Text('Web Login'),
           content: const Text(
             'WebView-based login is not supported on web. Returning a mock token for development.',
           ),
           actions: <dynamic>[
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
-            ),
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
           ],
         ),
       );
 
       const String mockToken = 'mock_web_token';
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', mockToken);
       return mockToken;
     }
@@ -45,7 +42,7 @@ class AuthenticationService {
       );
 
       if (result != null && result is String) {
-        final prefs = await SharedPreferences.getInstance();
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', result);
         return result;
       }
@@ -58,12 +55,12 @@ class AuthenticationService {
   }
 
   Future<String?> getAuthToken() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
   }
 }

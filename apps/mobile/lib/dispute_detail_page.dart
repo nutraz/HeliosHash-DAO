@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class DisputeDetailPage extends StatefulWidget {
-
   const DisputeDetailPage({super.key, required this.disputeId});
   final String disputeId;
 
@@ -17,7 +16,8 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
   final Map<String, dynamic> _dispute = <String, dynamic>{
     'id': 'DIS-001',
     'title': 'Project Milestone Payment Dispute',
-    'description': 'The contractor claims the milestone was completed but the client disagrees with the quality of work delivered.',
+    'description':
+        'The contractor claims the milestone was completed but the client disagrees with the quality of work delivered.',
     'status': 'Open',
     'priority': 'High',
     'category': 'Project Payment',
@@ -28,11 +28,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
       'role': 'Project Manager',
       'avatar': 'A',
     },
-    'respondent': <String, String>{
-      'name': 'Bob Smith',
-      'role': 'Contractor',
-      'avatar': 'B',
-    },
+    'respondent': <String, String>{'name': 'Bob Smith', 'role': 'Contractor', 'avatar': 'B'},
     'mediator': <String, String>{
       'name': 'Carol Davis',
       'role': 'Community Mediator',
@@ -49,21 +45,24 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
       <String, Object>{
         'id': '1',
         'author': 'Alice Johnson',
-        'message': "The delivered code has multiple bugs and doesn't meet the specifications outlined in the contract.",
+        'message':
+            "The delivered code has multiple bugs and doesn't meet the specifications outlined in the contract.",
         'timestamp': DateTime.now().subtract(const Duration(days: 2)),
         'isMediator': false,
       },
       <String, Object>{
         'id': '2',
         'author': 'Bob Smith',
-        'message': 'I have fixed all the issues mentioned in the requirements. The code is fully functional and tested.',
+        'message':
+            'I have fixed all the issues mentioned in the requirements. The code is fully functional and tested.',
         'timestamp': DateTime.now().subtract(const Duration(days: 1)),
         'isMediator': false,
       },
       <String, Object>{
         'id': '3',
         'author': 'Carol Davis',
-        'message': "I've reviewed both sides. Let's schedule a mediation call to discuss the specific issues.",
+        'message':
+            "I've reviewed both sides. Let's schedule a mediation call to discuss the specific issues.",
         'timestamp': DateTime.now().subtract(const Duration(hours: 5)),
         'isMediator': true,
       },
@@ -129,22 +128,13 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
         foregroundColor: Colors.white,
         actions: <dynamic>[
           PopupMenuButton<String>(
-            onSelected: (value) {
+            onSelected: (String value) {
               // Handle menu actions
             },
-            itemBuilder: (context) => <dynamic>[
-              const PopupMenuItem(
-                value: 'escalate',
-                child: Text('Escalate Dispute'),
-              ),
-              const PopupMenuItem(
-                value: 'close',
-                child: Text('Close Dispute'),
-              ),
-              const PopupMenuItem(
-                value: 'report',
-                child: Text('Report Issue'),
-              ),
+            itemBuilder: (BuildContext context) => <dynamic>[
+              const PopupMenuItem(value: 'escalate', child: Text('Escalate Dispute')),
+              const PopupMenuItem(value: 'close', child: Text('Close Dispute')),
+              const PopupMenuItem(value: 'report', child: Text('Report Issue')),
             ],
           ),
         ],
@@ -169,10 +159,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                               Expanded(
                                 child: Text(
                                   _dispute['title'],
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Container(
@@ -180,9 +167,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                                 decoration: BoxDecoration(
                                   color: _getStatusColor(_dispute['status']).withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: _getStatusColor(_dispute['status']),
-                                  ),
+                                  border: Border.all(color: _getStatusColor(_dispute['status'])),
                                 ),
                                 child: Text(
                                   _dispute['status'],
@@ -198,10 +183,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                           const SizedBox(height: 8),
                           Text(
                             _dispute['description'],
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              height: 1.4,
-                            ),
+                            style: TextStyle(color: Colors.grey[600], height: 1.4),
                           ),
                           const SizedBox(height: 16),
                           Row(
@@ -210,10 +192,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                               const SizedBox(width: 8),
                               Text(
                                 _dispute['category'],
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(color: Colors.grey[600], fontSize: 14),
                               ),
                             ],
                           ),
@@ -221,10 +200,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                             const SizedBox(height: 8),
                             Text(
                               'Amount: \$${_dispute['amount']}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                           ],
                         ],
@@ -237,37 +213,20 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                   // Parties Involved
                   const Text(
                     'Parties Involved',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   Row(
                     children: <dynamic>[
-                      Expanded(
-                        child: _buildPartyCard(
-                          'Initiator',
-                          _dispute['initiator'],
-                        ),
-                      ),
+                      Expanded(child: _buildPartyCard('Initiator', _dispute['initiator'])),
                       const SizedBox(width: 16),
-                      Expanded(
-                        child: _buildPartyCard(
-                          'Respondent',
-                          _dispute['respondent'],
-                        ),
-                      ),
+                      Expanded(child: _buildPartyCard('Respondent', _dispute['respondent'])),
                     ],
                   ),
 
                   if (_dispute['mediator'] != null) ...<dynamic>[
                     const SizedBox(height: 16),
-                    _buildPartyCard(
-                      'Mediator',
-                      _dispute['mediator'],
-                      isMediator: true,
-                    ),
+                    _buildPartyCard('Mediator', _dispute['mediator'], isMediator: true),
                   ],
 
                   const SizedBox(height: 24),
@@ -275,34 +234,30 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                   // Evidence
                   const Text(
                     'Evidence',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                  ...(_dispute['evidence'] as List<String>).map((String evidence) => Card(
-                        child: ListTile(
-                          leading: const Icon(Icons.attach_file),
-                          title: Text(evidence),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.download),
-                            onPressed: () {
-                              // Download evidence
-                            },
-                          ),
+                  ...(_dispute['evidence'] as List<String>).map(
+                    (String evidence) => Card(
+                      child: ListTile(
+                        leading: const Icon(Icons.attach_file),
+                        title: Text(evidence),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.download),
+                          onPressed: () {
+                            // Download evidence
+                          },
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
 
                   const SizedBox(height: 24),
 
                   // Comments/Updates
                   const Text(
                     'Discussion',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
                   ...(_dispute['comments'] as List<Map<String, dynamic>>).map(
@@ -318,9 +273,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Colors.grey[200]!),
-              ),
+              border: Border(top: BorderSide(color: Colors.grey[200]!)),
             ),
             child: Row(
               children: <dynamic>[
@@ -335,10 +288,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                     maxLines: null,
                     textInputAction: TextInputAction.send,
@@ -367,9 +317,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
       decoration: BoxDecoration(
         color: _getPriorityColor(priority).withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: _getPriorityColor(priority),
-        ),
+        border: Border.all(color: _getPriorityColor(priority)),
       ),
       child: Text(
         priority,
@@ -403,18 +351,12 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
             const SizedBox(height: 8),
             Text(
               party['name'],
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
               textAlign: TextAlign.center,
             ),
             Text(
               party['role'],
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 12,
-              ),
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
               textAlign: TextAlign.center,
             ),
             Container(
@@ -474,10 +416,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                         children: <dynamic>[
                           Text(
                             comment['author'],
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                           ),
                           if (isMediator) ...<dynamic>[
                             const SizedBox(width: 4),
@@ -501,10 +440,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
                       ),
                       Text(
                         _formatDateTime(comment['timestamp']),
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                     ],
                   ),
@@ -512,10 +448,7 @@ class _DisputeDetailPageState extends State<DisputeDetailPage> {
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              comment['message'],
-              style: const TextStyle(height: 1.4),
-            ),
+            Text(comment['message'], style: const TextStyle(height: 1.4)),
           ],
         ),
       ),

@@ -1,16 +1,21 @@
+import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
 
-import '../models/dao/proposal.dart';
-
 class ProposalCard extends StatelessWidget {
-  const ProposalCard({super.key, required this.proposal, this.onVote, this.onTap});
   final Proposal proposal;
   final Function(bool)? onVote;
   final VoidCallback? onTap;
 
+  const ProposalCard({
+    Key? key,
+    required this.proposal,
+    this.onVote,
+    this.onTap,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -19,10 +24,10 @@ class ProposalCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <dynamic>[
+                children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
@@ -50,7 +55,9 @@ class ProposalCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 proposal.title,
-                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -65,11 +72,11 @@ class ProposalCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <dynamic>[
+                      children: [
                         Text(
                           'For: ${(proposal.votesFor / proposal.totalVotes * 100).toStringAsFixed(1)}%',
                           style: theme.textTheme.bodySmall,
@@ -78,9 +85,7 @@ class ProposalCard extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: LinearProgressIndicator(
-                            value: proposal.totalVotes > 0
-                                ? proposal.votesFor / proposal.totalVotes
-                                : 0,
+                            value: proposal.totalVotes > 0 ? proposal.votesFor / proposal.totalVotes : 0,
                             minHeight: 6,
                             backgroundColor: const Color(0xFFEF5350).withOpacity(0.2),
                             valueColor: const AlwaysStoppedAnimation(Color(0xFF66BB6A)),
@@ -93,7 +98,7 @@ class ProposalCard extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: ElevatedButton(
                       onPressed: onVote != null ? () => onVote!(true) : null,

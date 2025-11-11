@@ -1,4 +1,4 @@
-name: helioshash_mobile
+name: helios_hash_dao
 description: HeliosHash DAO Mobile Application
 
 # The following line prevents the package from being accidentally published to
@@ -21,6 +21,19 @@ dependencies:
 
   # Supabase Integration
   supabase_flutter: ^2.0.0
+
+  # Common UI / utilities used across the mobile project
+  cached_network_image: ^3.2.3
+  flutter_svg: ^2.0.7
+  flutter_tts: ^4.2.2
+  flutter_secure_storage: ^8.0.0
+  shared_preferences: ^2.1.1
+  webview_flutter: ^4.0.7
+  # walletconnect_flutter_v2 removed temporarily - pin or add when available
+  web3dart: ^2.4.0
+  intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
 
   # IC Integration (placeholder - will be replaced with actual IC packages)
   http: ^1.1.0

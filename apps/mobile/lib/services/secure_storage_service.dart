@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStorageService {
-  static const String _authTokenKey = 'auth_token';
+  static const _authTokenKey = 'auth_token';
   static final _storage = FlutterSecureStorage();
 
   static Future<void> setAuthToken(String token) async {

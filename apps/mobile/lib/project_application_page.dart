@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'project_model.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/project_model.dart';
+import 'package:helios_hash_dao/mock_data.dart';
 
 class ProjectApplicationPage extends StatefulWidget {
-  const ProjectApplicationPage({super.key, required this.project});
   final Project project;
+
+  const ProjectApplicationPage({super.key, required this.project});
 
   @override
   State<ProjectApplicationPage> createState() => _ProjectApplicationPageState();
 }
 
 class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _roleController = TextEditingController();
   final TextEditingController _coverLetterController = TextEditingController();
   final TextEditingController _experienceController = TextEditingController();
@@ -22,7 +24,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
   String _selectedRole = '';
   bool _isLoading = false;
 
-  final List<String> _availableRoles = <String>[
+  final List<String> _availableRoles = [
     'Smart Contract Developer',
     'Frontend Developer',
     'Backend Developer',
@@ -64,9 +66,9 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
 
     // Show success message and navigate back
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Application submitted successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Application submitted successfully!')),
+      );
       Navigator.of(context).pop();
     }
   }
@@ -85,27 +87,33 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Project Info Card
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <dynamic>[
+                    children: [
                       Text(
                         widget.project.title,
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         widget.project.description,
-                        style: TextStyle(color: Colors.grey[600], height: 1.4),
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          height: 1.4,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Row(
-                        children: <dynamic>[
-                          const Icon(Icons.attach_money, size: 16, color: Colors.green),
+                        children: [
+                          Icon(Icons.attach_money, size: 16, color: Colors.green),
                           const SizedBox(width: 4),
                           Text(
                             'Budget: \$${widget.project.budget.toStringAsFixed(0)}',
@@ -125,8 +133,11 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
 
               // Role Selection
               const Text(
-                "Role You're Applying For",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                'Role You\'re Applying For',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
@@ -135,15 +146,18 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                items: _availableRoles.map((String role) {
-                  return DropdownMenuItem(value: role, child: Text(role));
+                items: _availableRoles.map((role) {
+                  return DropdownMenuItem(
+                    value: role,
+                    child: Text(role),
+                  );
                 }).toList(),
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedRole = value!;
                   });
                 },
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please select a role';
                   }
@@ -156,20 +170,22 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
               // Cover Letter
               const Text(
                 'Cover Letter',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _coverLetterController,
                 decoration: const InputDecoration(
-                  hintText:
-                      "Tell us why you're interested in this project and what you can contribute...",
+                  hintText: 'Tell us why you\'re interested in this project and what you can contribute...',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 maxLines: 6,
                 maxLength: 1000,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please write a cover letter';
                   }
@@ -185,7 +201,10 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
               // Experience
               const Text(
                 'Relevant Experience',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -197,7 +216,7 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                 ),
                 maxLines: 4,
                 maxLength: 500,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please describe your experience';
                   }
@@ -210,7 +229,10 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
               // Availability
               const Text(
                 'Availability',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -221,11 +243,11 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 keyboardType: TextInputType.number,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please specify your availability';
                   }
-                  final int? hours = int.tryParse(value);
+                  final hours = int.tryParse(value);
                   if (hours == null || hours <= 0) {
                     return 'Please enter a valid number of hours';
                   }
@@ -238,14 +260,17 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
               // Proposed Rate (Optional)
               const Text(
                 'Proposed Rate (Optional)',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _proposedRateController,
                 decoration: const InputDecoration(
                   hintText: 'Rate per hour in USD (optional)',
-                  prefixText: r'$',
+                  prefixText: '\$',
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
@@ -264,24 +289,31 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <dynamic>[
+                  children: [
                     Row(
-                      children: <dynamic>[
+                      children: [
                         Icon(Icons.info_outline, color: Colors.blue[700]),
                         const SizedBox(width: 8),
                         Text(
                           'Application Terms',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[700]),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue[700],
+                          ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Text(
                       '• All applications are subject to review by project maintainers\n'
-                      "• You agree to follow the project's code of conduct\n"
+                      '• You agree to follow the project\'s code of conduct\n'
                       '• Payment terms will be discussed separately if accepted\n'
                       '• You can withdraw your application at any time',
-                      style: TextStyle(fontSize: 14, color: Colors.blue[700], height: 1.4),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blue[700],
+                        height: 1.4,
+                      ),
                     ),
                   ],
                 ),
@@ -298,7 +330,9 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppConstants.primaryColor,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
@@ -320,10 +354,12 @@ class _ProjectApplicationPageState extends State<ProjectApplicationPage> {
                     Navigator.of(context).pop();
                   },
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: AppConstants.primaryColor),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    side: BorderSide(color: AppConstants.primaryColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Cancel',
                     style: TextStyle(
                       color: AppConstants.primaryColor,

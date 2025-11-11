@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepOne extends StatelessWidget {
+  final TextEditingController nameController;
+  final TextEditingController descriptionController;
+  final TextEditingController locationController;
+
   const ProjectFormStepOne({
     super.key,
     required this.nameController,
     required this.descriptionController,
     required this.locationController,
   });
-  final TextEditingController nameController;
-  final TextEditingController descriptionController;
-  final TextEditingController locationController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <dynamic>[
+      children: [
         const Text(
           'Basic Project Information',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
         ),
         const SizedBox(height: 16),
         TextFormField(
@@ -29,7 +34,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.wb_sunny),
           ),
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Project name is required';
             }
@@ -46,7 +51,7 @@ class ProjectFormStepOne extends StatelessWidget {
             prefixIcon: Icon(Icons.description),
           ),
           maxLines: 4,
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Project description is required';
             }
@@ -62,7 +67,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_on),
           ),
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Location is required';
             }
@@ -78,7 +83,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: Border.all(color: Colors.blue.shade200),
           ),
           child: const Row(
-            children: <dynamic>[
+            children: [
               Icon(Icons.info, color: Colors.blue),
               SizedBox(width: 8),
               Expanded(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/project_model.dart';
+import 'package:helios_hash_dao/mock_data.dart';
 
 class MyApplicationsPage extends StatefulWidget {
   const MyApplicationsPage({super.key});
@@ -14,8 +16,8 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   String _searchQuery = '';
 
   // Mock applications data
-  final List<Map<String, dynamic>> _applications = <Map<String, dynamic>>[
-    <String, dynamic>{
+  final List<Map<String, dynamic>> _applications = [
+    {
       'id': 'APP-001',
       'projectId': '1',
       'projectTitle': 'Decentralized Identity System',
@@ -23,11 +25,11 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       'appliedAt': DateTime.now().subtract(const Duration(days: 2)),
       'role': 'Smart Contract Developer',
       'coverLetter': 'I am excited to contribute to this project...',
-      'skills': <String>['Solidity', 'Web3', 'React'],
+      'skills': ['Solidity', 'Web3', 'React'],
       'expectedHours': 20,
       'proposedRate': 50.0,
     },
-    <String, dynamic>{
+    {
       'id': 'APP-002',
       'projectId': '2',
       'projectTitle': 'Community Governance Platform',
@@ -35,11 +37,11 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       'appliedAt': DateTime.now().subtract(const Duration(days: 5)),
       'role': 'UI/UX Designer',
       'coverLetter': 'With my experience in DAO interfaces...',
-      'skills': <String>['Figma', 'User Research', 'Prototyping'],
+      'skills': ['Figma', 'User Research', 'Prototyping'],
       'expectedHours': 15,
       'proposedRate': 45.0,
     },
-    <String, dynamic>{
+    {
       'id': 'APP-003',
       'projectId': '3',
       'projectTitle': 'Sustainable Finance Protocol',
@@ -47,11 +49,11 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       'appliedAt': DateTime.now().subtract(const Duration(days: 7)),
       'role': 'Blockchain Analyst',
       'coverLetter': 'My background in DeFi analysis...',
-      'skills': <String>['DeFi', 'Data Analysis', 'Research'],
+      'skills': ['DeFi', 'Data Analysis', 'Research'],
       'expectedHours': 25,
       'proposedRate': 55.0,
     },
-    <String, dynamic>{
+    {
       'id': 'APP-004',
       'projectId': '4',
       'projectTitle': 'Environmental Impact Tracker',
@@ -59,7 +61,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       'appliedAt': DateTime.now().subtract(const Duration(days: 10)),
       'role': 'Full Stack Developer',
       'coverLetter': 'I have extensive experience...',
-      'skills': <String>['React', 'Node.js', 'PostgreSQL'],
+      'skills': ['React', 'Node.js', 'PostgreSQL'],
       'expectedHours': 30,
       'proposedRate': 60.0,
     },
@@ -79,14 +81,14 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   }
 
   List<Map<String, dynamic>> _getFilteredApplications() {
-    List<Map<String, dynamic>> applications = _applications;
+    var applications = _applications;
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      applications = applications.where((Map<String, dynamic> application) {
-        final String projectTitle = application['projectTitle'].toString().toLowerCase();
-        final String role = application['role'].toString().toLowerCase();
-        final String query = _searchQuery.toLowerCase();
+      applications = applications.where((application) {
+        final projectTitle = application['projectTitle'].toString().toLowerCase();
+        final role = application['role'].toString().toLowerCase();
+        final query = _searchQuery.toLowerCase();
 
         return projectTitle.contains(query) || role.contains(query);
       }).toList();
@@ -97,20 +99,15 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       case 0: // All Applications
         break;
       case 1: // Pending
-        applications = applications
-            .where((Map<String, dynamic> app) => app['status'] == 'Pending')
-            .toList();
+        applications = applications.where((app) => app['status'] == 'Pending').toList();
+        break;
       case 2: // Under Review
-        applications = applications
-            .where((Map<String, dynamic> app) => app['status'] == 'Under Review')
-            .toList();
+        applications = applications.where((app) => app['status'] == 'Under Review').toList();
+        break;
       case 3: // Accepted/Rejected
-        applications = applications
-            .where(
-              (Map<String, dynamic> app) =>
-                  app['status'] == 'Accepted' || app['status'] == 'Rejected',
-            )
-            .toList();
+        applications = applications.where((app) =>
+            app['status'] == 'Accepted' || app['status'] == 'Rejected').toList();
+        break;
     }
 
     return applications;
@@ -142,19 +139,19 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const <dynamic>[
+          tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Pending'),
             Tab(text: 'Under Review'),
             Tab(text: 'Results'),
           ],
-          onTap: (int index) {
+          onTap: (index) {
             setState(() {});
           },
         ),
       ),
       body: Column(
-        children: <dynamic>[
+        children: [
           // Search Section
           Container(
             padding: const EdgeInsets.all(16),
@@ -182,7 +179,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (String value) {
+              onChanged: (value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -194,7 +191,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: <dynamic>[
+              children: [
                 _buildApplicationsList(),
                 _buildApplicationsList(),
                 _buildApplicationsList(),
@@ -208,20 +205,33 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   }
 
   Widget _buildApplicationsList() {
-    final List<Map<String, dynamic>> applications = _getFilteredApplications();
+    final applications = _getFilteredApplications();
 
     if (applications.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
-            Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
+          children: [
+            Icon(
+              Icons.work_off,
+              size: 64,
+              color: Colors.grey[400],
+            ),
             const SizedBox(height: 16),
-            Text('No applications found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+            Text(
+              'No applications found',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[600],
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
             ),
           ],
         ),
@@ -236,8 +246,8 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: applications.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Map<String, dynamic> application = applications[index];
+        itemBuilder: (context, index) {
+          final application = applications[index];
           return _buildApplicationCard(application);
         },
       ),
@@ -255,13 +265,16 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Text(
                       application['projectTitle'],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Container(
@@ -269,7 +282,9 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                     decoration: BoxDecoration(
                       color: _getStatusColor(application['status']).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _getStatusColor(application['status'])),
+                      border: Border.all(
+                        color: _getStatusColor(application['status']),
+                      ),
                     ),
                     child: Text(
                       application['status'],
@@ -285,36 +300,48 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
               const SizedBox(height: 8),
               Text(
                 'Role: ${application['role']}',
-                style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 4),
               Row(
-                children: <dynamic>[
+                children: [
                   Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     '${application['expectedHours']}h/week',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Icon(Icons.attach_money, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     '\$${application['proposedRate']}/hour',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 'Applied ${_formatDate(application['appliedAt'])}',
-                style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 4,
                 runSpacing: 4,
-                children: (application['skills'] as List<String>).map((String skill) {
+                children: (application['skills'] as List<String>).map((skill) {
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
@@ -323,7 +350,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                     ),
                     child: Text(
                       skill,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppConstants.primaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -342,13 +369,13 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   void _showApplicationDetailDialog(BuildContext context, Map<String, dynamic> application) {
     showDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text('Application ${application['id']}'),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: <dynamic>[
+            children: [
               Text('Project: ${application['projectTitle']}'),
               Text('Role: ${application['role']}'),
               Text('Status: ${application['status']}'),
@@ -356,10 +383,16 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
               Text('Expected Hours: ${application['expectedHours']}h/week'),
               Text('Proposed Rate: \$${application['proposedRate']}/hour'),
               const SizedBox(height: 16),
-              const Text('Skills:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Skills:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text((application['skills'] as List<String>).join(', ')),
               const SizedBox(height: 16),
-              const Text('Cover Letter:', style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'Cover Letter:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -371,8 +404,11 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
             ],
           ),
         ),
-        actions: <dynamic>[
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
           if (application['status'] == 'Pending' || application['status'] == 'Under Review')
             ElevatedButton(
               onPressed: () {
@@ -391,8 +427,8 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   }
 
   String _formatDate(DateTime date) {
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(date);
+    final now = DateTime.now();
+    final difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

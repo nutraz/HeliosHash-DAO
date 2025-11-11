@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
+import 'package:helios_hash_dao/app_constant.dart';
 
 class CreatePostPage extends StatefulWidget {
   const CreatePostPage({super.key});
@@ -9,12 +9,12 @@ class CreatePostPage extends StatefulWidget {
 }
 
 class _CreatePostPageState extends State<CreatePostPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
   String _selectedCategory = 'General';
-  final List<String> _categories = <String>[
+  final List<String> _categories = [
     'General',
     'Projects',
     'Governance',
@@ -46,9 +46,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
     // Show success message and navigate back
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Post created successfully!')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Post created successfully!')),
+      );
       Navigator.of(context).pop();
     }
   }
@@ -60,18 +60,24 @@ class _CreatePostPageState extends State<CreatePostPage> {
         title: const Text('Create Post'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: <dynamic>[
+        actions: [
           TextButton(
             onPressed: _isLoading ? null : _submitPost,
             child: _isLoading
                 ? const SizedBox(
                     width: 20,
                     height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
                   )
                 : const Text(
                     'Post',
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
           ),
         ],
@@ -82,9 +88,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Category Selection
-              const Text('Category', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text(
+                'Category',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 value: _selectedCategory,
@@ -92,10 +104,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
-                items: _categories.map((String category) {
-                  return DropdownMenuItem(value: category, child: Text(category));
+                items: _categories.map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
                 }).toList(),
-                onChanged: (String? value) {
+                onChanged: (value) {
                   setState(() {
                     _selectedCategory = value!;
                   });
@@ -105,7 +120,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
               const SizedBox(height: 24),
 
               // Title Field
-              const Text('Title', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text(
+                'Title',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _titleController,
@@ -115,7 +136,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
                 maxLength: 100,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please enter a title';
                   }
@@ -129,7 +150,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
               const SizedBox(height: 24),
 
               // Content Field
-              const Text('Content', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text(
+                'Content',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _contentController,
@@ -140,7 +167,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 ),
                 maxLines: 10,
                 maxLength: 2000,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.trim().isEmpty) {
                     return 'Please enter post content';
                   }
@@ -155,10 +182,10 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
               // Anonymous Option
               Row(
-                children: <dynamic>[
+                children: [
                   Checkbox(
                     value: _isAnonymous,
-                    onChanged: (bool? value) {
+                    onChanged: (value) {
                       setState(() {
                         _isAnonymous = value ?? false;
                       });
@@ -181,14 +208,17 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <dynamic>[
+                  children: [
                     Row(
-                      children: <dynamic>[
+                      children: [
                         Icon(Icons.info_outline, color: Colors.blue[700]),
                         const SizedBox(width: 8),
                         Text(
                           'Posting Guidelines',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[700]),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue[700],
+                          ),
                         ),
                       ],
                     ),
@@ -198,7 +228,11 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       '• Stay on topic for the selected category\n'
                       '• No spam or promotional content\n'
                       '• Follow community standards',
-                      style: TextStyle(fontSize: 14, color: Colors.blue[700], height: 1.4),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.blue[700],
+                        height: 1.4,
+                      ),
                     ),
                   ],
                 ),
@@ -215,7 +249,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppConstants.primaryColor,
                     foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)

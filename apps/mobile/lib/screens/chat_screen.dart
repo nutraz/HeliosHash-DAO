@@ -8,14 +8,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final List<Map<String, String>> _messages = <Map<String, String>>[];
+  final List<Map<String, String>> _messages = [];
   final TextEditingController _controller = TextEditingController();
 
   void _sendMessage() {
-    final String text = _controller.text.trim();
+    final text = _controller.text.trim();
     if (text.isEmpty) return;
     setState(() {
-      _messages.add(<String, String>{'user': 'You', 'text': text});
+      _messages.add({'user': 'You', 'text': text});
     });
     _controller.clear();
     // TODO: Integrate with backend for real-time chat
@@ -26,27 +26,33 @@ class _ChatScreenState extends State<ChatScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Community Chat')),
       body: Column(
-        children: <dynamic>[
+        children: [
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
-              itemBuilder: (BuildContext context, int idx) {
-                final Map<String, String> msg = _messages[idx];
-                return ListTile(title: Text(msg['user'] ?? ''), subtitle: Text(msg['text'] ?? ''));
+              itemBuilder: (context, idx) {
+                final msg = _messages[idx];
+                return ListTile(
+                  title: Text(msg['user'] ?? ''),
+                  subtitle: Text(msg['text'] ?? ''),
+                );
               },
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: <dynamic>[
+              children: [
                 Expanded(
                   child: TextField(
                     controller: _controller,
                     decoration: const InputDecoration(hintText: 'Type a message...'),
                   ),
                 ),
-                IconButton(icon: const Icon(Icons.send), onPressed: _sendMessage),
+                IconButton(
+                  icon: const Icon(Icons.send),
+                  onPressed: _sendMessage,
+                ),
               ],
             ),
           ),

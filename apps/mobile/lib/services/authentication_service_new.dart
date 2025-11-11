@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 // Conditional import: mobile implementation uses native WebView, web uses a stub.
 // The mobile file imports `webview_flutter`, so keep that plugin out of web builds.
@@ -18,19 +18,22 @@ class AuthenticationService {
     if (kIsWeb) {
       await showDialog<void>(
         context: context,
-        builder: (BuildContext context) => AlertDialog(
+        builder: (context) => AlertDialog(
           title: const Text('Web Login'),
           content: const Text(
             'WebView-based login is not supported on web. Returning a mock token for development.',
           ),
-          actions: <dynamic>[
-            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('OK')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
           ],
         ),
       );
 
-      const String mockToken = 'mock_web_token';
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final mockToken = 'mock_web_token';
+      final prefs = await SharedPreferences.getInstance();
       await prefs.setString('auth_token', mockToken);
       return mockToken;
     }
@@ -42,7 +45,7 @@ class AuthenticationService {
       );
 
       if (result != null && result is String) {
-        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final prefs = await SharedPreferences.getInstance();
         await prefs.setString('auth_token', result);
         return result;
       }
@@ -55,12 +58,12 @@ class AuthenticationService {
   }
 
   Future<String?> getAuthToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     return prefs.getString('auth_token');
   }
 
   Future<void> logout() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
   }
 }

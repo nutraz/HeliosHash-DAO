@@ -1,4 +1,13 @@
 class Post {
+  final String id;
+  final String author;
+  final String title;
+  final String content;
+  final DateTime createdAt;
+  final int likes;
+  final int comments;
+  final bool isLiked;
+  final List<String> tags;
 
   const Post({
     required this.id,
@@ -11,29 +20,6 @@ class Post {
     required this.isLiked,
     required this.tags,
   });
-
-  factory Post.fromJson(Map<String, dynamic> json) {
-    return Post(
-      id: json['id'] as String,
-      author: json['author'] as String,
-      title: json['title'] as String,
-      content: json['content'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      likes: json['likes'] as int,
-      comments: json['comments'] as int,
-      isLiked: json['is_liked'] as bool,
-      tags: List<String>.from(json['tags'] as List),
-    );
-  }
-  final String id;
-  final String author;
-  final String title;
-  final String content;
-  final DateTime createdAt;
-  final int likes;
-  final int comments;
-  final bool isLiked;
-  final List<String> tags;
 
   Post copyWith({
     String? id,
@@ -60,7 +46,7 @@ class Post {
   }
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'author': author,
       'title': title,
@@ -71,5 +57,19 @@ class Post {
       'is_liked': isLiked,
       'tags': tags,
     };
+  }
+
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'] as String,
+      author: json['author'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      likes: json['likes'] as int,
+      comments: json['comments'] as int,
+      isLiked: json['is_liked'] as bool,
+      tags: List<String>.from(json['tags'] as List),
+    );
   }
 }

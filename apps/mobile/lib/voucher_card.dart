@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
 class VoucherCard extends StatelessWidget {
+  final String title;
+  final String description;
+  final String code;
+  final String discount;
+  final DateTime expiryDate;
+  final bool isUsed;
+  final VoidCallback? onTap;
 
   const VoucherCard({
     super.key,
@@ -12,17 +19,10 @@ class VoucherCard extends StatelessWidget {
     this.isUsed = false,
     this.onTap,
   });
-  final String title;
-  final String description;
-  final String code;
-  final String discount;
-  final DateTime expiryDate;
-  final bool isUsed;
-  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final bool isExpired = DateTime.now().isAfter(expiryDate);
+    final isExpired = DateTime.now().isAfter(expiryDate);
 
     return Card(
       elevation: 4,
@@ -42,9 +42,9 @@ class VoucherCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Text(
                       title,
@@ -108,7 +108,7 @@ class VoucherCard extends StatelessWidget {
                   ),
                 ),
                 child: Row(
-                  children: <dynamic>[
+                  children: [
                     Text(
                       'Code: ',
                       style: TextStyle(
@@ -149,7 +149,7 @@ class VoucherCard extends StatelessWidget {
 
               // Discount and Expiry
               Row(
-                children: <dynamic>[
+                children: [
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
@@ -167,7 +167,7 @@ class VoucherCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Row(
-                    children: <dynamic>[
+                    children: [
                       Icon(
                         Icons.schedule,
                         size: 14,
@@ -193,8 +193,8 @@ class VoucherCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    final DateTime now = DateTime.now();
-    final Duration difference = date.difference(now);
+    final now = DateTime.now();
+    final difference = date.difference(now);
 
     if (difference.isNegative) {
       return 'Expired';
@@ -205,10 +205,10 @@ class VoucherCard extends StatelessWidget {
     } else if (difference.inDays < 7) {
       return 'in ${difference.inDays} days';
     } else if (difference.inDays < 30) {
-      final int weeks = (difference.inDays / 7).floor();
+      final weeks = (difference.inDays / 7).floor();
       return 'in $weeks week${weeks > 1 ? 's' : ''}';
     } else {
-      final int months = (difference.inDays / 30).floor();
+      final months = (difference.inDays / 30).floor();
       return 'in $months month${months > 1 ? 's' : ''}';
     }
   }

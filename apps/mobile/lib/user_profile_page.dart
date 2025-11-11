@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
+import 'package:helios_hash_dao/app_constant.dart';
 
 class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key, required this.userId});
   final String userId;
+
+  const UserProfilePage({super.key, required this.userId});
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -13,78 +14,57 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   late TabController _tabController;
 
   // Mock user data - in real app, fetch based on userId
-  final Map<String, dynamic> _user = <String, dynamic>{
+  final Map<String, dynamic> _user = {
     'id': 'user-123',
     'name': 'Bob Smith',
     'email': 'bob.smith@example.com',
     'avatar': 'B',
-    'bio':
-        'Full-stack developer passionate about Web3 and decentralized technologies. Love building tools that empower communities.',
+    'bio': 'Full-stack developer passionate about Web3 and decentralized technologies. Love building tools that empower communities.',
     'joinDate': DateTime(2023, 3, 10),
     'location': 'New York, NY',
     'website': 'https://bobsmith.dev',
-    'skills': <String>[
-      'React',
-      'Node.js',
-      'Solidity',
-      'TypeScript',
-      'Web3',
-      'Smart Contracts',
-      'DeFi',
-    ],
-    'stats': <String, num>{
+    'skills': ['React', 'Node.js', 'Solidity', 'TypeScript', 'Web3', 'Smart Contracts', 'DeFi'],
+    'stats': {
       'projectsContributed': 8,
       'proposalsCreated': 5,
       'votesCast': 89,
       'reputation': 4.6,
     },
-    'achievements': <Map<String, dynamic>>[
-      <String, dynamic>{
-        'name': 'Code Contributor',
-        'description': 'Contributed to 5+ projects',
-        'icon': Icons.code,
-      },
-      <String, dynamic>{
-        'name': 'Proposal Creator',
-        'description': 'Created 3+ proposals',
-        'icon': Icons.lightbulb,
-      },
-      <String, dynamic>{
-        'name': 'Active Member',
-        'description': 'Voted in 50+ decisions',
-        'icon': Icons.verified,
-      },
+    'achievements': [
+      {'name': 'Code Contributor', 'description': 'Contributed to 5+ projects', 'icon': Icons.code},
+      {'name': 'Proposal Creator', 'description': 'Created 3+ proposals', 'icon': Icons.lightbulb},
+      {'name': 'Active Member', 'description': 'Voted in 50+ decisions', 'icon': Icons.verified},
     ],
-    'recentActivity': <Map<String, Object>>[
-      <String, Object>{
+    'recentActivity': [
+      {
         'type': 'project',
         'title': 'Contributed to Community Governance Platform',
         'timestamp': DateTime.now().subtract(const Duration(days: 1)),
       },
-      <String, Object>{
+      {
         'type': 'proposal',
         'title': 'Created proposal: Developer Incentive Program',
         'timestamp': DateTime.now().subtract(const Duration(days: 3)),
       },
-      <String, Object>{
+      {
         'type': 'vote',
         'title': 'Voted on Treasury Allocation Proposal',
         'timestamp': DateTime.now().subtract(const Duration(days: 5)),
       },
-      <String, Object>{
+      {
         'type': 'comment',
         'title': 'Commented on Sustainable Finance Protocol',
         'timestamp': DateTime.now().subtract(const Duration(days: 7)),
       },
     ],
-    'projects': <Map<String, String>>[
-      <String, String>{
+    'projects': [
+      {
         'id': '1',
         'title': 'Decentralized Identity System',
         'role': 'Frontend Developer',
         'status': 'Active',
       },
-      <String, String>{
+      {
         'id': '2',
         'title': 'Community Governance Platform',
         'role': 'Full Stack Developer',
@@ -126,7 +106,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         title: Text(_user['name']),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: <dynamic>[
+        actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -136,15 +116,17 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         ],
       ),
       body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <dynamic>[
-            SliverToBoxAdapter(child: _buildProfileHeader()),
+        headerSliverBuilder: (context, innerBoxIsScrolled) {
+          return [
+            SliverToBoxAdapter(
+              child: _buildProfileHeader(),
+            ),
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
                 TabBar(
                   controller: _tabController,
-                  tabs: const <dynamic>[
+                  tabs: const [
                     Tab(text: 'Overview'),
                     Tab(text: 'Activity'),
                     Tab(text: 'Projects'),
@@ -159,7 +141,11 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         },
         body: TabBarView(
           controller: _tabController,
-          children: <dynamic>[_buildOverviewTab(), _buildActivityTab(), _buildProjectsTab()],
+          children: [
+            _buildOverviewTab(),
+            _buildActivityTab(),
+            _buildProjectsTab(),
+          ],
         ),
       ),
     );
@@ -170,14 +156,14 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       padding: const EdgeInsets.all(20),
       color: Colors.white,
       child: Column(
-        children: <dynamic>[
+        children: [
           // Avatar
           CircleAvatar(
             radius: 50,
             backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
             child: Text(
               _user['avatar'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 36,
                 fontWeight: FontWeight.bold,
                 color: AppConstants.primaryColor,
@@ -190,10 +176,13 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Name and Follow Button
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <dynamic>[
+            children: [
               Text(
                 _user['name'],
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(width: 16),
               ElevatedButton(
@@ -201,7 +190,9 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _isFollowing ? Colors.grey : AppConstants.primaryColor,
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
                 ),
                 child: Text(_isFollowing ? 'Following' : 'Follow'),
               ),
@@ -213,7 +204,11 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Bio
           Text(
             _user['bio'],
-            style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.4),
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey[600],
+              height: 1.4,
+            ),
             textAlign: TextAlign.center,
           ),
 
@@ -222,25 +217,34 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Location and Join Date
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <dynamic>[
+            children: [
               Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
               const SizedBox(width: 4),
-              Text(_user['location'], style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+              Text(
+                _user['location'],
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
               const SizedBox(width: 16),
               Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
               const SizedBox(width: 4),
               Text(
                 'Joined ${_formatDate(_user['joinDate'])}',
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
               ),
             ],
           ),
 
-          if (_user['website'] != null) ...<dynamic>[
+          if (_user['website'] != null) ...[
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <dynamic>[
+              children: [
                 Icon(Icons.link, size: 16, color: Colors.grey[600]),
                 const SizedBox(width: 4),
                 Text(
@@ -264,9 +268,15 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <dynamic>[
+        children: [
           // Stats Grid
-          const Text('Statistics', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text(
+            'Statistics',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 16),
           GridView.count(
             crossAxisCount: 2,
@@ -274,7 +284,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
             physics: const NeverScrollableScrollPhysics(),
             crossAxisSpacing: 16,
             mainAxisSpacing: 16,
-            children: <dynamic>[
+            children: [
               _buildStatCard(
                 'Projects',
                 _user['stats']['projectsContributed'].toString(),
@@ -307,17 +317,20 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Skills
           const Text(
             'Skills & Expertise',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: (_user['skills'] as List<String>).map((String skill) {
+            children: (_user['skills'] as List<String>).map((skill) {
               return Chip(
                 label: Text(skill),
                 backgroundColor: AppConstants.primaryColor.withOpacity(0.1),
-                labelStyle: const TextStyle(color: AppConstants.primaryColor),
+                labelStyle: TextStyle(color: AppConstants.primaryColor),
               );
             }).toList(),
           ),
@@ -325,15 +338,22 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           const SizedBox(height: 24),
 
           // Achievements
-          const Text('Achievements', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const Text(
+            'Achievements',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           const SizedBox(height: 16),
-          ...(_user['achievements'] as List<Map<String, dynamic>>).map((
-            Map<String, dynamic> achievement,
-          ) {
+          ...(_user['achievements'] as List<Map<String, dynamic>>).map((achievement) {
             return Card(
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
-                leading: Icon(achievement['icon'], color: AppConstants.primaryColor),
+                leading: Icon(
+                  achievement['icon'],
+                  color: AppConstants.primaryColor,
+                ),
                 title: Text(achievement['name']),
                 subtitle: Text(achievement['description']),
               ),
@@ -348,15 +368,18 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: _user['recentActivity'].length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         final activity = _user['recentActivity'][index];
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
-            leading: Icon(_getActivityIcon(activity['type']), color: AppConstants.primaryColor),
+            leading: Icon(
+              _getActivityIcon(activity['type']),
+              color: AppConstants.primaryColor,
+            ),
             title: Text(activity['title']),
             subtitle: Text(_formatDate(activity['timestamp'])),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16),
             onTap: () {
               // Navigate to activity detail
             },
@@ -367,16 +390,26 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   }
 
   Widget _buildProjectsTab() {
-    final List<Map<String, dynamic>> projects = _user['projects'] as List<Map<String, dynamic>>;
+    final projects = _user['projects'] as List<Map<String, dynamic>>;
 
     if (projects.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
-            Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
+          children: [
+            Icon(
+              Icons.work_off,
+              size: 64,
+              color: Colors.grey[400],
+            ),
             const SizedBox(height: 16),
-            Text('No projects yet', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+            Text(
+              'No projects yet',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[600],
+              ),
+            ),
           ],
         ),
       );
@@ -385,8 +418,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: projects.length,
-      itemBuilder: (BuildContext context, int index) {
-        final Map<String, dynamic> project = projects[index];
+      itemBuilder: (context, index) {
+        final project = projects[index];
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(
@@ -395,9 +428,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
             trailing: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: project['status'] == 'Active'
-                    ? Colors.green.withOpacity(0.1)
-                    : Colors.grey.withOpacity(0.1),
+                color: project['status'] == 'Active' ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(
                   color: project['status'] == 'Active' ? Colors.green : Colors.grey,
@@ -427,12 +458,24 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
+          children: [
             Icon(icon, size: 32, color: color),
             const SizedBox(height: 8),
-            Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(title, style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[600],
+              ),
+            ),
           ],
         ),
       ),
@@ -455,8 +498,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
   }
 
   String _formatDate(DateTime date) {
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(date);
+    final now = DateTime.now();
+    final difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays} days ago';
@@ -471,8 +514,9 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
-  _SliverAppBarDelegate(this.tabBar);
   final TabBar tabBar;
+
+  _SliverAppBarDelegate(this.tabBar);
 
   @override
   double get minExtent => tabBar.preferredSize.height;
@@ -482,7 +526,10 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return ColoredBox(color: Colors.white, child: tabBar);
+    return Container(
+      color: Colors.white,
+      child: tabBar,
+    );
   }
 
   @override

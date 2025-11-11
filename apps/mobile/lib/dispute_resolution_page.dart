@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'dispute_detail_page.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/dispute_detail_page.dart';
 
 class DisputeResolutionPage extends StatefulWidget {
   const DisputeResolutionPage({super.key});
@@ -9,14 +9,13 @@ class DisputeResolutionPage extends StatefulWidget {
   State<DisputeResolutionPage> createState() => _DisputeResolutionPageState();
 }
 
-class _DisputeResolutionPageState extends State<DisputeResolutionPage>
-    with TickerProviderStateMixin {
+class _DisputeResolutionPageState extends State<DisputeResolutionPage> with TickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<Map<String, dynamic>> _disputes = <Map<String, dynamic>>[
-    <String, dynamic>{
+  final List<Map<String, dynamic>> _disputes = [
+    {
       'id': 'DIS-001',
       'title': 'Project Milestone Payment Dispute',
       'description': 'Contractor claims milestone completion but client disputes quality.',
@@ -29,7 +28,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       'respondent': 'Bob Smith',
       'mediator': 'Carol Davis',
     },
-    <String, dynamic>{
+    {
       'id': 'DIS-002',
       'title': 'Governance Proposal Rejection',
       'description': 'Community member disputes the rejection of their proposal.',
@@ -42,7 +41,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       'respondent': 'DAO Council',
       'mediator': 'Eve Martinez',
     },
-    <String, dynamic>{
+    {
       'id': 'DIS-003',
       'title': 'Reward Distribution Error',
       'description': 'Incorrect reward calculation for community contribution.',
@@ -55,7 +54,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       'respondent': 'Reward System',
       'mediator': 'Grace Lee',
     },
-    <String, dynamic>{
+    {
       'id': 'DIS-004',
       'title': 'Membership Fee Refund',
       'description': 'Member requests refund for unused membership period.',
@@ -84,14 +83,14 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
   }
 
   List<Map<String, dynamic>> _getFilteredDisputes() {
-    List<Map<String, dynamic>> disputes = _disputes;
+    var disputes = _disputes;
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      disputes = disputes.where((Map<String, dynamic> dispute) {
-        final String title = dispute['title'].toString().toLowerCase();
-        final String description = dispute['description'].toString().toLowerCase();
-        final String query = _searchQuery.toLowerCase();
+      disputes = disputes.where((dispute) {
+        final title = dispute['title'].toString().toLowerCase();
+        final description = dispute['description'].toString().toLowerCase();
+        final query = _searchQuery.toLowerCase();
 
         return title.contains(query) || description.contains(query);
       }).toList();
@@ -102,20 +101,15 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       case 0: // All Disputes
         break;
       case 1: // Open
-        disputes = disputes
-            .where((Map<String, dynamic> dispute) => dispute['status'] == 'Open')
-            .toList();
+        disputes = disputes.where((dispute) => dispute['status'] == 'Open').toList();
+        break;
       case 2: // In Progress
-        disputes = disputes
-            .where((Map<String, dynamic> dispute) => dispute['status'] == 'In Progress')
-            .toList();
+        disputes = disputes.where((dispute) => dispute['status'] == 'In Progress').toList();
+        break;
       case 3: // Resolved/Closed
-        disputes = disputes
-            .where(
-              (Map<String, dynamic> dispute) =>
-                  dispute['status'] == 'Resolved' || dispute['status'] == 'Closed',
-            )
-            .toList();
+        disputes = disputes.where((dispute) =>
+            dispute['status'] == 'Resolved' || dispute['status'] == 'Closed').toList();
+        break;
     }
 
     return disputes;
@@ -160,19 +154,19 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
         bottom: TabBar(
           controller: _tabController,
           isScrollable: true,
-          tabs: const <dynamic>[
+          tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Open'),
             Tab(text: 'In Progress'),
             Tab(text: 'Resolved'),
           ],
-          onTap: (int index) {
+          onTap: (index) {
             setState(() {});
           },
         ),
       ),
       body: Column(
-        children: <dynamic>[
+        children: [
           // Search and Filter Section
           Container(
             padding: const EdgeInsets.all(16),
@@ -200,7 +194,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (String value) {
+              onChanged: (value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -212,7 +206,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: <dynamic>[
+              children: [
                 _buildDisputesList(),
                 _buildDisputesList(),
                 _buildDisputesList(),
@@ -227,27 +221,40 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
           // Navigate to create dispute page
         },
         backgroundColor: AppConstants.primaryColor,
-        tooltip: 'File New Dispute',
         child: const Icon(Icons.add),
+        tooltip: 'File New Dispute',
       ),
     );
   }
 
   Widget _buildDisputesList() {
-    final List<Map<String, dynamic>> disputes = _getFilteredDisputes();
+    final disputes = _getFilteredDisputes();
 
     if (disputes.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
-            Icon(Icons.gavel, size: 64, color: Colors.grey[400]),
+          children: [
+            Icon(
+              Icons.gavel,
+              size: 64,
+              color: Colors.grey[400],
+            ),
             const SizedBox(height: 16),
-            Text('No disputes found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+            Text(
+              'No disputes found',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[600],
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
             ),
           ],
         ),
@@ -262,8 +269,8 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: disputes.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Map<String, dynamic> dispute = disputes[index];
+        itemBuilder: (context, index) {
+          final dispute = disputes[index];
           return _buildDisputeCard(dispute);
         },
       ),
@@ -278,7 +285,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => DisputeDetailPage(disputeId: dispute['id']),
+              builder: (context) => DisputeDetailPage(disputeId: dispute['id']),
             ),
           );
         },
@@ -286,13 +293,16 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Text(
                       dispute['title'],
-                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   Container(
@@ -300,7 +310,9 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
                     decoration: BoxDecoration(
                       color: _getStatusColor(dispute['status']).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: _getStatusColor(dispute['status'])),
+                      border: Border.all(
+                        color: _getStatusColor(dispute['status']),
+                      ),
                     ),
                     child: Text(
                       dispute['status'],
@@ -316,47 +328,62 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
               const SizedBox(height: 8),
               Text(
                 dispute['description'],
-                style: TextStyle(color: Colors.grey[600], height: 1.4),
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  height: 1.4,
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 12),
               Row(
-                children: <dynamic>[
+                children: [
                   _buildPriorityChip(dispute['priority']),
                   const SizedBox(width: 8),
                   Text(
                     dispute['category'],
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
-                  if (dispute['amount'] != null) ...<dynamic>[
+                  if (dispute['amount'] != null) ...[
                     const SizedBox(width: 8),
                     Text(
                       '\$${dispute['amount']}',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
                     ),
                   ],
                 ],
               ),
               const SizedBox(height: 8),
               Row(
-                children: <dynamic>[
+                children: [
                   Icon(Icons.person, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     'Initiator: ${dispute['initiator']}',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
               const SizedBox(height: 4),
               Row(
-                children: <dynamic>[
+                children: [
                   Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     _formatDate(dispute['createdAt']),
-                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
@@ -373,7 +400,9 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
       decoration: BoxDecoration(
         color: _getPriorityColor(priority).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: _getPriorityColor(priority)),
+        border: Border.all(
+          color: _getPriorityColor(priority),
+        ),
       ),
       child: Text(
         priority,
@@ -387,8 +416,8 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage>
   }
 
   String _formatDate(DateTime date) {
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(date);
+    final now = DateTime.now();
+    final difference = now.difference(date);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

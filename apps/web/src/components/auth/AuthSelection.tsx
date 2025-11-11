@@ -42,7 +42,12 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen relative bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 flex items-center justify-center p-4">
+      {/* Centered logo at top of auth screen */}
+      <div className="absolute top-8 left-0 right-0 flex justify-center pointer-events-none">
+        <img src="/hhdaologo.svg" alt="HHDAO logo" className="w-28 h-28 object-contain" />
+      </div>
+
       <div className="w-full max-w-md space-y-6">
         {/* Language Toggle */}
         <div className="flex justify-center space-x-4">
@@ -68,12 +73,12 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
               {language === 'en' ? 'Welcome to HHDAO' : 'HHDAO में आपका स्वागत है'}
             </CardTitle>
             <CardDescription className="text-gray-400">
-              {language === 'en' 
-                ? 'Choose your preferred authentication method' 
+              {language === 'en'
+                ? 'Choose your preferred authentication method'
                 : 'अपनी पसंदीदा प्रमाणीकरण विधि चुनें'}
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent>
             <div className="flex space-x-2 mb-6">
               <Button
@@ -101,8 +106,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
 
             {authMethod === 'wallet' && (
               <div className="space-y-4">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start text-left h-auto py-4 bg-gray-900 border-gray-700 hover:bg-gray-800 hover:border-blue-500"
                   onClick={() => handleWalletAuth('ii')}
                 >
@@ -115,8 +120,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
                   </div>
                 </Button>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start text-left h-auto py-4 bg-gray-900 border-gray-700 hover:bg-gray-800 hover:border-blue-500"
                   onClick={() => handleWalletAuth('metamask')}
                 >
@@ -129,8 +134,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
                   </div>
                 </Button>
 
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full justify-start text-left h-auto py-4 bg-gray-900 border-gray-700 hover:bg-gray-800 hover:border-blue-500"
                   onClick={() => handleWalletAuth('plug')}
                 >
@@ -161,8 +166,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
                         className="bg-gray-900 border-gray-700 text-white"
                       />
                     </div>
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700" 
+                    <Button
+                      className="w-full bg-blue-600 hover:bg-blue-700"
                       onClick={handlePhoneAuth}
                       disabled={!phoneNumber}
                     >
@@ -184,8 +189,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
                         className="bg-gray-900 border-gray-700 text-white text-center text-2xl tracking-widest"
                       />
                     </div>
-                    <Button 
-                      className="w-full bg-blue-600 hover:bg-blue-700" 
+                    <Button
+                      className="w-full bg-blue-600 hover:bg-blue-700"
                       onClick={handleOtpVerify}
                       disabled={otp.length !== 6}
                     >
@@ -207,12 +212,12 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
               <div className="text-center py-8 space-y-4">
                 <div className="text-4xl">🆔</div>
                 <p className="text-gray-400">
-                  {language === 'en' 
-                    ? 'Aadhaar e-KYC integration coming soon' 
+                  {language === 'en'
+                    ? 'Aadhaar e-KYC integration coming soon'
                     : 'आधार ई-केवाईसी एकीकरण जल्द आ रहा है'}
                 </p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="w-full"
                   onClick={() => setAuthMethod('phone')}
                 >
@@ -224,8 +229,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
         </Card>
 
         <p className="text-center text-xs text-gray-500">
-          {language === 'en' 
-            ? 'By continuing, you agree to HHDAO Terms & Privacy Policy' 
+          {language === 'en'
+            ? 'By continuing, you agree to HHDAO Terms & Privacy Policy'
             : 'जारी रखने से, आप HHDAO की शर्तों और गोपनीयता नीति से सहमत हैं'}
         </p>
       </div>

@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'proposal_model.dart';
+import 'package:helios_hash_dao/proposal_model.dart';
 
 class ProposalCard extends StatelessWidget {
-  const ProposalCard({super.key, required this.proposal, this.onTap, this.showVoteButtons = true});
   final Proposal proposal;
   final VoidCallback? onTap;
   final bool showVoteButtons;
+
+  const ProposalCard({
+    super.key,
+    required this.proposal,
+    this.onTap,
+    this.showVoteButtons = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -20,14 +28,17 @@ class ProposalCard extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Title and Status
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Text(
                       proposal.title,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   _buildStatusChip(),
@@ -39,7 +50,10 @@ class ProposalCard extends StatelessWidget {
               // Description
               Text(
                 proposal.description,
-                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -48,7 +62,7 @@ class ProposalCard extends StatelessWidget {
 
               // Type and Category
               Row(
-                children: <dynamic>[
+                children: [
                   Chip(
                     label: Text(
                       _getProposalTypeText(proposal.type),
@@ -57,10 +71,13 @@ class ProposalCard extends StatelessWidget {
                     backgroundColor: Colors.purple[50],
                     labelStyle: TextStyle(color: Colors.purple[700]),
                   ),
-                  if (proposal.category != null) ...<dynamic>[
+                  if (proposal.category != null) ...[
                     const SizedBox(width: 8),
                     Chip(
-                      label: Text(proposal.category!, style: const TextStyle(fontSize: 12)),
+                      label: Text(
+                        proposal.category!,
+                        style: const TextStyle(fontSize: 12),
+                      ),
                       backgroundColor: Colors.blue[50],
                       labelStyle: TextStyle(color: Colors.blue[700]),
                     ),
@@ -75,17 +92,15 @@ class ProposalCard extends StatelessWidget {
                 Wrap(
                   spacing: 4,
                   runSpacing: 4,
-                  children: proposal.tags
-                      .take(3)
-                      .map(
-                        (String tag) => Chip(
-                          label: Text(tag, style: const TextStyle(fontSize: 10)),
-                          backgroundColor: Colors.grey[200],
-                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          padding: EdgeInsets.zero,
-                        ),
-                      )
-                      .toList(),
+                  children: proposal.tags.take(3).map((tag) => Chip(
+                    label: Text(
+                      tag,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    backgroundColor: Colors.grey[200],
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: EdgeInsets.zero,
+                  )).toList(),
                 ),
 
               const SizedBox(height: 12),
@@ -94,10 +109,13 @@ class ProposalCard extends StatelessWidget {
               if (proposal.isActive)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <dynamic>[
+                  children: [
                     const Text(
                       'Voting Progress',
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
@@ -108,7 +126,7 @@ class ProposalCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <dynamic>[
+                      children: [
                         Text(
                           'Yes: ${proposal.yesVotePercentage.toStringAsFixed(1)}%',
                           style: const TextStyle(fontSize: 12, color: Colors.green),
@@ -122,7 +140,10 @@ class ProposalCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       'Total Votes: ${proposal.totalVotes}',
-                      style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),
@@ -132,7 +153,7 @@ class ProposalCard extends StatelessWidget {
               // Vote buttons (only for active proposals)
               if (showVoteButtons && proposal.canVote)
                 Row(
-                  children: <dynamic>[
+                  children: [
                     Expanded(
                       child: ElevatedButton.icon(
                         onPressed: () {
@@ -178,12 +199,15 @@ class ProposalCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 8),
                   child: Row(
-                    children: <dynamic>[
+                    children: [
                       const Icon(Icons.schedule, size: 16, color: Colors.grey),
                       const SizedBox(width: 4),
                       Text(
                         'Voting ends: ${_formatDate(proposal.votingEndDate)}',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
                       ),
                     ],
                   ),
@@ -198,7 +222,7 @@ class ProposalCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
-                    children: <dynamic>[
+                    children: [
                       Icon(
                         proposal.isPassed ? Icons.check_circle : Icons.cancel,
                         size: 16,
@@ -231,25 +255,34 @@ class ProposalCard extends StatelessWidget {
       case ProposalStatus.active:
         chipColor = Colors.green;
         statusText = 'Active';
+        break;
       case ProposalStatus.passed:
         chipColor = Colors.blue;
         statusText = 'Passed';
+        break;
       case ProposalStatus.rejected:
         chipColor = Colors.red;
         statusText = 'Rejected';
+        break;
       case ProposalStatus.executed:
         chipColor = Colors.purple;
         statusText = 'Executed';
+        break;
       case ProposalStatus.cancelled:
         chipColor = Colors.grey;
         statusText = 'Cancelled';
+        break;
       case ProposalStatus.draft:
         chipColor = Colors.orange;
         statusText = 'Draft';
+        break;
     }
 
     return Chip(
-      label: Text(statusText, style: const TextStyle(fontSize: 10, color: Colors.white)),
+      label: Text(
+        statusText,
+        style: const TextStyle(fontSize: 10, color: Colors.white),
+      ),
       backgroundColor: chipColor,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: EdgeInsets.zero,
@@ -274,8 +307,8 @@ class ProposalCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    final DateTime now = DateTime.now();
-    final Duration difference = date.difference(now);
+    final now = DateTime.now();
+    final difference = date.difference(now);
 
     if (difference.isNegative) {
       return 'Ended';

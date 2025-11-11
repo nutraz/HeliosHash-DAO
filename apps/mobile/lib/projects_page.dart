@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'mock_data.dart';
-import 'project_card.dart';
-import 'project_model.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/project_card.dart';
+import 'package:helios_hash_dao/mock_data.dart';
+import 'package:helios_hash_dao/project_model.dart';
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
@@ -17,7 +17,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   String _searchQuery = '';
   String _selectedCategory = 'All';
 
-  final List<String> _categories = <String>[
+  final List<String> _categories = [
     'All',
     'Infrastructure',
     'Environment',
@@ -41,27 +41,20 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   }
 
   List<Project> _getFilteredProjects() {
-    List<Project> projects = MockData.getMockProjects();
+    var projects = MockData.getMockProjects();
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      projects = projects
-          .where(
-            (Project project) =>
-                project.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                project.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-                project.tags.any(
-                  (String tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()),
-                ),
-          )
-          .toList();
+      projects = projects.where((project) =>
+          project.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          project.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+          project.tags.any((tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()))
+      ).toList();
     }
 
     // Filter by category
     if (_selectedCategory != 'All') {
-      projects = projects
-          .where((Project project) => project.category == _selectedCategory)
-          .toList();
+      projects = projects.where((project) => project.category == _selectedCategory).toList();
     }
 
     // Filter by tab
@@ -69,9 +62,11 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
       case 0: // All Projects
         break;
       case 1: // Active Projects
-        projects = projects.where((Project project) => project.status == 'active').toList();
+        projects = projects.where((project) => project.status == 'active').toList();
+        break;
       case 2: // Draft Projects
-        projects = projects.where((Project project) => project.status == 'draft').toList();
+        projects = projects.where((project) => project.status == 'draft').toList();
+        break;
     }
 
     return projects;
@@ -87,24 +82,24 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          tabs: const <dynamic>[
+          tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Active'),
             Tab(text: 'Draft'),
           ],
-          onTap: (int index) {
+          onTap: (index) {
             setState(() {});
           },
         ),
       ),
       body: Column(
-        children: <dynamic>[
+        children: [
           // Search and Filter Section
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.grey[50],
             child: Column(
-              children: <dynamic>[
+              children: [
                 // Search Bar
                 TextField(
                   controller: _searchController,
@@ -129,7 +124,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (String value) {
+                  onChanged: (value) {
                     setState(() {
                       _searchQuery = value;
                     });
@@ -144,16 +139,16 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final String category = _categories[index];
-                      final bool isSelected = category == _selectedCategory;
+                    itemBuilder: (context, index) {
+                      final category = _categories[index];
+                      final isSelected = category == _selectedCategory;
 
                       return Container(
                         margin: const EdgeInsets.only(right: 8),
                         child: FilterChip(
                           label: Text(category),
                           selected: isSelected,
-                          onSelected: (bool selected) {
+                          onSelected: (selected) {
                             setState(() {
                               _selectedCategory = selected ? category : 'All';
                             });
@@ -174,7 +169,11 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
           Expanded(
             child: TabBarView(
               controller: _tabController,
-              children: <dynamic>[_buildProjectsList(), _buildProjectsList(), _buildProjectsList()],
+              children: [
+                _buildProjectsList(),
+                _buildProjectsList(),
+                _buildProjectsList(),
+              ],
             ),
           ),
         ],
@@ -190,20 +189,33 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   }
 
   Widget _buildProjectsList() {
-    final List<dynamic> projects = _getFilteredProjects();
+    final projects = _getFilteredProjects();
 
     if (projects.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
-            Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
+          children: [
+            Icon(
+              Icons.work_off,
+              size: 64,
+              color: Colors.grey[400],
+            ),
             const SizedBox(height: 16),
-            Text('No projects found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
+            Text(
+              'No projects found',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.grey[600],
+              ),
+            ),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[500],
+              ),
             ),
           ],
         ),
@@ -218,7 +230,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: projects.length,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           final project = projects[index];
           return ProjectCard(
             project: project,
@@ -235,27 +247,30 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   void _showProjectDetailDialog(BuildContext context, Project project) {
     showDialog(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(project.title),
         content: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: <dynamic>[
+            children: [
               Text(project.description),
               const SizedBox(height: 16),
               Text('Budget: \$${project.budget.toStringAsFixed(0)}'),
               Text('Team Members: ${project.teamMembers.length}'),
               Text('Upvotes: ${project.upvotes}'),
-              if (project.githubUrl != null) ...<dynamic>[
+              if (project.githubUrl != null) ...[
                 const SizedBox(height: 8),
                 Text('GitHub: ${project.githubUrl}'),
               ],
             ],
           ),
         ),
-        actions: <dynamic>[
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
           ElevatedButton(
             onPressed: () {
               // Handle project application or contribution

@@ -18,7 +18,7 @@ export default function Layout({ children }: LayoutProps) {
   const [darkMode, setDarkMode] = useState(false)
   const pathname = usePathname()
   const { isAuthenticated } = useAuth()
-  
+
   // Initialize dark mode from localStorage
   useEffect(() => {
     const savedTheme = localStorage.getItem('hhdao-theme')
@@ -41,7 +41,7 @@ export default function Layout({ children }: LayoutProps) {
       localStorage.setItem('hhdao-theme', 'light')
     }
   }
-  
+
   // Generate page title based on current route
   const getPageTitle = () => {
     if (pathname === '/projects/create') return 'Create Project - HeliosHash DAO'
@@ -64,12 +64,13 @@ export default function Layout({ children }: LayoutProps) {
           <div className="flex items-center justify-between">
             {/* Logo and Brand */}
             <Link href="/" className="flex items-center space-x-3 hover:opacity-90 transition-all">
-              <Image 
-                src="/hhdaologo-main.svg" 
+              <Image
+                src="/hhdaologo-main.svg"
                 alt="HeliosHash DAO"
                 width={180}
                 height={45}
                 className="h-11 w-auto"
+                priority
               />
             </Link>
 
@@ -87,7 +88,7 @@ export default function Layout({ children }: LayoutProps) {
               >
                 Projects
               </Link>
-              
+
               {/* Dark Mode Toggle */}
               <button
                 onClick={toggleDarkMode}
@@ -96,7 +97,7 @@ export default function Layout({ children }: LayoutProps) {
               >
                 {darkMode ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-gray-700" />}
               </button>
-              
+
               {isAuthenticated ? (
                 <Link
                   href="/projects/create"
@@ -151,19 +152,8 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
 
-      <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 mt-8">
-        <div className="container mx-auto px-4 py-6 text-sm text-gray-600 dark:text-gray-400 flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Image src="/logo-simple.svg" alt="HHDAO" width={20} height={20} className="dark:invert" />
-            <span>© {new Date().getFullYear()} HeliosHash DAO — All rights reserved</span>
-          </div>
-          <div className="space-x-4 mt-2 md:mt-0">
-            <Link href="/terms" className="hover:text-blue-600 dark:hover:text-blue-400">Terms</Link>
-            <Link href="/privacy" className="hover:text-blue-600 dark:hover:text-blue-400">Privacy</Link>
-            <a href="mailto:support@hhdao.com" className="hover:text-blue-600 dark:hover:text-blue-400">Support</a>
-          </div>
-        </div>
-      </footer>
+      {/* Use new branded Footer component */}
+      {require('./Footer').default()}
     </>
   )
 }

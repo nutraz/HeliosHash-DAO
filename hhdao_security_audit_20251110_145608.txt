@@ -1,0 +1,5 @@
+Git remote URLs:
+origin	https://github.com/nutraz/HeliosHash-DAO.git (fetch)
+origin	https://github.com/nutraz/HeliosHash-DAO.git (push)
+Total commits:
+19

@@ -14,7 +14,7 @@ class WalletScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <dynamic>[
+          children: [
             const Text(
               'Wallet Screen',
               style: TextStyle(fontSize: 24),

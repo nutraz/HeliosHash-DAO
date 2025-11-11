@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/dao/proposal.dart';
 
 class GovernanceProvider with ChangeNotifier {
-
-  GovernanceProvider() {
-    _loadMockProposals();
-  }
-  List<Proposal> _proposals = <Proposal>[];
+  List<Proposal> _proposals = [];
   bool _isLoading = false;
   String? _error;
 
@@ -14,8 +10,12 @@ class GovernanceProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
 
+  GovernanceProvider() {
+    _loadMockProposals();
+  }
+
   void _loadMockProposals() {
-    _proposals = <Proposal>[
+    _proposals = [
       Proposal(
         id: '1',
         title: 'Increase Solar Panel Efficiency Standards',
@@ -86,7 +86,7 @@ class GovernanceProvider with ChangeNotifier {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 2));
 
-      final Proposal newProposal = Proposal(
+      final newProposal = Proposal(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         title: title,
         description: description,
@@ -119,9 +119,9 @@ class GovernanceProvider with ChangeNotifier {
       // Simulate API call
       await Future.delayed(const Duration(seconds: 1));
 
-      final int proposalIndex = _proposals.indexWhere((Proposal p) => p.id == proposalId);
+      final proposalIndex = _proposals.indexWhere((p) => p.id == proposalId);
       if (proposalIndex != -1) {
-        final Proposal proposal = _proposals[proposalIndex];
+        final proposal = _proposals[proposalIndex];
         if (voteYes) {
           proposal.votesFor += 1;
         } else {

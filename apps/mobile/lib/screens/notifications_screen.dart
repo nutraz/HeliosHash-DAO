@@ -10,14 +10,16 @@ class NotificationsScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Notifications')),
       body: ValueListenableBuilder<List<String>>(
         valueListenable: NotificationService.notifier,
-        builder: (BuildContext context, List<String> notifications, _) {
+        builder: (context, notifications, _) {
           if (notifications.isEmpty) {
             return const Center(child: Text('No notifications.'));
           }
           return ListView.builder(
             itemCount: notifications.length,
-            itemBuilder: (BuildContext context, int idx) =>
-                ListTile(leading: const Icon(Icons.notifications), title: Text(notifications[idx])),
+            itemBuilder: (context, idx) => ListTile(
+              leading: const Icon(Icons.notifications),
+              title: Text(notifications[idx]),
+            ),
           );
         },
       ),

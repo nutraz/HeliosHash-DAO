@@ -1,21 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/dao/proposal.dart';
 import '../providers/governance_provider.dart';
+import '../models/dao/proposal.dart';
+import 'package:flutter/material.dart';
 
 class CreateProposalDialog extends StatefulWidget {
-  const CreateProposalDialog({super.key});
+  const CreateProposalDialog({Key? key}) : super(key: key);
 
   @override
   State<CreateProposalDialog> createState() => _CreateProposalDialogState();
 }
 
 class _CreateProposalDialogState extends State<CreateProposalDialog> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _titleController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  final _amountController = TextEditingController();
   ProposalCategory _category = ProposalCategory.funding;
   bool _isSubmitting = false;
 
@@ -29,7 +28,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return AlertDialog(
       title: const Text('Create Proposal'),
       content: SingleChildScrollView(
@@ -37,11 +36,14 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
           key: _formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: <dynamic>[
+            children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
-                validator: (String? value) {
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a title';
                   }
@@ -56,7 +58,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 4,
-                validator: (String? value) {
+                validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a description';
                   }
@@ -70,13 +72,13 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
                   labelText: 'Category',
                   border: OutlineInputBorder(),
                 ),
-                items: ProposalCategory.values.map((ProposalCategory category) {
+                items: ProposalCategory.values.map((category) {
                   return DropdownMenuItem(
                     value: category,
                     child: Text(category.name.toUpperCase()),
                   );
                 }).toList(),
-                onChanged: (ProposalCategory? value) {
+                onChanged: (value) {
                   if (value != null) {
                     setState(() {
                       _category = value;
@@ -98,7 +100,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
           ),
         ),
       ),
-      actions: <dynamic>[
+      actions: [
         TextButton(
           onPressed: _isSubmitting ? null : () => Navigator.pop(context),
           child: const Text('Cancel'),
@@ -122,8 +124,8 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
     setState(() {
       _isSubmitting = true;
     });
-    final GovernanceProvider governanceProvider = context.read<GovernanceProvider>();
-    final bool success = await governanceProvider.createProposal(
+    final governanceProvider = context.read<GovernanceProvider>();
+    final success = await governanceProvider.createProposal(
       title: _titleController.text,
       description: _descriptionController.text,
       endDate: DateTime.now().add(const Duration(days: 7)),

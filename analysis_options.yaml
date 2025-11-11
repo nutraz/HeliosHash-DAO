@@ -1,0 +1,13 @@
+analyzer:
+  exclude:
+    - build/**
+    - .dart_tool/**
+    - test/**
+    - packages/**
+    - modules/**/test/**
+linter:
+  rules:
+    - avoid_print
+    - prefer_const_constructors
+    - always_use_package_imports
+

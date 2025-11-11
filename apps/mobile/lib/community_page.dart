@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'mock_data.dart';
-
-import 'post_model.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/mock_data.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({super.key});
@@ -39,7 +37,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
           indicatorColor: Colors.white,
           labelColor: Colors.white,
           unselectedLabelColor: Colors.white70,
-          tabs: const <dynamic>[
+          tabs: const [
             Tab(text: 'Posts'),
             Tab(text: 'Discussions'),
             Tab(text: 'Events'),
@@ -48,7 +46,11 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
       ),
       body: TabBarView(
         controller: _tabController,
-        children: <dynamic>[_buildPostsTab(), _buildDiscussionsTab(), _buildEventsTab()],
+        children: [
+          _buildPostsTab(),
+          _buildDiscussionsTab(),
+          _buildEventsTab(),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -61,7 +63,7 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
   }
 
   Widget _buildPostsTab() {
-    final List<Post> posts = MockData.getMockPosts();
+    final posts = MockData.getMockPosts();
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -71,17 +73,17 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: posts.length,
-        itemBuilder: (BuildContext context, int index) {
-          final Post post = posts[index];
+        itemBuilder: (context, index) {
+          final post = posts[index];
           return Card(
             margin: const EdgeInsets.only(bottom: 16),
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <dynamic>[
+                children: [
                   Row(
-                    children: <dynamic>[
+                    children: [
                       CircleAvatar(
                         backgroundColor: AppConstants.primaryColor,
                         child: Text(
@@ -93,25 +95,37 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <dynamic>[
+                          children: [
                             Text(
                               post.author,
-                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
                             ),
                             Text(
                               _formatTimeAgo(post.createdAt),
-                              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
                       ),
                       PopupMenuButton<String>(
-                        onSelected: (String value) {
+                        onSelected: (value) {
                           // Handle menu actions
                         },
-                        itemBuilder: (BuildContext context) => <dynamic>[
-                          const PopupMenuItem(value: 'report', child: Text('Report')),
-                          const PopupMenuItem(value: 'hide', child: Text('Hide')),
+                        itemBuilder: (context) => [
+                          const PopupMenuItem(
+                            value: 'report',
+                            child: Text('Report'),
+                          ),
+                          const PopupMenuItem(
+                            value: 'hide',
+                            child: Text('Hide'),
+                          ),
                         ],
                       ),
                     ],
@@ -119,15 +133,24 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
                   const SizedBox(height: 12),
                   Text(
                     post.title,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  if (post.content.isNotEmpty) ...<dynamic>[
+                  if (post.content.isNotEmpty) ...[
                     const SizedBox(height: 8),
-                    Text(post.content, style: TextStyle(color: Colors.grey[700], height: 1.5)),
+                    Text(
+                      post.content,
+                      style: TextStyle(
+                        color: Colors.grey[700],
+                        height: 1.5,
+                      ),
+                    ),
                   ],
                   const SizedBox(height: 12),
                   Row(
-                    children: <dynamic>[
+                    children: [
                       IconButton(
                         onPressed: () {
                           // Handle like
@@ -165,16 +188,20 @@ class _CommunityPageState extends State<CommunityPage> with TickerProviderStateM
   }
 
   Widget _buildDiscussionsTab() {
-    return const Center(child: Text('Discussions - Coming Soon'));
+    return const Center(
+      child: Text('Discussions - Coming Soon'),
+    );
   }
 
   Widget _buildEventsTab() {
-    return const Center(child: Text('Events - Coming Soon'));
+    return const Center(
+      child: Text('Events - Coming Soon'),
+    );
   }
 
   String _formatTimeAgo(DateTime dateTime) {
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(dateTime);
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
       return '${difference.inDays}d ago';

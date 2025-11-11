@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepTwo extends StatelessWidget {
+  final TextEditingController fundingGoalController;
+  final TextEditingController tokenAllocationController;
+  final TextEditingController capacityController;
+
   const ProjectFormStepTwo({
     super.key,
     required this.fundingGoalController,
     required this.tokenAllocationController,
     required this.capacityController,
   });
-  final TextEditingController fundingGoalController;
-  final TextEditingController tokenAllocationController;
-  final TextEditingController capacityController;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <dynamic>[
+      children: [
         const Text(
           'Funding & Technical Details',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.green,
+          ),
         ),
         const SizedBox(height: 16),
         TextFormField(
@@ -31,11 +36,11 @@ class ProjectFormStepTwo extends StatelessWidget {
             suffixText: 'MW',
           ),
           keyboardType: TextInputType.number,
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Capacity is required';
             }
-            final double? capacity = double.tryParse(value);
+            final capacity = double.tryParse(value);
             if (capacity == null || capacity <= 0) {
               return 'Please enter a valid capacity';
             }
@@ -53,11 +58,11 @@ class ProjectFormStepTwo extends StatelessWidget {
             suffixText: 'ETH',
           ),
           keyboardType: TextInputType.number,
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Funding goal is required';
             }
-            final double? goal = double.tryParse(value);
+            final goal = double.tryParse(value);
             if (goal == null || goal <= 0) {
               return 'Please enter a valid funding goal';
             }
@@ -76,11 +81,11 @@ class ProjectFormStepTwo extends StatelessWidget {
             helperText: 'Tokens to be distributed to investors and contributors',
           ),
           keyboardType: TextInputType.number,
-          validator: (String? value) {
+          validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Token allocation is required';
             }
-            final double? tokens = double.tryParse(value);
+            final tokens = double.tryParse(value);
             if (tokens == null || tokens <= 0) {
               return 'Please enter a valid token amount';
             }
@@ -95,21 +100,24 @@ class ProjectFormStepTwo extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.green.shade200),
           ),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
-              Row(
-                children: <dynamic>[
+            children: [
+              const Row(
+                children: [
                   Icon(Icons.lightbulb, color: Colors.green),
                   SizedBox(width: 8),
                   Text(
                     'Funding Structure',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.green,
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: 8),
+              const Text(
                 '• 70% of funds will be used for solar panel installation and infrastructure\n'
                 '• 20% allocated for maintenance and monitoring systems\n'
                 '• 10% reserved for community education and training programs\n\n'

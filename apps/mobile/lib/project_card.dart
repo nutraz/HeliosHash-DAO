@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
-import 'project_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:helios_hash_dao/project_model.dart';
 
 class ProjectCard extends StatelessWidget {
-  const ProjectCard({super.key, required this.project, this.onTap, this.showVoteButtons = true});
   final Project project;
   final VoidCallback? onTap;
   final bool showVoteButtons;
+
+  const ProjectCard({
+    super.key,
+    required this.project,
+    this.onTap,
+    this.showVoteButtons = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -20,16 +29,26 @@ class ProjectCard extends StatelessWidget {
           height: 280, // Fixed height for consistent card sizing
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               // Project Image
               if (project.imageUrl != null)
                 ClipRRect(
                   borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-                  child: Container(
+                  child: CachedNetworkImage(
+                    imageUrl: project.imageUrl!,
                     height: 120,
                     width: double.infinity,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.image, size: 40, color: Colors.grey),
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      height: 120,
+                      color: Colors.grey[300],
+                      child: const Center(child: CircularProgressIndicator()),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 120,
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported, size: 40),
+                    ),
                   ),
                 ),
 
@@ -38,14 +57,17 @@ class ProjectCard extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <dynamic>[
+                    children: [
                       // Title and Status
                       Row(
-                        children: <dynamic>[
+                        children: [
                           Expanded(
                             child: Text(
                               project.title,
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -59,7 +81,10 @@ class ProjectCard extends StatelessWidget {
                       // Description
                       Text(
                         project.description,
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey[600],
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -68,9 +93,12 @@ class ProjectCard extends StatelessWidget {
 
                       // Category and Budget
                       Row(
-                        children: <dynamic>[
+                        children: [
                           Chip(
-                            label: Text(project.category, style: const TextStyle(fontSize: 10)),
+                            label: Text(
+                              project.category,
+                              style: const TextStyle(fontSize: 10),
+                            ),
                             backgroundColor: Colors.blue[50],
                             labelStyle: TextStyle(color: Colors.blue[700]),
                             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -95,27 +123,26 @@ class ProjectCard extends StatelessWidget {
                         Wrap(
                           spacing: 2,
                           runSpacing: 2,
-                          children: project.tags
-                              .take(2)
-                              .map(
-                                (String tag) => Chip(
-                                  label: Text(tag, style: const TextStyle(fontSize: 8)),
-                                  backgroundColor: Colors.grey[200],
-                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  padding: EdgeInsets.zero,
-                                ),
-                              )
-                              .toList(),
+                          children: project.tags.take(2).map((tag) => Chip(
+                            label: Text(
+                              tag,
+                              style: const TextStyle(fontSize: 8),
+                            ),
+                            backgroundColor: Colors.grey[200],
+                            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            padding: EdgeInsets.zero,
+                          )).toList(),
                         ),
 
                       const Spacer(), // Push content to bottom
+
                       // Vote buttons and stats
                       if (showVoteButtons)
                         Row(
-                          children: <dynamic>[
+                          children: [
                             Expanded(
                               child: Row(
-                                children: <dynamic>[
+                                children: [
                                   IconButton(
                                     onPressed: () {
                                       // Handle upvote
@@ -148,7 +175,10 @@ class ProjectCard extends StatelessWidget {
                             ),
                             Text(
                               '${project.teamMembers.length} members',
-                              style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
@@ -156,12 +186,15 @@ class ProjectCard extends StatelessWidget {
                       // Team members
                       if (!showVoteButtons)
                         Row(
-                          children: <dynamic>[
+                          children: [
                             const Icon(Icons.people, size: 14, color: Colors.grey),
                             const SizedBox(width: 4),
                             Text(
                               '${project.teamMembers.length} members',
-                              style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.grey[600],
+                              ),
                             ),
                           ],
                         ),
@@ -184,22 +217,29 @@ class ProjectCard extends StatelessWidget {
       case 'active':
         chipColor = Colors.green;
         statusText = 'Active';
+        break;
       case 'completed':
         chipColor = Colors.blue;
         statusText = 'Completed';
+        break;
       case 'draft':
         chipColor = Colors.orange;
         statusText = 'Draft';
+        break;
       case 'cancelled':
         chipColor = Colors.red;
         statusText = 'Cancelled';
+        break;
       default:
         chipColor = Colors.grey;
         statusText = 'Unknown';
     }
 
     return Chip(
-      label: Text(statusText, style: const TextStyle(fontSize: 10, color: Colors.white)),
+      label: Text(
+        statusText,
+        style: const TextStyle(fontSize: 10, color: Colors.white),
+      ),
       backgroundColor: chipColor,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       padding: EdgeInsets.zero,

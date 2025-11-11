@@ -1,6 +1,8 @@
 import 'package:flutter_tts/flutter_tts.dart';
 
 class TTSService {
+  static final TTSService _instance = TTSService._internal();
+  final FlutterTts _flutterTts = FlutterTts();
 
   factory TTSService() {
     return _instance;
@@ -9,11 +11,9 @@ class TTSService {
   TTSService._internal() {
     _initializeTTS();
   }
-  static final TTSService _instance = TTSService._internal();
-  final FlutterTts _flutterTts = FlutterTts();
 
-  Future<void> _initializeTTS() async {
-    await _flutterTts.setLanguage('en-US');
+  void _initializeTTS() async {
+    await _flutterTts.setLanguage("en-US");
     await _flutterTts.setSpeechRate(0.5);
     await _flutterTts.setVolume(1.0);
     await _flutterTts.setPitch(1.0);

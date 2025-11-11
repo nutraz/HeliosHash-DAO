@@ -2,18 +2,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../models/reward_model.dart';
 import '../providers/reward_provider.dart';
+import '../models/reward_model.dart';
 // import '../providers/dao_provider.dart'; // To get the user's token balance
 
 class RewardsExchangeScreen extends StatelessWidget {
+  static const routeName = '/rewards-exchange';
   const RewardsExchangeScreen({super.key});
-  static const String routeName = '/rewards-exchange';
 
   @override
   Widget build(BuildContext context) {
-    final RewardProvider rewardProvider = Provider.of<RewardProvider>(context);
+    final rewardProvider = Provider.of<RewardProvider>(context);
     // final daoProvider = Provider.of<DAOProvider>(context); // Fetch current token balance
 
     return Scaffold(
@@ -26,9 +25,11 @@ class RewardsExchangeScreen extends StatelessWidget {
       body: FutureBuilder(
         key: const ValueKey('rewards-future-builder'),
         future: rewardProvider.fetchRewards(),
-        builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+        builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(key: ValueKey('rewards-loading')));
+            return const Center(
+              child: CircularProgressIndicator(key: ValueKey('rewards-loading')),
+            );
           }
           if (rewardProvider.availableRewards.isEmpty) {
             return const Center(
@@ -46,9 +47,12 @@ class RewardsExchangeScreen extends StatelessWidget {
               childAspectRatio: 0.7,
             ),
             itemCount: rewardProvider.availableRewards.length,
-            itemBuilder: (BuildContext context, int index) {
-              final RewardModel reward = rewardProvider.availableRewards[index];
-              return RewardCard(key: ValueKey('reward-card-${reward.id}'), reward: reward);
+            itemBuilder: (context, index) {
+              final reward = rewardProvider.availableRewards[index];
+              return RewardCard(
+                key: ValueKey('reward-card-${reward.id}'),
+                reward: reward,
+              );
             },
           );
         },
@@ -58,8 +62,8 @@ class RewardsExchangeScreen extends StatelessWidget {
 }
 
 class RewardCard extends StatelessWidget {
-  const RewardCard({super.key, required this.reward});
   final RewardModel reward;
+  const RewardCard({super.key, required this.reward});
 
   @override
   Widget build(BuildContext context) {
@@ -70,13 +74,11 @@ class RewardCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <dynamic>[
+          children: [
             Icon(
-              reward.category == 'travel'
-                  ? Icons.flight
-                  : reward.category == 'food'
-                  ? Icons.restaurant
-                  : Icons.card_giftcard,
+              reward.category == 'travel' ? Icons.flight : 
+              reward.category == 'food' ? Icons.restaurant : 
+              Icons.card_giftcard,
               size: 48,
               color: Theme.of(context).primaryColor,
               key: ValueKey('reward-icon-${reward.id}'),
@@ -99,10 +101,7 @@ class RewardCard extends StatelessWidget {
             Text(
               'Cost: ￿{reward.pointsCost} HHC',
               key: ValueKey('reward-cost-${reward.id}'),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             SizedBox(
@@ -122,14 +121,11 @@ class RewardCard extends StatelessWidget {
   void _showRedeemDialog(BuildContext context, RewardModel reward) {
     showDialog(
       context: context,
-      builder: (BuildContext ctx) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         key: ValueKey('reward-redeem-dialog-${reward.id}'),
         title: Text('Redeem ￿{reward.name}?', key: ValueKey('reward-redeem-title-${reward.id}')),
-        content: Text(
-          'Confirm spending ￿{reward.pointsCost} HHC for this reward?',
-          key: ValueKey('reward-redeem-content-${reward.id}'),
-        ),
-        actions: <dynamic>[
+        content: Text('Confirm spending ￿{reward.pointsCost} HHC for this reward?', key: ValueKey('reward-redeem-content-${reward.id}')),
+        actions: [
           TextButton(
             key: ValueKey('reward-redeem-cancel-btn-${reward.id}'),
             onPressed: () => Navigator.of(ctx).pop(),
@@ -139,16 +135,11 @@ class RewardCard extends StatelessWidget {
             key: ValueKey('reward-redeem-confirm-btn-${reward.id}'),
             onPressed: () async {
               Navigator.of(ctx).pop(); // Close dialog
-              final bool success = await Provider.of<RewardProvider>(
-                context,
-                listen: false,
-              ).redeemReward(reward);
-
+              final success = await Provider.of<RewardProvider>(context, listen: false).redeemReward(reward);
+              
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    success ? 'Successfully redeemed reward!' : 'Redemption failed. Check balance.',
-                  ),
+                  content: Text(success ? 'Successfully redeemed reward!' : 'Redemption failed. Check balance.'),
                   backgroundColor: success ? Colors.green : Colors.red,
                 ),
               );

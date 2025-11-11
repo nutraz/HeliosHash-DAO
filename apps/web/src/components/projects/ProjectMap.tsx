@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { MapPin, Filter, Plus, Users, Zap, TrendingUp } from 'lucide-react'
+import HeliosBaghpatMapNode from '@/components/projects/HeliosBaghpatMapNode'
 
 interface ProjectMapProps {
   user: any
@@ -110,8 +111,8 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
   const [selectedStage, setSelectedStage] = useState('all')
   const language = user.language || 'en'
 
-  const filteredProjects = selectedStage === 'all' 
-    ? mockProjects 
+  const filteredProjects = selectedStage === 'all'
+    ? mockProjects
     : mockProjects.filter(p => p.stage === selectedStage)
 
   const getStageColor = (stage: string) => {
@@ -134,12 +135,12 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
               {language === 'en' ? 'Project Map' : 'परियोजना मानचित्र'}
             </h1>
             <p className="text-gray-400">
-              {language === 'en' 
-                ? `${filteredProjects.length} projects in Baghpat region` 
+              {language === 'en'
+                ? `${filteredProjects.length} projects in Baghpat region`
                 : `बागपत क्षेत्र में ${filteredProjects.length} परियोजनाएं`}
             </p>
           </div>
-          <Button 
+          <Button
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold"
             onClick={() => onNavigate('create-project')}
           >
@@ -178,25 +179,25 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
                 <svg viewBox="0 0 800 600" className="w-full h-full">
                   {/* Background */}
                   <rect width="800" height="600" fill="#1f2937" />
-                  
+
                   {/* Grid lines */}
                   {[...Array(10)].map((_, i) => (
                     <g key={`grid-${i}`}>
-                      <line 
-                        x1={i * 80} 
-                        y1="0" 
-                        x2={i * 80} 
-                        y2="600" 
-                        stroke="#374151" 
-                        strokeWidth="0.5" 
+                      <line
+                        x1={i * 80}
+                        y1="0"
+                        x2={i * 80}
+                        y2="600"
+                        stroke="#374151"
+                        strokeWidth="0.5"
                       />
-                      <line 
-                        x1="0" 
-                        y1={i * 60} 
-                        x2="800" 
-                        y2={i * 60} 
-                        stroke="#374151" 
-                        strokeWidth="0.5" 
+                      <line
+                        x1="0"
+                        y1={i * 60}
+                        x2="800"
+                        y2={i * 60}
+                        stroke="#374151"
+                        strokeWidth="0.5"
                       />
                     </g>
                   ))}
@@ -218,35 +219,35 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
                     return (
                       <g key={project.id}>
                         {/* Pin shadow */}
-                        <ellipse 
-                          cx={x} 
-                          cy={y + 22} 
-                          rx="12" 
-                          ry="3" 
-                          fill="rgba(0,0,0,0.3)" 
+                        <ellipse
+                          cx={x}
+                          cy={y + 22}
+                          rx="12"
+                          ry="3"
+                          fill="rgba(0,0,0,0.3)"
                         />
                         {/* Pin */}
-                        <circle 
-                          cx={x} 
-                          cy={y} 
-                          r="10" 
-                          fill={fillColor} 
-                          stroke="white" 
+                        <circle
+                          cx={x}
+                          cy={y}
+                          r="10"
+                          fill={fillColor}
+                          stroke="white"
                           strokeWidth="2"
                           className="cursor-pointer hover:r-12 transition-all"
                           onClick={() => onNavigate('project', project.id)}
                         />
-                        <path 
-                          d={`M ${x},${y + 10} L ${x},${y + 20}`} 
-                          stroke={fillColor} 
+                        <path
+                          d={`M ${x},${y + 10} L ${x},${y + 20}`}
+                          stroke={fillColor}
                           strokeWidth="2"
                         />
                         {/* Label */}
-                        <text 
-                          x={x} 
-                          y={y + 35} 
-                          fill="white" 
-                          fontSize="10" 
+                        <text
+                          x={x}
+                          y={y + 35}
+                          fill="white"
+                          fontSize="10"
                           textAnchor="middle"
                           className="pointer-events-none"
                         >
@@ -287,73 +288,84 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
 
           {/* Project List */}
           <div className="space-y-4 max-h-[600px] overflow-y-auto">
-            {filteredProjects.map((project) => (
-              <Card 
-                key={project.id} 
-                className="bg-gray-800 border-gray-700 hover:border-blue-500 cursor-pointer transition-all"
-                onClick={() => onNavigate('project', project.id)}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-white text-lg mb-1">
-                        {language === 'en' ? project.name : project.nameHi}
-                      </CardTitle>
-                      <CardDescription className="text-gray-400 text-sm">
-                        {language === 'en' ? project.location : project.locationHi}
-                      </CardDescription>
-                    </div>
-                    <div className={`px-2 py-1 ${getStageColor(project.stage)} text-white text-xs font-bold rounded`}>
-                      {getStageLabel(project.stage)}
-                    </div>
+            {filteredProjects.map((project) => {
+              // Render the richer HeliosBaghpatMapNode for the Baghpat project (id '1')
+              if (project.id === '1') {
+                return (
+                  <div key={project.id} onClick={() => onNavigate('project', project.id)}>
+                    <HeliosBaghpatMapNode onNavigate={(p) => onNavigate(p)} />
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                      <div className="flex items-center text-gray-400 mb-1">
-                        <Zap className="w-3 h-3 mr-1" />
-                        <span className="text-xs">
-                          {language === 'en' ? 'Capacity' : 'क्षमता'}
-                        </span>
+                )
+              }
+
+              return (
+                <Card
+                  key={project.id}
+                  className="bg-gray-800 border-gray-700 hover:border-blue-500 cursor-pointer transition-all"
+                  onClick={() => onNavigate('project', project.id)}
+                >
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-white text-lg mb-1">
+                          {language === 'en' ? project.name : project.nameHi}
+                        </CardTitle>
+                        <CardDescription className="text-gray-400 text-sm">
+                          {language === 'en' ? project.location : project.locationHi}
+                        </CardDescription>
                       </div>
-                      <div className="text-white font-semibold">{project.capacity}</div>
-                    </div>
-                    <div>
-                      <div className="flex items-center text-gray-400 mb-1">
-                        <Users className="w-3 h-3 mr-1" />
-                        <span className="text-xs">
-                          {language === 'en' ? 'Members' : 'सदस्य'}
-                        </span>
+                      <div className={`px-2 py-1 ${getStageColor(project.stage)} text-white text-xs font-bold rounded`}>
+                        {getStageLabel(project.stage)}
                       </div>
-                      <div className="text-white font-semibold">{project.members}</div>
                     </div>
-                    {project.energyToday && (
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-3 text-sm">
                       <div>
                         <div className="flex items-center text-gray-400 mb-1">
-                          <TrendingUp className="w-3 h-3 mr-1" />
+                          <Zap className="w-3 h-3 mr-1" />
                           <span className="text-xs">
-                            {language === 'en' ? 'Today' : 'आज'}
+                            {language === 'en' ? 'Capacity' : 'क्षमता'}
                           </span>
                         </div>
-                        <div className="text-white font-semibold">{project.energyToday}</div>
+                        <div className="text-white font-semibold">{project.capacity}</div>
                       </div>
-                    )}
-                    {project.opportunities > 0 && (
                       <div>
-                        <div className="flex items-center text-orange-400 mb-1">
-                          <MapPin className="w-3 h-3 mr-1" />
+                        <div className="flex items-center text-gray-400 mb-1">
+                          <Users className="w-3 h-3 mr-1" />
                           <span className="text-xs">
-                            {language === 'en' ? 'Jobs' : 'नौकरियां'}
+                            {language === 'en' ? 'Members' : 'सदस्य'}
                           </span>
                         </div>
-                        <div className="text-orange-400 font-semibold">{project.opportunities}</div>
+                        <div className="text-white font-semibold">{project.members}</div>
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      {project.energyToday && (
+                        <div>
+                          <div className="flex items-center text-gray-400 mb-1">
+                            <TrendingUp className="w-3 h-3 mr-1" />
+                            <span className="text-xs">
+                              {language === 'en' ? 'Today' : 'आज'}
+                            </span>
+                          </div>
+                          <div className="text-white font-semibold">{project.energyToday}</div>
+                        </div>
+                      )}
+                      {project.opportunities > 0 && (
+                        <div>
+                          <div className="flex items-center text-orange-400 mb-1">
+                            <MapPin className="w-3 h-3 mr-1" />
+                            <span className="text-xs">
+                              {language === 'en' ? 'Jobs' : 'नौकरियां'}
+                            </span>
+                          </div>
+                          <div className="text-orange-400 font-semibold">{project.opportunities}</div>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </div>
         </div>
       </div>

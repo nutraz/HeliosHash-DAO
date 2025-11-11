@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helioshash_dao/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
+import 'package:helioshash_dao/l10n/app_localizations.dart';
 import '../providers/language_provider.dart';
 import '../providers/theme_provider.dart';
 
@@ -10,14 +9,16 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LanguageProvider langProvider = Provider.of<LanguageProvider>(context);
-    final ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-    final l10n = AppLocalizations.of(context);
+    final langProvider = Provider.of<LanguageProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.settings)),
+      appBar: AppBar(
+        title: Text(l10n.settings),
+      ),
       body: ListView(
-        children: <dynamic>[
+        children: [
           // --- Theme Selection Tile (NEW SECTION) ---
           ListTile(
             title: const Text('Dark Mode'),
@@ -28,10 +29,19 @@ class SettingsScreen extends StatelessWidget {
                   themeProvider.setThemeMode(newValue);
                 }
               },
-              items: const <dynamic>[
-                DropdownMenuItem(value: ThemeMode.system, child: Text('System Default')),
-                DropdownMenuItem(value: ThemeMode.light, child: Text('Light')),
-                DropdownMenuItem(value: ThemeMode.dark, child: Text('Dark')),
+              items: const [
+                DropdownMenuItem(
+                  value: ThemeMode.system,
+                  child: Text('System Default'),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.light,
+                  child: Text('Light'),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.dark,
+                  child: Text('Dark'),
+                ),
               ],
             ),
           ),
@@ -45,14 +55,26 @@ class SettingsScreen extends StatelessWidget {
                   langProvider.setLocale(Locale(newValue, ''));
                 }
               },
-              items: const <dynamic>[
-                DropdownMenuItem(value: 'en', child: Text('English')),
-                DropdownMenuItem(value: 'hi', child: Text('हिन्दी')),
+              items: const [
+                DropdownMenuItem(
+                  value: 'en',
+                  child: Text('English'),
+                ),
+                DropdownMenuItem(
+                  value: 'hi',
+                  child: Text('हिन्दी'),
+                ),
               ],
             ),
           ),
-          const ListTile(title: Text('Notification Preferences'), subtitle: Text('Coming Soon')),
-          const ListTile(title: Text('About'), subtitle: Text('Version 1.0.0')),
+          const ListTile(
+            title: Text('Notification Preferences'),
+            subtitle: Text('Coming Soon'),
+          ),
+          const ListTile(
+            title: Text('About'),
+            subtitle: Text('Version 1.0.0'),
+          ),
         ],
       ),
     );

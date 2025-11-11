@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'chat_page.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/chat_page.dart';
 
 class ConversationsListPage extends StatefulWidget {
   const ConversationsListPage({super.key});
@@ -13,8 +13,8 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<Map<String, dynamic>> _conversations = <Map<String, dynamic>>[
-    <String, dynamic>{
+  final List<Map<String, dynamic>> _conversations = [
+    {
       'id': '1',
       'name': 'Alice Johnson',
       'lastMessage': 'Thanks for the update!',
@@ -22,7 +22,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 2,
       'avatar': 'A',
     },
-    <String, dynamic>{
+    {
       'id': '2',
       'name': 'Bob Smith',
       'lastMessage': 'When is the next meeting?',
@@ -30,7 +30,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 0,
       'avatar': 'B',
     },
-    <String, dynamic>{
+    {
       'id': '3',
       'name': 'Carol Davis',
       'lastMessage': 'I agree with the proposal',
@@ -38,7 +38,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
       'unreadCount': 1,
       'avatar': 'C',
     },
-    <String, dynamic>{
+    {
       'id': '4',
       'name': 'David Wilson',
       'lastMessage': 'Let me check the documentation',
@@ -51,10 +51,10 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   List<Map<String, dynamic>> get _filteredConversations {
     if (_searchQuery.isEmpty) return _conversations;
 
-    return _conversations.where((Map<String, dynamic> conversation) {
-      final String name = conversation['name'].toString().toLowerCase();
-      final String lastMessage = conversation['lastMessage'].toString().toLowerCase();
-      final String query = _searchQuery.toLowerCase();
+    return _conversations.where((conversation) {
+      final name = conversation['name'].toString().toLowerCase();
+      final lastMessage = conversation['lastMessage'].toString().toLowerCase();
+      final query = _searchQuery.toLowerCase();
 
       return name.contains(query) || lastMessage.contains(query);
     }).toList();
@@ -73,7 +73,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         title: const Text('Messages'),
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
-        actions: <dynamic>[
+        actions: [
           IconButton(
             icon: const Icon(Icons.search),
             onPressed: () {
@@ -83,7 +83,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         ],
       ),
       body: Column(
-        children: <dynamic>[
+        children: [
           // Search Bar
           Padding(
             padding: const EdgeInsets.all(16),
@@ -110,7 +110,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 filled: true,
                 fillColor: Colors.grey[100],
               ),
-              onChanged: (String value) {
+              onChanged: (value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -124,25 +124,35 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <dynamic>[
-                        Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey[400]),
+                      children: [
+                        Icon(
+                          Icons.chat_bubble_outline,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           'No conversations found',
-                          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[600],
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Start a new conversation to get connected',
-                          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
                         ),
                       ],
                     ),
                   )
                 : ListView.builder(
                     itemCount: _filteredConversations.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Map<String, dynamic> conversation = _filteredConversations[index];
+                    itemBuilder: (context, index) {
+                      final conversation = _filteredConversations[index];
                       return _buildConversationTile(conversation);
                     },
                   ),
@@ -160,38 +170,55 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   }
 
   Widget _buildConversationTile(Map<String, dynamic> conversation) {
-    final String name = conversation['name'] as String;
-    final String lastMessage = conversation['lastMessage'] as String;
-    final DateTime timestamp = conversation['timestamp'] as DateTime;
-    final int unreadCount = conversation['unreadCount'] as int;
-    final String avatar = conversation['avatar'] as String;
+    final name = conversation['name'] as String;
+    final lastMessage = conversation['lastMessage'] as String;
+    final timestamp = conversation['timestamp'] as DateTime;
+    final unreadCount = conversation['unreadCount'] as int;
+    final avatar = conversation['avatar'] as String;
 
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
         child: Text(
           avatar,
-          style: const TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppConstants.primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       title: Row(
-        children: <dynamic>[
+        children: [
           Expanded(
-            child: Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            child: Text(
+              name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
           ),
-          Text(_formatTime(timestamp), style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+          Text(
+            _formatTime(timestamp),
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey[600],
+            ),
+          ),
         ],
       ),
       subtitle: Text(
         lastMessage,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: unreadCount > 0 ? Colors.black : Colors.grey[600]),
+        style: TextStyle(
+          color: unreadCount > 0 ? Colors.black : Colors.grey[600],
+        ),
       ),
       trailing: unreadCount > 0
           ? Container(
               padding: const EdgeInsets.all(6),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: AppConstants.primaryColor,
                 shape: BoxShape.circle,
               ),
@@ -209,8 +236,10 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) =>
-                ChatPage(conversationId: conversation['id'], otherUserName: name),
+            builder: (context) => ChatPage(
+              conversationId: conversation['id'],
+              otherUserName: name,
+            ),
           ),
         );
       },
@@ -218,8 +247,8 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
   }
 
   String _formatTime(DateTime time) {
-    final DateTime now = DateTime.now();
-    final Duration difference = now.difference(time);
+    final now = DateTime.now();
+    final difference = now.difference(time);
 
     if (difference.inDays > 0) {
       return '${time.day}/${time.month}';

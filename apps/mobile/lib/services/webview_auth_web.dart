@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // Web stub for WebView auth - returns a mock token and explains that WebView is not available
 class WebViewAuthScreen extends StatefulWidget {
-  const WebViewAuthScreen({super.key});
+  const WebViewAuthScreen({Key? key}) : super(key: key);
 
   @override
   _WebViewAuthScreenState createState() => _WebViewAuthScreenState();
@@ -21,11 +21,11 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Internet Identity (Web)')),
+      appBar: AppBar(
+        title: const Text('Internet Identity (Web)'),
+      ),
       body: const Center(
-        child: Text(
-          'Internet Identity login is not supported via WebView on web. Returning mock token.',
-        ),
+        child: Text('Internet Identity login is not supported via WebView on web. Returning mock token.'),
       ),
     );
   }

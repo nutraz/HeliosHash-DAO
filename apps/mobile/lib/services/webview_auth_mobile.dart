@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewAuthScreen extends StatefulWidget {
-  const WebViewAuthScreen({super.key});
+  const WebViewAuthScreen({Key? key}) : super(key: key);
 
   @override
   _WebViewAuthScreenState createState() => _WebViewAuthScreenState();
@@ -39,11 +39,11 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
   }
 
   void _handleAuthSuccess(String url) {
-    final Uri uri = Uri.parse(url);
-    final String fragment = uri.fragment;
-    final List<String> parts = fragment.split('delegation=');
+    final uri = Uri.parse(url);
+    final fragment = uri.fragment;
+    final parts = fragment.split('delegation=');
     if (parts.length > 1) {
-      final String delegation = parts[1].split('&')[0];
+      final delegation = parts[1].split('&')[0];
       Navigator.pop(context, delegation);
     }
   }
@@ -51,11 +51,16 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Internet Identity Authentication')),
+      appBar: AppBar(
+        title: const Text('Internet Identity Authentication'),
+      ),
       body: Stack(
-        children: <dynamic>[
+        children: [
           WebViewWidget(controller: _controller),
-          if (_isLoading) const Center(child: CircularProgressIndicator()),
+          if (_isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
         ],
       ),
     );

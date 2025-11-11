@@ -17,6 +17,26 @@ enum ProposalType {
 }
 
 class Proposal {
+  final String id;
+  final String title;
+  final String description;
+  final String proposerId;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final ProposalStatus status;
+  final ProposalType type;
+  final DateTime votingStartDate;
+  final DateTime votingEndDate;
+  final int yesVotes;
+  final int noVotes;
+  final int abstainVotes;
+  final double quorumRequired;
+  final double approvalThreshold;
+  final Map<String, dynamic>? parameters;
+  final String? discussionUrl;
+  final List<String> tags;
+  final String? category;
+  final Map<String, dynamic>? metadata;
 
   Proposal({
     required this.id,
@@ -50,11 +70,11 @@ class Proposal {
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: json['updated_at'] != null ? DateTime.parse(json['updated_at'] as String) : null,
       status: ProposalStatus.values.firstWhere(
-        (ProposalStatus e) => e.name == json['status'],
+        (e) => e.name == json['status'],
         orElse: () => ProposalStatus.draft,
       ),
       type: ProposalType.values.firstWhere(
-        (ProposalType e) => e.name == json['type'],
+        (e) => e.name == json['type'],
         orElse: () => ProposalType.other,
       ),
       votingStartDate: DateTime.parse(json['voting_start_date'] as String),
@@ -66,34 +86,14 @@ class Proposal {
       approvalThreshold: (json['approval_threshold'] as num).toDouble(),
       parameters: json['parameters'] as Map<String, dynamic>?,
       discussionUrl: json['discussion_url'] as String?,
-      tags: List<String>.from(json['tags'] ?? <dynamic>[]),
+      tags: List<String>.from(json['tags'] ?? []),
       category: json['category'] as String?,
       metadata: json['metadata'] as Map<String, dynamic>?,
     );
   }
-  final String id;
-  final String title;
-  final String description;
-  final String proposerId;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final ProposalStatus status;
-  final ProposalType type;
-  final DateTime votingStartDate;
-  final DateTime votingEndDate;
-  final int yesVotes;
-  final int noVotes;
-  final int abstainVotes;
-  final double quorumRequired;
-  final double approvalThreshold;
-  final Map<String, dynamic>? parameters;
-  final String? discussionUrl;
-  final List<String> tags;
-  final String? category;
-  final Map<String, dynamic>? metadata;
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'title': title,
       'description': description,

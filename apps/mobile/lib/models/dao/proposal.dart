@@ -6,6 +6,16 @@ enum ProposalCategory {
 }
 
 class Proposal {
+  final String id;
+  final String title;
+  final String description;
+  final String creator;
+  final DateTime createdAt;
+  final DateTime endDate;
+  int votesFor;
+  int votesAgainst;
+  int totalVotes;
+  String status;
 
   Proposal({
     required this.id,
@@ -19,16 +29,6 @@ class Proposal {
     required this.totalVotes,
     required this.status,
   });
-  final String id;
-  final String title;
-  final String description;
-  final String creator;
-  final DateTime createdAt;
-  final DateTime endDate;
-  int votesFor;
-  int votesAgainst;
-  int totalVotes;
-  String status;
 
   double get votePercentage {
     if (totalVotes == 0) return 0;

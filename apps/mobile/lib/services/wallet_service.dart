@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wallet/wallet.dart';
-import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
 import 'package:web3dart/web3dart.dart';
+import 'package:http/http.dart';
+import 'package:walletconnect_flutter_v2/walletconnect_flutter_v2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-enum WalletProvider { metamask, walletConnect, coinbase, internetIdentity }
+enum WalletProvider {
+  metamask,
+  walletConnect,
+  coinbase,
+  internetIdentity,
+}
 
 class WalletService extends ChangeNotifier {
   Web3Client? _web3Client;
@@ -48,28 +52,28 @@ class WalletService extends ChangeNotifier {
           name: 'HeliosHash DAO',
           description: 'Decentralized Autonomous Organization',
           url: 'https://helioshash.io',
-          icons: <String>['https://i.postimg.cc/1XxQvGCg/image.png'],
+          icons: ['https://i.postimg.cc/1XxQvGCg/image.png'],
         ),
       );
 
       final session = await _wcClient!.connect(
-        requiredNamespaces: <String, dynamic>{
+        requiredNamespaces: {
           'eip155': const RequiredNamespace(
-            chains: <String>['eip155:1'],
-            methods: <String>[
+            chains: ['eip155:1'],
+            methods: [
               'eth_sendTransaction',
               'eth_signTransaction',
               'eth_sign',
               'personal_sign',
               'eth_signTypedData',
             ],
-            events: <String>['chainChanged', 'accountsChanged'],
+            events: ['chainChanged', 'accountsChanged'],
           ),
         },
       );
 
       if (session != null) {
-        final accounts = session.namespaces['eip155']?.accounts ?? <dynamic>[];
+        final accounts = session.namespaces['eip155']?.accounts ?? [];
         if (accounts.isNotEmpty) {
           final addressString = accounts.first.split(':').last;
           _userAddress = EthereumAddress.fromHex(addressString);
@@ -104,8 +108,9 @@ class WalletService extends ChangeNotifier {
   Future<void> _updateBalance() async {
     if (_web3Client != null && _userAddress != null) {
       try {
-        final EtherAmount etherAmount = await _web3Client!.getBalance(_userAddress!);
-        _balance = etherAmount.getValueInUnit(EtherUnit.ether).toStringAsFixed(4);
+        final etherAmount = await _web3Client!.getBalance(_userAddress!);
+        _balance =
+            etherAmount.getValueInUnit(EtherUnit.ether).toStringAsFixed(4);
         notifyListeners();
       } catch (e) {
         debugPrint('Balance fetch error: $e');
@@ -114,7 +119,7 @@ class WalletService extends ChangeNotifier {
   }
 
   Future<void> _saveWalletState() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     if (_userAddress != null) {
       await prefs.setString('wallet_address', _userAddress!.hexEip55);
       await prefs.setString('wallet_provider', _connectedProvider.toString());
@@ -122,13 +127,13 @@ class WalletService extends ChangeNotifier {
   }
 
   Future<void> restoreWalletState() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? address = prefs.getString('wallet_address');
-    final String? providerString = prefs.getString('wallet_provider');
+    final prefs = await SharedPreferences.getInstance();
+    final address = prefs.getString('wallet_address');
+    final providerString = prefs.getString('wallet_provider');
     if (address != null && providerString != null) {
       _userAddress = EthereumAddress.fromHex(address);
       _connectedProvider = WalletProvider.values.firstWhere(
-        (WalletProvider p) => p.toString() == providerString,
+        (p) => p.toString() == providerString,
       );
       _initWeb3Client('https://mainnet.infura.io/v3/YOUR_INFURA_KEY');
       await _updateBalance();
@@ -137,7 +142,7 @@ class WalletService extends ChangeNotifier {
   }
 
   Future<void> disconnect() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     await prefs.remove('wallet_address');
     await prefs.remove('wallet_provider');
     _userAddress = null;

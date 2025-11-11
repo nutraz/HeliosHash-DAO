@@ -1,4 +1,21 @@
 class Project {
+  final String id;
+  final String title;
+  final String description;
+  final String creatorId;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final String status; // 'draft', 'active', 'completed', 'cancelled'
+  final double budget;
+  final String category;
+  final List<String> tags;
+  final String? imageUrl;
+  final int upvotes;
+  final int downvotes;
+  final List<String> teamMembers;
+  final String? githubUrl;
+  final String? websiteUrl;
+  final Map<String, dynamic>? metadata;
 
   Project({
     required this.id,
@@ -31,36 +48,19 @@ class Project {
       status: json['status'] as String,
       budget: (json['budget'] as num).toDouble(),
       category: json['category'] as String,
-      tags: List<String>.from(json['tags'] ?? <dynamic>[]),
+      tags: List<String>.from(json['tags'] ?? []),
       imageUrl: json['image_url'] as String?,
       upvotes: json['upvotes'] as int? ?? 0,
       downvotes: json['downvotes'] as int? ?? 0,
-      teamMembers: List<String>.from(json['team_members'] ?? <dynamic>[]),
+      teamMembers: List<String>.from(json['team_members'] ?? []),
       githubUrl: json['github_url'] as String?,
       websiteUrl: json['website_url'] as String?,
       metadata: json['metadata'] as Map<String, dynamic>?,
     );
   }
-  final String id;
-  final String title;
-  final String description;
-  final String creatorId;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final String status; // 'draft', 'active', 'completed', 'cancelled'
-  final double budget;
-  final String category;
-  final List<String> tags;
-  final String? imageUrl;
-  final int upvotes;
-  final int downvotes;
-  final List<String> teamMembers;
-  final String? githubUrl;
-  final String? websiteUrl;
-  final Map<String, dynamic>? metadata;
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{
+    return {
       'id': id,
       'title': title,
       'description': description,

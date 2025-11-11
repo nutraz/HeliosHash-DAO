@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ShimmerLoading extends StatelessWidget {
-  const ShimmerLoading({super.key, required this.child, this.baseColor, this.highlightColor});
   final Widget child;
   final Color? baseColor;
   final Color? highlightColor;
+
+  const ShimmerLoading({
+    super.key,
+    required this.child,
+    this.baseColor,
+    this.highlightColor,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +32,15 @@ class ProjectCardShimmer extends StatelessWidget {
       child: Card(
         elevation: 4,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Container(
           height: 200,
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Image placeholder
               Container(
                 height: 100,
@@ -62,14 +70,18 @@ class ProjectCardShimmer extends StatelessWidget {
               ),
               // Tags and budget
               Row(
-                children: <dynamic>[
+                children: [
                   Container(
                     height: 24,
                     width: 60,
                     color: Colors.white,
                     margin: const EdgeInsets.only(right: 8),
                   ),
-                  Container(height: 24, width: 80, color: Colors.white),
+                  Container(
+                    height: 24,
+                    width: 80,
+                    color: Colors.white,
+                  ),
                 ],
               ),
             ],
@@ -89,15 +101,17 @@ class ProposalCardShimmer extends StatelessWidget {
       child: Card(
         elevation: 4,
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Title and status
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Container(
                       height: 20,
@@ -105,7 +119,11 @@ class ProposalCardShimmer extends StatelessWidget {
                       margin: const EdgeInsets.only(bottom: 8),
                     ),
                   ),
-                  Container(height: 24, width: 60, color: Colors.white),
+                  Container(
+                    height: 24,
+                    width: 60,
+                    color: Colors.white,
+                  ),
                 ],
               ),
               // Description
@@ -123,14 +141,18 @@ class ProposalCardShimmer extends StatelessWidget {
               ),
               // Type and category
               Row(
-                children: <dynamic>[
+                children: [
                   Container(
                     height: 24,
                     width: 80,
                     color: Colors.white,
                     margin: const EdgeInsets.only(right: 8),
                   ),
-                  Container(height: 24, width: 70, color: Colors.white),
+                  Container(
+                    height: 24,
+                    width: 70,
+                    color: Colors.white,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -143,7 +165,7 @@ class ProposalCardShimmer extends StatelessWidget {
               ),
               // Vote buttons
               Row(
-                children: <dynamic>[
+                children: [
                   Expanded(
                     child: Container(
                       height: 36,
@@ -183,17 +205,27 @@ class StatCardShimmer extends StatelessWidget {
     return ShimmerLoading(
       child: Card(
         elevation: 4,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Container(
           padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               Row(
-                children: <dynamic>[
-                  Container(width: 40, height: 40, color: Colors.white),
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    color: Colors.white,
+                  ),
                   const Spacer(),
-                  Container(width: 60, height: 16, color: Colors.white),
+                  Container(
+                    width: 60,
+                    height: 16,
+                    color: Colors.white,
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -203,7 +235,11 @@ class StatCardShimmer extends StatelessWidget {
                 color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 4),
               ),
-              Container(height: 14, width: 120, color: Colors.white),
+              Container(
+                height: 14,
+                width: 120,
+                color: Colors.white,
+              ),
             ],
           ),
         ),
@@ -213,42 +249,62 @@ class StatCardShimmer extends StatelessWidget {
 }
 
 class ListShimmer extends StatelessWidget {
-  const ListShimmer({super.key, this.itemCount = 5, this.itemHeight = 60});
   final int itemCount;
   final double itemHeight;
+
+  const ListShimmer({
+    super.key,
+    this.itemCount = 5,
+    this.itemHeight = 60,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ShimmerLoading(
       child: ListView.builder(
         itemCount: itemCount,
-        itemBuilder: (BuildContext context, int index) {
+        itemBuilder: (context, index) {
           return Container(
             height: itemHeight,
             margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Row(
-                children: <dynamic>[
-                  Container(width: 40, height: 40, color: Colors.grey[300]),
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    color: Colors.grey[300],
+                  ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <dynamic>[
+                      children: [
                         Container(
                           height: 14,
                           width: 150,
                           color: Colors.grey[300],
                           margin: const EdgeInsets.only(bottom: 4),
                         ),
-                        Container(height: 12, width: 100, color: Colors.grey[300]),
+                        Container(
+                          height: 12,
+                          width: 100,
+                          color: Colors.grey[300],
+                        ),
                       ],
                     ),
                   ),
-                  Container(width: 60, height: 20, color: Colors.grey[300]),
+                  Container(
+                    width: 60,
+                    height: 20,
+                    color: Colors.grey[300],
+                  ),
                 ],
               ),
             ),

@@ -1,69 +1,68 @@
-import 'post_model.dart';
-import 'project_model.dart';
-import 'proposal_model.dart';
+import 'package:helios_hash_dao/project_model.dart';
+import 'package:helios_hash_dao/proposal_model.dart';
+import 'package:helios_hash_dao/post_model.dart';
 
 class MockData {
   static List<Project> getMockProjects() {
-    return <Project>[
+    return [
       Project(
         id: '1',
         title: 'Decentralized Identity System',
-        description:
-            'A blockchain-based identity verification system that gives users control over their personal data.',
+        description: 'A blockchain-based identity verification system that gives users control over their personal data.',
         creatorId: 'user1',
         createdAt: DateTime.now().subtract(const Duration(days: 30)),
         status: 'active',
         budget: 50000.0,
         category: 'Infrastructure',
-        tags: <String>['blockchain', 'identity', 'privacy'],
+        tags: ['blockchain', 'identity', 'privacy'],
+        imageUrl: null,
         upvotes: 45,
         downvotes: 3,
-        teamMembers: <String>['user1', 'user2', 'user3'],
+        teamMembers: ['user1', 'user2', 'user3'],
         githubUrl: 'https://github.com/heliosdao/identity-system',
         websiteUrl: 'https://identity.heliosdao.com',
       ),
       Project(
         id: '2',
         title: 'Sustainable Energy Marketplace',
-        description:
-            'A platform connecting renewable energy producers with consumers in a decentralized marketplace.',
+        description: 'A platform connecting renewable energy producers with consumers in a decentralized marketplace.',
         creatorId: 'user2',
         createdAt: DateTime.now().subtract(const Duration(days: 15)),
         status: 'active',
         budget: 75000.0,
         category: 'Environment',
-        tags: <String>['energy', 'sustainability', 'marketplace'],
+        tags: ['energy', 'sustainability', 'marketplace'],
+        imageUrl: null,
         upvotes: 67,
         downvotes: 5,
-        teamMembers: <String>['user2', 'user4', 'user5'],
+        teamMembers: ['user2', 'user4', 'user5'],
         githubUrl: 'https://github.com/heliosdao/energy-marketplace',
       ),
       Project(
         id: '3',
         title: 'AI-Powered Governance Assistant',
-        description:
-            'An AI assistant that helps community members understand and participate in governance decisions.',
+        description: 'An AI assistant that helps community members understand and participate in governance decisions.',
         creatorId: 'user3',
         createdAt: DateTime.now().subtract(const Duration(days: 7)),
         status: 'draft',
         budget: 25000.0,
         category: 'Governance',
-        tags: <String>['AI', 'governance', 'assistant'],
+        tags: ['AI', 'governance', 'assistant'],
+        imageUrl: null,
         upvotes: 23,
         downvotes: 1,
-        teamMembers: <String>['user3', 'user6'],
+        teamMembers: ['user3', 'user6'],
         githubUrl: 'https://github.com/heliosdao/governance-ai',
       ),
     ];
   }
 
   static List<Proposal> getMockProposals() {
-    return <Proposal>[
+    return [
       Proposal(
         id: '1',
         title: 'Increase Community Fund Allocation',
-        description:
-            'Proposal to increase the community fund allocation from 20% to 25% of total treasury.',
+        description: 'Proposal to increase the community fund allocation from 20% to 25% of total treasury.',
         proposerId: 'user1',
         createdAt: DateTime.now().subtract(const Duration(days: 14)),
         status: ProposalStatus.active,
@@ -75,15 +74,14 @@ class MockData {
         abstainVotes: 89,
         quorumRequired: 1000,
         approvalThreshold: 60.0,
-        tags: <String>['funding', 'treasury', 'community'],
+        tags: ['funding', 'treasury', 'community'],
         category: 'Finance',
-        parameters: <String, double>{'new_allocation': 25.0, 'current_allocation': 20.0},
+        parameters: {'new_allocation': 25.0, 'current_allocation': 20.0},
       ),
       Proposal(
         id: '2',
         title: 'Implement Quadratic Voting',
-        description:
-            'Change the voting system to quadratic voting for better representation of community preferences.',
+        description: 'Change the voting system to quadratic voting for better representation of community preferences.',
         proposerId: 'user2',
         createdAt: DateTime.now().subtract(const Duration(days: 21)),
         status: ProposalStatus.passed,
@@ -95,9 +93,9 @@ class MockData {
         abstainVotes: 120,
         quorumRequired: 1200,
         approvalThreshold: 65.0,
-        tags: <String>['voting', 'governance', 'quadratic'],
+        tags: ['voting', 'governance', 'quadratic'],
         category: 'Governance',
-        parameters: <String, String>{'voting_system': 'quadratic'},
+        parameters: {'voting_system': 'quadratic'},
       ),
       Proposal(
         id: '3',
@@ -114,62 +112,58 @@ class MockData {
         abstainVotes: 45,
         quorumRequired: 800,
         approvalThreshold: 55.0,
-        tags: <String>['project', 'defi', 'approval'],
+        tags: ['project', 'defi', 'approval'],
         category: 'Projects',
-        parameters: <String, Object>{'project_id': 'defi-001', 'budget': 100000.0},
+        parameters: {'project_id': 'defi-001', 'budget': 100000.0},
       ),
     ];
   }
 
   static List<Post> getMockPosts() {
-    return <Post>[
+    return [
       Post(
         id: '1',
         author: 'Alice Johnson',
         title: 'Welcome to HeliosHash DAO!',
-        content:
-            "Excited to launch our new DAO platform. Let's build something amazing together! This is a great opportunity for all of us to collaborate on innovative projects that can make a real difference in the world.",
+        content: 'Excited to launch our new DAO platform. Let\'s build something amazing together! This is a great opportunity for all of us to collaborate on innovative projects that can make a real difference in the world.',
         createdAt: DateTime.now().subtract(const Duration(hours: 2)),
         likes: 45,
         comments: 12,
         isLiked: true,
-        tags: <String>['announcement', 'welcome'],
+        tags: ['announcement', 'welcome'],
       ),
       Post(
         id: '2',
         author: 'Bob Smith',
         title: 'Proposal Discussion: Quadratic Voting Implementation',
-        content:
-            "Let's discuss the upcoming quadratic voting proposal. What are your thoughts on this governance change? I think it could help with better representation.",
+        content: 'Let\'s discuss the upcoming quadratic voting proposal. What are your thoughts on this governance change? I think it could help with better representation.',
         createdAt: DateTime.now().subtract(const Duration(hours: 5)),
         likes: 23,
         comments: 8,
         isLiked: false,
-        tags: <String>['governance', 'voting', 'discussion'],
+        tags: ['governance', 'voting', 'discussion'],
       ),
       Post(
         id: '3',
         author: 'Carol Davis',
         title: 'Project Showcase: Our New Identity System',
-        content:
-            "Check out the progress on our decentralized identity system project! We've made significant advances in the past week and would love to get community feedback.",
+        content: 'Check out the progress on our decentralized identity system project! We\'ve made significant advances in the past week and would love to get community feedback.',
         createdAt: DateTime.now().subtract(const Duration(hours: 8)),
         likes: 67,
         comments: 15,
         isLiked: true,
-        tags: <String>['project', 'showcase', 'identity'],
+        tags: ['project', 'showcase', 'identity'],
       ),
       Post(
         id: '4',
         author: 'David Wilson',
         title: 'Community Guidelines Update',
-        content:
-            "We've updated our community guidelines to better reflect our growing community. Please take a moment to review the changes and let us know your thoughts.",
+        content: 'We\'ve updated our community guidelines to better reflect our growing community. Please take a moment to review the changes and let us know your thoughts.',
         createdAt: DateTime.now().subtract(const Duration(hours: 12)),
         likes: 34,
         comments: 6,
         isLiked: false,
-        tags: <String>['guidelines', 'community', 'update'],
+        tags: ['guidelines', 'community', 'update'],
       ),
       Post(
         id: '5',
@@ -180,13 +174,13 @@ class MockData {
         likes: 28,
         comments: 22,
         isLiked: false,
-        tags: <String>['q&a', 'treasury', 'finance'],
+        tags: ['q&a', 'treasury', 'finance'],
       ),
     ];
   }
 
   static Map<String, dynamic> getMockUserProfile(String userId) {
-    return <String, dynamic>{
+    return {
       'id': userId,
       'username': 'user_$userId',
       'email': 'user$userId@heliosdao.com',
@@ -197,8 +191,8 @@ class MockData {
       'projects_contributed': 5,
       'proposals_submitted': 12,
       'voting_power': 1500,
-      'badges': <String>['Early Supporter', 'Active Voter', 'Project Contributor'],
-      'social_links': <String, String>{
+      'badges': ['Early Supporter', 'Active Voter', 'Project Contributor'],
+      'social_links': {
         'twitter': 'https://twitter.com/user$userId',
         'github': 'https://github.com/user$userId',
         'linkedin': 'https://linkedin.com/in/user$userId',
@@ -207,33 +201,32 @@ class MockData {
   }
 
   static List<Map<String, dynamic>> getMockCommunityPosts() {
-    return <Map<String, dynamic>>[
-      <String, dynamic>{
+    return [
+      {
         'id': '1',
         'author_id': 'user1',
         'title': 'Welcome to HeliosHash DAO!',
-        'content':
-            "Excited to launch our new DAO platform. Let's build something amazing together!",
+        'content': 'Excited to launch our new DAO platform. Let\'s build something amazing together!',
         'created_at': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
         'upvotes': 45,
         'downvotes': 2,
         'comments_count': 12,
-        'tags': <String>['announcement', 'welcome'],
+        'tags': ['announcement', 'welcome'],
         'image_url': null,
       },
-      <String, dynamic>{
+      {
         'id': '2',
         'author_id': 'user2',
         'title': 'Proposal Discussion: Quadratic Voting Implementation',
-        'content': "Let's discuss the upcoming quadratic voting proposal. What are your thoughts?",
+        'content': 'Let\'s discuss the upcoming quadratic voting proposal. What are your thoughts?',
         'created_at': DateTime.now().subtract(const Duration(hours: 5)).toIso8601String(),
         'upvotes': 23,
         'downvotes': 1,
         'comments_count': 8,
-        'tags': <String>['governance', 'voting', 'discussion'],
+        'tags': ['governance', 'voting', 'discussion'],
         'image_url': null,
       },
-      <String, dynamic>{
+      {
         'id': '3',
         'author_id': 'user3',
         'title': 'Project Showcase: Our New Identity System',
@@ -242,14 +235,14 @@ class MockData {
         'upvotes': 67,
         'downvotes': 0,
         'comments_count': 15,
-        'tags': <String>['project', 'showcase', 'identity'],
+        'tags': ['project', 'showcase', 'identity'],
         'image_url': null,
       },
     ];
   }
 
   static Map<String, dynamic> getMockDaoStats() {
-    return <String, dynamic>{
+    return {
       'total_members': 15420,
       'active_members': 8920,
       'total_projects': 45,
@@ -264,8 +257,8 @@ class MockData {
   }
 
   static List<Map<String, dynamic>> getMockRewards() {
-    return <Map<String, dynamic>>[
-      <String, dynamic>{
+    return [
+      {
         'id': '1',
         'type': 'voting',
         'title': 'Active Voter',
@@ -274,7 +267,7 @@ class MockData {
         'icon': 'vote',
         'unlocked_at': DateTime.now().subtract(const Duration(days: 30)).toIso8601String(),
       },
-      <String, dynamic>{
+      {
         'id': '2',
         'type': 'contribution',
         'title': 'Project Contributor',
@@ -283,7 +276,7 @@ class MockData {
         'icon': 'code',
         'unlocked_at': DateTime.now().subtract(const Duration(days: 15)).toIso8601String(),
       },
-      <String, dynamic>{
+      {
         'id': '3',
         'type': 'proposal',
         'title': 'Proposal Champion',

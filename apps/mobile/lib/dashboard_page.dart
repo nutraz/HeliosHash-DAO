@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'app_constant.dart';
-import 'mock_data.dart';
-import 'project_card.dart';
-import 'proposal_card.dart';
-import 'stat_card.dart';
-
-import 'project_model.dart';
-
-import 'proposal_model.dart';
+import 'package:helios_hash_dao/app_constant.dart';
+import 'package:helios_hash_dao/stat_card.dart';
+import 'package:helios_hash_dao/project_card.dart';
+import 'package:helios_hash_dao/proposal_card.dart';
+import 'package:helios_hash_dao/mock_data.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -17,29 +13,29 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  final List<Map<String, dynamic>> _stats = <Map<String, dynamic>>[
-    <String, dynamic>{
+  final List<Map<String, dynamic>> _stats = [
+    {
       'title': 'Total Members',
       'value': '15,420',
       'icon': Icons.people,
       'color': Colors.blue,
       'change': 12.5,
     },
-    <String, dynamic>{
+    {
       'title': 'Active Projects',
       'value': '23',
       'icon': Icons.work,
       'color': Colors.green,
       'change': 8.2,
     },
-    <String, dynamic>{
+    {
       'title': 'Treasury Balance',
-      'value': r'$2.5M',
+      'value': '\$2.5M',
       'icon': Icons.account_balance_wallet,
       'color': Colors.purple,
       'change': 15.3,
     },
-    <String, dynamic>{
+    {
       'title': 'Active Proposals',
       'value': '8',
       'icon': Icons.gavel,
@@ -56,7 +52,7 @@ class _DashboardPageState extends State<DashboardPage> {
         backgroundColor: AppConstants.primaryColor,
         foregroundColor: Colors.white,
         elevation: 0,
-        actions: <dynamic>[
+        actions: [
           IconButton(
             icon: const Icon(Icons.notifications),
             onPressed: () {
@@ -80,20 +76,20 @@ class _DashboardPageState extends State<DashboardPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <dynamic>[
+            children: [
               // Welcome Section
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: AppConstants.primaryColor,
-                  borderRadius: BorderRadius.only(
+                  borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <dynamic>[
+                  children: [
                     const Text(
                       'Welcome back!',
                       style: TextStyle(
@@ -104,8 +100,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Here's what's happening in your DAO today",
-                      style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8)),
+                      'Here\'s what\'s happening in your DAO today',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
                     ),
                   ],
                 ),
@@ -116,10 +115,13 @@ class _DashboardPageState extends State<DashboardPage> {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <dynamic>[
+                  children: [
                     const Text(
                       'DAO Statistics',
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     GridView.builder(
@@ -132,8 +134,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         childAspectRatio: 1.2,
                       ),
                       itemCount: _stats.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Map<String, dynamic> stat = _stats[index];
+                      itemBuilder: (context, index) {
+                        final stat = _stats[index];
                         return StatCard(
                           title: stat['title'],
                           value: stat['value'],
@@ -150,10 +152,13 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Recent Projects Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <dynamic>[
+                      children: [
                         const Text(
                           'Recent Projects',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -169,8 +174,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: MockData.getMockProjects().length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final Project project = MockData.getMockProjects()[index];
+                        itemBuilder: (context, index) {
+                          final project = MockData.getMockProjects()[index];
                           return Container(
                             width: 300,
                             margin: const EdgeInsets.only(right: 16),
@@ -190,10 +195,13 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Active Proposals Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <dynamic>[
+                      children: [
                         const Text(
                           'Active Proposals',
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -205,16 +213,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     const SizedBox(height: 16),
                     ...MockData.getMockProposals()
-                        .where((Proposal proposal) => proposal.isActive)
+                        .where((proposal) => proposal.isActive)
                         .take(2)
-                        .map(
-                          (Proposal proposal) => ProposalCard(
-                            proposal: proposal,
-                            onTap: () {
-                              // Navigate to proposal detail
-                            },
-                          ),
-                        ),
+                        .map((proposal) => ProposalCard(
+                              proposal: proposal,
+                              onTap: () {
+                                // Navigate to proposal detail
+                              },
+                            )),
                   ],
                 ),
               ),

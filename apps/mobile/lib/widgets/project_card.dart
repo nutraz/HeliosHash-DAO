@@ -3,13 +3,18 @@ import 'package:flutter/material.dart';
 import '../models/project/solar_project.dart';
 
 class ProjectCard extends StatelessWidget {
-  const ProjectCard({super.key, required this.project, this.onTap});
   final SolarProject project;
   final VoidCallback? onTap;
 
+  const ProjectCard({
+    Key? key,
+    required this.project,
+    this.onTap,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    final theme = Theme.of(context);
     return Card(
       clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -17,21 +22,28 @@ class ProjectCard extends StatelessWidget {
         onTap: onTap,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <dynamic>[
+          children: [
             // Project image/placeholder
             Container(
               height: 120,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: <dynamic>[Color(0xFFFFA726), Color(0xFFFF7043)],
+                  colors: [
+                    const Color(0xFFFFA726),
+                    const Color(0xFFFF7043),
+                  ],
                 ),
               ),
               child: Stack(
-                children: <dynamic>[
+                children: [
                   Center(
-                    child: Icon(Icons.wb_sunny, size: 40, color: Colors.white.withOpacity(0.7)),
+                    child: Icon(
+                      Icons.wb_sunny,
+                      size: 40,
+                      color: Colors.white.withOpacity(0.7),
+                    ),
                   ),
                   Positioned(
                     top: 8,
@@ -59,14 +71,16 @@ class ProjectCard extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <dynamic>[
+                children: [
                   Text(
                     project.name,
-                    style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 4),
                   Row(
-                    children: <dynamic>[
+                    children: [
                       Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
                       const SizedBox(width: 4),
                       Text(
@@ -80,7 +94,7 @@ class ProjectCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <dynamic>[
+                    children: [
                       _buildMetric('Capacity', '${project.capacity} MW', theme),
                       _buildMetric('Investors', '${project.investors}', theme),
                     ],
@@ -97,14 +111,19 @@ class ProjectCard extends StatelessWidget {
   Widget _buildMetric(String label, String value, ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: <dynamic>[
+      children: [
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurface.withOpacity(0.6),
           ),
         ),
-        Text(value, style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+        Text(
+          value,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }

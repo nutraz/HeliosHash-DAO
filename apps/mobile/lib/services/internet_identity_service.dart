@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/foundation.dart';
 
 class InternetIdentityService {
   static const String _identityUrl = 'https://identity.ic0.app/';
@@ -7,7 +7,7 @@ class InternetIdentityService {
   // Open Internet Identity login
   static Future<bool> login() async {
     try {
-      final Uri uri = Uri.parse(_identityUrl);
+      final uri = Uri.parse(_identityUrl);
       if (await canLaunchUrl(uri)) {
         await launchUrl(
           uri,

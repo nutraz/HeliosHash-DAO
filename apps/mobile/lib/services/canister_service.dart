@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CanisterService {
   final String _canisterId = "rrkah-fqaaa-aaaaa-aaaaq-cai"; // Replace with your canister ID
@@ -9,7 +8,7 @@ class CanisterService {
   // For read-only queries (direct to canister)
   Future<List<Map<String, dynamic>>> getProposals() async {
     try {
-      final http.Response response = await http.post(
+      final response = await http.post(
         Uri.parse('https://$_canisterId.ic0.app/getProposals'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({}), // Empty arguments
@@ -35,7 +34,7 @@ class CanisterService {
     required String authToken,
   }) async {
     try {
-      final http.Response response = await http.post(
+      final response = await http.post(
         Uri.parse('$_backendUrl/api/createProposal'),
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +66,7 @@ class CanisterService {
     required String authToken,
   }) async {
     try {
-      final http.Response response = await http.post(
+      final response = await http.post(
         Uri.parse('$_backendUrl/api/voteProposal'),
         headers: {
           'Content-Type': 'application/json',

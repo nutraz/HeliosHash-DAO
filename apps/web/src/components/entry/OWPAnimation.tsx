@@ -12,7 +12,9 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
   const [mounted, setMounted] = useState(false);
 
   // In dev or when explicitly disabled, render a lightweight static placeholder
-  const disableHeavy = process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true' || process.env.NODE_ENV !== 'production'
+  // To force the heavy animation even in development, set NEXT_PUBLIC_FORCE_HEAVY_SPLASH=true
+  const forceHeavySplash = process.env.NEXT_PUBLIC_FORCE_HEAVY_SPLASH === 'true'
+  const disableHeavy = !forceHeavySplash && (process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true' || process.env.NODE_ENV !== 'production')
   if (disableHeavy) {
     // minimal splash for dev: static logo + quick timeout to call onComplete
     useEffect(() => {

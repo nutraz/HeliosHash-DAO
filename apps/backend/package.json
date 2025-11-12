@@ -7,8 +7,10 @@
   "scripts": {
     "prebuild": "dfx generate helioshash_backend_backend",
     "build": "dfx build",
-    "dev": "dfx start --background && npm run build",
+    "dev": "dfx start --clean --background && npm run build",
     "pretest": "dfx generate helioshash_backend_backend",
-    "test": "echo 'No tests yet'"
+    "test": "echo 'No tests yet'",
+    "deploy": "dfx deploy",
+    "generate": "dfx generate"
   }
 }

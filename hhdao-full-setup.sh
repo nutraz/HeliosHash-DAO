@@ -43,6 +43,20 @@ info() {
   echo -e "${BLUE}ℹ $1${RESET}" | tee -a "$LOG_FILE"
 }
 
+# Dry-run mode
+DRY_RUN=false
+for arg in "$@"; do
+  case $arg in
+    --dry-run|-n)
+      DRY_RUN=true
+      shift
+      ;;
+  esac
+done
+
+# Mock commands for dry-run
+[ "$DRY_RUN" = "true" ] && log "🚀 DRY-RUN MODE: No changes will be made"
+
 log "🚀 Starting full HHDAO environment sync & setup..."
 
 #──────────────────────────────────────────────

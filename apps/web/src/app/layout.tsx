@@ -9,6 +9,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'HeliosHash DAO',
   description: 'Decentralized Autonomous Organization',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/hhdaologo.svg',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

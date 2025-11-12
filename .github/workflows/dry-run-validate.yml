@@ -1,0 +1,24 @@
+name: Validate hhdao-full-setup (dry-run)
+
+on:
+  pull_request:
+    paths:
+      - 'hhdao-full-setup.sh'
+      - 'scripts/**'
+      - '.github/workflows/**'
+
+jobs:
+  dry-run-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Make script executable
+        run: chmod +x hhdao-full-setup.sh
+      - name: Run hhdao-full-setup.sh in dry-run mode
+        run: |
+          ./hhdao-full-setup.sh --dry-run 2>&1 | tee dry-run-output.log
+      - name: Upload dry-run log
+        uses: actions/upload-artifact@v4
+        with:
+          name: hhdao-dry-run-log
+          path: dry-run-output.log

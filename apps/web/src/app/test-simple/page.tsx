@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function TestSimple() {
   return (
     <div style={{ padding: '2rem', background: '#1a1a1a', minHeight: '100vh', color: 'white' }}>
@@ -9,8 +11,8 @@ export default function TestSimple() {
         <li>✅ Component rendering</li>
       </ul>
       <div style={{ marginTop: '2rem' }}>
-        <a href="/" style={{ color: '#60a5fa', textDecoration: 'underline' }}>Go to Home</a> | {' '}
-        <a href="/dashboard" style={{ color: '#60a5fa', textDecoration: 'underline' }}>Go to Dashboard</a>
+        <Link href="/" style={{ color: '#60a5fa', textDecoration: 'underline' }}>Go to Home</Link> | {' '}
+        <Link href="/dashboard" style={{ color: '#60a5fa', textDecoration: 'underline' }}>Go to Dashboard</Link>
       </div>
     </div>
   )

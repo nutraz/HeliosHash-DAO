@@ -9,11 +9,6 @@ description: HeliosHash DAO Mobile Application
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
-
-environment:
-  sdk: ">=3.1.0 <4.0.0"
-
 name: helios_hash_dao
 description: HeliosHash DAO Mobile Application
 
@@ -79,3 +74,4 @@ flutter:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
+  #   - family: Schyler

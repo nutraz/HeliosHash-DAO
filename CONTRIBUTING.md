@@ -76,6 +76,32 @@ pm2 save
 
 Note: We use `NEXT_PUBLIC_FORCE_HEAVY_SPLASH=true` in the ecosystem config to enable the animated splash during development.
 
+### PM2 setup sequence
+
+The following sequence diagram shows how `scripts/setup-pm2.sh` automates installation, starting the PM2 process, and persisting it across restarts:
+
+```mermaid
+sequenceDiagram
+	actor User
+	participant setup-pm2.sh
+	participant npm
+	participant PM2
+	participant logs
+
+	User->>setup-pm2.sh: Execute script
+	setup-pm2.sh->>npm: Check/Install PM2 globally
+	npm->>setup-pm2.sh: PM2 installed ✓
+	setup-pm2.sh->>logs: Create ./logs directory
+	logs->>setup-pm2.sh: Directory ready ✓
+	setup-pm2.sh->>PM2: Load ecosystem.config.js
+	PM2->>PM2: Start helioshash-web app (port 3002)
+	PM2->>setup-pm2.sh: Process running ✓
+	setup-pm2.sh->>PM2: Save process list
+	PM2->>setup-pm2.sh: List saved ✓
+	setup-pm2.sh->>User: Display startup command & usage
+
+```
+
 ## Running tests (unit & E2E)
 
 Unit tests (Vitest)

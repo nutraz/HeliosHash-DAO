@@ -13,12 +13,9 @@ class _RewardsScreenState extends State<RewardsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rewards & Exchange'),
-        backgroundColor: Colors.amber,
-      ),
+      appBar: AppBar(title: const Text('Rewards & Exchange'), backgroundColor: Colors.amber),
       body: Consumer<DAOProvider>(
-        builder: (context, daoProvider, child) {
+        builder: (BuildContext context, DAOProvider daoProvider, Widget? child) {
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -30,19 +27,21 @@ class _RewardsScreenState extends State<RewardsScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Column(
+<<<<<<< HEAD
                       children: [
                         const Icon(
                           Icons.account_balance_wallet,
                           size: 48,
                           color: Colors.amber,
                         ),
+=======
+                      children: <dynamic>[
+                        const Icon(Icons.account_balance_wallet, size: 48, color: Colors.amber),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                         const SizedBox(height: 16),
                         const Text(
                           'Current Balance',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -58,20 +57,18 @@ class _RewardsScreenState extends State<RewardsScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton.icon(
-                              onPressed: daoProvider.isLoading ? null : () => _claimRewards(context),
+                              onPressed: daoProvider.isLoading
+                                  ? null
+                                  : () => _claimRewards(context),
                               icon: const Icon(Icons.download),
                               label: const Text('Claim Rewards'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                              ),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                             ),
                             ElevatedButton.icon(
                               onPressed: () => _showExchangeDialog(context),
                               icon: const Icon(Icons.swap_horiz),
                               label: const Text('Exchange'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                              ),
+                              style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                             ),
                           ],
                         ),
@@ -85,10 +82,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 // Available Rewards Section
                 const Text(
                   'Available Rewards',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
@@ -129,10 +123,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 // Token Exchange Section
                 const Text(
                   'Token Exchange',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
@@ -144,10 +135,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                       children: [
                         const Text(
                           'Exchange Rate',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                         ),
                         const SizedBox(height: 8),
                         const Text(
@@ -161,9 +149,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                         const SizedBox(height: 16),
                         const Text(
                           'Exchange your HHDAO tokens for ETH or other cryptocurrencies.',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(color: Colors.grey),
                         ),
                         const SizedBox(height: 16),
                         SizedBox(
@@ -176,10 +162,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                             ),
                             child: const Text(
                               'Exchange Tokens',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
@@ -193,10 +176,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
                 // Transaction History
                 const Text(
                   'Recent Transactions',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
 
@@ -231,7 +211,13 @@ class _RewardsScreenState extends State<RewardsScreen> {
     );
   }
 
-  Widget _buildRewardCard(String title, String description, String amount, Color color, IconData icon) {
+  Widget _buildRewardCard(
+    String title,
+    String description,
+    String amount,
+    Color color,
+    IconData icon,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -246,6 +232,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                 children: [
                   Text(
                     title,
@@ -254,14 +241,12 @@ class _RewardsScreenState extends State<RewardsScreen> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+=======
+                children: <dynamic>[
+                  Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                   const SizedBox(height: 4),
-                  Text(
-                    description,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
+                  Text(description, style: TextStyle(color: Colors.grey[600], fontSize: 14)),
                 ],
               ),
             ),
@@ -273,10 +258,7 @@ class _RewardsScreenState extends State<RewardsScreen> {
               ),
               child: Text(
                 amount,
-                style: TextStyle(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(color: color, fontWeight: FontWeight.bold),
               ),
             ),
           ],
@@ -285,33 +267,32 @@ class _RewardsScreenState extends State<RewardsScreen> {
     );
   }
 
-  Widget _buildTransactionItem(String title, String amount, String subtitle, String time, Color amountColor) {
+  Widget _buildTransactionItem(
+    String title,
+    String amount,
+    String subtitle,
+    String time,
+    Color amountColor,
+  ) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: amountColor.withOpacity(0.1),
-          child: Icon(
-            amount.startsWith('+') ? Icons.add : Icons.remove,
-            color: amountColor,
-          ),
+          child: Icon(amount.startsWith('+') ? Icons.add : Icons.remove, color: amountColor),
         ),
         title: Text(title),
         subtitle: Text('$subtitle • $time'),
         trailing: Text(
           amount,
-          style: TextStyle(
-            color: amountColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: TextStyle(color: amountColor, fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );
   }
 
   Future<void> _claimRewards(BuildContext context) async {
-    final daoProvider = Provider.of<DAOProvider>(context, listen: false);
+    final DAOProvider daoProvider = Provider.of<DAOProvider>(context, listen: false);
     await daoProvider.claimRewards();
 
     if (mounted) {
@@ -351,18 +332,20 @@ class _RewardsScreenState extends State<RewardsScreen> {
               const SizedBox(height: 8),
               Text(
                 'You will receive: ${amountController.text.isEmpty ? '0.00' : (double.tryParse(amountController.text) ?? 0 * 0.05).toStringAsFixed(2)} ETH',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
+                style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
               ),
             ],
           ),
+<<<<<<< HEAD
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Cancel'),
             ),
+=======
+          actions: <dynamic>[
+            TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ElevatedButton(
               onPressed: () {
                 // TODO: Implement actual exchange logic

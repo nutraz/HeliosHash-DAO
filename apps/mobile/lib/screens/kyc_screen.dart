@@ -10,6 +10,7 @@ class KycScreen extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
           children: [
             Text('Aadhaar Consent & KYC Choice',
                 style: TextStyle(fontSize: 22, color: Colors.white)),
@@ -17,15 +18,21 @@ class KycScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               child: Text('Continue with Aadhaar e-KYC'),
+=======
+          children: <dynamic>[
+            const Text(
+              'Aadhaar Consent & KYC Choice',
+              style: TextStyle(fontSize: 22, color: Colors.white),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Continue with PAN'),
+            const SizedBox(height: 24),
+            ElevatedButton(onPressed: () {}, child: const Text('Continue with Aadhaar e-KYC')),
+            ElevatedButton(onPressed: () {}, child: const Text('Continue with PAN')),
+            const SizedBox(height: 16),
+            const Text(
+              'We store only a hashed token and your consent. Full Aadhaar data stays with UIDAI.',
+              style: TextStyle(color: Colors.white70),
             ),
-            SizedBox(height: 16),
-            Text(
-                'We store only a hashed token and your consent. Full Aadhaar data stays with UIDAI.',
-                style: TextStyle(color: Colors.white70)),
           ],
         ),
       ),

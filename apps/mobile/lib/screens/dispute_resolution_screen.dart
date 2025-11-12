@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DisputeResolutionScreen extends StatefulWidget {
+  const DisputeResolutionScreen({super.key});
+
   @override
   _DisputeResolutionScreenState createState() => _DisputeResolutionScreenState();
 }
@@ -46,11 +48,16 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dispute Resolution'),
+        title: const Text('Dispute Resolution'),
         backgroundColor: Colors.orange.shade600,
         foregroundColor: Colors.white,
+<<<<<<< HEAD
         actions: [
           IconButton(icon: Icon(Icons.add), onPressed: () => _showNewDisputeDialog()),
+=======
+        actions: <dynamic>[
+          IconButton(icon: const Icon(Icons.add), onPressed: () => _showNewDisputeDialog()),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         ],
       ),
       body: Column(
@@ -59,9 +66,9 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
           _buildCategoryFilter(),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               itemCount: _disputes.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return _buildDisputeCard(_disputes[index]);
               },
             ),
@@ -71,14 +78,14 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showNewDisputeDialog(),
         backgroundColor: Colors.orange.shade600,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   Widget _buildHeader() {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -88,17 +95,31 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
         children: [
           Text('Dispute Resolution Center', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
           SizedBox(height: 8),
           Text('Resolve conflicts through transparent community governance', style: TextStyle(fontSize: 16, color: Colors.orange.shade100)),
           SizedBox(height: 16),
+=======
+        children: <dynamic>[
+          const Text(
+            'Dispute Resolution Center',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Resolve conflicts through transparent community governance',
+            style: TextStyle(fontSize: 16, color: Colors.orange.shade100),
+          ),
+          const SizedBox(height: 16),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           Row(
             children: [
               _buildStat('3', 'Active Disputes'),
-              SizedBox(width: 32),
+              const SizedBox(width: 32),
               _buildStat('1', 'Under Voting'),
-              SizedBox(width: 32),
+              const SizedBox(width: 32),
               _buildStat('89%', 'Resolution Rate'),
             ],
           ),
@@ -110,8 +131,16 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   Widget _buildStat(String value, String label) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
       children: [
         Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+=======
+      children: <dynamic>[
+        Text(
+          value,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         Text(label, style: TextStyle(fontSize: 14, color: Colors.orange.shade100)),
       ],
     );
@@ -120,17 +149,17 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   Widget _buildCategoryFilter() {
     final categories = ['All', 'Land', 'Financial', 'Contract', 'Technical'];
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: categories.map((category) {
             return Padding(
-              padding: EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8),
               child: FilterChip(
                 label: Text(category),
                 selected: category == 'All',
-                onSelected: (selected) {},
+                onSelected: (bool selected) {},
                 backgroundColor: Colors.grey.shade200,
                 selectedColor: Colors.orange.shade100,
                 checkmarkColor: Colors.orange.shade600,
@@ -143,30 +172,44 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   }
 
   Widget _buildDisputeCard(Map<String, dynamic> dispute) {
-    final statusColor = dispute['status'] == 'Resolved' ? Colors.green : dispute['status'] == 'Voting' ? Colors.blue : Colors.orange;
+    final MaterialColor statusColor = dispute['status'] == 'Resolved'
+        ? Colors.green
+        : dispute['status'] == 'Voting'
+        ? Colors.blue
+        : Colors.orange;
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Expanded(
-                  child: Text(dispute['title'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    dispute['title'],
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(color: statusColor.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
-                  child: Text(dispute['status'], style: TextStyle(color: statusColor, fontWeight: FontWeight.bold)),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    dispute['status'],
+                    style: TextStyle(color: statusColor, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(dispute['description'], style: TextStyle(color: Colors.grey.shade700)),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Row(
+<<<<<<< HEAD
               children: [
                 Icon(Icons.group, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
@@ -184,39 +227,72 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
                   Icon(Icons.how_to_vote, size: 16, color: Colors.grey),
                   SizedBox(width: 4),
                   Text('${dispute['votes']} / ${dispute['totalVotes']} votes', style: TextStyle(color: Colors.grey)),
+=======
+              children: <dynamic>[
+                const Icon(Icons.group, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(dispute['parties'].join(' vs '), style: const TextStyle(color: Colors.grey)),
+                const SizedBox(width: 16),
+                const Icon(Icons.category, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(dispute['category'], style: const TextStyle(color: Colors.grey)),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (dispute['status'] != 'Resolved') ...<dynamic>[
+              Row(
+                children: <dynamic>[
+                  const Icon(Icons.how_to_vote, size: 16, color: Colors.grey),
+                  const SizedBox(width: 4),
+                  Text(
+                    '${dispute['votes']} / ${dispute['totalVotes']} votes',
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               LinearProgressIndicator(
                 value: dispute['votes'] / dispute['totalVotes'],
                 backgroundColor: Colors.grey.shade200,
                 valueColor: AlwaysStoppedAnimation<Color>(statusColor),
               ),
             ],
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => _showDisputeDetails(dispute),
-                    child: Text('View Details'),
+                    child: const Text('View Details'),
                   ),
                 ),
+<<<<<<< HEAD
                 SizedBox(width: 8),
                 if (dispute['status'] == 'Voting') ...[
+=======
+                const SizedBox(width: 8),
+                if (dispute['status'] == 'Voting') ...<dynamic>[
+>>>>>>> 9823c84 (chore: sync and clean repo)
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _showVotingDialog(dispute),
-                      child: Text('Vote Now'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade600, foregroundColor: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange.shade600,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Vote Now'),
                     ),
                   ),
                 ] else if (dispute['status'] == 'Under Review') ...[
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () => _showCommentDialog(dispute),
-                      child: Text('Add Comment'),
-                      style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade600, foregroundColor: Colors.white),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue.shade600,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Add Comment'),
                     ),
                   ),
                 ],
@@ -231,10 +307,11 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   void _showNewDisputeDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Raise New Dispute'),
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Raise New Dispute'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+<<<<<<< HEAD
           children: [
             TextField(decoration: InputDecoration(labelText: 'Dispute Title', border: OutlineInputBorder())),
             SizedBox(height: 16),
@@ -242,24 +319,55 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
               decoration: InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
               items: ['Land', 'Financial', 'Contract', 'Technical'].map((cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
               onChanged: (value) {},
+=======
+          children: <dynamic>[
+            const TextField(
+              decoration: InputDecoration(labelText: 'Dispute Title', border: OutlineInputBorder()),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
-            SizedBox(height: 16),
-            TextField(decoration: InputDecoration(labelText: 'Involved Parties', border: OutlineInputBorder())),
-            SizedBox(height: 16),
-            TextField(
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Category',
+                border: OutlineInputBorder(),
+              ),
+              items: <String>[
+                'Land',
+                'Financial',
+                'Contract',
+                'Technical',
+              ].map((String cat) => DropdownMenuItem(value: cat, child: Text(cat))).toList(),
+              onChanged: (String? value) {},
+            ),
+            const SizedBox(height: 16),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Involved Parties',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            const TextField(
               decoration: InputDecoration(labelText: 'Description', border: OutlineInputBorder()),
               maxLines: 3,
             ),
           ],
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Dispute submitted for review!')));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Dispute submitted for review!')));
             },
-            child: Text('Submit Dispute'),
+            child: const Text('Submit Dispute'),
           ),
         ],
       ),
@@ -269,51 +377,66 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   void _showDisputeDetails(Map<String, dynamic> dispute) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => DisputeDetailScreen(dispute: dispute)),
+      MaterialPageRoute(builder: (BuildContext context) => DisputeDetailScreen(dispute: dispute)),
     );
   }
 
   void _showVotingDialog(Map<String, dynamic> dispute) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Vote on Dispute'),
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Vote on Dispute'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(dispute['title']),
-            SizedBox(height: 16),
-            Text('How do you vote on this dispute?'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
+            const Text('How do you vote on this dispute?'),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Vote recorded!')));
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(const SnackBar(content: Text('Vote recorded!')));
                     },
-                    child: Text('For Resolution'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green.shade600, foregroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green.shade600,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('For Resolution'),
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Vote recorded!')));
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(const SnackBar(content: Text('Vote recorded!')));
                     },
-                    child: Text('Against Resolution'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.red.shade600, foregroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red.shade600,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Against Resolution'),
                   ),
                 ),
               ],
             ),
           ],
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         ],
       ),
     );
@@ -322,27 +445,34 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
   void _showCommentDialog(Map<String, dynamic> dispute) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Add Comment'),
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Add Comment'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(dispute['title']),
-            SizedBox(height: 16),
-            TextField(
+            const SizedBox(height: 16),
+            const TextField(
               decoration: InputDecoration(labelText: 'Your Comment', border: OutlineInputBorder()),
               maxLines: 3,
             ),
           ],
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Comment added!')));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Comment added!')));
             },
-            child: Text('Submit Comment'),
+            child: const Text('Submit Comment'),
           ),
         ],
       ),
@@ -351,6 +481,10 @@ class _DisputeResolutionScreenState extends State<DisputeResolutionScreen> {
 }
 
 class DisputeDetailScreen extends StatelessWidget {
+<<<<<<< HEAD
+=======
+  const DisputeDetailScreen({super.key, required this.dispute});
+>>>>>>> 9823c84 (chore: sync and clean repo)
   final Map<String, dynamic> dispute;
   DisputeDetailScreen({required this.dispute});
   @override
@@ -362,18 +496,27 @@ class DisputeDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                   children: [
                     Text('Dispute Information', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 16),
+=======
+                  children: <dynamic>[
+                    const Text(
+                      'Dispute Information',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                     _buildInfoRow('ID', dispute['id']),
                     _buildInfoRow('Status', dispute['status']),
                     _buildInfoRow('Category', dispute['category']),
@@ -383,62 +526,107 @@ class DisputeDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                   children: [
                     Text('Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
+=======
+                  children: <dynamic>[
+                    const Text(
+                      'Description',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                     Text(dispute['description']),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                   children: [
                     Text('Voting Progress', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 16),
+=======
+                  children: <dynamic>[
+                    const Text(
+                      'Voting Progress',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 16),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                     LinearProgressIndicator(
                       value: dispute['votes'] / dispute['totalVotes'],
                       backgroundColor: Colors.grey.shade200,
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.orange.shade600),
                     ),
-                    SizedBox(height: 8),
-                    Text('${dispute['votes']} / ${dispute['totalVotes']} votes (${(dispute['votes'] / dispute['totalVotes'] * 100).toStringAsFixed(1)}%)'),
+                    const SizedBox(height: 8),
+                    Text(
+                      '${dispute['votes']} / ${dispute['totalVotes']} votes (${(dispute['votes'] / dispute['totalVotes'] * 100).toStringAsFixed(1)}%)',
+                    ),
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Card(
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
                   children: [
                     Text('Comments', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                     SizedBox(height: 8),
                     _buildCommentCard('Community Member', 'We need more transparency in this process.', '2 hours ago'),
                     _buildCommentCard('Project Manager', 'The timeline is being reviewed by all parties.', '1 day ago'),
+=======
+                  children: <dynamic>[
+                    const Text(
+                      'Comments',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    _buildCommentCard(
+                      'Community Member',
+                      'We need more transparency in this process.',
+                      '2 hours ago',
+                    ),
+                    _buildCommentCard(
+                      'Project Manager',
+                      'The timeline is being reviewed by all parties.',
+                      '1 day ago',
+                    ),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                   ],
                 ),
               ),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () { Navigator.pop(context); },
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange.shade600,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
                 child: Text(dispute['status'] == 'Voting' ? 'Vote Now' : 'Add Comment'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange.shade600, foregroundColor: Colors.white, padding: EdgeInsets.symmetric(vertical: 16)),
               ),
             ),
           ],
@@ -449,11 +637,19 @@ class DisputeDetailScreen extends StatelessWidget {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
         children: [
           SizedBox(width: 100, child: Text('$label:', style: TextStyle(fontWeight: FontWeight.bold))),
+=======
+        children: <dynamic>[
+          SizedBox(
+            width: 100,
+            child: Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
+          ),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           Expanded(child: Text(value)),
         ],
       ),
@@ -462,13 +658,14 @@ class DisputeDetailScreen extends StatelessWidget {
 
   Widget _buildCommentCard(String author, String comment, String time) {
     return Card(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Padding(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+<<<<<<< HEAD
               children: [
                 CircleAvatar(backgroundColor: Colors.orange.shade100, child: Icon(Icons.person, color: Colors.orange.shade600)),
                 SizedBox(width: 12),
@@ -477,11 +674,24 @@ class DisputeDetailScreen extends StatelessWidget {
                   children: [
                     Text(author, style: TextStyle(fontWeight: FontWeight.bold)),
                     Text(time, style: TextStyle(color: Colors.grey, fontSize: 12)),
+=======
+              children: <dynamic>[
+                CircleAvatar(
+                  backgroundColor: Colors.orange.shade100,
+                  child: Icon(Icons.person, color: Colors.orange.shade600),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <dynamic>[
+                    Text(author, style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(time, style: const TextStyle(color: Colors.grey, fontSize: 12)),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(comment),
           ],
         ),

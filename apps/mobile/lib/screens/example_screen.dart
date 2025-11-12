@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+
 class ExampleScreen extends StatelessWidget {
+  const ExampleScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Example Screen')),
-      body: Center(child: Text('This is an example screen.')),
+      appBar: AppBar(title: const Text('Example Screen')),
+      body: const Center(child: Text('This is an example screen.')),
     );
   }
 }

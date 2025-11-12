@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:helios_hash_dao/app_constant.dart';
 import 'package:helios_hash_dao/stat_card.dart';
 import 'package:helios_hash_dao/project_card.dart';
 import 'package:helios_hash_dao/proposal_card.dart';
 import 'package:helios_hash_dao/mock_data.dart';
+=======
+import 'app_constant.dart';
+import 'mock_data.dart';
+import 'project_card.dart';
+import 'proposal_card.dart';
+import 'stat_card.dart';
+
+import 'project_model.dart';
+
+import 'proposal_model.dart';
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -80,9 +92,9 @@ class _DashboardPageState extends State<DashboardPage> {
               // Welcome Section
               Container(
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppConstants.primaryColor,
-                  borderRadius: const BorderRadius.only(
+                  borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(30),
                     bottomRight: Radius.circular(30),
                   ),
@@ -100,11 +112,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
+<<<<<<< HEAD
                       'Here\'s what\'s happening in your DAO today',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.8),
                       ),
+=======
+                      "Here's what's happening in your DAO today",
+                      style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8)),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                     ),
                   ],
                 ),
@@ -118,10 +135,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   children: [
                     const Text(
                       'DAO Statistics',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     GridView.builder(
@@ -134,8 +148,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         childAspectRatio: 1.2,
                       ),
                       itemCount: _stats.length,
+<<<<<<< HEAD
                       itemBuilder: (context, index) {
                         final stat = _stats[index];
+=======
+                      itemBuilder: (BuildContext context, int index) {
+                        final Map<String, dynamic> stat = _stats[index];
+>>>>>>> 9823c84 (chore: sync and clean repo)
                         return StatCard(
                           title: stat['title'],
                           value: stat['value'],
@@ -155,10 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         const Text(
                           'Recent Projects',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         TextButton(
                           onPressed: () {
@@ -174,8 +190,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: MockData.getMockProjects().length,
-                        itemBuilder: (context, index) {
-                          final project = MockData.getMockProjects()[index];
+                        itemBuilder: (BuildContext context, int index) {
+                          final Project project = MockData.getMockProjects()[index];
                           return Container(
                             width: 300,
                             margin: const EdgeInsets.only(right: 16),
@@ -198,10 +214,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: [
                         const Text(
                           'Active Proposals',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         TextButton(
                           onPressed: () {
@@ -213,14 +226,16 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     const SizedBox(height: 16),
                     ...MockData.getMockProposals()
-                        .where((proposal) => proposal.isActive)
+                        .where((Proposal proposal) => proposal.isActive)
                         .take(2)
-                        .map((proposal) => ProposalCard(
-                              proposal: proposal,
-                              onTap: () {
-                                // Navigate to proposal detail
-                              },
-                            )),
+                        .map(
+                          (Proposal proposal) => ProposalCard(
+                            proposal: proposal,
+                            onTap: () {
+                              // Navigate to proposal detail
+                            },
+                          ),
+                        ),
                   ],
                 ),
               ),

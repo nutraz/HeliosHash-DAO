@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DAOProvider with ChangeNotifier {
+<<<<<<< HEAD
+=======
+  DAOProvider() {
+    _loadUserData();
+    _fetchData();
+  }
+
+>>>>>>> 9823c84 (chore: sync and clean repo)
   /// Mock method for project investment.
   /// In a real app, this would involve a Web3 transaction.
   Future<bool> investInProject({required String projectId, required BigInt amount}) async {
     // 1. Log the action (for mock data visibility)
-    print('DAOProvider: Received investment request for project $projectId '
-        'with amount $amount tokens.');
+    print(
+      'DAOProvider: Received investment request for project $projectId '
+      'with amount $amount tokens.',
+    );
 
     // 2. Mock delay to simulate network latency
     await Future.delayed(const Duration(milliseconds: 500));
@@ -23,6 +33,7 @@ class DAOProvider with ChangeNotifier {
       return false; // Investment failed
     }
   }
+
   bool _isLoading = false;
   bool _isConnected = false;
   String _userAddress = '';
@@ -46,7 +57,7 @@ class DAOProvider with ChangeNotifier {
   }
 
   Future<void> _loadUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     _isConnected = prefs.getBool('isConnected') ?? false;
     _userAddress = prefs.getString('userAddress') ?? '';
     _tokenBalance = prefs.getDouble('tokenBalance') ?? 0.0;
@@ -54,7 +65,7 @@ class DAOProvider with ChangeNotifier {
   }
 
   Future<void> _saveUserData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isConnected', _isConnected);
     await prefs.setString('userAddress', _userAddress);
     await prefs.setDouble('tokenBalance', _tokenBalance);
@@ -101,10 +112,25 @@ class DAOProvider with ChangeNotifier {
         'image': 'assets/images/solar_farm.jpg',
         'beneficiaries': 150,
         'co2Reduced': 45.2,
+<<<<<<< HEAD
         'updates': [
           {'title': 'Land Acquisition Complete', 'date': '2 days ago', 'description': 'Successfully acquired 2 acres of land'},
           {'title': 'Environmental Approval Received', 'date': '1 week ago', 'description': 'All necessary clearances obtained'},
         ]
+=======
+        'updates': <Map<String, String>>[
+          <String, String>{
+            'title': 'Land Acquisition Complete',
+            'date': '2 days ago',
+            'description': 'Successfully acquired 2 acres of land',
+          },
+          <String, String>{
+            'title': 'Environmental Approval Received',
+            'date': '1 week ago',
+            'description': 'All necessary clearances obtained',
+          },
+        ],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'id': 'PRJ-002',
@@ -118,10 +144,25 @@ class DAOProvider with ChangeNotifier {
         'image': 'assets/images/microgrid.jpg',
         'beneficiaries': 200,
         'co2Reduced': 62.8,
+<<<<<<< HEAD
         'updates': [
           {'title': 'Community Survey Completed', 'date': '3 days ago', 'description': 'Surveyed 200 households'},
           {'title': 'Technical Feasibility Study', 'date': '1 week ago', 'description': 'Study confirms viability'},
         ]
+=======
+        'updates': <Map<String, String>>[
+          <String, String>{
+            'title': 'Community Survey Completed',
+            'date': '3 days ago',
+            'description': 'Surveyed 200 households',
+          },
+          <String, String>{
+            'title': 'Technical Feasibility Study',
+            'date': '1 week ago',
+            'description': 'Study confirms viability',
+          },
+        ],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'id': 'PRJ-003',
@@ -135,11 +176,27 @@ class DAOProvider with ChangeNotifier {
         'image': 'assets/images/school.jpg',
         'beneficiaries': 5000,
         'co2Reduced': 120.5,
+<<<<<<< HEAD
         'updates': [
           {'title': 'First 10 Schools Completed', 'date': '1 day ago', 'description': 'All systems operational'},
           {'title': 'Teacher Training Program', 'date': '1 week ago', 'description': 'Teachers trained on system maintenance'},
         ]
       }
+=======
+        'updates': <Map<String, String>>[
+          <String, String>{
+            'title': 'First 10 Schools Completed',
+            'date': '1 day ago',
+            'description': 'All systems operational',
+          },
+          <String, String>{
+            'title': 'Teacher Training Program',
+            'date': '1 week ago',
+            'description': 'Teachers trained on system maintenance',
+          },
+        ],
+      },
+>>>>>>> 9823c84 (chore: sync and clean repo)
     ];
     _proposals = [
       {
@@ -152,10 +209,25 @@ class DAOProvider with ChangeNotifier {
         'totalVotes': 100,
         'endDate': '2024-02-15',
         'category': 'Infrastructure',
+<<<<<<< HEAD
         'comments': [
           {'author': 'Rajesh Kumar', 'content': 'This expansion will benefit our community greatly', 'date': '2 hours ago'},
           {'author': 'Priya Sharma', 'content': 'We need more details about the cost breakdown', 'date': '5 hours ago'},
         ]
+=======
+        'comments': <Map<String, String>>[
+          <String, String>{
+            'author': 'Rajesh Kumar',
+            'content': 'This expansion will benefit our community greatly',
+            'date': '2 hours ago',
+          },
+          <String, String>{
+            'author': 'Priya Sharma',
+            'content': 'We need more details about the cost breakdown',
+            'date': '5 hours ago',
+          },
+        ],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'id': 'PROP-002',
@@ -167,10 +239,25 @@ class DAOProvider with ChangeNotifier {
         'totalVotes': 100,
         'endDate': '2024-02-20',
         'category': 'Governance',
+<<<<<<< HEAD
         'comments': [
           {'author': 'Amit Patel', 'content': 'The guidelines look comprehensive', 'date': '1 day ago'},
           {'author': 'Sunita Devi', 'content': 'We need more transparency in fund allocation', 'date': '2 days ago'},
         ]
+=======
+        'comments': <Map<String, String>>[
+          <String, String>{
+            'author': 'Amit Patel',
+            'content': 'The guidelines look comprehensive',
+            'date': '1 day ago',
+          },
+          <String, String>{
+            'author': 'Sunita Devi',
+            'content': 'We need more transparency in fund allocation',
+            'date': '2 days ago',
+          },
+        ],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'id': 'PROP-003',
@@ -182,11 +269,27 @@ class DAOProvider with ChangeNotifier {
         'totalVotes': 100,
         'endDate': '2024-02-10',
         'category': 'Membership',
+<<<<<<< HEAD
         'comments': [
           {'author': 'Vikram Singh', 'content': 'Great initiative for community engagement', 'date': '3 days ago'},
           {'author': 'Meera Patel', 'content': 'The benefits are well structured', 'date': '4 days ago'},
         ]
       }
+=======
+        'comments': <Map<String, String>>[
+          <String, String>{
+            'author': 'Vikram Singh',
+            'content': 'Great initiative for community engagement',
+            'date': '3 days ago',
+          },
+          <String, String>{
+            'author': 'Meera Patel',
+            'content': 'The benefits are well structured',
+            'date': '4 days ago',
+          },
+        ],
+      },
+>>>>>>> 9823c84 (chore: sync and clean repo)
     ];
     _communityMembers = [
       {
@@ -196,8 +299,13 @@ class DAOProvider with ChangeNotifier {
         'contributions': 15,
         'tokens': 250.0,
         'avatar': 'assets/images/rajesh.jpg',
+<<<<<<< HEAD
         'projects': ['Urgam Valley Solar Farm', 'Dharampur Microgrid'],
         'skills': ['Solar Engineering', 'Project Management', 'Community Training']
+=======
+        'projects': <String>['Urgam Valley Solar Farm', 'Dharampur Microgrid'],
+        'skills': <String>['Solar Engineering', 'Project Management', 'Community Training'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'name': 'Priya Sharma',
@@ -206,8 +314,13 @@ class DAOProvider with ChangeNotifier {
         'contributions': 23,
         'tokens': 375.0,
         'avatar': 'assets/images/priya.jpg',
+<<<<<<< HEAD
         'projects': ['Community Outreach', 'Education Programs'],
         'skills': ['Community Organization', 'Public Speaking', 'Event Planning']
+=======
+        'projects': <String>['Community Outreach', 'Education Programs'],
+        'skills': <String>['Community Organization', 'Public Speaking', 'Event Planning'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'name': 'Amit Patel',
@@ -216,8 +329,13 @@ class DAOProvider with ChangeNotifier {
         'contributions': 18,
         'tokens': 180.0,
         'avatar': 'assets/images/amit.jpg',
+<<<<<<< HEAD
         'projects': ['Land Acquisition', 'Community Engagement'],
         'skills': ['Agriculture', 'Community Relations', 'Local Knowledge']
+=======
+        'projects': <String>['Land Acquisition', 'Community Engagement'],
+        'skills': <String>['Agriculture', 'Community Relations', 'Local Knowledge'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
       },
       {
         'name': 'Sunita Devi',
@@ -226,9 +344,15 @@ class DAOProvider with ChangeNotifier {
         'contributions': 31,
         'tokens': 425.0,
         'avatar': 'assets/images/sunita.jpg',
+<<<<<<< HEAD
         'projects': ['School Electrification', 'Teacher Training'],
         'skills': ['Education', 'Training', 'Curriculum Development']
       }
+=======
+        'projects': <String>['School Electrification', 'Teacher Training'],
+        'skills': <String>['Education', 'Training', 'Curriculum Development'],
+      },
+>>>>>>> 9823c84 (chore: sync and clean repo)
     ];
     _isLoading = false;
     notifyListeners();
@@ -254,7 +378,13 @@ class DAOProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 1));
+<<<<<<< HEAD
     final proposalIndex = _proposals.indexWhere((p) => p['id'] == proposalId);
+=======
+    final int proposalIndex = _proposals.indexWhere(
+      (Map<String, dynamic> p) => p['id'] == proposalId,
+    );
+>>>>>>> 9823c84 (chore: sync and clean repo)
     if (proposalIndex != -1) {
       _proposals[proposalIndex]['votes'] += voteFor ? 1 : 0;
       _tokenBalance += 10.0;
@@ -275,8 +405,13 @@ class DAOProvider with ChangeNotifier {
       'contributions': 0,
       'tokens': 50.0,
       'avatar': 'assets/images/default_avatar.jpg',
+<<<<<<< HEAD
       'projects': [],
       'skills': expertise.split(',').map((e) => e.trim()).toList()
+=======
+      'projects': <dynamic>[],
+      'skills': expertise.split(',').map((String e) => e.trim()).toList(),
+>>>>>>> 9823c84 (chore: sync and clean repo)
     });
     _tokenBalance += 50.0;
     await _saveUserData();
@@ -314,7 +449,8 @@ class DAOProvider with ChangeNotifier {
     final newProposal = {
       'id': 'PROP-${DateTime.now().millisecondsSinceEpoch}',
       'title': 'New Solar Project: ${projectData['name']}',
-      'description': 'Proposal to fund and implement ${projectData['name']} - ${projectData['description']}\n\n'
+      'description':
+          'Proposal to fund and implement ${projectData['name']} - ${projectData['description']}\n\n'
           'Location: ${projectData['location']}\n'
           'Capacity: ${projectData['capacity']} MW\n'
           'Funding Goal: ${projectData['fundingGoal']} ETH\n'

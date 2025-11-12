@@ -2436,9 +2436,12 @@ packages:
   '@types/testing-library__jest-dom@5.14.9':
     resolution: {integrity: sha512-FSYhIjFlfOpGSRyVoMBMuS3ws5ehFQODymf3vlI7U1K8c7PHwWwFY7VREfmsuzHSOnoKs/9/Y983ayOs7eRzqw==}
 
+<<<<<<< HEAD
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   '@types/ws@8.18.1':
     resolution: {integrity: sha512-ThVF6DCVhA8kUGy+aazFQ4kXQ7E1Ty7A3ypFOe0IcJV8O/M511G99AW24irKrW56Wt44yG9+ij8FaqoBGkuBXg==}
 
@@ -9401,8 +9404,11 @@ snapshots:
     dependencies:
       '@types/jest': 30.0.0
 
+<<<<<<< HEAD
   '@types/trusted-types@2.0.7': {}
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   '@types/ws@8.18.1':
     dependencies:
       '@types/node': 20.19.24

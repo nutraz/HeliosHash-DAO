@@ -1,0 +1,36 @@
+{
+  "canisters": {
+    "hhdao_dao": {
+      "main": "canisters/hhdao_dao/src/main.mo",
+      "type": "motoko"
+    },
+    "project_hub": {
+      "main": "canisters/project_hub/src/main.mo", 
+      "type": "motoko"
+    },
+    "baghpat_backend": {
+      "main": "canisters/baghpat_backend/src/main.mo",
+      "type": "motoko"
+    },
+    "hhdao_assets": {
+      "dependencies": ["hhdao_dao"],
+      "frontend": {
+        "entrypoint": "apps/web/out/index.html"
+      },
+      "source": ["apps/web/out"],
+      "type": "assets"
+    },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}

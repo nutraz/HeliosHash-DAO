@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class PostDetailPage extends StatefulWidget {
+<<<<<<< HEAD
   final String postId;
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   const PostDetailPage({super.key, required this.postId});
 
   @override
@@ -47,14 +50,24 @@ I welcome your thoughts and feedback on this proposal.''',
       {
         'id': '1',
         'author': 'Bob Smith',
+<<<<<<< HEAD
         'content': 'I fully support this initiative. The environmental focus aligns perfectly with our DAO\'s values.',
+=======
+        'content':
+            "I fully support this initiative. The environmental focus aligns perfectly with our DAO's values.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         'createdAt': DateTime.now().subtract(const Duration(days: 1)),
         'upvotes': 12,
         'replies': [
           {
             'id': '1-1',
             'author': 'Alice Johnson',
+<<<<<<< HEAD
             'content': 'Thank you for your support! I\'m glad you see the alignment with our values.',
+=======
+            'content':
+                "Thank you for your support! I'm glad you see the alignment with our values.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
             'createdAt': DateTime.now().subtract(const Duration(hours: 20)),
             'upvotes': 3,
           },
@@ -71,14 +84,24 @@ I welcome your thoughts and feedback on this proposal.''',
       {
         'id': '3',
         'author': 'David Wilson',
+<<<<<<< HEAD
         'content': 'While I support environmental causes, I\'m concerned about the 25% allocation. Could we start with a smaller percentage to test the waters?',
+=======
+        'content':
+            "While I support environmental causes, I'm concerned about the 25% allocation. Could we start with a smaller percentage to test the waters?",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         'createdAt': DateTime.now().subtract(const Duration(hours: 12)),
         'upvotes': 15,
         'replies': [
           {
             'id': '3-1',
             'author': 'Alice Johnson',
+<<<<<<< HEAD
             'content': 'That\'s a valid concern. We could certainly start with a pilot program and scale up based on results.',
+=======
+            'content':
+                "That's a valid concern. We could certainly start with a pilot program and scale up based on results.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
             'createdAt': DateTime.now().subtract(const Duration(hours: 10)),
             'upvotes': 7,
           },
@@ -154,9 +177,10 @@ I welcome your thoughts and feedback on this proposal.''',
         foregroundColor: Colors.white,
         actions: [
           PopupMenuButton<String>(
-            onSelected: (value) {
+            onSelected: (String value) {
               // Handle menu actions
             },
+<<<<<<< HEAD
             itemBuilder: (context) => [
               const PopupMenuItem(
                 value: 'share',
@@ -170,6 +194,12 @@ I welcome your thoughts and feedback on this proposal.''',
                 value: 'save',
                 child: Text('Save'),
               ),
+=======
+            itemBuilder: (BuildContext context) => <dynamic>[
+              const PopupMenuItem(value: 'share', child: Text('Share')),
+              const PopupMenuItem(value: 'report', child: Text('Report')),
+              const PopupMenuItem(value: 'save', child: Text('Save')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ],
           ),
         ],
@@ -189,7 +219,7 @@ I welcome your thoughts and feedback on this proposal.''',
                         backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
                         child: Text(
                           _post['author']['avatar'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppConstants.primaryColor,
                             fontWeight: FontWeight.bold,
                           ),
@@ -202,17 +232,11 @@ I welcome your thoughts and feedback on this proposal.''',
                           children: [
                             Text(
                               _post['author']['name'],
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             Text(
                               '${_post['author']['role']} • ${_formatDate(_post['createdAt'])}',
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14,
-                              ),
+                              style: TextStyle(color: Colors.grey[600], fontSize: 14),
                             ),
                           ],
                         ),
@@ -225,10 +249,7 @@ I welcome your thoughts and feedback on this proposal.''',
                   // Post Title
                   Text(
                     _post['title'],
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 12),
@@ -244,7 +265,7 @@ I welcome your thoughts and feedback on this proposal.''',
                         ),
                         child: Text(
                           _post['category'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: AppConstants.primaryColor,
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -252,6 +273,7 @@ I welcome your thoughts and feedback on this proposal.''',
                         ),
                       ),
                       const SizedBox(width: 8),
+<<<<<<< HEAD
                       ...(_post['tags'] as List<String>).map((tag) => Container(
                         margin: const EdgeInsets.only(right: 4),
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
@@ -264,22 +286,26 @@ I welcome your thoughts and feedback on this proposal.''',
                           style: TextStyle(
                             color: Colors.grey[700],
                             fontSize: 10,
+=======
+                      ...(_post['tags'] as List<String>).map(
+                        (String tag) => Container(
+                          margin: const EdgeInsets.only(right: 4),
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                           ),
+                          child: Text(tag, style: TextStyle(color: Colors.grey[700], fontSize: 10)),
                         ),
-                      )),
+                      ),
                     ],
                   ),
 
                   const SizedBox(height: 16),
 
                   // Post Content
-                  Text(
-                    _post['content'],
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.6,
-                    ),
-                  ),
+                  Text(_post['content'], style: const TextStyle(fontSize: 16, height: 1.6)),
 
                   const SizedBox(height: 20),
 
@@ -330,10 +356,7 @@ I welcome your thoughts and feedback on this proposal.''',
                   // Comments Section
                   const Text(
                     'Comments',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
 
                   const SizedBox(height: 16),
@@ -351,9 +374,7 @@ I welcome your thoughts and feedback on this proposal.''',
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Colors.grey[200]!),
-              ),
+              border: Border(top: BorderSide(color: Colors.grey[200]!)),
             ),
             child: Row(
               children: [
@@ -368,10 +389,7 @@ I welcome your thoughts and feedback on this proposal.''',
                       ),
                       filled: true,
                       fillColor: Colors.grey[100],
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                     ),
                     maxLines: null,
                     textInputAction: TextInputAction.send,
@@ -409,7 +427,7 @@ I welcome your thoughts and feedback on this proposal.''',
                   backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
                   child: Text(
                     comment['author'][0],
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppConstants.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
@@ -423,17 +441,11 @@ I welcome your thoughts and feedback on this proposal.''',
                     children: [
                       Text(
                         comment['author'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
-                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                       ),
                       Text(
                         _formatDate(comment['createdAt']),
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
                       ),
                     ],
                   ),
@@ -449,16 +461,14 @@ I welcome your thoughts and feedback on this proposal.''',
                     ),
                     Text(
                       comment['upvotes'].toString(),
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey,
-                      ),
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),
                   ],
                 ),
               ],
             ),
             const SizedBox(height: 8),
+<<<<<<< HEAD
             Text(
               comment['content'],
               style: const TextStyle(height: 1.4),
@@ -482,29 +492,41 @@ I welcome your thoughts and feedback on this proposal.''',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 12,
+=======
+            Text(comment['content'], style: const TextStyle(height: 1.4)),
+            if ((comment['replies'] as List).isNotEmpty) ...<dynamic>[
+              const SizedBox(height: 12),
+              ...comment['replies'].map<Widget>(
+                (reply) => Container(
+                  margin: const EdgeInsets.only(left: 24, top: 8),
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[50],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <dynamic>[
+                      Row(
+                        children: <dynamic>[
+                          Text(
+                            reply['author'],
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          _formatDate(reply['createdAt']),
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 10,
+                          const SizedBox(width: 8),
+                          Text(
+                            _formatDate(reply['createdAt']),
+                            style: TextStyle(color: Colors.grey[600], fontSize: 10),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      reply['content'],
-                      style: const TextStyle(
-                        fontSize: 14,
-                        height: 1.3,
+                        ],
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(reply['content'], style: const TextStyle(fontSize: 14, height: 1.3)),
+                    ],
+                  ),
                 ),
-              )),
+              ),
             ],
           ],
         ),

@@ -2,6 +2,7 @@ import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
 
 class ProposalCard extends StatelessWidget {
+<<<<<<< HEAD
   final Proposal proposal;
   final Function(bool)? onVote;
   final VoidCallback? onTap;
@@ -12,10 +13,16 @@ class ProposalCard extends StatelessWidget {
     this.onVote,
     this.onTap,
   }) : super(key: key);
+=======
+  const ProposalCard({super.key, required this.proposal, this.onVote, this.onTap});
+  final Proposal proposal;
+  final Function(bool)? onVote;
+  final VoidCallback? onTap;
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return Card(
       child: InkWell(
         onTap: onTap,
@@ -55,9 +62,7 @@ class ProposalCard extends StatelessWidget {
               const SizedBox(height: 12),
               Text(
                 proposal.title,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -85,7 +90,9 @@ class ProposalCard extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(4),
                           child: LinearProgressIndicator(
-                            value: proposal.totalVotes > 0 ? proposal.votesFor / proposal.totalVotes : 0,
+                            value: proposal.totalVotes > 0
+                                ? proposal.votesFor / proposal.totalVotes
+                                : 0,
                             minHeight: 6,
                             backgroundColor: const Color(0xFFEF5350).withOpacity(0.2),
                             valueColor: const AlwaysStoppedAnimation(Color(0xFF66BB6A)),

@@ -1,0 +1,7 @@
+error: unexpected argument '-n' found
+
+  tip: to pass '-n' as a value, use '-- -n'
+
+Usage: fd [OPTIONS] [pattern] [path]...
+
+For more information, try '--help'.

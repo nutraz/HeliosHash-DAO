@@ -12,7 +12,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _controller = TextEditingController();
 
   void _sendMessage() {
-    final text = _controller.text.trim();
+    final String text = _controller.text.trim();
     if (text.isEmpty) return;
     setState(() {
       _messages.add({'user': 'You', 'text': text});
@@ -30,12 +30,18 @@ class _ChatScreenState extends State<ChatScreen> {
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,
+<<<<<<< HEAD
               itemBuilder: (context, idx) {
                 final msg = _messages[idx];
                 return ListTile(
                   title: Text(msg['user'] ?? ''),
                   subtitle: Text(msg['text'] ?? ''),
                 );
+=======
+              itemBuilder: (BuildContext context, int idx) {
+                final Map<String, String> msg = _messages[idx];
+                return ListTile(title: Text(msg['user'] ?? ''), subtitle: Text(msg['text'] ?? ''));
+>>>>>>> 9823c84 (chore: sync and clean repo)
               },
             ),
           ),
@@ -49,10 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: const InputDecoration(hintText: 'Type a message...'),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _sendMessage,
-                ),
+                IconButton(icon: const Icon(Icons.send), onPressed: _sendMessage),
               ],
             ),
           ),

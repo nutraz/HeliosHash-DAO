@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:helios_hash_dao/project_model.dart';
 import 'package:helios_hash_dao/proposal_model.dart';
 import 'package:helios_hash_dao/post_model.dart';
@@ -5,17 +6,31 @@ import 'package:helios_hash_dao/post_model.dart';
 class MockData {
   static List<Project> getMockProjects() {
     return [
+=======
+import 'post_model.dart';
+import 'project_model.dart';
+import 'proposal_model.dart';
+
+class MockData {
+  static List<Project> getMockProjects() {
+    return <Project>[
+>>>>>>> 9823c84 (chore: sync and clean repo)
       Project(
         id: '1',
         title: 'Decentralized Identity System',
-        description: 'A blockchain-based identity verification system that gives users control over their personal data.',
+        description:
+            'A blockchain-based identity verification system that gives users control over their personal data.',
         creatorId: 'user1',
         createdAt: DateTime.now().subtract(const Duration(days: 30)),
         status: 'active',
         budget: 50000.0,
         category: 'Infrastructure',
+<<<<<<< HEAD
         tags: ['blockchain', 'identity', 'privacy'],
         imageUrl: null,
+=======
+        tags: <String>['blockchain', 'identity', 'privacy'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
         upvotes: 45,
         downvotes: 3,
         teamMembers: ['user1', 'user2', 'user3'],
@@ -25,14 +40,19 @@ class MockData {
       Project(
         id: '2',
         title: 'Sustainable Energy Marketplace',
-        description: 'A platform connecting renewable energy producers with consumers in a decentralized marketplace.',
+        description:
+            'A platform connecting renewable energy producers with consumers in a decentralized marketplace.',
         creatorId: 'user2',
         createdAt: DateTime.now().subtract(const Duration(days: 15)),
         status: 'active',
         budget: 75000.0,
         category: 'Environment',
+<<<<<<< HEAD
         tags: ['energy', 'sustainability', 'marketplace'],
         imageUrl: null,
+=======
+        tags: <String>['energy', 'sustainability', 'marketplace'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
         upvotes: 67,
         downvotes: 5,
         teamMembers: ['user2', 'user4', 'user5'],
@@ -41,14 +61,19 @@ class MockData {
       Project(
         id: '3',
         title: 'AI-Powered Governance Assistant',
-        description: 'An AI assistant that helps community members understand and participate in governance decisions.',
+        description:
+            'An AI assistant that helps community members understand and participate in governance decisions.',
         creatorId: 'user3',
         createdAt: DateTime.now().subtract(const Duration(days: 7)),
         status: 'draft',
         budget: 25000.0,
         category: 'Governance',
+<<<<<<< HEAD
         tags: ['AI', 'governance', 'assistant'],
         imageUrl: null,
+=======
+        tags: <String>['AI', 'governance', 'assistant'],
+>>>>>>> 9823c84 (chore: sync and clean repo)
         upvotes: 23,
         downvotes: 1,
         teamMembers: ['user3', 'user6'],
@@ -58,11 +83,16 @@ class MockData {
   }
 
   static List<Proposal> getMockProposals() {
+<<<<<<< HEAD
     return [
+=======
+    return <Proposal>[
+>>>>>>> 9823c84 (chore: sync and clean repo)
       Proposal(
         id: '1',
         title: 'Increase Community Fund Allocation',
-        description: 'Proposal to increase the community fund allocation from 20% to 25% of total treasury.',
+        description:
+            'Proposal to increase the community fund allocation from 20% to 25% of total treasury.',
         proposerId: 'user1',
         createdAt: DateTime.now().subtract(const Duration(days: 14)),
         status: ProposalStatus.active,
@@ -81,7 +111,8 @@ class MockData {
       Proposal(
         id: '2',
         title: 'Implement Quadratic Voting',
-        description: 'Change the voting system to quadratic voting for better representation of community preferences.',
+        description:
+            'Change the voting system to quadratic voting for better representation of community preferences.',
         proposerId: 'user2',
         createdAt: DateTime.now().subtract(const Duration(days: 21)),
         status: ProposalStatus.passed,
@@ -120,12 +151,21 @@ class MockData {
   }
 
   static List<Post> getMockPosts() {
+<<<<<<< HEAD
     return [
+=======
+    return <Post>[
+>>>>>>> 9823c84 (chore: sync and clean repo)
       Post(
         id: '1',
         author: 'Alice Johnson',
         title: 'Welcome to HeliosHash DAO!',
+<<<<<<< HEAD
         content: 'Excited to launch our new DAO platform. Let\'s build something amazing together! This is a great opportunity for all of us to collaborate on innovative projects that can make a real difference in the world.',
+=======
+        content:
+            "Excited to launch our new DAO platform. Let's build something amazing together! This is a great opportunity for all of us to collaborate on innovative projects that can make a real difference in the world.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         createdAt: DateTime.now().subtract(const Duration(hours: 2)),
         likes: 45,
         comments: 12,
@@ -136,7 +176,12 @@ class MockData {
         id: '2',
         author: 'Bob Smith',
         title: 'Proposal Discussion: Quadratic Voting Implementation',
+<<<<<<< HEAD
         content: 'Let\'s discuss the upcoming quadratic voting proposal. What are your thoughts on this governance change? I think it could help with better representation.',
+=======
+        content:
+            "Let's discuss the upcoming quadratic voting proposal. What are your thoughts on this governance change? I think it could help with better representation.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         createdAt: DateTime.now().subtract(const Duration(hours: 5)),
         likes: 23,
         comments: 8,
@@ -147,7 +192,12 @@ class MockData {
         id: '3',
         author: 'Carol Davis',
         title: 'Project Showcase: Our New Identity System',
+<<<<<<< HEAD
         content: 'Check out the progress on our decentralized identity system project! We\'ve made significant advances in the past week and would love to get community feedback.',
+=======
+        content:
+            "Check out the progress on our decentralized identity system project! We've made significant advances in the past week and would love to get community feedback.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         createdAt: DateTime.now().subtract(const Duration(hours: 8)),
         likes: 67,
         comments: 15,
@@ -158,7 +208,12 @@ class MockData {
         id: '4',
         author: 'David Wilson',
         title: 'Community Guidelines Update',
+<<<<<<< HEAD
         content: 'We\'ve updated our community guidelines to better reflect our growing community. Please take a moment to review the changes and let us know your thoughts.',
+=======
+        content:
+            "We've updated our community guidelines to better reflect our growing community. Please take a moment to review the changes and let us know your thoughts.",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         createdAt: DateTime.now().subtract(const Duration(hours: 12)),
         likes: 34,
         comments: 6,
@@ -206,7 +261,12 @@ class MockData {
         'id': '1',
         'author_id': 'user1',
         'title': 'Welcome to HeliosHash DAO!',
+<<<<<<< HEAD
         'content': 'Excited to launch our new DAO platform. Let\'s build something amazing together!',
+=======
+        'content':
+            "Excited to launch our new DAO platform. Let's build something amazing together!",
+>>>>>>> 9823c84 (chore: sync and clean repo)
         'created_at': DateTime.now().subtract(const Duration(hours: 2)).toIso8601String(),
         'upvotes': 45,
         'downvotes': 2,

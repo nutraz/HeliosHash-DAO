@@ -5,7 +5,7 @@
   
   **Decentralized Renewable Energy Platform on Internet Computer**
   
-  [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/flutter-ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
+  [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
   [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
   
 </div>

@@ -14,8 +14,8 @@ fi
 
 mkdir -p "$ROOT_DIR/apps/web/logs"
 
-echo "Starting pm2 process from apps/web/ecosystem.config.js"
-pm2 start "$ROOT_DIR/apps/web/ecosystem.config.js" --only helioshash-web || true
+echo "Starting pm2 process from apps/web/ecosystem.config.cjs"
+pm2 start "$ROOT_DIR/apps/web/ecosystem.config.cjs" --only helioshash-web || true
 
 echo "Saving pm2 process list"
 pm2 save

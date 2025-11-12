@@ -5,7 +5,7 @@ import { e as escape } from "../../chunks/escape.js";
 const idlFactory = ({ IDL }) => {
   return IDL.Service({ "greet": IDL.Func([IDL.Text], [IDL.Text], ["query"]) });
 };
-const canisterId = "u6s2n-gx777-77774-qaaba-cai";
+const canisterId = "uxrrr-q7777-77774-qaaaq-cai";
 const createActor = (canisterId2, options = {}) => {
   const agent = options.agent || new HttpAgent({ ...options.agentOptions });
   if (options.agent && options.agentOptions) {

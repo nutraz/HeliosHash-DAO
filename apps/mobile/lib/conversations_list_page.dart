@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/chat_page.dart';
+import 'app_constant.dart';
+import 'chat_page.dart';
 
 class ConversationsListPage extends StatefulWidget {
   const ConversationsListPage({super.key});
@@ -110,7 +110,7 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 filled: true,
                 fillColor: Colors.grey[100],
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -124,35 +124,39 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
                       children: [
                         Icon(
                           Icons.chat_bubble_outline,
                           size: 64,
                           color: Colors.grey[400],
                         ),
+=======
+                      children: <dynamic>[
+                        Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey[400]),
+>>>>>>> 9823c84 (chore: sync and clean repo)
                         const SizedBox(height: 16),
                         Text(
                           'No conversations found',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[600],
-                          ),
+                          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Start a new conversation to get connected',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey[500],
-                          ),
+                          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                         ),
                       ],
                     ),
                   )
                 : ListView.builder(
                     itemCount: _filteredConversations.length,
+<<<<<<< HEAD
                     itemBuilder: (context, index) {
                       final conversation = _filteredConversations[index];
+=======
+                    itemBuilder: (BuildContext context, int index) {
+                      final Map<String, dynamic> conversation = _filteredConversations[index];
+>>>>>>> 9823c84 (chore: sync and clean repo)
                       return _buildConversationTile(conversation);
                     },
                   ),
@@ -181,44 +185,27 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         backgroundColor: AppConstants.primaryColor.withOpacity(0.2),
         child: Text(
           avatar,
-          style: TextStyle(
-            color: AppConstants.primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(color: AppConstants.primaryColor, fontWeight: FontWeight.bold),
         ),
       ),
       title: Row(
         children: [
           Expanded(
-            child: Text(
-              name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
+            child: Text(name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
           ),
-          Text(
-            _formatTime(timestamp),
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey[600],
-            ),
-          ),
+          Text(_formatTime(timestamp), style: TextStyle(fontSize: 12, color: Colors.grey[600])),
         ],
       ),
       subtitle: Text(
         lastMessage,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          color: unreadCount > 0 ? Colors.black : Colors.grey[600],
-        ),
+        style: TextStyle(color: unreadCount > 0 ? Colors.black : Colors.grey[600]),
       ),
       trailing: unreadCount > 0
           ? Container(
               padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppConstants.primaryColor,
                 shape: BoxShape.circle,
               ),
@@ -236,10 +223,8 @@ class _ConversationsListPageState extends State<ConversationsListPage> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ChatPage(
-              conversationId: conversation['id'],
-              otherUserName: name,
-            ),
+            builder: (BuildContext context) =>
+                ChatPage(conversationId: conversation['id'], otherUserName: name),
           ),
         );
       },

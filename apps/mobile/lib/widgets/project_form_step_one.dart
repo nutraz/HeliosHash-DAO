@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepOne extends StatelessWidget {
+<<<<<<< HEAD
   final TextEditingController nameController;
   final TextEditingController descriptionController;
   final TextEditingController locationController;
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   const ProjectFormStepOne({
     super.key,
     required this.nameController,
@@ -19,11 +22,7 @@ class ProjectFormStepOne extends StatelessWidget {
       children: [
         const Text(
           'Basic Project Information',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
         ),
         const SizedBox(height: 16),
         TextFormField(
@@ -34,7 +33,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.wb_sunny),
           ),
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Project name is required';
             }
@@ -51,7 +50,7 @@ class ProjectFormStepOne extends StatelessWidget {
             prefixIcon: Icon(Icons.description),
           ),
           maxLines: 4,
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Project description is required';
             }
@@ -67,7 +66,7 @@ class ProjectFormStepOne extends StatelessWidget {
             border: OutlineInputBorder(),
             prefixIcon: Icon(Icons.location_on),
           ),
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Location is required';
             }

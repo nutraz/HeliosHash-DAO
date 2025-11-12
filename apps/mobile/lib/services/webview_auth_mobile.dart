@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewAuthScreen extends StatefulWidget {
-  const WebViewAuthScreen({Key? key}) : super(key: key);
+  const WebViewAuthScreen({super.key});
 
   @override
   _WebViewAuthScreenState createState() => _WebViewAuthScreenState();
@@ -51,16 +51,11 @@ class _WebViewAuthScreenState extends State<WebViewAuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Internet Identity Authentication'),
-      ),
+      appBar: AppBar(title: const Text('Internet Identity Authentication')),
       body: Stack(
         children: [
           WebViewWidget(controller: _controller),
-          if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+          if (_isLoading) const Center(child: CircularProgressIndicator()),
         ],
       ),
     );

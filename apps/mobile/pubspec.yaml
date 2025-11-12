@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 name: helios_hash_dao
+=======
+name: helioshash_mobile
+>>>>>>> 9823c84 (chore: sync and clean repo)
 description: HeliosHash DAO Mobile Application
 
 # The following line prevents the package from being accidentally published to
@@ -22,6 +26,7 @@ dependencies:
   # Supabase Integration
   supabase_flutter: ^2.0.0
 
+<<<<<<< HEAD
   # Common UI / utilities used across the mobile project
   cached_network_image: ^3.2.3
   flutter_svg: ^2.0.7
@@ -35,6 +40,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   # IC Integration (placeholder - will be replaced with actual IC packages)
   http: ^1.1.0
 

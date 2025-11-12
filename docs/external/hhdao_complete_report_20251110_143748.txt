@@ -1,0 +1,115 @@
+🚀 HeliosHash DAO Complete Project Report
+Generated: Mon Nov 10 02:37:48 PM IST 2025
+==============================================
+
+🔍 HHDAO references:
+----------------------------------------
+
+🔍 HeliosHash references:
+----------------------------------------
+
+🔍 hhdao-help command references:
+----------------------------------------
+
+🔍 helioshash (lowercase) references:
+----------------------------------------
+
+🔧 Aliases and Functions:
+----------------------------------------
+alias dfx-deploy-dao='dfx deploy hhdao_dao'
+alias dfx-deploy-frontend='dfx deploy hhdao_frontend'
+alias dfx-deploy-hhdao='dfx deploy hhdao'
+alias dfx-deploy-identity='dfx deploy hhdao_identity'
+alias hhdao-backend='cd ~/HeliosHash-DAO/apps/backend'
+alias hhdao-build='pnpm build'
+alias hhdao-cd='cd ~/HeliosHash-DAO'
+alias hhdao-dev='pnpm dev'
+alias hhdao-help='echo "HeliosHash DAO Development Aliases:
+  hhdao-cd      - Navigate to project root
+  hhdao-web     - Navigate to web app
+  hhdao-backend - Navigate to backend
+  hhdao-mobile  - Navigate to mobile app
+  hhdao-dev     - Start development servers
+  hhdao-build   - Build project
+  hhdao-install - Install dependencies
+  hhdao-help    - Show this help"'
+alias hhdao-install='pnpm install'
+alias hhdao-mobile='cd ~/HeliosHash-DAO/apps/mobile'
+alias hhdao-test='pnpm test:all'
+alias hhdao-test-canisters='pnpm test:canister'
+alias hhdao-web='cd ~/HeliosHash-DAO/apps/web'
+REPORT_FILE=hhdao_complete_report_20251110_143748.txt
+hhdao-clean () 
+hhdao-cycles () 
+    for canister in hhdao hhdao_dao hhdao_identity hhdao_telemetry hhdao_documents;
+hhdao-generate-types () 
+hhdao-health () 
+hhdao-help () 
+    echo "  hhdao-init          - Initialize development environment";
+    echo "  hhdao-status        - Check system status";
+    echo "  hhdao-health        - Run health check";
+    echo "  dfx-deploy-hhdao    - Deploy main HHDAO canister";
+    echo "  hhdao-test          - Run all tests";
+    echo "  hhdao-test-motoko   - Run Motoko tests";
+    echo "  hhdao-test-canisters- Run canister tests";
+    echo "  hhdao-dev           - Start development server";
+    echo "  hhdao-build         - Build project";
+    echo "  hhdao-clean         - Clean build artifacts";
+    echo "  hhdao-generate-types- Generate TypeScript declarations";
+    echo "  hhdao-cycles        - Check canister cycles";
+hhdao-init () 
+hhdao-status () 
+hhdao-test-motoko () 
+
+⚙️ Configuration Files:
+----------------------------------------
+
+📜 Scripts and Executables:
+----------------------------------------
+
+🌍 Environment Variables:
+----------------------------------------
+BASH_FUNC_hhdao-clean%%=() {  echo "🧹 Cleaning HeliosHash DAO build artifacts...";
+BASH_FUNC_hhdao-generate-types%%=() {  echo "🔧 Generating TypeScript declarations...";
+BASH_FUNC_hhdao-status%%=() {  echo "📊 HeliosHash DAO Development Status";
+BASH_FUNC_hhdao-health%%=() {  echo "🏥 HeliosHash DAO Health Check";
+BASH_FUNC_hhdao-help%%=() {  echo "🚀 HeliosHash DAO Development Commands";
+ echo "  hhdao-init          - Initialize development environment";
+ echo "  hhdao-status        - Check system status";
+ echo "  hhdao-health        - Run health check";
+ echo "  dfx-deploy-hhdao    - Deploy main HHDAO canister";
+ echo "  hhdao-test          - Run all tests";
+ echo "  hhdao-test-motoko   - Run Motoko tests";
+ echo "  hhdao-test-canisters- Run canister tests";
+ echo "  hhdao-dev           - Start development server";
+ echo "  hhdao-build         - Build project";
+ echo "  hhdao-clean         - Clean build artifacts";
+ echo "  hhdao-generate-types- Generate TypeScript declarations";
+ echo "  hhdao-cycles        - Check canister cycles";
+BASH_FUNC_hhdao-init%%=() {  echo "🏗️  Initializing HeliosHash DAO development environment...";
+BASH_FUNC_hhdao-test-motoko%%=() {  echo "🧪 Running Motoko tests...";
+BASH_FUNC_hhdao-cycles%%=() {  echo "💰 Canister Cycles Status";
+ for canister in hhdao hhdao_dao hhdao_identity hhdao_telemetry hhdao_documents;
+
+🔄 Running Processes:
+----------------------------------------
+nutarzz    51568  0.0  0.0   8128  6140 pts/1    S+   14:37   0:00 rg -i hhdao
+nutarzz    51569  0.0  0.0 230368  2252 pts/1    S+   14:37   0:00 tee -a hhdao_complete_report_20251110_143748.txt
+
+⏰ Cron Jobs:
+----------------------------------------
+
+📁 Project Directories:
+----------------------------------------
+
+🐳 Docker Containers:
+----------------------------------------
+CONTAINER ID   IMAGE                      COMMAND                  CREATED      STATUS                 PORTS                                                NAMES
+c65156772ff3   helioshash-dao-hhdao-dev   "bash -c 'dfx start …"   5 days ago   Up 2 hours (healthy)   127.0.0.1:4943->4943/tcp, 127.0.0.1:8000->8000/tcp   hhdao-dev
+helioshash-dao-hhdao-dev   latest     0ff95f422ecf   5 days ago   1.42GB
+
+📚 Git Repositories:
+----------------------------------------
+
+✅ Report complete: hhdao_complete_report_20251110_143748.txt
+🚀 Use 'cat hhdao_complete_report_20251110_143748.txt' to view the full report

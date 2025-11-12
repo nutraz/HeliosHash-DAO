@@ -1,0 +1,16 @@
+Enhance hhdao-full-setup.sh: improved logging, --dry-run and --help support, plus documentation and CI validation.
+
+Files added in this branch:
+- `hhdao-full-setup.sh` (enhanced)
+- `docs/hhdao-setup.md` (usage & guide)
+- `.github/workflows/dry-run-validate.yml` (runs `--dry-run` on PRs)
+
+Validation steps:
+1. Run `./hhdao-full-setup.sh --dry-run` locally to preview actions.
+2. CI will run the same dry-run and upload a log artifact for reviewers.
+
+Notes:
+- The full run performs system upgrades (may prompt for sudo). Review and run on a developer machine.
+- If you want CI to skip certain steps, we can refine the workflow filters.
+
+Please review and merge when ready.

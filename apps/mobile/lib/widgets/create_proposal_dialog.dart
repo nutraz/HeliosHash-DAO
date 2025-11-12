@@ -4,17 +4,17 @@ import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
 
 class CreateProposalDialog extends StatefulWidget {
-  const CreateProposalDialog({Key? key}) : super(key: key);
+  const CreateProposalDialog({super.key});
 
   @override
   State<CreateProposalDialog> createState() => _CreateProposalDialogState();
 }
 
 class _CreateProposalDialogState extends State<CreateProposalDialog> {
-  final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _amountController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
   ProposalCategory _category = ProposalCategory.funding;
   bool _isSubmitting = false;
 
@@ -28,7 +28,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
     return AlertDialog(
       title: const Text('Create Proposal'),
       content: SingleChildScrollView(
@@ -39,11 +39,8 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
-                ),
-                validator: (value) {
+                decoration: const InputDecoration(labelText: 'Title', border: OutlineInputBorder()),
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a title';
                   }
@@ -58,7 +55,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 4,
-                validator: (value) {
+                validator: (String? value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a description';
                   }
@@ -78,7 +75,7 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
                     child: Text(category.name.toUpperCase()),
                   );
                 }).toList(),
-                onChanged: (value) {
+                onChanged: (ProposalCategory? value) {
                   if (value != null) {
                     setState(() {
                       _category = value;
@@ -124,8 +121,8 @@ class _CreateProposalDialogState extends State<CreateProposalDialog> {
     setState(() {
       _isSubmitting = true;
     });
-    final governanceProvider = context.read<GovernanceProvider>();
-    final success = await governanceProvider.createProposal(
+    final GovernanceProvider governanceProvider = context.read<GovernanceProvider>();
+    final bool success = await governanceProvider.createProposal(
       title: _titleController.text,
       description: _descriptionController.text,
       endDate: DateTime.now().add(const Duration(days: 7)),

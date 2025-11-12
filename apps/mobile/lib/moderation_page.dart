@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
+import 'app_constant.dart';
 
 class ModerationPage extends StatefulWidget {
   const ModerationPage({super.key});
@@ -79,9 +79,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
         final reportedUser = report['reportedUser'].toString().toLowerCase();
         final query = _searchQuery.toLowerCase();
 
-        return title.contains(query) ||
-               description.contains(query) ||
-               reportedUser.contains(query);
+        return title.contains(query) || description.contains(query) || reportedUser.contains(query);
       }).toList();
     }
 
@@ -90,11 +88,21 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       case 0: // All Reports
         break;
       case 1: // Pending
+<<<<<<< HEAD
         reports = reports.where((report) => report['status'] == 'Pending').toList();
         break;
       case 2: // Under Review
         reports = reports.where((report) => report['status'] == 'Under Review').toList();
         break;
+=======
+        reports = reports
+            .where((Map<String, dynamic> report) => report['status'] == 'Pending')
+            .toList();
+      case 2: // Under Review
+        reports = reports
+            .where((Map<String, dynamic> report) => report['status'] == 'Under Review')
+            .toList();
+>>>>>>> 9823c84 (chore: sync and clean repo)
     }
 
     return reports;
@@ -143,7 +151,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
             Tab(text: 'Pending'),
             Tab(text: 'Under Review'),
           ],
-          onTap: (index) {
+          onTap: (int index) {
             setState(() {});
           },
         ),
@@ -177,7 +185,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -189,11 +197,15 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
           Expanded(
             child: TabBarView(
               controller: _tabController,
+<<<<<<< HEAD
               children: [
                 _buildReportsList(),
                 _buildReportsList(),
                 _buildReportsList(),
               ],
+=======
+              children: <dynamic>[_buildReportsList(), _buildReportsList(), _buildReportsList()],
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
           ),
         ],
@@ -208,27 +220,23 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
           children: [
             Icon(
               Icons.report_problem,
               size: 64,
               color: Colors.grey[400],
             ),
+=======
+          children: <dynamic>[
+            Icon(Icons.report_problem, size: 64, color: Colors.grey[400]),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             const SizedBox(height: 16),
-            Text(
-              'No reports found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text('No reports found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             const SizedBox(height: 8),
             Text(
               'All reports have been handled',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -243,8 +251,13 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: reports.length,
+<<<<<<< HEAD
         itemBuilder: (context, index) {
           final report = reports[index];
+=======
+        itemBuilder: (BuildContext context, int index) {
+          final Map<String, dynamic> report = reports[index];
+>>>>>>> 9823c84 (chore: sync and clean repo)
           return _buildReportCard(report);
         },
       ),
@@ -268,10 +281,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                   Expanded(
                     child: Text(
                       report['title'],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -279,9 +289,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                     decoration: BoxDecoration(
                       color: _getStatusColor(report['status']).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: _getStatusColor(report['status']),
-                      ),
+                      border: Border.all(color: _getStatusColor(report['status'])),
                     ),
                     child: Text(
                       report['status'],
@@ -297,10 +305,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
               const SizedBox(height: 8),
               Text(
                 report['description'],
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  height: 1.4,
-                ),
+                style: TextStyle(color: Colors.grey[600], height: 1.4),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -309,17 +314,11 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                 children: [
                   _buildPriorityChip(report['priority']),
                   const SizedBox(width: 8),
-                  Text(
-                    report['category'],
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
+                  Text(report['category'], style: TextStyle(color: Colors.grey[600], fontSize: 14)),
                   const SizedBox(width: 8),
                   Text(
                     report['type'],
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppConstants.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
@@ -334,20 +333,14 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
                   const SizedBox(width: 4),
                   Text(
                     'Reported: ${report['reportedUser']}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(width: 16),
                   Icon(Icons.access_time, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     _formatDate(report['createdAt']),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
               ),
@@ -364,9 +357,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
       decoration: BoxDecoration(
         color: _getPriorityColor(priority).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: _getPriorityColor(priority),
-        ),
+        border: Border.all(color: _getPriorityColor(priority)),
       ),
       child: Text(
         priority,
@@ -382,7 +373,7 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
   void _showReportDetailDialog(BuildContext context, Map<String, dynamic> report) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: Text('Report ${report['id']}'),
         content: SingleChildScrollView(
           child: Column(
@@ -395,17 +386,11 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
               Text('Reported by: ${report['reportedBy']}'),
               Text('Reported user: ${report['reportedUser']}'),
               const SizedBox(height: 16),
-              const Text(
-                'Description:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              const Text('Description:', style: TextStyle(fontWeight: FontWeight.bold)),
               Text(report['description']),
               if (report['content'] != null) ...[
                 const SizedBox(height: 16),
-                const Text(
-                  'Reported Content:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+                const Text('Reported Content:', style: TextStyle(fontWeight: FontWeight.bold)),
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
@@ -418,11 +403,16 @@ class _ModerationPageState extends State<ModerationPage> with TickerProviderStat
             ],
           ),
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Dismiss'),
           ),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Dismiss')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           ElevatedButton(
             onPressed: () {
               // Handle take action

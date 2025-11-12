@@ -37,9 +37,15 @@ class WalletProvider with ChangeNotifier {
       _client = Web3Client(rpcUrl, http.Client());
 
       // Check for saved wallet
+<<<<<<< HEAD
       final prefs = await SharedPreferences.getInstance();
       final savedPrivateKey = prefs.getString('wallet_private_key');
       
+=======
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? savedPrivateKey = prefs.getString('wallet_private_key');
+
+>>>>>>> 9823c84 (chore: sync and clean repo)
       if (savedPrivateKey != null) {
         await _restoreWallet(savedPrivateKey);
       }
@@ -69,7 +75,7 @@ class WalletProvider with ChangeNotifier {
       _isConnected = true;
 
       // Save wallet (in production, use secure storage)
-      final prefs = await SharedPreferences.getInstance();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('wallet_private_key', _credentials!.privateKey.toString());
 
       // Fetch initial balance
@@ -110,7 +116,7 @@ class WalletProvider with ChangeNotifier {
 
   // Disconnect wallet
   Future<void> disconnectWallet() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('wallet_private_key');
 
     _address = null;
@@ -123,22 +129,19 @@ class WalletProvider with ChangeNotifier {
   }
 
   // Send transaction
-  Future<String?> sendTransaction({
-    required String toAddress,
-    required BigInt amount,
-  }) async {
+  Future<String?> sendTransaction({required String toAddress, required BigInt amount}) async {
     if (_client == null || _credentials == null) return null;
 
     _isLoading = true;
     notifyListeners();
 
     try {
-      final transaction = Transaction(
+      final Transaction transaction = Transaction(
         to: EthereumAddress.fromHex(toAddress),
         value: EtherAmount.inWei(amount),
       );
 
-      final txHash = await _client!.sendTransaction(
+      final String txHash = await _client!.sendTransaction(
         _credentials!,
         transaction,
         chainId: 11155111, // Sepolia

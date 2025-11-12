@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:helios_hash_dao/app_constant.dart';
 import 'package:helios_hash_dao/project_card.dart';
 import 'package:helios_hash_dao/mock_data.dart';
 import 'package:helios_hash_dao/project_model.dart';
+=======
+import 'app_constant.dart';
+import 'mock_data.dart';
+import 'project_card.dart';
+import 'project_model.dart';
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
 class ProjectsPage extends StatefulWidget {
   const ProjectsPage({super.key});
@@ -41,20 +48,27 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   }
 
   List<Project> _getFilteredProjects() {
-    var projects = MockData.getMockProjects();
+    List<Project> projects = MockData.getMockProjects();
 
     // Filter by search query
     if (_searchQuery.isNotEmpty) {
-      projects = projects.where((project) =>
-          project.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          project.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          project.tags.any((tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()))
-      ).toList();
+      projects = projects
+          .where(
+            (Project project) =>
+                project.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                project.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                project.tags.any(
+                  (String tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()),
+                ),
+          )
+          .toList();
     }
 
     // Filter by category
     if (_selectedCategory != 'All') {
-      projects = projects.where((project) => project.category == _selectedCategory).toList();
+      projects = projects
+          .where((Project project) => project.category == _selectedCategory)
+          .toList();
     }
 
     // Filter by tab
@@ -62,11 +76,17 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
       case 0: // All Projects
         break;
       case 1: // Active Projects
+<<<<<<< HEAD
         projects = projects.where((project) => project.status == 'active').toList();
         break;
       case 2: // Draft Projects
         projects = projects.where((project) => project.status == 'draft').toList();
         break;
+=======
+        projects = projects.where((Project project) => project.status == 'active').toList();
+      case 2: // Draft Projects
+        projects = projects.where((Project project) => project.status == 'draft').toList();
+>>>>>>> 9823c84 (chore: sync and clean repo)
     }
 
     return projects;
@@ -87,7 +107,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
             Tab(text: 'Active'),
             Tab(text: 'Draft'),
           ],
-          onTap: (index) {
+          onTap: (int index) {
             setState(() {});
           },
         ),
@@ -124,7 +144,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
                     filled: true,
                     fillColor: Colors.white,
                   ),
-                  onChanged: (value) {
+                  onChanged: (String value) {
                     setState(() {
                       _searchQuery = value;
                     });
@@ -139,16 +159,22 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
+<<<<<<< HEAD
                     itemBuilder: (context, index) {
                       final category = _categories[index];
                       final isSelected = category == _selectedCategory;
+=======
+                    itemBuilder: (BuildContext context, int index) {
+                      final String category = _categories[index];
+                      final bool isSelected = category == _selectedCategory;
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
                       return Container(
                         margin: const EdgeInsets.only(right: 8),
                         child: FilterChip(
                           label: Text(category),
                           selected: isSelected,
-                          onSelected: (selected) {
+                          onSelected: (bool selected) {
                             setState(() {
                               _selectedCategory = selected ? category : 'All';
                             });
@@ -169,11 +195,15 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
           Expanded(
             child: TabBarView(
               controller: _tabController,
+<<<<<<< HEAD
               children: [
                 _buildProjectsList(),
                 _buildProjectsList(),
                 _buildProjectsList(),
               ],
+=======
+              children: <dynamic>[_buildProjectsList(), _buildProjectsList(), _buildProjectsList()],
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
           ),
         ],
@@ -195,27 +225,23 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
           children: [
             Icon(
               Icons.work_off,
               size: 64,
               color: Colors.grey[400],
             ),
+=======
+          children: <dynamic>[
+            Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             const SizedBox(height: 16),
-            Text(
-              'No projects found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text('No projects found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -230,7 +256,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: projects.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           final project = projects[index];
           return ProjectCard(
             project: project,
@@ -247,7 +273,7 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
   void _showProjectDetailDialog(BuildContext context, Project project) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: Text(project.title),
         content: SingleChildScrollView(
           child: Column(
@@ -266,11 +292,16 @@ class _ProjectsPageState extends State<ProjectsPage> with TickerProviderStateMix
             ],
           ),
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Close'),
           ),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           ElevatedButton(
             onPressed: () {
               // Handle project application or contribution

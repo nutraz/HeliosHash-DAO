@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:helios_hash_dao/app_constant.dart';
 import 'package:helios_hash_dao/project_model.dart';
 import 'package:helios_hash_dao/mock_data.dart';
+=======
+import 'app_constant.dart';
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
 class MyApplicationsPage extends StatefulWidget {
   const MyApplicationsPage({super.key});
@@ -99,6 +103,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       case 0: // All Applications
         break;
       case 1: // Pending
+<<<<<<< HEAD
         applications = applications.where((app) => app['status'] == 'Pending').toList();
         break;
       case 2: // Under Review
@@ -108,6 +113,22 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
         applications = applications.where((app) =>
             app['status'] == 'Accepted' || app['status'] == 'Rejected').toList();
         break;
+=======
+        applications = applications
+            .where((Map<String, dynamic> app) => app['status'] == 'Pending')
+            .toList();
+      case 2: // Under Review
+        applications = applications
+            .where((Map<String, dynamic> app) => app['status'] == 'Under Review')
+            .toList();
+      case 3: // Accepted/Rejected
+        applications = applications
+            .where(
+              (Map<String, dynamic> app) =>
+                  app['status'] == 'Accepted' || app['status'] == 'Rejected',
+            )
+            .toList();
+>>>>>>> 9823c84 (chore: sync and clean repo)
     }
 
     return applications;
@@ -145,7 +166,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
             Tab(text: 'Under Review'),
             Tab(text: 'Results'),
           ],
-          onTap: (index) {
+          onTap: (int index) {
             setState(() {});
           },
         ),
@@ -179,7 +200,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -211,27 +232,23 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
           children: [
             Icon(
               Icons.work_off,
               size: 64,
               color: Colors.grey[400],
             ),
+=======
+          children: <dynamic>[
+            Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             const SizedBox(height: 16),
-            Text(
-              'No applications found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text('No applications found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -246,8 +263,13 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: applications.length,
+<<<<<<< HEAD
         itemBuilder: (context, index) {
           final application = applications[index];
+=======
+        itemBuilder: (BuildContext context, int index) {
+          final Map<String, dynamic> application = applications[index];
+>>>>>>> 9823c84 (chore: sync and clean repo)
           return _buildApplicationCard(application);
         },
       ),
@@ -271,10 +293,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                   Expanded(
                     child: Text(
                       application['projectTitle'],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -282,9 +301,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                     decoration: BoxDecoration(
                       color: _getStatusColor(application['status']).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: _getStatusColor(application['status']),
-                      ),
+                      border: Border.all(color: _getStatusColor(application['status'])),
                     ),
                     child: Text(
                       application['status'],
@@ -300,10 +317,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
               const SizedBox(height: 8),
               Text(
                 'Role: ${application['role']}',
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 4),
               Row(
@@ -312,30 +326,21 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                   const SizedBox(width: 4),
                   Text(
                     '${application['expectedHours']}h/week',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   const SizedBox(width: 16),
                   Icon(Icons.attach_money, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     '\$${application['proposedRate']}/hour',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
               Text(
                 'Applied ${_formatDate(application['appliedAt'])}',
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Colors.grey[600], fontSize: 14),
               ),
               const SizedBox(height: 8),
               Wrap(
@@ -350,7 +355,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
                     ),
                     child: Text(
                       skill,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: AppConstants.primaryColor,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
@@ -369,7 +374,7 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
   void _showApplicationDetailDialog(BuildContext context, Map<String, dynamic> application) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: Text('Application ${application['id']}'),
         content: SingleChildScrollView(
           child: Column(
@@ -383,16 +388,10 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
               Text('Expected Hours: ${application['expectedHours']}h/week'),
               Text('Proposed Rate: \$${application['proposedRate']}/hour'),
               const SizedBox(height: 16),
-              const Text(
-                'Skills:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              const Text('Skills:', style: TextStyle(fontWeight: FontWeight.bold)),
               Text((application['skills'] as List<String>).join(', ')),
               const SizedBox(height: 16),
-              const Text(
-                'Cover Letter:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              const Text('Cover Letter:', style: TextStyle(fontWeight: FontWeight.bold)),
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
@@ -404,11 +403,16 @@ class _MyApplicationsPageState extends State<MyApplicationsPage> with TickerProv
             ],
           ),
         ),
+<<<<<<< HEAD
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Close'),
           ),
+=======
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Close')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           if (application['status'] == 'Pending' || application['status'] == 'Under Review')
             ElevatedButton(
               onPressed: () {

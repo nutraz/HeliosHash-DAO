@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:helios_hash_dao/app_constant.dart';
-import 'package:helios_hash_dao/dispute_detail_page.dart';
+import 'app_constant.dart';
+import 'dispute_detail_page.dart';
 
 class DisputeResolutionPage extends StatefulWidget {
   const DisputeResolutionPage({super.key});
@@ -9,7 +9,8 @@ class DisputeResolutionPage extends StatefulWidget {
   State<DisputeResolutionPage> createState() => _DisputeResolutionPageState();
 }
 
-class _DisputeResolutionPageState extends State<DisputeResolutionPage> with TickerProviderStateMixin {
+class _DisputeResolutionPageState extends State<DisputeResolutionPage>
+    with TickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -101,6 +102,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       case 0: // All Disputes
         break;
       case 1: // Open
+<<<<<<< HEAD
         disputes = disputes.where((dispute) => dispute['status'] == 'Open').toList();
         break;
       case 2: // In Progress
@@ -110,6 +112,22 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
         disputes = disputes.where((dispute) =>
             dispute['status'] == 'Resolved' || dispute['status'] == 'Closed').toList();
         break;
+=======
+        disputes = disputes
+            .where((Map<String, dynamic> dispute) => dispute['status'] == 'Open')
+            .toList();
+      case 2: // In Progress
+        disputes = disputes
+            .where((Map<String, dynamic> dispute) => dispute['status'] == 'In Progress')
+            .toList();
+      case 3: // Resolved/Closed
+        disputes = disputes
+            .where(
+              (Map<String, dynamic> dispute) =>
+                  dispute['status'] == 'Resolved' || dispute['status'] == 'Closed',
+            )
+            .toList();
+>>>>>>> 9823c84 (chore: sync and clean repo)
     }
 
     return disputes;
@@ -160,7 +178,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
             Tab(text: 'In Progress'),
             Tab(text: 'Resolved'),
           ],
-          onTap: (index) {
+          onTap: (int index) {
             setState(() {});
           },
         ),
@@ -194,7 +212,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                 filled: true,
                 fillColor: Colors.white,
               ),
-              onChanged: (value) {
+              onChanged: (String value) {
                 setState(() {
                   _searchQuery = value;
                 });
@@ -221,8 +239,8 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
           // Navigate to create dispute page
         },
         backgroundColor: AppConstants.primaryColor,
-        child: const Icon(Icons.add),
         tooltip: 'File New Dispute',
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -234,27 +252,23 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+<<<<<<< HEAD
           children: [
             Icon(
               Icons.gavel,
               size: 64,
               color: Colors.grey[400],
             ),
+=======
+          children: <dynamic>[
+            Icon(Icons.gavel, size: 64, color: Colors.grey[400]),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             const SizedBox(height: 16),
-            Text(
-              'No disputes found',
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.grey[600],
-              ),
-            ),
+            Text('No disputes found', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
             const SizedBox(height: 8),
             Text(
               'Try adjusting your search or filters',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],
         ),
@@ -269,8 +283,13 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: disputes.length,
+<<<<<<< HEAD
         itemBuilder: (context, index) {
           final dispute = disputes[index];
+=======
+        itemBuilder: (BuildContext context, int index) {
+          final Map<String, dynamic> dispute = disputes[index];
+>>>>>>> 9823c84 (chore: sync and clean repo)
           return _buildDisputeCard(dispute);
         },
       ),
@@ -285,7 +304,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DisputeDetailPage(disputeId: dispute['id']),
+              builder: (BuildContext context) => DisputeDetailPage(disputeId: dispute['id']),
             ),
           );
         },
@@ -299,10 +318,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                   Expanded(
                     child: Text(
                       dispute['title'],
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -310,9 +326,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                     decoration: BoxDecoration(
                       color: _getStatusColor(dispute['status']).withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(
-                        color: _getStatusColor(dispute['status']),
-                      ),
+                      border: Border.all(color: _getStatusColor(dispute['status'])),
                     ),
                     child: Text(
                       dispute['status'],
@@ -328,10 +342,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
               const SizedBox(height: 8),
               Text(
                 dispute['description'],
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  height: 1.4,
-                ),
+                style: TextStyle(color: Colors.grey[600], height: 1.4),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -342,19 +353,13 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                   const SizedBox(width: 8),
                   Text(
                     dispute['category'],
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                   if (dispute['amount'] != null) ...[
                     const SizedBox(width: 8),
                     Text(
                       '\$${dispute['amount']}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.green,
-                      ),
+                      style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
                     ),
                   ],
                 ],
@@ -366,10 +371,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                   const SizedBox(width: 4),
                   Text(
                     'Initiator: ${dispute['initiator']}',
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
               ),
@@ -380,10 +382,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
                   const SizedBox(width: 4),
                   Text(
                     _formatDate(dispute['createdAt']),
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
                   ),
                 ],
               ),
@@ -400,9 +399,7 @@ class _DisputeResolutionPageState extends State<DisputeResolutionPage> with Tick
       decoration: BoxDecoration(
         color: _getPriorityColor(priority).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(
-          color: _getPriorityColor(priority),
-        ),
+        border: Border.all(color: _getPriorityColor(priority)),
       ),
       child: Text(
         priority,

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class JobsOpportunitiesScreen extends StatefulWidget {
+  const JobsOpportunitiesScreen({super.key});
+
   @override
   _JobsOpportunitiesScreenState createState() => _JobsOpportunitiesScreenState();
 }
@@ -49,12 +51,18 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Jobs & Opportunities'),
+        title: const Text('Jobs & Opportunities'),
         backgroundColor: Colors.blue.shade600,
         foregroundColor: Colors.white,
+<<<<<<< HEAD
         actions: [
           IconButton(icon: Icon(Icons.filter_list), onPressed: () => _showFilterDialog()),
           IconButton(icon: Icon(Icons.add), onPressed: () => _showPostJobDialog()),
+=======
+        actions: <dynamic>[
+          IconButton(icon: const Icon(Icons.filter_list), onPressed: () => _showFilterDialog()),
+          IconButton(icon: const Icon(Icons.add), onPressed: () => _showPostJobDialog()),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         ],
       ),
       body: Column(
@@ -63,9 +71,9 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
           _buildStatsRow(),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               itemCount: _jobs.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (BuildContext context, int index) {
                 return _buildJobCard(_jobs[index]);
               },
             ),
@@ -75,27 +83,27 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showPostJobDialog(),
         backgroundColor: Colors.blue.shade600,
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
 
   Widget _buildSearchBar() {
     return Padding(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'Search jobs by title, company, or location...',
-          prefixIcon: Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),
-          contentPadding: EdgeInsets.symmetric(vertical: 0),
+          contentPadding: const EdgeInsets.symmetric(),
         ),
       ),
     );
   }
 
   Widget _buildStatsRow() {
-    return Padding(
+    return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
@@ -147,28 +155,38 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
 
   Widget _buildJobCard(Map<String, dynamic> job) {
     return Card(
-      margin: EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Expanded(
-                  child: Text(job['title'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  child: Text(
+                    job['title'],
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(color: Colors.blue.shade100, borderRadius: BorderRadius.circular(12)),
-                  child: Text(job['type'], style: TextStyle(color: Colors.blue.shade800, fontWeight: FontWeight.bold)),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    job['type'],
+                    style: TextStyle(color: Colors.blue.shade800, fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(job['company'], style: TextStyle(fontSize: 16, color: Colors.grey.shade700)),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
+<<<<<<< HEAD
               children: [
                 Icon(Icons.location_on, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
@@ -177,30 +195,43 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
                 Icon(Icons.attach_money, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
                 Text(job['salary'], style: TextStyle(color: Colors.grey)),
+=======
+              children: <dynamic>[
+                const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(job['location'], style: const TextStyle(color: Colors.grey)),
+                const SizedBox(width: 16),
+                const Icon(Icons.attach_money, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(job['salary'], style: const TextStyle(color: Colors.grey)),
+>>>>>>> 9823c84 (chore: sync and clean repo)
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             Wrap(
               spacing: 6,
               children: job['skills'].map<Widget>((skill) {
                 return Chip(label: Text(skill), backgroundColor: Colors.grey.shade200);
               }).toList(),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: OutlinedButton(
                     onPressed: () => _showJobDetails(job),
-                    child: Text('View Details'),
+                    child: const Text('View Details'),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 Expanded(
                   child: ElevatedButton(
                     onPressed: () => _showApplyDialog(job),
-                    child: Text('Apply Now'),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade600, foregroundColor: Colors.white),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue.shade600,
+                      foregroundColor: Colors.white,
+                    ),
+                    child: const Text('Apply Now'),
                   ),
                 ),
               ],
@@ -214,24 +245,49 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
   void _showFilterDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Filter Jobs'),
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Filter Jobs'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<String>(
+<<<<<<< HEAD
               decoration: InputDecoration(labelText: 'Job Type'),
               items: ['All', 'Full-time', 'Part-time', 'Contract', 'Internship'].map((type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
               onChanged: (value) {},
+=======
+              decoration: const InputDecoration(labelText: 'Job Type'),
+              items: <String>[
+                'All',
+                'Full-time',
+                'Part-time',
+                'Contract',
+                'Internship',
+              ].map((String type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
+              onChanged: (String? value) {},
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
+<<<<<<< HEAD
               decoration: InputDecoration(labelText: 'Location'),
               items: ['All', 'Urgam Valley', 'Dharampur', 'Mumbai', 'Remote'].map((loc) => DropdownMenuItem(value: loc, child: Text(loc))).toList(),
               onChanged: (value) {},
+=======
+              decoration: const InputDecoration(labelText: 'Location'),
+              items: <String>[
+                'All',
+                'Urgam Valley',
+                'Dharampur',
+                'Mumbai',
+                'Remote',
+              ].map((String loc) => DropdownMenuItem(value: loc, child: Text(loc))).toList(),
+              onChanged: (String? value) {},
+>>>>>>> 9823c84 (chore: sync and clean repo)
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
+<<<<<<< HEAD
               decoration: InputDecoration(labelText: 'Experience Level'),
               items: ['All', 'Entry Level', 'Mid Level', 'Senior', 'Executive'].map((level) => DropdownMenuItem(value: level, child: Text(level))).toList(),
               onChanged: (value) {},
@@ -241,6 +297,26 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
           ElevatedButton(onPressed: () => Navigator.pop(context), child: Text('Apply Filters')),
+=======
+              decoration: const InputDecoration(labelText: 'Experience Level'),
+              items: <String>[
+                'All',
+                'Entry Level',
+                'Mid Level',
+                'Senior',
+                'Executive',
+              ].map((String level) => DropdownMenuItem(value: level, child: Text(level))).toList(),
+              onChanged: (String? value) {},
+            ),
+          ],
+        ),
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Apply Filters'),
+          ),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         ],
       ),
     );
@@ -249,7 +325,7 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
   void _showPostJobDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => const AlertDialog(
         title: Text('Post New Job'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -270,7 +346,9 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Job posted successfully!')));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Job posted successfully!')));
             },
             child: Text('Post Job'),
           ),
@@ -282,16 +360,16 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
   void _showJobDetails(Map<String, dynamic> job) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => JobDetailScreen(job: job)),
+      MaterialPageRoute(builder: (BuildContext context) => JobDetailScreen(job: job)),
     );
   }
 
   void _showApplyDialog(Map<String, dynamic> job) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: Text('Apply for ${job['title']}'),
-        content: Column(
+        content: const Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(decoration: InputDecoration(labelText: 'Full Name')),
@@ -302,17 +380,33 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
             SizedBox(height: 12),
             TextField(decoration: InputDecoration(labelText: 'Cover Letter'), maxLines: 3),
             SizedBox(height: 12),
+<<<<<<< HEAD
             Row(children: [Icon(Icons.attach_file), SizedBox(width: 8), Text('Upload Resume')]),
           ],
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text('Cancel')),
+=======
+            Row(
+              children: <dynamic>[
+                Icon(Icons.attach_file),
+                SizedBox(width: 8),
+                Text('Upload Resume'),
+              ],
+            ),
+          ],
+        ),
+        actions: <dynamic>[
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+>>>>>>> 9823c84 (chore: sync and clean repo)
           ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Application submitted!')));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Application submitted!')));
             },
-            child: Text('Submit Application'),
+            child: const Text('Submit Application'),
           ),
         ],
       ),
@@ -321,6 +415,10 @@ class _JobsOpportunitiesScreenState extends State<JobsOpportunitiesScreen> {
 }
 
 class JobDetailScreen extends StatelessWidget {
+<<<<<<< HEAD
+=======
+  const JobDetailScreen({super.key, required this.job});
+>>>>>>> 9823c84 (chore: sync and clean repo)
   final Map<String, dynamic> job;
   JobDetailScreen({required this.job});
   @override
@@ -332,15 +430,22 @@ class JobDetailScreen extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
           children: [
             Text(job['title'], style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             SizedBox(height: 8),
+=======
+          children: <dynamic>[
+            Text(job['title'], style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+>>>>>>> 9823c84 (chore: sync and clean repo)
             Text(job['company'], style: TextStyle(fontSize: 18, color: Colors.grey.shade700)),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
+<<<<<<< HEAD
               children: [
                 Icon(Icons.location_on, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
@@ -353,28 +458,56 @@ class JobDetailScreen extends StatelessWidget {
                 Icon(Icons.attach_money, size: 16, color: Colors.grey),
                 SizedBox(width: 4),
                 Text(job['salary'], style: TextStyle(color: Colors.grey)),
+=======
+              children: <dynamic>[
+                const Icon(Icons.location_on, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(job['location'], style: const TextStyle(color: Colors.grey)),
+                const SizedBox(width: 16),
+                const Icon(Icons.work, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(job['type'], style: const TextStyle(color: Colors.grey)),
+                const SizedBox(width: 16),
+                const Icon(Icons.attach_money, size: 16, color: Colors.grey),
+                const SizedBox(width: 4),
+                Text(job['salary'], style: const TextStyle(color: Colors.grey)),
+>>>>>>> 9823c84 (chore: sync and clean repo)
               ],
             ),
-            SizedBox(height: 16),
-            Text('Job Description', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
-            Text('We are looking for a passionate individual to join our team and contribute to our solar energy projects. The ideal candidate will have experience in renewable energy and a commitment to sustainable development.'),
-            SizedBox(height: 16),
-            Text('Required Skills', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 8),
+            const SizedBox(height: 16),
+            const Text(
+              'Job Description',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'We are looking for a passionate individual to join our team and contribute to our solar energy projects. The ideal candidate will have experience in renewable energy and a commitment to sustainable development.',
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Required Skills',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 6,
               children: job['skills'].map<Widget>((skill) {
                 return Chip(label: Text(skill), backgroundColor: Colors.grey.shade200);
               }).toList(),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () { Navigator.pop(context); },
-                child: Text('Apply Now'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue.shade600, foregroundColor: Colors.white, padding: EdgeInsets.symmetric(vertical: 16)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue.shade600,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child: const Text('Apply Now'),
               ),
             ),
           ],

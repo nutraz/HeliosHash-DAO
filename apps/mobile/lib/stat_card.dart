@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StatCard extends StatelessWidget {
+<<<<<<< HEAD
   final String title;
   final String value;
   final IconData icon;
@@ -9,6 +10,8 @@ class StatCard extends StatelessWidget {
   final double? change;
   final String? changeLabel;
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   const StatCard({
     super.key,
     required this.title,
@@ -24,9 +27,7 @@ class StatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
@@ -48,11 +49,7 @@ class StatCard extends StatelessWidget {
                     color: color.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Icon(
-                    icon,
-                    color: color,
-                    size: 20,
-                  ),
+                  child: Icon(icon, color: color, size: 20),
                 ),
                 const Spacer(),
                 if (change != null) _buildChangeIndicator(),
@@ -62,11 +59,7 @@ class StatCard extends StatelessWidget {
             Flexible(
               child: Text(
                 value,
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: color),
                 overflow: TextOverflow.ellipsis,
               ),
             ),
@@ -87,10 +80,7 @@ class StatCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   subtitle!,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[500],
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -102,6 +92,7 @@ class StatCard extends StatelessWidget {
   }
 
   Widget _buildChangeIndicator() {
+<<<<<<< HEAD
     final isPositive = change! >= 0;
     final changeColor = isPositive ? Colors.green : Colors.red;
     final changeIcon = isPositive ? Icons.trending_up : Icons.trending_down;
@@ -113,14 +104,19 @@ class StatCard extends StatelessWidget {
           size: 16,
           color: changeColor,
         ),
+=======
+    final bool isPositive = change! >= 0;
+    final MaterialColor changeColor = isPositive ? Colors.green : Colors.red;
+    final IconData changeIcon = isPositive ? Icons.trending_up : Icons.trending_down;
+
+    return Row(
+      children: <dynamic>[
+        Icon(changeIcon, size: 16, color: changeColor),
+>>>>>>> 9823c84 (chore: sync and clean repo)
         const SizedBox(width: 4),
         Text(
           '${change!.abs().toStringAsFixed(1)}${changeLabel ?? '%'}',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: changeColor,
-          ),
+          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: changeColor),
         ),
       ],
     );

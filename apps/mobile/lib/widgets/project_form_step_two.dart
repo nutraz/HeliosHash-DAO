@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ProjectFormStepTwo extends StatelessWidget {
+<<<<<<< HEAD
   final TextEditingController fundingGoalController;
   final TextEditingController tokenAllocationController;
   final TextEditingController capacityController;
 
+=======
+>>>>>>> 9823c84 (chore: sync and clean repo)
   const ProjectFormStepTwo({
     super.key,
     required this.fundingGoalController,
@@ -19,11 +22,7 @@ class ProjectFormStepTwo extends StatelessWidget {
       children: [
         const Text(
           'Funding & Technical Details',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.green),
         ),
         const SizedBox(height: 16),
         TextFormField(
@@ -36,7 +35,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             suffixText: 'MW',
           ),
           keyboardType: TextInputType.number,
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Capacity is required';
             }
@@ -58,7 +57,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             suffixText: 'ETH',
           ),
           keyboardType: TextInputType.number,
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Funding goal is required';
             }
@@ -81,7 +80,7 @@ class ProjectFormStepTwo extends StatelessWidget {
             helperText: 'Tokens to be distributed to investors and contributors',
           ),
           keyboardType: TextInputType.number,
-          validator: (value) {
+          validator: (String? value) {
             if (value == null || value.isEmpty) {
               return 'Token allocation is required';
             }
@@ -100,24 +99,27 @@ class ProjectFormStepTwo extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
             border: Border.all(color: Colors.green.shade200),
           ),
-          child: Column(
+          child: const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+<<<<<<< HEAD
             children: [
               const Row(
                 children: [
+=======
+            children: <dynamic>[
+              Row(
+                children: <dynamic>[
+>>>>>>> 9823c84 (chore: sync and clean repo)
                   Icon(Icons.lightbulb, color: Colors.green),
                   SizedBox(width: 8),
                   Text(
                     'Funding Structure',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
                   ),
                 ],
               ),
-              const SizedBox(height: 8),
-              const Text(
+              SizedBox(height: 8),
+              Text(
                 '• 70% of funds will be used for solar panel installation and infrastructure\n'
                 '• 20% allocated for maintenance and monitoring systems\n'
                 '• 10% reserved for community education and training programs\n\n'

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class EnergyChart extends StatelessWidget {
-  const EnergyChart({Key? key}) : super(key: key);
+  const EnergyChart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final ThemeData theme = Theme.of(context);
 
     // Mock data for demonstration
     final data = [
@@ -18,7 +18,13 @@ class EnergyChart extends StatelessWidget {
       {'day': 'Sun', 'value': 125.4},
     ];
 
+<<<<<<< HEAD
     final maxValue = data.map((e) => e['value'] as double).reduce((a, b) => a > b ? a : b);
+=======
+    final double maxValue = data
+        .map((Map<String, Object> e) => e['value']! as double)
+        .reduce((double a, double b) => a > b ? a : b);
+>>>>>>> 9823c84 (chore: sync and clean repo)
 
     return Container(
       height: 200,
@@ -49,8 +55,8 @@ class EnergyChart extends StatelessWidget {
                         const SizedBox(height: 4),
                         Container(
                           height: height,
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
                               colors: [Color(0xFFFFA726), Color(0xFFFF7043)],

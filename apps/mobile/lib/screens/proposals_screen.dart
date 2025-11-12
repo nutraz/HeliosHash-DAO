@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/dao/proposal.dart';
 import '../providers/governance_provider.dart';
 
 class ProposalsScreen extends StatelessWidget {
-  const ProposalsScreen({Key? key}) : super(key: key);
+  const ProposalsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     final governanceProvider = Provider.of<GovernanceProvider>(context);
     
+=======
+    final GovernanceProvider governanceProvider = Provider.of<GovernanceProvider>(context);
+
+>>>>>>> 9823c84 (chore: sync and clean repo)
     return Scaffold(
       appBar: AppBar(
         title: const Text('Governance Proposals'),
@@ -30,18 +36,18 @@ class ProposalsScreen extends StatelessWidget {
       body: governanceProvider.isLoading
           ? const Center(child: CircularProgressIndicator())
           : governanceProvider.error != null
-              ? Center(child: Text('Error: ${governanceProvider.error}'))
-              : ListView.builder(
-                  itemCount: governanceProvider.proposals.length,
-                  itemBuilder: (context, idx) {
-                    final proposal = governanceProvider.proposals[idx];
-                    return ListTile(
-                      title: Text(proposal['title'] ?? ''),
-                      subtitle: Text(proposal['description'] ?? ''),
-                      trailing: Text('Deadline: ${proposal['deadline'] ?? ''}'),
-                    );
-                  },
-                ),
+          ? Center(child: Text('Error: ${governanceProvider.error}'))
+          : ListView.builder(
+              itemCount: governanceProvider.proposals.length,
+              itemBuilder: (BuildContext context, int idx) {
+                final Proposal proposal = governanceProvider.proposals[idx];
+                return ListTile(
+                  title: Text(proposal['title'] ?? ''),
+                  subtitle: Text(proposal['description'] ?? ''),
+                  trailing: Text('Deadline: ${proposal['deadline'] ?? ''}'),
+                );
+              },
+            ),
     );
   }
 }

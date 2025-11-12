@@ -5,11 +5,8 @@ Thanks for wanting to contribute! This document covers quick local setup, PM2 de
 ## Table of Contents
 
 - Local development
-
 - PM2 (dev server) usage
-
 - Running tests (unit & E2E)
-
 - Git workflow and PRs
 
 ## Local development

@@ -32,17 +32,16 @@ RUN set -e; \
 # Keep dfx pinned via ARG above. The install script will put the CLI in
 # /root/.local/bin by default; add that to PATH so subsequent RUNs can find it.
 RUN set -e; \
-    echo "Installing prerequisites for mops install script..."; \
-    apt-get update && apt-get install -y ca-certificates curl git bash; \
-    echo "Running official mops install script (this detects arch)..."; \
-    # The script uses bash-specific features; run with bash so it parses correctly.
-    # The script installs into ~/.local/bin by default; run as root so it lands at /root/.local/bin
-    curl -fsSL https://mops.one/install.sh | bash -s --; \
-    # Ensure /root/.local/bin is on PATH for later steps and for container users
-    echo 'export PATH="/root/.local/bin:$PATH"' >> /root/.bashrc; \
-    export PATH="/root/.local/bin:$PATH"; \
-    echo "mops file info (if present):"; file /root/.local/bin/mops || file /usr/local/bin/mops || true; \
-    echo "mops --version (if available):"; if command -v mops >/dev/null 2>&1; then mops --version || true; fi
+    echo "Installing prerequisites (Node.js + npm) for npm-based mops install..."; \
+    apt-get update && apt-get install -y ca-certificates curl git gnupg2 lsb-release bash; \
+    # Install Node.js 18 LTS from NodeSource
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -; \
+    apt-get install -y nodejs; \
+    # Install mops via npm (official package)
+    npm install -g @dfinity/mops || true; \
+    # Verify installation locations and versions
+    echo "mops file info (if present):"; command -v mops && file "$(command -v mops)" || echo "/usr/local/bin/mops not found"; \
+    echo "mops --version (if available):"; if command -v mops >/dev/null 2>&1; then mops --version || true; else echo "mops not installed"; fi
 
 ENV PATH="/root/.local/bin:${PATH}"
 

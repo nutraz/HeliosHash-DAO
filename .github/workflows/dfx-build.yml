@@ -17,8 +17,8 @@ jobs:
       - name: Install DFINITY SDK (dfx)
         run: |
           set -e
-          # Install dfx (official installer)
-          curl -fsSL https://sdk.dfinity.org/install.sh | sh
+          # Install dfx (official installer) non-interactively by piping 'yes' to prompts
+          yes | curl -fsSL https://sdk.dfinity.org/install.sh | sh
           # Add dfx to PATH for this run (installer writes to ~/.cache/dfx)
           echo "${HOME}/.cache/dfx/versions/$(ls ${HOME}/.cache/dfx/versions)/dfx" >> $GITHUB_PATH
 

@@ -20,7 +20,8 @@ export default function OpportunitiesPage() {
   }
 
   // Use 'language' only if present in user, else default to 'en'
-  const language = (user as any)?.language || 'en'
+  type MaybeUser = { language?: string }
+  const language = user && typeof (user as MaybeUser).language === 'string' ? (user as MaybeUser).language : 'en'
 
-  return <OpportunitiesHub user={user} language={language} />
+  return <OpportunitiesHub user={user || undefined} language={language} />
 }

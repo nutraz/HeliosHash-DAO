@@ -84,10 +84,10 @@ export default function TestCanisterPage() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {projects?.slice(0, 3).map((project: any, index: number) => (
+                  {projects?.slice(0, 3).map((project: { title?: string; description?: string }, index: number) => (
                     <div key={index} className="text-gray-300 p-2 bg-gray-700 rounded">
                       <p className="font-medium">{project.title || `Project ${index + 1}`}</p>
-                      <p className="text-sm text-gray-400">{project.description?.substring(0, 50)}...</p>
+                      <p className="text-sm text-gray-400">{project.description ? `${project.description.substring(0, 50)}...` : ''}</p>
                     </div>
                   )) || <p className="text-gray-400">No projects found</p>}
                 </div>

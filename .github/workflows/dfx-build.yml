@@ -22,12 +22,16 @@ jobs:
       - name: Start replica and build canisters
         run: |
           set -e
-          # Start replica in background inside a container
-          docker run -d --name dfx-replica dfx-builder bash -lc "dfx start --background --clean || true"
-
-          # Run canister create/build inside a container that mounts the repo
-          docker run --rm -v "$PWD":/workspace -w /workspace dfx-builder bash -lc "cd apps/backend && dfx canister create --all && dfx build"
-
-          # Cleanup the replica container
-          docker stop dfx-replica || true
-          docker rm dfx-replica || true
+          # Run all dfx commands inside a single container so the replica started by dfx is reachable
+          docker run --rm -v "$PWD":/workspace -w /workspace dfx-builder bash -lc '
+            set -e
+            cd apps/backend
+            echo "Starting dfx local replica in background..."
+            dfx start --background --clean
+            # small wait to allow the replica to become reachable
+            sleep 3
+            echo "Creating canisters..."
+            dfx canister create --all
+            echo "Building canisters..."
+            dfx build
+          '

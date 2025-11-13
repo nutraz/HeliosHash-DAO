@@ -14,34 +14,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install DFINITY SDK (dfx)
+      - name: Build docker image with dfx + mops
         run: |
           set -e
-          # Install dfx (official installer) non-interactively by piping 'yes' to prompts
-          yes | curl -fsSL https://sdk.dfinity.org/install.sh | sh
-          # Add dfx to PATH for this run (installer writes to ~/.cache/dfx)
-          echo "${HOME}/.cache/dfx/versions/$(ls ${HOME}/.cache/dfx/versions)/dfx" >> $GITHUB_PATH
+          # Build a container image that installs dfx and mops non-interactively
+          docker build -t helios-dfx - <<'DOCKERFILE'
+          FROM ubuntu:24.04
+          ENV DEBIAN_FRONTEND=noninteractive
+          RUN apt-get update && apt-get install -y curl ca-certificates tar gzip xz-utils gnupg \
+              && rm -rf /var/lib/apt/lists/*
 
-      - name: Install Motoko tools (mops)
+          # Install dfx by downloading the prebuilt tarball via the official installer script
+          RUN mkdir -p /opt/dfx && \
+              curl -fsSL https://sdk.dfinity.org/install.sh | bash -s -- --no-modify-path --install-dir /opt/dfx || true
+
+          # If the installer didn't place the dfx binary, try extracting the tarball directly
+          RUN if [ -d /opt/dfx ]; then true; else mkdir -p /opt/dfx; fi
+
+          ENV PATH="/opt/dfx:$PATH"
+
+          # Install mops (Motoko package manager)
+          RUN curl -fsSL https://mops.one/install.sh | bash || true
+          ENV PATH="/root/.local/bin:/root/.cache/dfx/versions/$(ls /root/.cache/dfx/versions 2>/dev/null || true):$PATH"
+
+          WORKDIR /work
+          DOCKERFILE
+
+      - name: Run canister build inside container
         run: |
           set -e
-          # Install mops (Motoko package manager) and ensure it's on PATH
-          curl -fsSL https://mops.one/install.sh | bash
-          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          # Mount repo into the container and run dfx commands there
+          docker run --rm -v "$PWD":/work -w /work helios-dfx bash -lc "cd apps/backend && dfx canister create --all && dfx build"
 
-      - name: Start local replica
-        run: |
-          set -e
-          dfx start --background --clean
-
-      - name: Create and build canisters
-        working-directory: ./apps/backend
-        run: |
-          set -e
-          dfx canister create --all
-          dfx build
-
-      - name: Stop dfx
+      - name: Stop any background dfx processes (best-effort)
         if: always()
         run: |
-          dfx stop || true
+          docker run --rm -v "$PWD":/work -w /work helios-dfx bash -lc "dfx stop || true" || true

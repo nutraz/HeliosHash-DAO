@@ -1,0 +1,37 @@
+name: dfx build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-canisters:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dfx (DFINITY SDK)
+        run: |
+          set -e
+          curl -fsSL https://sdk.dfinity.org/install.sh | sh
+          export PATH="${HOME}/.cache/dfx/versions/$(ls ${HOME}/.cache/dfx/versions)/dfx":$PATH
+
+      - name: Start local replica
+        run: |
+          set -e
+          dfx start --background --clean
+
+      - name: Create and build canisters
+        working-directory: ./apps/backend
+        run: |
+          set -e
+          dfx canister create --all
+          dfx build
+
+      - name: Stop dfx
+        if: always()
+        run: |
+          dfx stop || true

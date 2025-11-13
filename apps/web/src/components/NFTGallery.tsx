@@ -31,7 +31,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
     {
       id: 'solar-btc-1',
       name: 'Solar Bitcoin Miner #001',
-      image: '/NFTsamples/solar-btc-1.png',
+      image: '/assets/icons/helioshash.svg',
       community: 'Green Energy Collective',
       projectId: '1',
       description: 'Genesis solar miner powered by Bitcoin rewards',
@@ -44,7 +44,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
     {
       id: 'ev-charging-2',
       name: 'EV Charging Station #002',
-      image: '/NFTsamples/ev-charging-2.png',
+      image: '/assets/icons/urgam.svg',
       community: 'Sustainable Transport DAO',
       projectId: '2',
       description: 'Fast-charging station with renewable energy backup',
@@ -57,7 +57,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
     {
       id: 'data-center-3',
       name: 'Green Data Center #003',
-      image: '/NFTsamples/data-center-3.png',
+      image: '/icons/llogo-nobackground.svg',
       community: 'Tech Infrastructure Hub',
       projectId: '3',
       description: 'Carbon-neutral data center powered by renewable energy',
@@ -70,7 +70,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
     {
       id: 'temple-solar-4',
       name: 'Temple Solar Array #004',
-      image: '/NFTsamples/temple-solar-4.png',
+      image: '/assets/icons/governance.svg',
       community: 'Community Power Network',
       projectId: '4',
       description: 'Community-owned solar array powering local temple',
@@ -84,7 +84,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
     {
       id: 'school-solar-5',
       name: 'School Solar Initiative #005',
-      image: '/NFTsamples/school-solar-5.png',
+      image: '/logo-simple.svg',
       community: 'Education Energy Alliance',
       projectId: '5',
       description: 'Solar installation at rural school providing clean energy education',

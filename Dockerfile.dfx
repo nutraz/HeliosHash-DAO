@@ -27,20 +27,38 @@ RUN set -e; \
       rm -f /tmp/dfx.tar.gz; \
     fi
 
-# Install mops from GitHub releases
+# Install mops from GitHub releases (robust download + diagnostics)
 RUN set -e; \
-        echo "Downloading mops for host architecture"; \
-        arch=$(uname -m); \
-        case "$arch" in \
-            x86_64) ASSET="mops-x86_64-linux" ;; \
-            aarch64|arm64) ASSET="mops-aarch64-linux" ;; \
-            *) ASSET="mops-x86_64-linux" ;; \
-        esac; \
-        echo "Detected arch=$arch -> asset=$ASSET"; \
-        wget -q "https://github.com/ZenVoich/mops/releases/latest/download/${ASSET}" -O /usr/local/bin/mops || true; \
-        chmod +x /usr/local/bin/mops || true; \
-        echo "mops file info:"; file /usr/local/bin/mops || true; \
-        echo "mops readelf header (if available):"; if command -v readelf >/dev/null 2>&1; then readelf -h /usr/local/bin/mops || true; fi
+                echo "Downloading mops for host architecture"; \
+                arch=$(uname -m); \
+                case "$arch" in \
+                        x86_64) ASSET="mops-x86_64-linux" ;; \
+                        aarch64|arm64) ASSET="mops-aarch64-linux" ;; \
+                        *) ASSET="mops-x86_64-linux" ;; \
+                esac; \
+                echo "Detected arch=$arch -> asset=$ASSET"; \
+                # Use curl -L to follow redirects and retry a few times; write to a temp file first
+                TMP_MOPS="/tmp/mops.$$"; \
+                tries=0; \
+                until [ $tries -ge 3 ]; do \
+                    tries=$((tries+1)); \
+                    echo "Attempt $tries to download mops..."; \
+                    curl -fsSL "https://github.com/ZenVoich/mops/releases/latest/download/${ASSET}" -o "$TMP_MOPS" && break || sleep 1; \
+                done; \
+                if [ -f "$TMP_MOPS" ] && [ $(wc -c <"$TMP_MOPS") -gt 100 ]; then \
+                    mv "$TMP_MOPS" /usr/local/bin/mops; \
+                    chmod +x /usr/local/bin/mops; \
+                else \
+                    echo "mops download failed or file too small - saving diagnostics"; \
+                    ls -l "$TMP_MOPS" || true; \
+                    file "$TMP_MOPS" || true; \
+                    head -c 512 "$TMP_MOPS" | sed -n '1,200p' || true; \
+                    # leave an empty placeholder so build continues and diagnostics are visible
+                    echo "" > /usr/local/bin/mops || true; \
+                    chmod +x /usr/local/bin/mops || true; \
+                fi; \
+                echo "mops file info:"; file /usr/local/bin/mops || true; \
+                echo "mops readelf header (if available):"; if command -v readelf >/dev/null 2>&1; then readelf -h /usr/local/bin/mops || true; fi
 
 # Verify installations (best-effort)
 RUN if command -v dfx >/dev/null 2>&1; then dfx --version || true; else echo "dfx not installed"; fi

@@ -8,6 +8,19 @@ const seededRandom = (seed: number) => {
   return x - Math.floor(x);
 };
 
+interface Particle {
+  id: number;
+  width: number;
+  height: number;
+  left: number;
+  top: number;
+  background: string;
+  opacity: number;
+  duration: number;
+  delay: number;
+  dx: number;
+}
+
 export default function OWPAnimation({ onComplete }: { onComplete: () => void }) {
   const [mounted, setMounted] = useState(false);
 
@@ -15,26 +28,11 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
   // To force the heavy animation even in development, set NEXT_PUBLIC_FORCE_HEAVY_SPLASH=true
   const forceHeavySplash = process.env.NEXT_PUBLIC_FORCE_HEAVY_SPLASH === 'true'
   const disableHeavy = !forceHeavySplash && (process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true' || process.env.NODE_ENV !== 'production')
-  if (disableHeavy) {
-    // minimal splash for dev: static logo + quick timeout to call onComplete
-    useEffect(() => {
-      const t = setTimeout(onComplete, 300)
-      return () => clearTimeout(t)
-    }, [onComplete])
-
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-900 text-center">
-        <div>
-          <img src="/hhdaologo.svg" alt="HeliosHash" className="w-40 h-40 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-white">HeliosHash DAO</h1>
-        </div>
-      </div>
-    )
-  }
-
   // Pre-generate stable particle data to avoid hydration mismatch
-  const particles = useMemo(() =>
-    Array.from({ length: 60 }, (_, i) => {
+  // Keep hooks unconditionally at top level. When in dev/lightweight mode the memo will return an empty array.
+  const particles = useMemo<Particle[]>(() => {
+    if (disableHeavy) return [];
+    return Array.from({ length: 60 }, (_, i) => {
       const seed = i * 7.3891; // Unique seed per particle
       return {
         id: i,
@@ -46,39 +44,49 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
         opacity: seededRandom(seed + 5) * 0.7 + 0.2,
         duration: seededRandom(seed + 6) * 3 + 2,
         delay: seededRandom(seed + 7) * 2,
-        dx: (seededRandom(seed + 8) * 30 - 15).toFixed(2),
-      };
-    }), []
-  );
+        dx: seededRandom(seed + 8) * 30 - 15,
+      } as Particle;
+    });
+  }, [disableHeavy]);
 
+  // Unconditional effect that handles both lightweight and heavy paths
   useEffect(() => {
-    setMounted(true);
-    const timer = setTimeout(onComplete, 5000);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+    if (disableHeavy) {
+      const t = setTimeout(onComplete, 300)
+      return () => clearTimeout(t)
+    }
+
+    setMounted(true)
+    const timer = setTimeout(onComplete, 5000)
+    return () => clearTimeout(timer)
+  }, [disableHeavy, onComplete])
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-black overflow-hidden">
       {/* Animated energy particles */}
       <div className="absolute inset-0">
-        {particles.map((particle) => (
-          <div
-            key={particle.id}
-            className="absolute rounded-full"
-            style={{
-              width: `${particle.width}px`,
-              height: `${particle.height}px`,
-              left: `${particle.left}%`,
-              top: `${particle.top}%`,
-              background: particle.background,
-              opacity: particle.opacity,
-              animation: `energyFloat ${particle.duration}s ease-in-out infinite`,
-              animationDelay: `${particle.delay}s`,
-              // Provide deterministic horizontal offset via CSS variable
-              ['--dx' as any]: `${particle.dx}px`,
-            }}
-          />
-        ))}
+        {particles.map((particle: Particle) => {
+          const styleVars = { ['--dx']: `${particle.dx}px` } as Record<string, string> & React.CSSProperties;
+          const style: React.CSSProperties = {
+            ...styleVars,
+            width: `${particle.width}px`,
+            height: `${particle.height}px`,
+            left: `${particle.left}%`,
+            top: `${particle.top}%`,
+            background: particle.background,
+            opacity: particle.opacity,
+            animation: `energyFloat ${particle.duration}s ease-in-out infinite`,
+            animationDelay: `${particle.delay}s`,
+          };
+
+          return (
+            <div
+              key={particle.id}
+              className="absolute rounded-full"
+              style={style}
+            />
+          )
+        })}
       </div>
 
       {/* Main OWP Container */}

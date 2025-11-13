@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'app_constant.dart';
 
 class UserProfilePage extends StatefulWidget {
-<<<<<<< HEAD
-  final String userId;
-
-=======
->>>>>>> 9823c84 (chore: sync and clean repo)
   const UserProfilePage({super.key, required this.userId});
+
+  final String userId;
 
   @override
   State<UserProfilePage> createState() => _UserProfilePageState();
@@ -27,10 +24,6 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
     'joinDate': DateTime(2023, 3, 10),
     'location': 'New York, NY',
     'website': 'https://bobsmith.dev',
-<<<<<<< HEAD
-    'skills': ['React', 'Node.js', 'Solidity', 'TypeScript', 'Web3', 'Smart Contracts', 'DeFi'],
-    'stats': {
-=======
     'skills': <String>[
       'React',
       'Node.js',
@@ -41,18 +34,11 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       'DeFi',
     ],
     'stats': <String, num>{
->>>>>>> 9823c84 (chore: sync and clean repo)
       'projectsContributed': 8,
       'proposalsCreated': 5,
       'votesCast': 89,
       'reputation': 4.6,
     },
-<<<<<<< HEAD
-    'achievements': [
-      {'name': 'Code Contributor', 'description': 'Contributed to 5+ projects', 'icon': Icons.code},
-      {'name': 'Proposal Creator', 'description': 'Created 3+ proposals', 'icon': Icons.lightbulb},
-      {'name': 'Active Member', 'description': 'Voted in 50+ decisions', 'icon': Icons.verified},
-=======
     'achievements': <Map<String, dynamic>>[
       <String, dynamic>{
         'name': 'Code Contributor',
@@ -69,7 +55,6 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         'description': 'Voted in 50+ decisions',
         'icon': Icons.verified,
       },
->>>>>>> 9823c84 (chore: sync and clean repo)
     ],
     'recentActivity': [
       {
@@ -152,17 +137,9 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
         ],
       ),
       body: NestedScrollView(
-<<<<<<< HEAD
-        headerSliverBuilder: (context, innerBoxIsScrolled) {
-          return [
-            SliverToBoxAdapter(
-              child: _buildProfileHeader(),
-            ),
-=======
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return <dynamic>[
             SliverToBoxAdapter(child: _buildProfileHeader()),
->>>>>>> 9823c84 (chore: sync and clean repo)
             SliverPersistentHeader(
               pinned: true,
               delegate: _SliverAppBarDelegate(
@@ -185,13 +162,7 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           controller: _tabController,
 <<<<<<< HEAD
           children: [
-            _buildOverviewTab(),
-            _buildActivityTab(),
-            _buildProjectsTab(),
-          ],
-=======
           children: <dynamic>[_buildOverviewTab(), _buildActivityTab(), _buildProjectsTab()],
->>>>>>> 9823c84 (chore: sync and clean repo)
         ),
       ),
     );
@@ -359,13 +330,9 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
           // Achievements
           const Text('Achievements', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const SizedBox(height: 16),
-<<<<<<< HEAD
-          ...(_user['achievements'] as List<Map<String, dynamic>>).map((achievement) {
-=======
           ...(_user['achievements'] as List<Map<String, dynamic>>).map((
             Map<String, dynamic> achievement,
           ) {
->>>>>>> 9823c84 (chore: sync and clean repo)
             return Card(
               margin: const EdgeInsets.only(bottom: 8),
               child: ListTile(
@@ -409,17 +376,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-<<<<<<< HEAD
-          children: [
-            Icon(
-              Icons.work_off,
-              size: 64,
-              color: Colors.grey[400],
-            ),
-=======
           children: <dynamic>[
             Icon(Icons.work_off, size: 64, color: Colors.grey[400]),
->>>>>>> 9823c84 (chore: sync and clean repo)
             const SizedBox(height: 16),
             Text('No projects yet', style: TextStyle(fontSize: 18, color: Colors.grey[600])),
           ],
@@ -430,13 +388,8 @@ class _UserProfilePageState extends State<UserProfilePage> with TickerProviderSt
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: projects.length,
-<<<<<<< HEAD
-      itemBuilder: (context, index) {
-        final project = projects[index];
-=======
       itemBuilder: (BuildContext context, int index) {
         final Map<String, dynamic> project = projects[index];
->>>>>>> 9823c84 (chore: sync and clean repo)
         return Card(
           margin: const EdgeInsets.only(bottom: 8),
           child: ListTile(

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { 
-  Home, Wrench, Zap, User, HardHat, Package, 
+  Home, Wrench, Zap, HardHat, Package, 
   Truck, CheckCircle, MapPin, Users
 } from 'lucide-react'
 

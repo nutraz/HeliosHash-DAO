@@ -2,23 +2,16 @@ import '../models/dao/proposal.dart';
 import 'package:flutter/material.dart';
 
 class ProposalCard extends StatelessWidget {
-<<<<<<< HEAD
-  final Proposal proposal;
-  final Function(bool)? onVote;
-  final VoidCallback? onTap;
-
   const ProposalCard({
-    Key? key,
+    super.key,
     required this.proposal,
     this.onVote,
     this.onTap,
-  }) : super(key: key);
-=======
-  const ProposalCard({super.key, required this.proposal, this.onVote, this.onTap});
+  });
+
   final Proposal proposal;
   final Function(bool)? onVote;
   final VoidCallback? onTap;
->>>>>>> 9823c84 (chore: sync and clean repo)
 
   @override
   Widget build(BuildContext context) {

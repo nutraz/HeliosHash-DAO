@@ -3,50 +3,58 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { 
-  User, Wallet, Award, TrendingUp, Map, 
+import {
+  Wallet, Award, TrendingUp, Map,
   Users, Gift, FileText, Settings, LogOut,
-  Send, ArrowDownToLine, Lock, Zap, Globe, Briefcase
+  Send, ArrowDownToLine, Lock, Zap, Globe, Briefcase,
+  Loader2, AlertCircle
 } from 'lucide-react'
+import { useHHDAO } from '@/hooks/useHHDAO'
+
+interface UserProfileLocal {
+  name?: string;
+  language?: string;
+  roleLabel?: string;
+  roleLabelHi?: string;
+}
 
 interface MainDashboardProps {
-  user: any
+  user: UserProfileLocal
   onNavigate: (view: string) => void
   onLogout: () => void
 }
 
 export default function MainDashboard({ user, onNavigate, onLogout }: MainDashboardProps) {
   const [showSendTokens, setShowSendTokens] = useState(false)
+  const { dashboardData, projects, loading, error, refetch } = useHHDAO()
   const language = user.language || 'en'
 
-  // Mock user data - replace with real data from IC backend
+  // Real data from IC canister
   const userData = {
-    name: user.name || 'User',
+    name: dashboardData?.userProfile?.[0]?.displayName || dashboardData?.userProfile?.[0]?.username || user.name || 'User',
     role: user.roleLabel || 'Member',
     roleHi: user.roleLabelHi || 'सदस्य',
-    rank: 'Bronze',
-    hhuBalance: 2450,
-    nfts: [
-      { id: 1, name: 'Baghpat Solar #1', image: '🏞️', status: 'green' },
-      { id: 2, name: 'Village Grid #42', image: '⚡', status: 'yellow' },
-      { id: 3, name: 'Early Adopter', image: '🌟', status: 'badge' },
-      { id: 4, name: 'Engineer Certified', image: '🔧', status: 'badge' },
-      { id: 5, name: 'Contributor Rank 3', image: '🏆', status: 'badge' },
-      { id: 6, name: 'Node Operator', image: '🖥️', status: 'badge' },
-      { id: 7, name: 'Land Deed #101', image: '📜', status: 'deed' },
-      { id: 8, name: 'Milestone 100kW', image: '⚡', status: 'badge' }
-    ],
+    rank: 'Bronze', // TODO: Calculate from canister data
+    hhuBalance: 2450, // TODO: Get from canister
+    nfts: dashboardData?.documents?.filter(doc => doc.documentType === 'Image') || [],
     stats: {
-      projectsStarted: 2,
-      projectsHelped: 7,
-      membersAdded: 12,
-      energyGenerated: '45.3 MWh',
-      co2Saved: '32.1 tons',
-      tokensEarned: 2450
+      projectsStarted: projects?.length || 0,
+      projectsHelped: 7, // TODO: Calculate from canister
+      membersAdded: 12, // TODO: Calculate from canister
+      energyGenerated: '45.3 MWh', // TODO: Get from devices
+      co2Saved: '32.1 tons', // TODO: Calculate from energy
+      tokensEarned: 2450 // TODO: Get from canister
     }
   }
 
   const quickActions = [
+    { 
+      id: 'villages', 
+      label: 'Villages',
+      labelHi: 'गांव',
+      icon: Map,
+      color: 'bg-cyan-600 hover:bg-cyan-700'
+    },
     { 
       id: 'map', 
       label: 'Project Map', 
@@ -68,6 +76,13 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
       icon: Gift, 
       color: 'bg-green-600 hover:bg-green-700' 
     },
+    {
+      id: 'nft-gallery',
+      label: 'NFT Gallery',
+      labelHi: 'NFT गैलरी',
+      icon: Gift,
+      color: 'bg-pink-600 hover:bg-pink-700'
+    },
     { 
       id: 'opportunities', 
       label: 'Opportunities', 
@@ -84,7 +99,7 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
     }
   ]
 
-  const getStatusColor = (status: string) => {
+    const getStatusColor = (status: string | undefined) => {
     switch (status) {
       case 'green': return 'bg-green-500'
       case 'yellow': return 'bg-yellow-500'
@@ -93,6 +108,32 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
       case 'grey': return 'bg-gray-500'
       default: return 'bg-purple-500'
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 p-4 md:p-8 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-blue-400 mx-auto mb-4" />
+          <p className="text-white text-lg">Loading dashboard data from blockchain...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 p-4 md:p-8 flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <AlertCircle className="h-12 w-12 text-red-400 mx-auto mb-4" />
+          <h2 className="text-white text-xl font-bold mb-2">Connection Error</h2>
+          <p className="text-gray-300 mb-4">{error}</p>
+          <Button onClick={refetch} className="bg-blue-600 hover:bg-blue-700">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -113,6 +154,10 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
               <span className="px-3 py-1 bg-amber-600 text-white text-xs font-bold rounded-full">
                 {userData.rank}
               </span>
+              <div className="flex items-center space-x-1 px-2 py-1 bg-green-600/20 border border-green-500/30 rounded-full">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-green-400 text-xs font-medium">Live on ICP</span>
+              </div>
             </div>
           </div>
           <div className="flex items-center space-x-2">
@@ -266,7 +311,9 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {quickActions.map((action) => {
+              {quickActions
+                .filter(action => action.id !== 'nft-gallery')
+                .map((action) => {
                 const Icon = action.icon
                 return (
                   <Button 

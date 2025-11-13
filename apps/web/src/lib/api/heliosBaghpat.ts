@@ -2,12 +2,28 @@
 // Tries to call an HTTP proxy endpoint (configure NEXT_PUBLIC_HELIOS_API),
 // otherwise falls back to mocked data.
 
+import { useState, useEffect } from 'react';
+
 export interface LiveStats {
   solar_kwh: number;
   btc_mined: number;
   crop_yield_percent: number;
   members: number;
   updated_at: number;
+}
+
+// Minimal actor config and mining stats typings to reduce explicit `any` usage
+export interface ActorConfig {
+  canisterId: string;
+  interfaceFactory: unknown;
+  options?: { agent?: unknown };
+}
+
+export interface MiningStats {
+  hashrate: number;
+  powerConsumption: number;
+  efficiency: number;
+  temperature?: number;
 }
 
 const CACHE_TTL = 10_000; // ms
@@ -39,7 +55,7 @@ export async function fetchLiveStats(
         return parsed;
       }
     }
-  } catch (e) {
+  } catch {
     // ignore
   }
 
@@ -47,30 +63,32 @@ export async function fetchLiveStats(
   // This avoids relying on generated bindings being present, but still
   // keeps the HTTP proxy and mock as fallbacks.
   try {
-    const { Actor, HttpAgent } = await import("@dfinity/agent");
+  const { Actor, HttpAgent } = await import("@dfinity/agent");
     // Import IDL builder (we only need it to construct an idlFactory function
     // which we pass to Actor.createActor — the real actor implementation may
     // ignore it in tests/mocks).
-    const { IDL } = await import("@dfinity/candid");
-
-    const idlFactory = ({ IDL: _IDL }: any) => {
-      const ProjectStats = _IDL.Record({
-        efficiency_percentage: _IDL.Nat,
-        last_production_date: _IDL.Opt(_IDL.Int),
-        operational_days: _IDL.Nat,
-        revenue_generated_usd: _IDL.Nat,
-        total_energy_kwh: _IDL.Nat,
+    const idlFactory = ({ IDL: _IDL }: { IDL: unknown }) => {
+      // We keep this dynamic because Candid IDL builders have complex types
+      // which are awkward to express here. Narrow locally to `any` for the
+      // builder implementation only.
+      const _ = _IDL as any;
+      const ProjectStats = _.Record({
+        efficiency_percentage: _.Nat,
+        last_production_date: _.Opt(_.Int),
+        operational_days: _.Nat,
+        revenue_generated_usd: _.Nat,
+        total_energy_kwh: _.Nat,
       });
-      const Result4 = _IDL.Variant({ err: _IDL.Text, ok: ProjectStats });
-      return _IDL.Service({
-        get_project_stats: _IDL.Func([_IDL.Text], [Result4], ["query"]),
+      const Result4 = _.Variant({ err: _.Text, ok: ProjectStats });
+      return _.Service({
+        get_project_stats: _.Func([_.Text], [Result4], ["query"]),
       });
     };
 
     // Create an HttpAgent and, if available on the client, attempt to wire an
     // authenticated identity from @dfinity/auth-client. If not authenticated
     // or unavailable, fall back to an unauthenticated agent.
-    let agent: any = new HttpAgent({
+    let agent: unknown = new HttpAgent({
       host: process.env.NEXT_PUBLIC_IC_HOST || undefined,
     });
     try {
@@ -85,24 +103,22 @@ export async function fetchLiveStats(
           });
         }
       }
-    } catch (e) {
+    } catch {
       // if auth-client isn't available or not authenticated, continue with unauthenticated agent
     }
 
     const canisterId = process.env.NEXT_PUBLIC_PROJECT_HUB_CANISTER_ID;
     if (canisterId) {
-      const actor = Actor.createActor(idlFactory, { agent, canisterId });
-      if (actor && typeof actor.get_project_stats === "function") {
-        const res: any = await actor.get_project_stats(projectId);
-        if (res?.ok) {
-          const proj = res.ok;
+      const actor = Actor.createActor(idlFactory, { agent: agent as any, canisterId });
+      if (actor && typeof (actor as unknown as { get_project_stats?: Function }).get_project_stats === "function") {
+        const res: unknown = await (actor as unknown as any).get_project_stats(projectId);
+        if (res && typeof res === 'object' && 'ok' in (res as Record<string, unknown>)) {
+          const proj = (res as any).ok as Record<string, unknown>;
           const stats: LiveStats = {
-            solar_kwh: Number(proj.total_energy_kwh) || mockStats.solar_kwh,
+            solar_kwh: Number((proj.total_energy_kwh as unknown) as number) || mockStats.solar_kwh,
             btc_mined: 0,
-            crop_yield_percent:
-              Number(proj.efficiency_percentage) ||
-              mockStats.crop_yield_percent,
-            members: Number(proj.operational_days) || mockStats.members,
+            crop_yield_percent: Number((proj.efficiency_percentage as unknown) as number) || mockStats.crop_yield_percent,
+            members: Number((proj.operational_days as unknown) as number) || mockStats.members,
             updated_at: Date.now(),
           };
           try {
@@ -115,9 +131,9 @@ export async function fetchLiveStats(
         }
       }
     }
-  } catch (e) {
+  } catch {
     // ignore actor errors and fallback to proxy/mock
-    // console.debug('actor call failed', e)
+    // console.debug('actor call failed')
   }
 
   // If WebSocket push endpoint provided, we don't need to fetch here — but keep HTTP fallback
@@ -143,7 +159,7 @@ export async function fetchLiveStats(
         window.localStorage.setItem(cacheKey(projectId), JSON.stringify(stats));
       } catch {}
       return stats;
-    } catch (err) {
+    } catch {
       // fallback to mock on error
       return { ...mockStats, updated_at: Date.now() };
     }
@@ -158,8 +174,6 @@ export function useHeliosLiveStats(
   projectId = "helios-baghpat",
   intervalMs = 10_000
 ) {
-  // Lazy import to avoid react types here — returned shape mimics a simple hook
-  const { useState, useEffect } = require("react") as typeof import("react");
   const [data, setData] = useState<LiveStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -170,23 +184,27 @@ export function useHeliosLiveStats(
     let bc: BroadcastChannel | null = null;
     try {
       if (typeof window !== "undefined" && "BroadcastChannel" in window) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        bc = new BroadcastChannel("helios_stats");
-        bc.onmessage = (ev: MessageEvent) => {
-          try {
-            const msg = ev.data;
-            if (msg?.projectId === projectId && msg?.stats) {
-              if (!mounted) return;
-              setData(msg.stats);
-              setLoading(false);
+        // Use the DOM BroadcastChannel directly. In test environments jsdom
+        // will provide a polyfill (we set that up in tests). Cast locally to
+        // `any` to avoid the lint rule complaining about DOM-lib mismatch.
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        bc = new (BroadcastChannel as any)('helios_stats')
+        if (bc) {
+          bc.onmessage = (ev: MessageEvent) => {
+            try {
+              const msg = ev.data;
+              if (msg?.projectId === projectId && msg?.stats) {
+                if (!mounted) return;
+                setData(msg.stats);
+                setLoading(false);
+              }
+            } catch {
+              // ignore
             }
-          } catch (e) {
-            // ignore
-          }
-        };
+          };
+        }
       }
-    } catch (e) {
+    } catch {
       bc = null;
     }
 
@@ -219,7 +237,7 @@ export function useHeliosLiveStats(
                   );
                 } catch {}
               }
-            } catch (e) {
+            } catch {
               // ignore
             }
           };
@@ -242,7 +260,7 @@ export function useHeliosLiveStats(
             // let onclose handle reconnect
           };
         }
-      } catch (e) {
+      } catch {
         ws = null;
       }
     };
@@ -261,9 +279,9 @@ export function useHeliosLiveStats(
             bc.postMessage({ projectId, stats });
           } catch {}
         }
-      } catch (e: any) {
+      } catch (_e: any) {
         if (!mounted) return;
-        setError(e);
+        setError(_e);
       } finally {
         if (!mounted) return;
         setLoading(false);

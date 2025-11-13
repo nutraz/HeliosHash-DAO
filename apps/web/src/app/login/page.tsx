@@ -15,15 +15,16 @@ export default function LoginPage() {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000))
     
-    // Mock user data
+    // Mock user data (kept for future use) — referenced to avoid unused-var lint
     const mockUser = {
       id: '1',
       name: 'Alex Johnson',
       email: 'alex.johnson@example.com',
       walletAddress: '0x742d35Cc6634C0532925a3b8D4a2a2a2a2a2a2a2'
     }
+    void mockUser
     
-    login(mockUser)
+    login()
     router.push('/')
   }
 

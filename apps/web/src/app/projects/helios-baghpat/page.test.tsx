@@ -30,19 +30,19 @@ vi.mock('@/components/project/opportunities/OpportunitiesHub', () => ({
 // Mock simple UI primitives used by the page
 vi.mock('@/components/ui/badge', () => ({
   __esModule: true,
-  Badge: (props: any) => React.createElement('span', props, props.children)
+  Badge: () => React.createElement('span', {}, 'Badge')
 }))
 vi.mock('@/components/ui/button', () => ({
   __esModule: true,
-  Button: (props: any) => React.createElement('button', props, props.children)
+  Button: () => React.createElement('button', {}, 'Button')
 }))
 vi.mock('@/components/ui/card', () => ({
   __esModule: true,
-  Card: (props: any) => React.createElement('div', props, props.children),
-  CardHeader: (props: any) => React.createElement('div', props, props.children),
-  CardContent: (props: any) => React.createElement('div', props, props.children),
-  CardTitle: (props: any) => React.createElement('div', props, props.children),
-  CardDescription: (props: any) => React.createElement('div', props, props.children)
+  Card: () => React.createElement('div', {}, 'Card'),
+  CardHeader: () => React.createElement('div', {}, 'CardHeader'),
+  CardContent: () => React.createElement('div', {}, 'CardContent'),
+  CardTitle: () => React.createElement('div', {}, 'CardTitle'),
+  CardDescription: () => React.createElement('div', {}, 'CardDescription')
 }))
 
 import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'

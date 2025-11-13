@@ -162,24 +162,27 @@ persistent actor class HHDAO(
 		completionDate : ?Int
 	) : async Result.Result<HHDAOLib.Project, Text> {
 		// Create project locally
-		let project = state.createProject(name, location, capacity, description, estimatedCost, completionDate, caller);
-
-		// Optionally create a DAO proposal if canister configured
-		switch (dao_canister) {
-			case (?dao) {
-				let proposalResult = await dao.createProposal(
-					"Project Proposal: " # name,
-					"Proposal for solar project: " # description,
-					#Project,
-					7, // 7 days voting period
-					? ("project_id:" # Nat.toText(project.id))
-				);
-				switch (proposalResult) {
-					case (#ok(_proposalId)) { #ok(project) };
-					case (#err(error)) { #err("Project created locally but proposal failed: " # error) };
-				};
+		switch (state.createProject(name, location, capacity, description, estimatedCost, completionDate, caller)) {
+			case (#ok(project)) {
+				// Optionally create a DAO proposal if canister configured
+				switch (dao_canister) {
+					case (?dao) {
+						let proposalResult = await dao.createProposal(
+							"Project Proposal: " # name,
+							"Proposal for solar project: " # description,
+							#Project,
+							7, // 7 days voting period
+							? ("project_id:" # Nat.toText(project.id))
+						);
+						switch (proposalResult) {
+							case (#ok(_proposalId)) { #ok(project) };
+							case (#err(error)) { #err("Project created locally but proposal failed: " # error) };
+						};
+					};
+					case null { #ok(project) };
+				}
 			};
-			case null { #ok(project) };
+			case (#err(error)) { #err(error) };
 		}
 	};
 
@@ -359,7 +362,7 @@ persistent actor class HHDAO(
 	public shared ({ caller }) func updateProjectStatus(
 		id : Nat,
 		status : HHDAOLib.ProjectStatus
-	) : async Bool {
+	) : async Result.Result<(), Text> {
 		state.updateProjectStatus(id, status, caller)
 	};
 
@@ -496,8 +499,11 @@ persistent actor class HHDAO(
 	};
 
 	public query func getCyclesBalance() : async Nat { Cycles.balance() };
-<<<<<<< HEAD
-=======
+
+	// Internet Identity integration - returns caller principal
+	public shared ({ caller }) func whoami() : async Principal {
+		caller
+	};
 
 	// Seed data method for development and testing
 	public shared ({ caller }) func seed_data() : async Text {
@@ -505,7 +511,7 @@ persistent actor class HHDAO(
 
 		// 1. Create Sample Projects
 		summary #= "📊 Creating sample projects...\n";
-		let project1 = state.createProject(
+		let project1Result = state.createProject(
 			"Urgam Valley Solar Farm",
 			"Urgam Valley, Gujarat, India",
 			500, // 500 kW capacity
@@ -514,9 +520,13 @@ persistent actor class HHDAO(
 			?(Time.now() + (180 * 24 * 60 * 60 * 1000000000)), // 180 days from now
 			caller
 		);
+		let project1 = switch (project1Result) {
+			case (#ok(p)) p;
+			case (#err(e)) { summary #= "❌ Failed to create project 1: " # e # "\n"; return summary; };
+		};
 		summary #= "  ✓ Project #" # Nat.toText(project1.id) # ": " # project1.name # "\n";
 
-		let project2 = state.createProject(
+		let project2Result = state.createProject(
 			"Dharampur Rooftop Solar Initiative",
 			"Dharampur, Gujarat, India",
 			250, // 250 kW capacity
@@ -525,9 +535,13 @@ persistent actor class HHDAO(
 			?(Time.now() + (120 * 24 * 60 * 60 * 1000000000)), // 120 days from now
 			caller
 		);
+		let project2 = switch (project2Result) {
+			case (#ok(p)) p;
+			case (#err(e)) { summary #= "❌ Failed to create project 2: " # e # "\n"; return summary; };
+		};
 		summary #= "  ✓ Project #" # Nat.toText(project2.id) # ": " # project2.name # "\n";
 
-		let project3 = state.createProject(
+		let project3Result = state.createProject(
 			"Valsad Agricultural Solar Pumps",
 			"Valsad District, Gujarat, India",
 			100, // 100 kW capacity
@@ -536,6 +550,10 @@ persistent actor class HHDAO(
 			?(Time.now() + (90 * 24 * 60 * 60 * 1000000000)), // 90 days from now
 			caller
 		);
+		let project3 = switch (project3Result) {
+			case (#ok(p)) p;
+			case (#err(e)) { summary #= "❌ Failed to create project 3: " # e # "\n"; return summary; };
+		};
 		summary #= "  ✓ Project #" # Nat.toText(project3.id) # ": " # project3.name # "\n";
 
 		// 2. Create Sample Proposals
@@ -778,5 +796,4 @@ persistent actor class HHDAO(
 
 		summary
 	};
->>>>>>> audit-clean
 }

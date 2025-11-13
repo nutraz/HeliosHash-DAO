@@ -137,3 +137,7 @@ apps/*/node_modules/
 
 # Declaration files
 apps/backend/src/declarations/
+
+# Backup directories from scripted refactors / quick edits
+.backups/
+.backups/**

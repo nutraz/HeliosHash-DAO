@@ -1,16 +1,16 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
-  Briefcase, MapPin, Calendar, Users, Zap,
+  MapPin, Zap, Users,
   Wrench, HardHat, Package, TrendingUp, Clock
 } from 'lucide-react'
 
 interface OpportunitiesHubProps {
-  user: any
+  user?: unknown
   language?: string
 }
 
@@ -113,7 +113,7 @@ const opportunities = [
   }
 ]
 
-export default function OpportunitiesHub({ user, language = 'en' }: OpportunitiesHubProps) {
+export default function OpportunitiesHub({ language = 'en' }: OpportunitiesHubProps) {
   const [filter, setFilter] = useState<string>('all')
 
   const getStatusBadge = (status: string) => {

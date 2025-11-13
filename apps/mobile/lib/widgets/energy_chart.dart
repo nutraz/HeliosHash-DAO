@@ -18,13 +18,9 @@ class EnergyChart extends StatelessWidget {
       {'day': 'Sun', 'value': 125.4},
     ];
 
-<<<<<<< HEAD
-    final maxValue = data.map((e) => e['value'] as double).reduce((a, b) => a > b ? a : b);
-=======
     final double maxValue = data
         .map((Map<String, Object> e) => e['value']! as double)
         .reduce((double a, double b) => a > b ? a : b);
->>>>>>> 9823c84 (chore: sync and clean repo)
 
     return Container(
       height: 200,

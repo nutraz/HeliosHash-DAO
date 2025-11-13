@@ -1,10 +1,28 @@
 {
-  "canisters": {},
+  "canisters": {
+    "hhdao": {
+      "main": "canisters/hhdao/src/main.mo",
+      "type": "motoko"
+    },
+    "project_hub": {
+      "main": "canisters/project_hub/src/main.mo", 
+      "type": "motoko"
+    },
+    "baghpat_energy": {
+      "main": "canisters/baghpat_energy/src/main.mo",
+      "type": "motoko"
+    },
+    "internet_identity": {
+      "type": "pull",
+      "id": "rdmx6-jaaaa-aaaaa-aaadq-cai"
+    }
+  },
   "defaults": {
     "build": {
       "args": "",
       "packtool": ""
     }
   },
+  "output_env_file": ".env",
   "version": 1
 }

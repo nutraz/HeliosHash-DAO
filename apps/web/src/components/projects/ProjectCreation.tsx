@@ -1,15 +1,31 @@
 'use client'
 
 import React, { useState } from 'react'
-import { ChevronRight, Upload, Video, FileText, CheckCircle, AlertCircle } from 'lucide-react'
+import { ChevronRight, Upload, Video, CheckCircle, AlertCircle } from 'lucide-react'
+
+interface ProjectDetails {
+  name?: string
+  description?: string
+  location?: string
+  estimatedCost?: string | number
+  timeline?: string
+}
+
+interface ProjectFormData {
+  projectType?: string
+  applicantType?: string
+  projectDetails: ProjectDetails
+  documents: Record<string, File | null>
+  testimonial: { videoRecorded: boolean; videoFile: File | null }
+}
 
 interface ProjectCreationProps {
-  onProjectCreated?: (projectData: any) => void
+  onProjectCreated?: (projectData: ProjectFormData) => void
 }
 
 const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated }) => {
   const [step, setStep] = useState<number>(1)
-  const [formData, setFormData] = useState<any>({
+  const [formData, setFormData] = useState<ProjectFormData>({
     projectType: '',
     applicantType: '',
     projectDetails: {
@@ -47,14 +63,14 @@ const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated
     setStep(2)
   }
 
-  const handleInputChange = (section: string, field: string, value: any) => {
-    setFormData({
-      ...formData,
-      [section]: {
-        ...formData[section],
+  const handleInputChange = (section: 'projectDetails', field: keyof ProjectDetails, value: string | number | undefined) => {
+    setFormData((prev) => ({
+      ...prev,
+      projectDetails: {
+        ...prev.projectDetails,
         [field]: value
       }
-    })
+    }))
   }
 
   const handleFileUpload = (docType: string, event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +79,7 @@ const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated
       ...formData,
       documents: {
         ...formData.documents,
-        [docType]: file
+        [docType]: file || null
       }
     })
   }
@@ -176,7 +192,7 @@ const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated
     </div>
   )
 
-  const DocumentUpload: React.FC<{ label: string; docType: string; required?: boolean; uploaded?: any }> = ({ label, docType, required = true, uploaded }) => (
+  const DocumentUpload: React.FC<{ label: string; docType: string; required?: boolean; uploaded?: File | null }> = ({ label, docType, required = true, uploaded }) => (
     <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
       <div className="flex items-center justify-between mb-2">
         <label className="text-sm font-medium text-gray-700">{label} {required && <span className="text-red-500">*</span>}</label>
@@ -227,7 +243,7 @@ const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated
         
         <DocumentUpload label="Criminal Background Verification" docType="criminalBackground" uploaded={formData.documents.criminalBackground} />
         
-        {['entrepreneur', 'bitcoin-mining'].includes(formData.applicantType) && (
+        {['entrepreneur', 'bitcoin-mining'].includes(formData.applicantType || '') && (
           <DocumentUpload label="Business Plan / Project Proposal" docType="businessPlan" uploaded={formData.documents.businessPlan} />
         )}
       </div>

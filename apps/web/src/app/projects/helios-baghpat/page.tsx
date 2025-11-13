@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import CommunityHub from '@/components/project/community/CommunityHub'
 import OpportunitiesHub from '@/components/project/opportunities/OpportunitiesHub'
 import { useHeliosLiveStats } from '@/lib/api/heliosBaghpat'
-import HeliosBaghpatOverview from '@/components/project/HeliosBaghpatOverview'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -114,7 +113,7 @@ export default function HeliosBaghpatProject() {
         </div>
 
         <div>
-          {active === 'overview' && <HeliosBaghpatOverview onViewBoard={() => setActive('opportunities')} />}
+          {active === 'overview' && <OverviewTab />}
           {active === 'community-hub' && <CommunityHub user={{}} language="en" />}
           {active === 'opportunities' && <OpportunitiesHub user={{}} language="en" />}
         </div>

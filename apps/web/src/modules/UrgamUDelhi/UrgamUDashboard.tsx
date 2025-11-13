@@ -26,9 +26,13 @@ interface EnergyStats {
   surplus: string;
 }
 
-export default function UrgamUDelhiDashboard() {
+interface UrgamUDashboardProps {
+  language?: string;
+}
+
+export default function UrgamUDelhiDashboard({ language }: UrgamUDashboardProps) {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Overview);
-  const { live } = useHeliosLiveStats('urgamu-delhi');
+  const { data } = useHeliosLiveStats('urgamu-delhi');
   
   // State for rate-based power calculation
   const [previousSolarKwh, setPreviousSolarKwh] = useState<number | undefined>();
@@ -55,25 +59,25 @@ export default function UrgamUDelhiDashboard() {
 
   // Update energy stats when live data changes
   useEffect(() => {
-    if (live?.solar_kwh && typeof live.solar_kwh === 'number') {
+    if (data?.solar_kwh && typeof data.solar_kwh === 'number') {
       const now = new Date();
       let timeDiffHours = 1;
-      
+
       if (previousSolarKwh !== undefined && lastUpdateTime) {
         timeDiffHours = (now.getTime() - lastUpdateTime.getTime()) / (1000 * 60 * 60);
         timeDiffHours = Math.max(0.1, Math.min(24, timeDiffHours));
       }
-      
-      const instantKW = calculateInstantPower(live.solar_kwh, previousSolarKwh, timeDiffHours);
+
+      const instantKW = calculateInstantPower(data.solar_kwh, previousSolarKwh, timeDiffHours);
       setEnergyStats(prev => ({
         ...prev,
         solarOutput: `${instantKW.toFixed(1)} kW`
       }));
-      
-      setPreviousSolarKwh(live.solar_kwh);
+
+      setPreviousSolarKwh(data.solar_kwh);
       setLastUpdateTime(now);
     }
-  }, [live?.solar_kwh]);
+  }, [data?.solar_kwh]);
 
   // Demo simulation (fluctuating stats)
   useEffect(() => {
@@ -90,7 +94,7 @@ export default function UrgamUDelhiDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div data-language={language} className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Tabs */}
         <div className="flex space-x-4 mb-6">

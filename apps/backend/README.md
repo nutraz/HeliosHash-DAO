@@ -1,3 +1,42 @@
+DFX / Motoko canisters (local build instructions)
+
+This folder contains minimal Motoko canister skeletons (governance, treasury) and a `dfx.json` configuration.
+
+Quick local build steps
+1. Ensure the DFINITY SDK (dfx) is installed and on your PATH. If not installed, install it with:
+
+   curl -fsSL https://sdk.dfinity.org/install.sh | sh
+
+2. Start a clean local replica and build the canisters:
+
+   cd /path/to/repo/apps/backend
+   dfx start --background --clean
+   dfx canister create --all
+   dfx build
+
+3. Deploy (optional):
+
+   dfx deploy
+
+Common local build issue encountered in this environment
+- Error: Failed to invoke the package tool "mops" / "No such file or directory (os error 2)"
+
+What this means
+- The Motoko package toolchain (mops/moc) is not available in the running environment. Installing the DFINITY SDK via the official install script should provide the required Motoko tooling.
+
+If you run into this locally
+- Ensure you've installed dfx using the install script above and reopened your shell so the dfx path is available.
+- If the error persists, run:
+
+  dfx --version
+  which mops || true
+  which moc || true
+
+You can also rely on CI: a GitHub Actions workflow is included at `/.github/workflows/dfx-build.yml` that performs a fresh dfx install and builds the canisters on Ubuntu CI.
+
+If you'd like, I can:
+- Add a more complete CI job that also runs Motoko tests and uploads build artifacts.
+- Attempt to install the Motoko toolchain in this environment (requires network install).
 # `helioshash_backend`
 
 Welcome to your new `helioshash_backend` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.

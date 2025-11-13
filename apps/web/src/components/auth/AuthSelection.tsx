@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -65,7 +66,9 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
 
       {/* Centered logo at top of auth screen */}
       <div className="absolute top-8 left-0 right-0 flex justify-center pointer-events-none">
-        <img src="/hhdaologo.svg" alt="HHDAO logo" className="w-28 h-28 object-contain" />
+        <div className="w-28 h-28 relative pointer-events-none">
+          <Image src="/hhdaologo.svg" alt="HHDAO logo" fill className="object-contain" />
+        </div>
       </div>
 
       <div className="w-full max-w-md space-y-6">

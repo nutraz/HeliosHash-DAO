@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useAuth } from '@/contexts/AuthContext'
 
 export default function UserMenu() {
@@ -44,7 +45,7 @@ export default function UserMenu() {
       >
         <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full text-white text-sm font-semibold">
           {user.avatar ? (
-            <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
+            <Image src={user.avatar} alt={user.name} width={32} height={32} className="rounded-full" unoptimized />
           ) : (
             getInitials(user.name || 'U')
           )}

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useEffect, useState, useMemo } from 'react';
+import Image from 'next/image';
 
 // Deterministic pseudo-random number generator for stable SSR
 const seededRandom = (seed: number) => {
@@ -196,8 +197,8 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
         </div>
 
         {/* Central logo medallion with circuit pattern */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-48 h-48 animate-pulse-slow">
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="relative w-48 h-48 animate-pulse-slow">
             {/* Circuit board background */}
             <svg viewBox="0 0 200 200" className="w-full h-full">
               <circle cx="100" cy="100" r="90" fill="#1e293b" opacity="0.95" />
@@ -235,7 +236,9 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
 
             {/* HeliosHash Logo */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <img src="/hhdaologo.svg" alt="HeliosHash" className="w-24 h-24 object-contain" style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.6))' }} />
+              <div className="relative w-24 h-24" style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.6))' }}>
+                <Image src="/hhdaologo.svg" alt="HeliosHash" fill className="object-contain" />
+              </div>
             </div>
           </div>
         </div>

@@ -39,9 +39,9 @@ export const testAuthentication = async () => {
     const isBrowser = typeof window !== 'undefined' && typeof indexedDB !== 'undefined';
     console.log(`1. Environment check: ${isBrowser ? 'Browser' : 'Node.js'}`);
 
-    let isAuthenticated = false;
-    let authClient: any = null;
-    let principal: string | null = null;
+  let isAuthenticated = false;
+  let authClient: AuthClient | null = null;
+  let principal: string | null = null;
 
     if (!isBrowser) {
       console.log('2. Skipping AuthClient test (requires browser environment)');
@@ -71,7 +71,7 @@ export const testAuthentication = async () => {
           return { success: false, error: 'Canister ID not configured' };
         }
 
-  const actor = await createActor(canisterId, hhdaoIdlFactory, identity) as any;
+  const actor: unknown = await createActor(canisterId, hhdaoIdlFactory, identity);
   // `actor` is intentionally unused here in this lightweight integration test.
   // Use a void expression so ESLint's no-unused-vars rule is satisfied while
   // preserving the creation side-effect for manual testing.

@@ -67,10 +67,10 @@ export async function fetchLiveStats(
     // Import IDL builder (we only need it to construct an idlFactory function
     // which we pass to Actor.createActor — the real actor implementation may
     // ignore it in tests/mocks).
+    /* eslint-disable @typescript-eslint/no-explicit-any */
     const idlFactory = ({ IDL: _IDL }: { IDL: unknown }) => {
-      // We keep this dynamic because Candid IDL builders have complex types
-      // which are awkward to express here. Narrow locally to `any` for the
-      // builder implementation only.
+      // Candid IDL builders have complex types; use a local `any` here only
+      // inside the builder and re-enable linting afterwards.
       const _ = _IDL as any;
       const ProjectStats = _.Record({
         efficiency_percentage: _.Nat,
@@ -84,6 +84,7 @@ export async function fetchLiveStats(
         get_project_stats: _.Func([_.Text], [Result4], ["query"]),
       });
     };
+    /* eslint-enable @typescript-eslint/no-explicit-any */
 
     // Create an HttpAgent and, if available on the client, attempt to wire an
     // authenticated identity from @dfinity/auth-client. If not authenticated
@@ -109,11 +110,14 @@ export async function fetchLiveStats(
 
     const canisterId = process.env.NEXT_PUBLIC_PROJECT_HUB_CANISTER_ID;
     if (canisterId) {
+      /* eslint-disable @typescript-eslint/no-explicit-any */
       const actor = Actor.createActor(idlFactory, { agent: agent as any, canisterId });
-      if (actor && typeof (actor as unknown as { get_project_stats?: Function }).get_project_stats === "function") {
-        const res: unknown = await (actor as unknown as any).get_project_stats(projectId);
+      /* eslint-enable @typescript-eslint/no-explicit-any */
+
+      if (actor && typeof (actor as unknown as { get_project_stats?: (projectId: string) => Promise<unknown> }).get_project_stats === "function") {
+        const res: unknown = await (actor as unknown as { get_project_stats: (projectId: string) => Promise<unknown> }).get_project_stats(projectId);
         if (res && typeof res === 'object' && 'ok' in (res as Record<string, unknown>)) {
-          const proj = (res as any).ok as Record<string, unknown>;
+          const proj = (res as Record<string, unknown>).ok as Record<string, unknown>;
           const stats: LiveStats = {
             solar_kwh: Number((proj.total_energy_kwh as unknown) as number) || mockStats.solar_kwh,
             btc_mined: 0,
@@ -279,9 +283,10 @@ export function useHeliosLiveStats(
             bc.postMessage({ projectId, stats });
           } catch {}
         }
-      } catch (_e: any) {
+      } catch (_e: unknown) {
         if (!mounted) return;
-        setError(_e);
+        const err = _e instanceof Error ? _e : new Error(String(_e));
+        setError(err);
       } finally {
         if (!mounted) return;
         setLoading(false);

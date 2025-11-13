@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
     xz-utils \
     tar \
     gzip \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Install DFX from direct download (specific version)
@@ -28,9 +29,18 @@ RUN set -e; \
 
 # Install mops from GitHub releases
 RUN set -e; \
-    echo "Downloading mops"; \
-    wget -q https://github.com/ZenVoich/mops/releases/latest/download/mops-x86_64-linux -O /usr/local/bin/mops || true; \
-    chmod +x /usr/local/bin/mops || true
+        echo "Downloading mops for host architecture"; \
+        arch=$(uname -m); \
+        case "$arch" in \
+            x86_64) ASSET="mops-x86_64-linux" ;; \
+            aarch64|arm64) ASSET="mops-aarch64-linux" ;; \
+            *) ASSET="mops-x86_64-linux" ;; \
+        esac; \
+        echo "Detected arch=$arch -> asset=$ASSET"; \
+        wget -q "https://github.com/ZenVoich/mops/releases/latest/download/${ASSET}" -O /usr/local/bin/mops || true; \
+        chmod +x /usr/local/bin/mops || true; \
+        echo "mops file info:"; file /usr/local/bin/mops || true; \
+        echo "mops readelf header (if available):"; if command -v readelf >/dev/null 2>&1; then readelf -h /usr/local/bin/mops || true; fi
 
 # Verify installations (best-effort)
 RUN if command -v dfx >/dev/null 2>&1; then dfx --version || true; else echo "dfx not installed"; fi

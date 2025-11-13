@@ -49,16 +49,38 @@ export default function UrgamUDashboard({ language = 'en' }: Props) {
   React.useEffect(() => {
     if (live && !liveLoading) {
       try {
-        // solar_kwh is an accumulated kWh (daily or total) — approximate an
-        // instantaneous kW by dividing by 24 for a simple UI estimate.
-        const approxKW = typeof live.solar_kwh === 'number' ? (live.solar_kwh / 24) : null
-        setEnergyStats(prev => ({
-          ...prev,
-          solarOutput: approxKW ? `${approxKW.toFixed(1)} kW` : prev.solarOutput,
-          batteryLevel: prev.batteryLevel,
-          gridUsage: prev.gridUsage,
-          surplus: approxKW ? `${Math.max(0, (approxKW - 10)).toFixed(1)} kW` : prev.surplus
-        }))
+        // Prefer an instantaneous power metric when the proxy/canister provides it.
+        // Check several common field names used by different integrations.
+        // Fall back to the kWh/24 approximation when an instant metric is unavailable.
+        // Use a generic record to check optional fields without using `any`.
+        const l = live as unknown as Record<string, unknown>;
+        const candidateKeys = [
+          'instant_kw',
+          'instant_power_kw',
+          'instant_power',
+          'power_kw',
+          'power',
+          'current_kw',
+        ];
+        const foundKey = candidateKeys.find((k) => typeof l[k] === 'number');
+        const instant = foundKey ? (l[foundKey] as number) : undefined;
+
+        if (typeof instant === 'number') {
+          const instantKW = instant;
+          setEnergyStats(prev => ({
+            ...prev,
+            solarOutput: `${instantKW.toFixed(1)} kW`,
+            // estimate surplus as instant minus an assumed compute baseline (10 kW)
+            surplus: `${Math.max(0, (instantKW - 10)).toFixed(1)} kW`
+          }))
+        } else {
+          const approxKW = typeof live.solar_kwh === 'number' ? (live.solar_kwh / 24) : null
+          setEnergyStats(prev => ({
+            ...prev,
+            solarOutput: approxKW ? `${approxKW.toFixed(1)} kW` : prev.solarOutput,
+            surplus: approxKW ? `${Math.max(0, (approxKW - 10)).toFixed(1)} kW` : prev.surplus
+          }))
+        }
       } catch {
         // ignore mapping errors; keep simulated values
       }

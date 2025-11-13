@@ -1,180 +1,166 @@
-'use client'
+// apps/web/src/modules/UrgamUDelhi/UrgamUDashboard.tsx
 
-import React from 'react'
-import { useHeliosLiveStats } from '@/lib/api/heliosBaghpat'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { useAuth } from '@/contexts/AuthContext'
+'use client';
 
-type Props = {
-  language?: string
+import { useState, useEffect } from 'react';
+import { useHeliosLiveStats } from '@/lib/api/heliosBaghpat';
+
+enum Tab {
+  Overview = 'Overview',
+  Mining = 'Mining Stats',
+  Energy = 'Energy Monitor',
+  ROI = 'ROI Tracker'
+}
+interface UrgamUDashboardProps {
+  language?: string;
 }
 
-export default function UrgamUDashboard({ language = 'en' }: Props) {
-  const { user } = useAuth()
-
-  // Energy state — simulate live values for UI/demo purposes. If canister/proxy
-  // data is available we map it into these fields below.
-  type EnergyStats = {
-    solarOutput: string
-    batteryLevel: string
-    gridUsage: string
-    surplus: string
-  }
-
-  const [energyStats, setEnergyStats] = React.useState<EnergyStats>({
-    solarOutput: '48.2 kW',
+// Update the component function to accept the prop
+export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboardProps) {
+  const [activeTab, setActiveTab] = useState<Tab>(Tab.Overview);
+  const { live } = useHeliosLiveStats('urgamu-delhi');
+  
+  // State for rate-based power calculation
+  const [previousSolarKwh, setPreviousSolarKwh] = useState<number | undefined>();
+  const [lastUpdateTime, setLastUpdateTime] = useState<Date | undefined>();
+  const [energyStats, setEnergyStats] = useState<EnergyStats>({
+    solarOutput: '45.2 kW',
     batteryLevel: '87%',
     gridUsage: '2.1 kW',
     surplus: '39.3 kW'
-  })
+  });
 
-  React.useEffect(() => {
-    const t = setInterval(() => {
+  // Rate-based power calculation
+  const calculateInstantPower = (solarKwh: number, prevKwh?: number, timeDiffHours?: number): number => {
+    if (prevKwh !== undefined && timeDiffHours && timeDiffHours > 0) {
+      const powerKW = (solarKwh - prevKwh) / timeDiffHours;
+      return Math.max(0, Math.min(50, powerKW));
+    }
+    
+    const hour = new Date().getHours();
+    const solarProfile = [0, 0, 0, 0, 0.1, 0.3, 0.6, 0.8, 0.9, 1.0, 0.95, 0.85, 0.7, 0.5, 0.3, 0.1, 0, 0, 0, 0, 0, 0, 0, 0];
+    const estimatedKW = 50 * solarProfile[hour];
+    
+    return estimatedKW;
+  };
+
+  // Update energy stats when live data changes
+  useEffect(() => {
+    if (live?.solar_kwh && typeof live.solar_kwh === 'number') {
+      const now = new Date();
+      let timeDiffHours = 1;
+      
+      if (previousSolarKwh !== undefined && lastUpdateTime) {
+        timeDiffHours = (now.getTime() - lastUpdateTime.getTime()) / (1000 * 60 * 60);
+        timeDiffHours = Math.max(0.1, Math.min(24, timeDiffHours));
+      }
+      
+      const instantKW = calculateInstantPower(live.solar_kwh, previousSolarKwh, timeDiffHours);
       setEnergyStats(prev => ({
         ...prev,
-        solarOutput: `${(Math.random() * 10 + 45).toFixed(1)} kW`, // fluctuate around 45-55 kW
-        batteryLevel: `${Math.floor(Math.random() * 10 + 80)}%`,
-        gridUsage: `${(Math.random() * 1 + 1.5).toFixed(1)} kW`
-      }))
-    }, 4500)
-    return () => clearInterval(t)
-  }, [])
-
-  // Wire to live canister/proxy stats when available. Use the existing
-  // `useHeliosLiveStats` hook which already implements client-side guards,
-  // caching and websocket push fallback.
-  const { data: live, loading: liveLoading } = useHeliosLiveStats('urgamu-delhi', 10000)
-
-  React.useEffect(() => {
-    if (live && !liveLoading) {
-      try {
-        // Prefer an instantaneous power metric when the proxy/canister provides it.
-        // Check several common field names used by different integrations.
-        // Fall back to the kWh/24 approximation when an instant metric is unavailable.
-        // Use a generic record to check optional fields without using `any`.
-        const l = live as unknown as Record<string, unknown>;
-        const candidateKeys = [
-          'instant_kw',
-          'instant_power_kw',
-          'instant_power',
-          'power_kw',
-          'power',
-          'current_kw',
-        ];
-        const foundKey = candidateKeys.find((k) => typeof l[k] === 'number');
-        const instant = foundKey ? (l[foundKey] as number) : undefined;
-
-        if (typeof instant === 'number') {
-          const instantKW = instant;
-          setEnergyStats(prev => ({
-            ...prev,
-            solarOutput: `${instantKW.toFixed(1)} kW`,
-            // estimate surplus as instant minus an assumed compute baseline (10 kW)
-            surplus: `${Math.max(0, (instantKW - 10)).toFixed(1)} kW`
-          }))
-        } else {
-          const approxKW = typeof live.solar_kwh === 'number' ? (live.solar_kwh / 24) : null
-          setEnergyStats(prev => ({
-            ...prev,
-            solarOutput: approxKW ? `${approxKW.toFixed(1)} kW` : prev.solarOutput,
-            surplus: approxKW ? `${Math.max(0, (approxKW - 10)).toFixed(1)} kW` : prev.surplus
-          }))
-        }
-      } catch {
-        // ignore mapping errors; keep simulated values
-      }
+        solarOutput: `${instantKW.toFixed(1)} kW`
+      }));
+      
+      setPreviousSolarKwh(live.solar_kwh);
+      setLastUpdateTime(now);
     }
-  }, [live, liveLoading])
+  }, [live?.solar_kwh]);
 
-  // Mocked community / compute stats — replace with canister calls via @dfinity/agent
-  const stats = {
-    currentHashrate: 1.24,
-    dailyEnergyProd: 3420,
-    members: 1825
-  }
+  // Demo simulation (random updates every 5s)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setEnergyStats(prev => ({
+        ...prev,
+        solarOutput: `${(Math.random() * 10 + 45).toFixed(1)} kW`,
+        batteryLevel: `${Math.floor(Math.random() * 10 + 80)}%`,
+        gridUsage: `${(Math.random() * 1 + 1.5).toFixed(1)} kW`,
+        surplus: `${(Math.random() * 10 + 35).toFixed(1)} kW` // Added to avoid stale value
+      }));
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="min-h-screen p-4">
-      <Card className="bg-gradient-to-r from-orange-900/50 to-amber-900/50 backdrop-blur-md rounded-xl border border-orange-500/30 p-6">
-        <div className="flex items-center gap-4 mb-4">
-          <div className="text-5xl">⛏️</div>
-          <div>
-            <h2 className="text-2xl font-bold text-white font-orbitron">UrgamU Delhi Mining Center</h2>
-            <p className="text-slate-300 mt-1">Solar-Powered Bitcoin Mining • 3 Acres • 50 kW Capacity</p>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+      <div className="max-w-7xl mx-auto">
+        {/* Tabs navigation */}
+        <div className="flex space-x-4 mb-6">
+          {Object.values(Tab).map((tab) => (
+            <button
+              key={tab}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === tab
+                  ? 'bg-orange-500 text-white'
+                  : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+              }`}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <p className="text-white text-2xl">{stats.currentHashrate} TH/s</p>
-              <p className="text-gray-300">{language === 'en' ? 'Hashrate' : 'हैशरेट'}</p>
-            </div>
-            <div>
-              <p className="text-white text-2xl">{stats.dailyEnergyProd} kWh</p>
-              <p className="text-gray-300">{language === 'en' ? 'Daily Energy' : 'दैनिक ऊर्जा'}</p>
-            </div>
-            <div>
-              <p className="text-white text-2xl">{stats.members}</p>
-              <p className="text-gray-300">{language === 'en' ? 'Members' : 'सदस्य'}</p>
-            </div>
-          </div>
+        {/* Tab content */}
+        <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-6">
+          {activeTab === Tab.Overview && (
+            <div className="space-y-6">
+              {/* Welcome Banner */}
+              <div className="bg-gradient-to-r from-orange-900/50 to-amber-900/50 backdrop-blur-md rounded-xl border border-orange-500/30 p-6">
+                <div className="flex items-center gap-4">
+                  <div className="text-5xl">⛏️</div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white font-orbitron">
+                      UrgamU Delhi Mining Center
+                    </h2>
+                    <p className="text-slate-300 mt-1">
+                      Solar-Powered Bitcoin Mining • 3 Acres • 50 kW Capacity
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-gray-900/30 rounded-xl p-4 text-center">
-              <div className="text-5xl mb-2">☀️</div>
-              <div className="text-white font-semibold">Solar Panels</div>
-              <div className="text-yellow-400 text-2xl font-bold mt-1">50 kW</div>
+              {/* Live Stats Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
+                  <div className="text-slate-400 text-sm">Solar Output</div>
+                  <div className="text-2xl font-bold text-yellow-400 mt-1">
+                    {energyStats.solarOutput}
+                  </div>
+                </div>
+                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
+                  <div className="text-slate-400 text-sm">Battery</div>
+                  <div className="text-2xl font-bold text-green-400 mt-1">
+                    {energyStats.batteryLevel}
+                  </div>
+                </div>
+                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
+                  <div className="text-slate-400 text-sm">Grid Usage</div>
+                  <div className="text-2xl font-bold text-cyan-400 mt-1">
+                    {energyStats.gridUsage}
+                  </div>
+                </div>
+                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
+                  <div className="text-slate-400 text-sm">Surplus</div>
+                  <div className="text-2xl font-bold text-purple-400 mt-1">
+                    {energyStats.surplus}
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <div className="bg-gray-900/30 rounded-xl p-4">
-              <div className="text-sm text-slate-400">Current Solar Output</div>
-              <div className="text-2xl font-bold text-green-400 mt-1">{energyStats.solarOutput}</div>
-              <div className="text-xs text-slate-400 mt-1">Battery {energyStats.batteryLevel} • Grid {energyStats.gridUsage}</div>
-            </div>
-
-            <div className="bg-gray-900/30 rounded-xl p-4">
-              <div className="text-sm text-slate-400">Surplus (to compute)</div>
-              <div className="text-2xl font-bold text-cyan-300 mt-1">{energyStats.surplus}</div>
-            </div>
-          </div>
-
-          <div className="mt-6 flex gap-3">
-            <Button onClick={() => window.location.href = '/urgamu-delhi/jobs'}>
-              {language === 'en' ? 'Jobs & Social' : 'नौकरियाँ और सोशल'}
-            </Button>
-            <Button onClick={() => window.location.href = '/urgamu-delhi/governance'}>
-              {language === 'en' ? 'Governance' : 'शासन'}
-            </Button>
-            <Button onClick={() => window.location.href = '/urgamu-delhi/disputes'}>
-              {language === 'en' ? 'Disputes' : 'विवाद'}
-            </Button>
-          </div>
-
-          {user && user.principal && (
-            <div className="mt-4 text-sm text-gray-400">{language === 'en' ? `Signed in as ${user.name || user.principal}` : `साइन इन: ${user.name || user.principal}`}</div>
           )}
-
-          <div className="mt-6 bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-6">
-            <h3 className="text-xl font-bold text-white mb-4">Investment Breakdown</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <div className="text-slate-400 text-sm">Total CAPEX</div>
-                <div className="text-3xl font-bold text-white mt-1">₹65,00,000</div>
-                <div className="text-sm text-slate-400">≈ $780,000</div>
-              </div>
-              <div>
-                <div className="text-slate-400 text-sm">Landowner Share (7%)</div>
-                <div className="text-3xl font-bold text-amber-400 mt-1">₹2.85 Cr</div>
-                <div className="text-sm text-slate-400">Over 10 years</div>
-              </div>
-            </div>
-          </div>
-
-          <p className="mt-4 text-xs text-gray-500">Note: This dashboard is a web-friendly implementation of the UrgamU/Helios#Baghpat module. Replace mock data with Motoko canister calls using @dfinity/agent and generated bindings.</p>
-        </CardContent>
-      </Card>
+          
+          {activeTab === Tab.Mining && (
+            <div className="text-white">Mining Stats Content</div>
+          )}
+          {activeTab === Tab.Energy && (
+            <div className="text-white">Energy Monitor Content</div>
+          )}
+          {activeTab === Tab.ROI && (
+            <div className="text-white">ROI Tracker Content</div>
+          )}
+        </div>
+      </div>
     </div>
-  )
+  );
 }

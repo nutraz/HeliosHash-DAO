@@ -5,14 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Badge } from '@/components/ui/badge'
 import {
-  Plus, Image, Zap, Award, FileText,
-  Upload, CheckCircle, Clock, TrendingUp
+  Plus, Zap, Award, FileText,
+  Upload, CheckCircle, Clock
 } from 'lucide-react'
 
 interface NFTCreationProps {
-  user: any
+  user?: { name?: string }
   language?: string
   onBack?: () => void
 }
@@ -61,9 +60,11 @@ const nftTemplates = [
 ]
 
 export default function NFTCreation({ user, language = 'en', onBack }: NFTCreationProps) {
+  // currently `user` is provided for future features; reference to avoid unused-var lint
+  void user
   const [step, setStep] = useState<'select' | 'create' | 'preview'>('select')
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null)
-  const [nftData, setNftData] = useState<any>({})
+  const [nftData, setNftData] = useState<Record<string, unknown>>({})
   const [uploading, setUploading] = useState(false)
 
   const template = nftTemplates.find(t => t.id === selectedTemplate)

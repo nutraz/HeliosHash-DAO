@@ -7,12 +7,25 @@ export default function HhdaoSplash({ onComplete }: { onComplete: () => void }) 
 
   // Allow disabling heavy animations in development or via env flag
   const disableHeavy = process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true' || process.env.NODE_ENV !== 'production'
-  if (disableHeavy) {
-    useEffect(() => {
+  // Unconditionally declare hooks; handle dev/lightweight path inside the effect below
+  useEffect(() => {
+    if (disableHeavy) {
       const t = setTimeout(onComplete, 300)
       return () => clearTimeout(t)
-    }, [onComplete])
+    }
 
+    setMounted(true)
+    const phase1Timer = setTimeout(() => setPhase(1), 500)
+    const phase2Timer = setTimeout(() => setPhase(2), 1500)
+    const completeTimer = setTimeout(onComplete, 6000)
+    return () => {
+      clearTimeout(phase1Timer)
+      clearTimeout(phase2Timer)
+      clearTimeout(completeTimer)
+    }
+  }, [disableHeavy, onComplete])
+
+  if (disableHeavy) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-900 text-center">
         <div>
@@ -24,17 +37,7 @@ export default function HhdaoSplash({ onComplete }: { onComplete: () => void }) 
     )
   }
 
-  useEffect(() => {
-    setMounted(true)
-    const phase1Timer = setTimeout(() => setPhase(1), 500)
-    const phase2Timer = setTimeout(() => setPhase(2), 1500)
-    const completeTimer = setTimeout(onComplete, 6000)
-    return () => {
-      clearTimeout(phase1Timer)
-      clearTimeout(phase2Timer)
-      clearTimeout(completeTimer)
-    }
-  }, [onComplete])
+  
 
   if (!mounted) return null
 

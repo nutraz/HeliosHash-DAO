@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { MapPin, Filter, Plus, Users, Zap, TrendingUp } from 'lucide-react'
+import { MapPin, Plus, Users, Zap, TrendingUp } from 'lucide-react'
 import HeliosBaghpatMapNode from '@/components/projects/HeliosBaghpatMapNode'
 
+interface UserLocal { language?: string }
+
 interface ProjectMapProps {
-  user: any
+  user?: UserLocal
   onNavigate: (view: string, projectId?: string) => void
 }
 
@@ -109,19 +111,19 @@ const mockProjects = [
 
 export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
   const [selectedStage, setSelectedStage] = useState('all')
-  const language = user.language || 'en'
+  const language = user?.language || 'en'
 
   const filteredProjects = selectedStage === 'all'
     ? mockProjects
-    : mockProjects.filter(p => p.stage === selectedStage)
+    : mockProjects.filter((p) => p.stage === selectedStage)
 
   const getStageColor = (stage: string) => {
-    const stageObj = projectStages.find(s => s.id === stage)
+    const stageObj = projectStages.find((s) => s.id === stage)
     return stageObj?.color || 'bg-gray-500'
   }
 
   const getStageLabel = (stage: string) => {
-    const stageObj = projectStages.find(s => s.id === stage)
+    const stageObj = projectStages.find((s) => s.id === stage)
     return language === 'en' ? stageObj?.label : stageObj?.labelHi
   }
 
@@ -203,11 +205,11 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
                   ))}
 
                   {/* Project Pins */}
-                  {filteredProjects.map((project, idx) => {
+                  {filteredProjects.map((project) => {
                     const x = 200 + (project.lng - 77) * 500
                     const y = 300 - (project.lat - 29) * 1200
                     const stageColor = getStageColor(project.stage)
-                    const colorMap: any = {
+                    const colorMap: Record<string, string> = {
                       'bg-green-500': '#10b981',
                       'bg-yellow-500': '#eab308',
                       'bg-orange-500': '#f97316',
@@ -264,7 +266,7 @@ export default function ProjectMap({ user, onNavigate }: ProjectMapProps) {
                       {language === 'en' ? 'Status' : 'स्थिति'}
                     </text>
                     {projectStages.filter(s => s.id !== 'all').map((stage, idx) => {
-                      const colorMap: any = {
+                      const colorMap: Record<string, string> = {
                         'bg-green-500': '#10b981',
                         'bg-yellow-500': '#eab308',
                         'bg-orange-500': '#f97316',

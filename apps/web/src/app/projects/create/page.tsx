@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react';
-import { ChevronRight, Upload, Video, FileText, CheckCircle, AlertCircle } from 'lucide-react';
+import { ChevronRight, Upload, Video, CheckCircle, AlertCircle } from 'lucide-react';
 
 export default function HHDAOProjectCreation() {
   const [step, setStep] = useState(1);

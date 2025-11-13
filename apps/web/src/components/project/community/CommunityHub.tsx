@@ -1,13 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import {
   MessageSquare, Users, TrendingUp, Heart,
-  Share2, Calendar, MapPin, Zap, Globe
+  Share2, Calendar, MapPin, Globe
 } from 'lucide-react'
 
 interface CommunityHubProps {

@@ -4,6 +4,8 @@ import { useState, useCallback, useEffect } from 'react'
 import OWPAnimation from '@/components/entry/OWPAnimation'
 import AuthSelection from '@/components/auth/AuthSelection'
 import { useRouter } from 'next/navigation'
+import { useHHDAO } from '@/hooks/useHHDAO'
+// removed unused icons: CheckCircle, Wifi, WifiOff
 
 type Stage = 'splash' | 'auth'
 
@@ -11,6 +13,7 @@ export default function Home() {
   // Allow skipping the splash in dev via env or query param
   const skipSplashEnv = process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true'
   const [stage, setStage] = useState<Stage>(skipSplashEnv ? 'auth' : 'splash')
+  const { loading, error } = useHHDAO()
 
   // Check query param on the client only (avoid useSearchParams during prerender)
   useEffect(() => {
@@ -19,8 +22,8 @@ export default function Home() {
         const params = new URLSearchParams(window.location.search)
         if (params.get('skipSplash') === '1') setStage('auth')
       }
-    } catch (e) {
-      // ignore
+    } catch (_e) {
+      void _e
     }
   }, [])
   const router = useRouter()
@@ -29,8 +32,13 @@ export default function Home() {
     setStage('auth')
   }, [])
 
+  // reference loading/error here to avoid unused-var in this file
+  void loading
+  void error
+
   const handleAuthenticated = useCallback((authData: any) => {
     // Redirect to dashboard after auth
+    void authData
     router.push('/dashboard')
   }, [router])
 

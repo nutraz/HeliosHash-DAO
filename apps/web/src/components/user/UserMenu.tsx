@@ -46,13 +46,13 @@ export default function UserMenu() {
           {user.avatar ? (
             <img src={user.avatar} alt={user.name} className="w-8 h-8 rounded-full" />
           ) : (
-            getInitials(user.name)
+            getInitials(user.name || 'U')
           )}
         </div>
         <div className="hidden md:block text-left">
           <div className="text-sm font-semibold text-gray-800">{user.name}</div>
           <div className="text-xs text-gray-500">
-            {user.walletAddress ? `${user.walletAddress.slice(0, 6)}...${user.walletAddress.slice(-4)}` : user.email}
+            {user.email}
           </div>
         </div>
         <svg className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -9,6 +9,7 @@ import Nat32 "mo:base/Nat32";
 import Array "mo:base/Array";
 import HashMap "mo:base/HashMap";
 import Iter "mo:base/Iter";
+import ErrorTypes "./types/errors";
 
 module HHDAOLib {
   public type ProjectStatus = {
@@ -201,7 +202,33 @@ module HHDAOLib {
       estimatedCost : Nat,
       completionDate : ?Int,
       owner : Principal
-    ) : Project {
+    ) : Result.Result<Project, Text> {
+      // Validate inputs
+      switch (ErrorTypes.validateNotEmpty(name, "project name")) {
+        case (#err(e)) { return #err(e) };
+        case (#ok()) {};
+      };
+
+      switch (ErrorTypes.validateNotEmpty(location, "location")) {
+        case (#err(e)) { return #err(e) };
+        case (#ok()) {};
+      };
+
+      switch (ErrorTypes.validateNotEmpty(description, "description")) {
+        case (#err(e)) { return #err(e) };
+        case (#ok()) {};
+      };
+
+      switch (ErrorTypes.validatePositive(capacity, "capacity")) {
+        case (#err(e)) { return #err(e) };
+        case (#ok()) {};
+      };
+
+      switch (ErrorTypes.validatePositive(estimatedCost, "estimated cost")) {
+        case (#err(e)) { return #err(e) };
+        case (#ok()) {};
+      };
+
       let newProject : Project = {
         id = nextProjectId;
         name = name;
@@ -218,7 +245,7 @@ module HHDAOLib {
       };
       projects := Array.append(projects, [newProject]);
       nextProjectId += 1;
-      newProject
+      #ok(newProject)
     };
 
     public func getProjects() : [Project] {
@@ -233,11 +260,11 @@ module HHDAOLib {
       id : Nat,
       status : ProjectStatus,
       caller : Principal
-    ) : Bool {
+    ) : Result.Result<(), Text> {
       switch (Array.find(projects, func (p : Project) : Bool { p.id == id })) {
         case (?project) {
           if (project.owner != caller) {
-            return false;
+            return #err(ErrorTypes.errorMessage(#Unauthorized));
           };
           let updatedProject = {
             id = project.id;
@@ -257,9 +284,9 @@ module HHDAOLib {
             p.id != id
           });
           projects := Array.append(projects, [updatedProject]);
-          true
+          #ok(())
         };
-        case (null) { false };
+        case (null) { #err(ErrorTypes.errorMessage(#NotFound("Project not found"))) };
       }
     };
   // Custom full-Nat hash function to replace deprecated Hash.hash
@@ -299,6 +326,7 @@ module HHDAOLib {
         votesFor = 0;
         votesAgainst = 0;
         status = #Open;
+        expiresAt = Time.now() + (7 * 24 * 60 * 60 * 1000000000); // 7 days from now
       };
       proposals.put(id, newProposal);
       id;
@@ -319,6 +347,7 @@ module HHDAOLib {
             votesFor = if (inFavor) proposal.votesFor + 1 else proposal.votesFor;
             votesAgainst = if (not inFavor) proposal.votesAgainst + 1 else proposal.votesAgainst;
             status = proposal.status;
+            expiresAt = proposal.expiresAt;
           };
           let newStatus : Status = 
             if (updatedProposal.votesFor >= proposal.votesRequired) #Passed
@@ -657,7 +686,6 @@ module HHDAOLib {
           };
 
           let newStatus : ReportStatus =
-          let newStatus : ReportStatus =
             if (updated.votesFor >= report.votesRequired) {
               #Validated
             } else if (updated.votesAgainst >= report.votesRequired) {
@@ -680,20 +708,7 @@ module HHDAOLib {
             };
           };
 
-          true;
-
-            // On validation, attempt reward issuance (best-effort)
-            if (newStatus == #Validated and not final.rewardIssued) {
-              let issued = tryIssueReward(final);
-              if (issued) {
-                let now = Time.now();
-                let withReward : AnimalReport = { final with rewardIssued = true; validatedAt = ?now };
-                animalReports.put(reportId, withReward);
-              };
-            };
-
-
-            true
+          true
         };
         case (null) { false };
       };

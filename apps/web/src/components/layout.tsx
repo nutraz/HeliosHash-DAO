@@ -13,11 +13,53 @@ interface LayoutProps {
   children: ReactNode
 }
 
+// Client-only component for auth-dependent navigation
+function AuthNavigation() {
+  const { isAuthenticated } = useAuth()
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <Link
+          href="/projects/create"
+          className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
+          Create Project
+        </Link>
+      ) : (
+        <Link href="/login" className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Sign In</Link>
+      )}
+      <UserMenu />
+    </>
+  )
+}
+
+// Client-only component for mobile auth navigation
+function MobileAuthNavigation() {
+  const { isAuthenticated } = useAuth()
+
+  return (
+    <>
+      {isAuthenticated ? (
+        <Link href="/projects/create" className="block font-semibold text-blue-600 dark:text-blue-400">Create Project</Link>
+      ) : (
+        <Link href="/login" className="block font-semibold text-blue-600 dark:text-blue-400">Sign In</Link>
+      )}
+      <div className="pt-2 border-t border-gray-200 dark:border-gray-700"><UserMenu /></div>
+    </>
+  )
+}
+
 export default function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [darkMode, setDarkMode] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const pathname = usePathname()
-  const { isAuthenticated } = useAuth()
+
+  // Mark as client-side after hydration
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   // Initialize dark mode from localStorage
   useEffect(() => {
@@ -98,17 +140,8 @@ export default function Layout({ children }: LayoutProps) {
                 {darkMode ? <Sun className="w-5 h-5 text-yellow-500" /> : <Moon className="w-5 h-5 text-gray-700" />}
               </button>
 
-              {isAuthenticated ? (
-                <Link
-                  href="/projects/create"
-                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-                >
-                  Create Project
-                </Link>
-              ) : (
-                <Link href="/login" className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors">Sign In</Link>
-              )}
-              <UserMenu />
+              {/* Auth-dependent navigation - only render on client */}
+              {isClient && <AuthNavigation />}
             </div>
 
             {/* Mobile Menu Button */}
@@ -137,12 +170,8 @@ export default function Layout({ children }: LayoutProps) {
             <div className="md:hidden mt-4 space-y-4 pb-4">
               <Link href="/" className="block font-semibold text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Dashboard</Link>
               <Link href="/projects" className="block font-semibold text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Projects</Link>
-              {isAuthenticated ? (
-                <Link href="/projects/create" className="block font-semibold text-blue-600 dark:text-blue-400">Create Project</Link>
-              ) : (
-                <Link href="/login" className="block font-semibold text-blue-600 dark:text-blue-400">Sign In</Link>
-              )}
-              <div className="pt-2 border-t border-gray-200 dark:border-gray-700"><UserMenu /></div>
+              {/* Auth-dependent mobile navigation - only render on client */}
+              {isClient && <MobileAuthNavigation />}
             </div>
           )}
         </nav>

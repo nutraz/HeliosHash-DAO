@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
-import { vi, describe, it, beforeEach, expect } from 'vitest'
+import { vi, describe, it, expect } from 'vitest'
 
 // Test the authenticated actor flow: mock AuthClient as authenticated and
 // ensure the actor path is used and surfaces the expected stats.
@@ -19,12 +19,15 @@ vi.mock('@dfinity/auth-client', () => ({
 // Mock agent to return a unique stat so we can detect the authenticated path
 vi.mock('@dfinity/agent', () => ({
   Actor: {
-    createActor: (_idlFactory: any, _opts: any) => ({
-      get_project_stats: (projectId: string) =>
-        Promise.resolve({ ok: { total_energy_kwh: BigInt(9999), efficiency_percentage: BigInt(99), operational_days: BigInt(1000), revenue_generated_usd: BigInt(0), last_production_date: null } }),
+    createActor: () => ({
+    get_project_stats: (_projectId: string) => {
+      // mark parameter as used to satisfy no-unused-vars rule in tests
+      void _projectId
+      return Promise.resolve({ ok: { total_energy_kwh: BigInt(9999), efficiency_percentage: BigInt(99), operational_days: BigInt(1000), revenue_generated_usd: BigInt(0), last_production_date: null } })
+    },
     }),
   },
-  HttpAgent: function HttpAgent(_opts?: any) { return {} }
+  HttpAgent: function HttpAgent(_opts?: unknown) { void _opts; return {} }
 }))
 
 vi.mock('@dfinity/candid', () => ({ IDL: {} }))

@@ -1,4 +1,5 @@
-import express, { Router, Request, Response } from "express";
+import * as express from "express";
+import { Router, Request, Response } from "express";
 import { AuthRequest } from "../middleware/auth.middleware";
 import { authController } from "../controllers/auth.controller";
 
@@ -11,18 +12,7 @@ const router = Router();
  * @returns { userId, accessToken, refreshToken, user }
  */
 router.post("/register", async (req: Request, res: Response) => {
-  try {
-    const result = await authController.register(req.body);
-    res.status(201).json(result);
-  } catch (error: any) {
-    res.status(400).json({
-      success: false,
-      error: {
-        code: "REGISTER_FAILED",
-        message: error.message,
-      },
-    });
-  }
+  await authController.register(req, res);
 });
 
 /**
@@ -32,39 +22,7 @@ router.post("/register", async (req: Request, res: Response) => {
  * @returns { accessToken, refreshToken, expiresIn }
  */
 router.post("/login", async (req: Request, res: Response) => {
-  try {
-    const result = await authController.login(req.body);
-    res.json(result);
-  } catch (error: any) {
-    res.status(401).json({
-      success: false,
-      error: {
-        code: "LOGIN_FAILED",
-        message: error.message,
-      },
-    });
-  }
-});
-
-/**
- * @route   POST /api/v1/auth/refresh
- * @desc    Refresh access token
- * @body    { refreshToken }
- * @returns { accessToken, expiresIn }
- */
-router.post("/refresh", async (req: Request, res: Response) => {
-  try {
-    const result = await authController.refreshToken(req.body.refreshToken);
-    res.json(result);
-  } catch (error: any) {
-    res.status(401).json({
-      success: false,
-      error: {
-        code: "REFRESH_FAILED",
-        message: error.message,
-      },
-    });
-  }
+  await authController.login(req, res);
 });
 
 /**

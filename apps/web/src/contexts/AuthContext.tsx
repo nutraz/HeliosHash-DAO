@@ -1,90 +1,164 @@
-'use client'
+'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import type { Identity } from '@dfinity/agent';
+import { AuthClient } from '@dfinity/auth-client';
+import { createActor } from '@/lib/actorFactory';
+import { hhdaoIdlFactory } from '@/lib/hhdaoIdl';
 
 interface User {
-  id: string
-  name: string
-  email: string
-  avatar?: string
-  walletAddress?: string
+  principal: string;
+  name?: string;
+  email?: string;
+  avatar?: string;
 }
 
 interface AuthContextType {
-  user: User | null
-  isAuthenticated: boolean
-  login: (userData: User) => void
-  logout: () => void
-  isLoading: boolean
+  user: User | null;
+  isAuthenticated: boolean;
+  login: () => Promise<void>;
+  logout: () => Promise<void>;
+  isLoading: boolean;
   // Backwards-compatible fields for legacy wallet components
-  isConnected: boolean
-  walletType: string | null
-  principal: string | null
-  connect: (type: string) => void
-  disconnect: () => void
+  isConnected: boolean;
+  walletType: string | null;
+  principal: string | null;
+  connect: (type: string) => Promise<void>;
+  disconnect: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [authClient, setAuthClient] = useState<AuthClient | null>(null);
+  const [isClient, setIsClient] = useState(false);
+
+  const logout = useCallback(async () => {
+    if (authClient) {
+      try {
+        await authClient.logout();
+      } catch {
+        // ignore logout errors
+      }
+    }
+    setUser(null);
+  }, [authClient]);
+
+  const handleAuthentication = useCallback(async (identity: unknown): Promise<void> => {
+    try {
+      // Narrow the unknown identity to the minimal shape we need
+      type PrincipalLike = { toText?: () => string; isAnonymous?: () => boolean }
+      const maybeIdentity = identity as { getPrincipal?: () => PrincipalLike };
+      if (typeof maybeIdentity.getPrincipal !== 'function') {
+        throw new Error('Invalid identity object');
+      }
+
+      const principal = maybeIdentity.getPrincipal();
+      if (principal) {
+        const p = principal as PrincipalLike
+        if (typeof p.isAnonymous === 'function' && p.isAnonymous()) {
+          throw new Error('Anonymous identity not allowed');
+        }
+      }
+
+      // Create actor and verify authentication with backend
+      const canisterId = process.env.NEXT_PUBLIC_HHDAO_CANISTER_ID;
+      if (!canisterId) {
+        throw new Error('HHDAO canister ID not configured');
+      }
+
+  // createActor expects an `Identity` instance from @dfinity/agent
+  await createActor(canisterId, hhdaoIdlFactory, identity as Identity);
+
+      const principalText = typeof principal?.toText === 'function' ? principal.toText() : String(principal);
+      setUser({
+        principal: principalText,
+        name: `User ${principalText.slice(0, 8)}...`,
+      });
+    } catch (error) {
+      console.error('Authentication failed:', error);
+      await logout();
+    }
+  }, [logout]);
 
   useEffect(() => {
-    // Check for stored auth on mount
-    try {
-      const storedUser = localStorage.getItem('helioshash-user')
-      if (storedUser) {
-        setUser(JSON.parse(storedUser))
+    setIsClient(true);
+
+    (async function initializeAuth() {
+      try {
+        const client = await AuthClient.create();
+        setAuthClient(client);
+
+        if (await client.isAuthenticated()) {
+          await handleAuthentication(client.getIdentity());
+        }
+      } catch (error) {
+        console.error("Failed to initialize auth client:", error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (e) {
-      // ignore parse errors
-      console.warn('Failed to read stored user', e)
-    }
-    setIsLoading(false)
-  }, [])
+    })();
+  }, [handleAuthentication]);
 
-  const login = (userData: User) => {
-    setUser(userData)
+  const login = async () => {
+    if (!authClient) {
+      throw new Error("Auth client not initialized");
+    }
+
     try {
-      localStorage.setItem('helioshash-user', JSON.stringify(userData))
-    } catch (e) {
-      console.warn('Failed to persist user', e)
+      await authClient.login({
+        identityProvider: process.env.NEXT_PUBLIC_DFX_NETWORK === "ic"
+          ? "https://identity.ic0.app"
+          : `http://127.0.0.1:4943/?canisterId=${process.env.NEXT_PUBLIC_INTERNET_IDENTITY_CANISTER_ID}`,
+        onSuccess: async () => {
+          await handleAuthentication(authClient.getIdentity());
+        },
+        onError: (error) => {
+          console.error("Login failed:", error);
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
     }
-  }
+  };
 
-  const logout = () => {
-    setUser(null)
-    try {
-      localStorage.removeItem('helioshash-user')
-    } catch (e) {
-      console.warn('Failed to remove stored user', e)
-    }
-  }
-
-  const value = {
-    user,
-    isAuthenticated: !!user,
+  // Provide default values when not on client
+  const value: AuthContextType = {
+    user: isClient ? user : null,
+    isAuthenticated: isClient ? !!user : false,
     login,
     logout,
-    isLoading,
+    isLoading: isClient ? isLoading : true,
     // legacy compatibility fields
-    isConnected: !!user,
-    walletType: user?.walletAddress ? 'wallet' : null,
-    principal: null,
-    connect: (type: string) => {
-      console.log('connect called', type)
-    },
+    isConnected: isClient ? !!user : false,
+    walletType: isClient && user ? 'internet-identity' : null,
+    principal: isClient ? user?.principal || null : null,
+    connect: login,
     disconnect: logout,
-  }
+  };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider')
+    // Return safe defaults during SSR/static generation
+    return {
+      user: null,
+      isAuthenticated: false,
+      login: async () => {},
+      logout: async () => {},
+      isLoading: true,
+      isConnected: false,
+      walletType: null,
+      principal: null,
+      connect: async () => {},
+      disconnect: async () => {},
+    };
   }
-  return context
+  return context;
 }

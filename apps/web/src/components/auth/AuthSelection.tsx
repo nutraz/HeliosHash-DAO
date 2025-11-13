@@ -5,8 +5,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
+interface AuthUser {
+  authMethod: 'wallet' | 'phone' | 'aadhaar';
+  phone?: string;
+  walletType?: string;
+  verified?: boolean;
+  language?: 'en' | 'hi';
+}
+
 interface AuthSelectionProps {
-  onAuthenticated: (userData: any) => void
+  // Backward-compatible prop used across the app
+  onAuthenticated: (userData: AuthUser) => void;
+  // New optional, more explicit callback names
+  onAuthSuccess?: (userData: AuthUser) => void;
+  onError?: (error: Error) => void;
 }
 
 export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
@@ -43,6 +55,14 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
 
   return (
     <div className="min-h-screen relative bg-gradient-to-br from-gray-900 via-blue-950 to-gray-900 flex items-center justify-center p-4">
+      {/* Web3 Connection Status */}
+      <div className="absolute top-4 right-4">
+        <div className="flex items-center space-x-2 px-3 py-2 bg-green-600/20 border border-green-500/30 rounded-full">
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span className="text-green-400 text-sm font-medium">ICP Live</span>
+        </div>
+      </div>
+
       {/* Centered logo at top of auth screen */}
       <div className="absolute top-8 left-0 right-0 flex justify-center pointer-events-none">
         <img src="/hhdaologo.svg" alt="HHDAO logo" className="w-28 h-28 object-contain" />

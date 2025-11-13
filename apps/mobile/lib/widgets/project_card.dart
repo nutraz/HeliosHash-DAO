@@ -3,20 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/project/solar_project.dart';
 
 class ProjectCard extends StatelessWidget {
-<<<<<<< HEAD
-  final SolarProject project;
-  final VoidCallback? onTap;
-
   const ProjectCard({
-    Key? key,
+    super.key,
     required this.project,
     this.onTap,
-  }) : super(key: key);
-=======
-  const ProjectCard({super.key, required this.project, this.onTap});
+  });
+
   final SolarProject project;
   final VoidCallback? onTap;
->>>>>>> 9823c84 (chore: sync and clean repo)
 
   @override
   Widget build(BuildContext context) {

@@ -19,24 +19,23 @@ vi.mock('@dfinity/auth-client', () => ({
 // Simple mock WebSocket implementation that allows tests to push messages
 class MockWebSocket {
   static instances: MockWebSocket[] = []
-  onmessage: ((ev: any) => void) | null = null
-  onopen: ((ev: any) => void) | null = null
+  onmessage: ((ev: MessageEvent) => void) | null = null
+  onopen: ((ev: Event) => void) | null = null
   url: string
   constructor(url: string) {
     this.url = url
     MockWebSocket.instances.push(this)
     // simulate open
-    setTimeout(() => { if (this.onopen) this.onopen({}) }, 0)
+    setTimeout(() => { if (this.onopen) this.onopen(new Event('open')) }, 0)
   }
   // helper for tests to simulate a server message
-  sendServerMessage(data: any) {
-    if (this.onmessage) this.onmessage({ data: JSON.stringify(data) })
+  sendServerMessage(data: unknown) {
+    if (this.onmessage) this.onmessage({ data: JSON.stringify(data) } as unknown as MessageEvent)
   }
   close() {}
 }
 
-// @ts-ignore set global WebSocket
-global.WebSocket = MockWebSocket as any
+global.WebSocket = MockWebSocket as unknown as typeof WebSocket
 
 import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'
 

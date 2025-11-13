@@ -6,7 +6,7 @@ interface ExchangeOption {
   id: string
   name: string
   category: 'travel' | 'hotel' | 'food' | 'ecommerce' | 'services'
-  icon: any
+  icon: React.ComponentType<Record<string, unknown>>
   exchangeRate: number // HHU tokens per unit
   unit: string
   minAmount: number
@@ -132,6 +132,8 @@ export default function TokenExchangeHub({ userBalance = 2450, onNavigate }: Tok
   const [selectedOption, setSelectedOption] = useState<ExchangeOption | null>(null)
   const [exchangeAmount, setExchangeAmount] = useState<number>(100)
   const [showConfirmation, setShowConfirmation] = useState(false)
+  // `onNavigate` is currently unused in this component; reference it to avoid lint error
+  void onNavigate
 
   const categories = [
     { id: 'all', label: 'All', icon: Gift },

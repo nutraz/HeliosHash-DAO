@@ -9,22 +9,25 @@ process.env.NEXT_PUBLIC_PROJECT_HUB_CANISTER_ID = 'aaaaa-aa'
 // Mock @dfinity/agent to provide Actor.createActor that returns a test actor
 vi.mock('@dfinity/agent', () => {
   return {
-    Actor: {
-      createActor: (_idlFactory: any, _opts: any) => {
-        return {
-          get_project_stats: (projectId: string) =>
-            Promise.resolve({
-              ok: {
-                total_energy_kwh: BigInt(500),
-                efficiency_percentage: BigInt(88),
-                operational_days: BigInt(365),
-                revenue_generated_usd: BigInt(123456),
-                last_production_date: null,
-              },
-            }),
-        }
+      Actor: {
+        createActor: () => {
+          return {
+            get_project_stats: (projectId: string) => {
+              // consume the param so tests don't fail on unused-vars
+              void projectId
+              return Promise.resolve({
+                ok: {
+                  total_energy_kwh: BigInt(500),
+                  efficiency_percentage: BigInt(88),
+                  operational_days: BigInt(365),
+                  revenue_generated_usd: BigInt(123456),
+                  last_production_date: null,
+                },
+              })
+            },
+          }
+        },
       },
-    },
     HttpAgent: function HttpAgent() {
       return {}
     },
@@ -46,19 +49,20 @@ beforeEach(() => {
   // Minimal BroadcastChannel polyfill for tests
   class BC {
     name: string
-    onmessage: any = null
+    onmessage: ((ev: MessageEvent) => void) | null = null
     static channels: Record<string, BC[]> = {}
     constructor(name: string) {
       this.name = name
       BC.channels[name] = BC.channels[name] || []
       BC.channels[name].push(this)
     }
-    postMessage(msg: any) {
+    postMessage(msg: unknown) {
       const peers = BC.channels[this.name] || []
       for (const p of peers) {
         if (p === this) continue
         if (typeof p.onmessage === 'function') {
-          p.onmessage({ data: msg })
+          // post a MessageEvent-like object
+          p.onmessage({ data: msg } as unknown as MessageEvent)
         }
       }
     }
@@ -66,7 +70,7 @@ beforeEach(() => {
       BC.channels[this.name] = (BC.channels[this.name] || []).filter((p) => p !== this)
     }
   }
-  // @ts-ignore
+  // @ts-expect-error - intentional test polyfill for BroadcastChannel in jsdom
   global.BroadcastChannel = BC
 })
 
@@ -92,8 +96,7 @@ describe('Helios#Baghpat actor integration', () => {
     await waitFor(() => screen.getByText(/Solar Today/i))
 
     // create a broadcaster and post an updated stats message
-    // @ts-ignore
-    const bc = new BroadcastChannel('helios_stats')
+  const bc = new BroadcastChannel('helios_stats')
     const newStats = {
       solar_kwh: 900,
       btc_mined: 0.005,

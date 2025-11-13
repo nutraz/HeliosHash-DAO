@@ -1,5 +1,6 @@
 "use client"
 import { useEffect, useState } from "react"
+import Image from 'next/image'
 
 export default function HhdaoSplash({ onComplete }: { onComplete: () => void }) {
   const [mounted, setMounted] = useState(false)
@@ -25,17 +26,17 @@ export default function HhdaoSplash({ onComplete }: { onComplete: () => void }) 
     }
   }, [disableHeavy, onComplete])
 
-  if (disableHeavy) {
-    return (
+    if (disableHeavy) {
+      return (
       <div className="flex items-center justify-center min-h-screen bg-slate-900 text-center">
         <div>
-          <img src="/hhdaologo.svg" alt="HeliosHash logo" className="w-40 h-40 mx-auto mb-4" />
+          <Image src="/hhdaologo.svg" alt="HeliosHash logo" width={160} height={160} className="w-40 h-40 mx-auto mb-4" />
           <h1 className="text-3xl font-bold text-white">HeliosHash DAO</h1>
           <p className="text-sm text-slate-300">Starting…</p>
         </div>
       </div>
     )
-  }
+    }
 
   
 
@@ -235,7 +236,7 @@ export default function HhdaoSplash({ onComplete }: { onComplete: () => void }) 
           >
             <div className="w-72 h-72 flex items-center justify-center" style={{ filter: "drop-shadow(0 0 20px rgba(59, 130, 246, 0.6))" }}>
               {/* Use the canonical hhdaologo.svg from public root */}
-              <img src="/hhdaologo.svg" alt="HeliosHash logo" className="w-72 h-72 object-contain" />
+              <Image src="/hhdaologo.svg" alt="HeliosHash logo" width={288} height={288} className="w-72 h-72 object-contain" />
             </div>
           </div>
 

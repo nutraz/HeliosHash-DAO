@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from 'react';
+import NextImage from 'next/image';
 import { 
   Award, Users, TrendingUp, MapPin, Plus, 
   Wallet, Gift, ShoppingBag, Map, MessageSquare, 
   FileText, DollarSign, Send, 
-  ArrowDownLeft, Image, Video, 
+  ArrowDownLeft, Image as ImageIcon, Video, 
   Briefcase, Zap, Building, Shield, Wrench, Eye,
   Store, ChevronRight, CheckCircle, Home
 } from 'lucide-react';
@@ -89,7 +90,7 @@ const HHDAODashboard = () => {
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">
-            <img src={userData.pfp} alt="Profile" className="w-20 h-20 rounded-full border-4 border-white shadow-lg" />
+            <NextImage src={userData.pfp} alt="Profile" width={80} height={80} className="w-20 h-20 rounded-full border-4 border-white shadow-lg" />
             <div>
               <h2 className="text-2xl font-bold">{userData.name}</h2>
               <div className="flex items-center space-x-2 mt-1">
@@ -151,7 +152,7 @@ const HHDAODashboard = () => {
 
       <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
         <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-          <Image className="text-purple-400" />
+          <ImageIcon className="text-purple-400" />
           <span>My NFT Collection</span>
           <span className="text-sm font-normal text-gray-400">({userData.nftCollection.length} projects)</span>
         </h3>
@@ -167,7 +168,7 @@ const HHDAODashboard = () => {
               }
             }} className="group relative bg-gray-900 border-2 border-gray-700 rounded-xl p-3 hover:border-blue-500 hover:shadow-2xl transition-all overflow-hidden">
               <div className="aspect-square rounded-lg overflow-hidden mb-2 bg-gradient-to-br from-gray-800 to-gray-900">
-                <img src={nft.image} alt={nft.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                <NextImage src={nft.image} alt={nft.name} width={400} height={400} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
               </div>
               <h4 className="text-sm font-semibold text-white mb-1 line-clamp-2">{nft.name}</h4>
               <p className="text-xs text-gray-400 mb-2 line-clamp-1">{nft.community}</p>
@@ -372,7 +373,7 @@ const HHDAODashboard = () => {
                     {opp.type.includes('Engineer') && <Wrench className="text-orange-400" size={20} />}
                     {opp.type.includes('Inspector') && <Eye className="text-purple-400" size={20} />}
                     {opp.type.includes('Supplier') && <Store className="text-indigo-400" size={20} />}
-                    {opp.type.includes('NFT') && <Image className="text-pink-400" size={20} />}
+                    {opp.type.includes('NFT') && <ImageIcon className="text-pink-400" size={20} />}
                     {opp.type.includes('Contractor') && <Building className="text-gray-400" size={20} />}
                     {opp.type.includes('Tech') && <Wrench className="text-blue-400" size={20} />}
                     {opp.type.includes('Manager') && <Users className="text-purple-400" size={20} />}
@@ -417,7 +418,7 @@ const HHDAODashboard = () => {
         <textarea className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none" rows={4} placeholder={selectedProject ? `Share updates about ${selectedProject.name}...` : "What's on your mind? Share updates, ideas, or questions..."} />
         <div className="flex items-center justify-between mt-4">
           <div className="flex space-x-2">
-            <button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"><Image className="text-gray-400" size={20} /></button>
+            <button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"><ImageIcon className="text-gray-400" size={20} /></button>
             <button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"><Video className="text-gray-400" size={20} /></button>
             <button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors"><FileText className="text-gray-400" size={20} /></button>
           </div>
@@ -459,7 +460,7 @@ const HHDAODashboard = () => {
           {['Priya Singh', 'Amit Patel', 'Sarah Johnson'].map((mod, idx) => (
             <div key={idx} className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${mod}`} className="w-10 h-10 rounded-full border-2 border-gray-700" alt={mod} />
+                <NextImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${mod}`} alt={mod} width={40} height={40} className="w-10 h-10 rounded-full border-2 border-gray-700" />
                 <div>
                   <p className="font-semibold text-white">{mod}</p>
                   <p className="text-xs text-gray-400">Moderator</p>
@@ -476,7 +477,7 @@ const HHDAODashboard = () => {
         {[1,2,3].map((post) => (
           <div key={post} className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
             <div className="flex items-start space-x-3">
-              <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=post${post}`} className="w-12 h-12 rounded-full border-2 border-gray-700" alt="User" />
+              <NextImage src={`https://api.dicebear.com/7.x/avataaars/svg?seed=post${post}`} alt={`Community member ${post}`} width={48} height={48} className="w-12 h-12 rounded-full border-2 border-gray-700" />
               <div className="flex-1">
                 <div className="flex items-center justify-between mb-2">
                   <div>

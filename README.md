@@ -2,7 +2,7 @@
   <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400"/>
   
   # HeliosHash DAO
-  **A OneWorldProject Initiative India**https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity**
+  **A OneWorldProject Initiative India** https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity
   **Decentralized Renewable Energy Platform on Internet Computer**
   
   [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)

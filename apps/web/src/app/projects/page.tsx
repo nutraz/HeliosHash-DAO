@@ -21,6 +21,15 @@ export default function ProjectsPage() {
           </Link>
         </div>
 
+        {/* Summary stats */}
+        <div className="max-w-6xl mx-auto mb-6">
+          <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4 inline-block">
+            <div className="text-slate-400 text-sm">Total Capacity</div>
+            <div className="text-3xl font-bold text-green-400 mt-1">100 kW</div>
+            <div className="text-xs text-slate-400 mt-1">Solar Power</div>
+          </div>
+        </div>
+
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Project Card 1 */}

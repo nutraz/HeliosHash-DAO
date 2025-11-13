@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Heart, Share2, ExternalLink, Download, Grid3x3 } from 'lucide-react';
 
 interface NFTItem {
@@ -143,11 +144,12 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
                 selectedNFT?.id === nft.id ? 'ring-4 ring-blue-500' : ''
               }`}
             >
-              <div className="aspect-square bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg">
-                <img
+              <div className="aspect-square bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg relative overflow-hidden">
+                <Image
                   src={nft.image}
                   alt={nft.name}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               
@@ -225,11 +227,12 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
           <div className="relative bg-gray-800 rounded-xl p-8">
             {selectedNFT ? (
               <div className="text-center">
-                <div className="aspect-square max-w-2xl mx-auto mb-6 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl overflow-hidden">
-                  <img
+                  <div className="aspect-square max-w-2xl mx-auto mb-6 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl overflow-hidden relative">
+                  <Image
                     src={selectedNFT.image}
                     alt={selectedNFT.name}
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
                   />
                 </div>
                 
@@ -296,12 +299,13 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
                     <button
                       key={idx}
                       onClick={() => handleNFTClick(nft)}
-                      className="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 transition-colors"
+                      className="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 transition-colors relative"
                     >
-                      <img
+                      <Image
                         src={nft.image}
                         alt={nft.name}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                       />
                     </button>
                   ))}

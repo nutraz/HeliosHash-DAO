@@ -93,7 +93,8 @@ export default function NFTDetail({ nftId, onBack }: NFTDetailProps) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Left: Image */}
         <div className="bg-slate-800 rounded-xl p-6">
-          <img 
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
             src={nft.image} 
             alt={nft.name}
             className="w-full h-auto rounded-lg"

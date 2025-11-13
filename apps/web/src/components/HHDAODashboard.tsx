@@ -12,12 +12,23 @@ import {
 
 const HHDAODashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
+  interface Opportunity {
+    type: string
+    positions?: number
+    amount?: string
+  }
+
   interface Project {
-    id: number;
-    name: string;
-    stage?: string;
-    color?: string;
-    [key: string]: any;
+    id: number
+    name: string
+    stage?: string
+    color?: string
+    size?: string
+    energySupply?: string
+    surplus?: string
+    completion?: number
+    funding?: string
+    opportunities: Opportunity[]
   }
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -352,7 +363,7 @@ const HHDAODashboard = () => {
             <span>Project Opportunities</span>
           </h3>
           <div className="space-y-3">
-            {selectedProject.opportunities.map((opp: any, idx: number) => (
+            {selectedProject.opportunities.map((opp: { type: string; positions?: number; amount?: string }, idx: number) => (
               <div key={idx} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500 transition-colors bg-gray-900 bg-opacity-50">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">

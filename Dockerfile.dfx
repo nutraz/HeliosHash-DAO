@@ -1,0 +1,40 @@
+FROM ubuntu:22.04
+
+# Set environment to non-interactive
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    ca-certificates \
+    xz-utils \
+    tar \
+    gzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install DFX from direct download (specific version)
+ARG DFX_VERSION=0.29.2
+RUN set -e; \
+    echo "Downloading dfx ${DFX_VERSION}"; \
+    wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz -O /tmp/dfx.tar.gz || true; \
+    if [ -f /tmp/dfx.tar.gz ]; then \
+      tar -xzf /tmp/dfx.tar.gz -C /tmp; \
+      if [ -f /tmp/dfx ]; then mv /tmp/dfx /usr/local/bin/dfx && chmod +x /usr/local/bin/dfx; fi; \
+      rm -f /tmp/dfx.tar.gz; \
+    fi
+
+# Install mops from GitHub releases
+RUN set -e; \
+    echo "Downloading mops"; \
+    wget -q https://github.com/ZenVoich/mops/releases/latest/download/mops-x86_64-linux -O /usr/local/bin/mops || true; \
+    chmod +x /usr/local/bin/mops || true
+
+# Verify installations (best-effort)
+RUN if command -v dfx >/dev/null 2>&1; then dfx --version || true; else echo "dfx not installed"; fi
+RUN if command -v mops >/dev/null 2>&1; then mops --version || true; else echo "mops not installed"; fi
+
+WORKDIR /workspace
+COPY . .

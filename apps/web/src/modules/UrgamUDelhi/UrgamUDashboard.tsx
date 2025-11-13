@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useHeliosLiveStats } from '@/lib/api/heliosBaghpat'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -12,7 +13,8 @@ type Props = {
 export default function UrgamUDashboard({ language = 'en' }: Props) {
   const { user } = useAuth()
 
-  // Energy state — simulate live values for UI/demo purposes.
+  // Energy state — simulate live values for UI/demo purposes. If canister/proxy
+  // data is available we map it into these fields below.
   type EnergyStats = {
     solarOutput: string
     batteryLevel: string
@@ -38,6 +40,30 @@ export default function UrgamUDashboard({ language = 'en' }: Props) {
     }, 4500)
     return () => clearInterval(t)
   }, [])
+
+  // Wire to live canister/proxy stats when available. Use the existing
+  // `useHeliosLiveStats` hook which already implements client-side guards,
+  // caching and websocket push fallback.
+  const { data: live, loading: liveLoading } = useHeliosLiveStats('urgamu-delhi', 10000)
+
+  React.useEffect(() => {
+    if (live && !liveLoading) {
+      try {
+        // solar_kwh is an accumulated kWh (daily or total) — approximate an
+        // instantaneous kW by dividing by 24 for a simple UI estimate.
+        const approxKW = typeof live.solar_kwh === 'number' ? (live.solar_kwh / 24) : null
+        setEnergyStats(prev => ({
+          ...prev,
+          solarOutput: approxKW ? `${approxKW.toFixed(1)} kW` : prev.solarOutput,
+          batteryLevel: prev.batteryLevel,
+          gridUsage: prev.gridUsage,
+          surplus: approxKW ? `${Math.max(0, (approxKW - 10)).toFixed(1)} kW` : prev.surplus
+        }))
+      } catch {
+        // ignore mapping errors; keep simulated values
+      }
+    }
+  }, [live, liveLoading])
 
   // Mocked community / compute stats — replace with canister calls via @dfinity/agent
   const stats = {

@@ -71,8 +71,12 @@ export const testAuthentication = async () => {
           return { success: false, error: 'Canister ID not configured' };
         }
 
-        const actor = await createActor(canisterId, hhdaoIdlFactory, identity) as any;
-        console.log('✅ Actor created successfully');
+  const actor = await createActor(canisterId, hhdaoIdlFactory, identity) as any;
+  // `actor` is intentionally unused here in this lightweight integration test.
+  // Use a void expression so ESLint's no-unused-vars rule is satisfied while
+  // preserving the creation side-effect for manual testing.
+  void actor;
+  console.log('✅ Actor created successfully');
 
         // Skip backend whoami verification for now (function not implemented)
         console.log('ℹ️  Skipping backend verification (whoami not available)');

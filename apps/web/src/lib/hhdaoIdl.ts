@@ -133,10 +133,7 @@ export const hhdaoIdlFactory = ({ IDL: _IDL }: { IDL: unknown }) => {
     completionDate: _.Opt(_.Int),
   });
 
-  const Result = _.Variant({
-    ok: _.Principal,
-    err: _.Text,
-  });
+  // `Result` was previously declared but not used; removed to satisfy linter.
 
   const Result_1 = _.Variant({
     ok: Project,

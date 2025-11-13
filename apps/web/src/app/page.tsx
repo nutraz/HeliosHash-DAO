@@ -36,9 +36,15 @@ export default function Home() {
   void loading
   void error
 
-  const handleAuthenticated = useCallback((authData: any) => {
-    // Redirect to dashboard after auth
-    void authData
+  const handleAuthenticated = useCallback((authData: unknown) => {
+    // Redirect to dashboard after auth. Narrow unknown to avoid `any`.
+    try {
+      if (authData && typeof authData === 'object') {
+        // no-op: future use of authData can be safely narrowed here
+      }
+    } catch {
+      // ignore
+    }
     router.push('/dashboard')
   }, [router])
 

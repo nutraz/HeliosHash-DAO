@@ -6,6 +6,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import UserMenu from './user/UserMenu'
+import Footer from './Footer'
 import { useAuth } from '@/contexts/AuthContext'
 import { Moon, Sun } from 'lucide-react'
 
@@ -181,8 +182,8 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
 
-      {/* Use new branded Footer component */}
-      {require('./Footer').default()}
+  {/* Use new branded Footer component */}
+  <Footer />
     </>
   )
 }

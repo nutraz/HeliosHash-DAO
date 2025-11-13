@@ -61,7 +61,7 @@ export default function BaghpatDashboard() {
                 <OwpLogo className="h-16 w-16 text-cyan-400" />
                 <div>
                   <h2 className="text-2xl font-bold text-white font-orbitron">Welcome to Helios#Baghpat</h2>
-                  <p className="text-slate-300 mt-1">India's first ICP-powered solar village DAO</p>
+                  <p className="text-slate-300 mt-1">India&apos;s first ICP-powered solar village DAO</p>
                 </div>
               </div>
             </div>
@@ -76,7 +76,7 @@ export default function BaghpatDashboard() {
                 <div className="text-2xl font-bold text-green-400 mt-1">{liveData.current_kW} kW</div>
               </div>
               <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
-                <div className="text-slate-400 text-sm">Today's Energy</div>
+                <div className="text-slate-400 text-sm">Today&apos;s Energy</div>
                 <div className="text-2xl font-bold text-purple-400 mt-1">{liveData.today_kWh.toFixed(1)} kWh</div>
               </div>
               <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">

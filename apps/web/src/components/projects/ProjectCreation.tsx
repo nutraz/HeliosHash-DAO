@@ -270,7 +270,7 @@ const HHDAOProjectCreation: React.FC<ProjectCreationProps> = ({ onProjectCreated
             <ul className="text-xs text-blue-600 space-y-1 ml-4 list-disc">
               <li>State your name and applicant type</li>
               <li>Describe your project goals</li>
-              <li>Explain why you're the right person for this project</li>
+              <li>Explain why you&apos;re the right person for this project</li>
               <li>Share your commitment to the HHDAO community</li>
             </ul>
           </div>

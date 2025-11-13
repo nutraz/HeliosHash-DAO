@@ -1,5 +1,4 @@
 // apps/web/src/modules/UrgamUDelhi/UrgamUDashboard.tsx
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -11,12 +10,23 @@ enum Tab {
   Energy = 'Energy Monitor',
   ROI = 'ROI Tracker'
 }
-interface UrgamUDashboardProps {
-  language?: string;
+
+interface MiningStats {
+  hashrate: string;
+  btcMined: number;
+  powerDraw: string;
+  temperature: string;
+  efficiency: string;
 }
 
-// Update the component function to accept the prop
-export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboardProps) {
+interface EnergyStats {
+  solarOutput: string;
+  batteryLevel: string;
+  gridUsage: string;
+  surplus: string;
+}
+
+export default function UrgamUDelhiDashboard() {
   const [activeTab, setActiveTab] = useState<Tab>(Tab.Overview);
   const { live } = useHeliosLiveStats('urgamu-delhi');
   
@@ -40,7 +50,6 @@ export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboar
     const hour = new Date().getHours();
     const solarProfile = [0, 0, 0, 0, 0.1, 0.3, 0.6, 0.8, 0.9, 1.0, 0.95, 0.85, 0.7, 0.5, 0.3, 0.1, 0, 0, 0, 0, 0, 0, 0, 0];
     const estimatedKW = 50 * solarProfile[hour];
-    
     return estimatedKW;
   };
 
@@ -66,7 +75,7 @@ export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboar
     }
   }, [live?.solar_kwh]);
 
-  // Demo simulation (random updates every 5s)
+  // Demo simulation (fluctuating stats)
   useEffect(() => {
     const interval = setInterval(() => {
       setEnergyStats(prev => ({
@@ -74,19 +83,18 @@ export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboar
         solarOutput: `${(Math.random() * 10 + 45).toFixed(1)} kW`,
         batteryLevel: `${Math.floor(Math.random() * 10 + 80)}%`,
         gridUsage: `${(Math.random() * 1 + 1.5).toFixed(1)} kW`,
-        surplus: `${(Math.random() * 10 + 35).toFixed(1)} kW` // Added to avoid stale value
+        surplus: `${(Math.random() * 10 + 35).toFixed(1)} kW`
       }));
     }, 5000);
-
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Tabs navigation */}
+        {/* Tabs */}
         <div className="flex space-x-4 mb-6">
-          {Object.values(Tab).map((tab) => (
+          {Object.values(Tab).map(tab => (
             <button
               key={tab}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
@@ -101,11 +109,11 @@ export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboar
           ))}
         </div>
 
-        {/* Tab content */}
+        {/* Tab Content */}
         <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-6">
           {activeTab === Tab.Overview && (
             <div className="space-y-6">
-              {/* Welcome Banner */}
+              {/* Banner */}
               <div className="bg-gradient-to-r from-orange-900/50 to-amber-900/50 backdrop-blur-md rounded-xl border border-orange-500/30 p-6">
                 <div className="flex items-center gap-4">
                   <div className="text-5xl">⛏️</div>
@@ -120,45 +128,24 @@ export default function UrgamUDelhiDashboard({ language = 'en' }: UrgamUDashboar
                 </div>
               </div>
 
-              {/* Live Stats Grid */}
+              {/* Stats Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
-                  <div className="text-slate-400 text-sm">Solar Output</div>
-                  <div className="text-2xl font-bold text-yellow-400 mt-1">
-                    {energyStats.solarOutput}
+                {Object.entries(energyStats).map(([key, value]) => (
+                  <div
+                    key={key}
+                    className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4"
+                  >
+                    <div className="text-slate-400 text-sm">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
+                    <div className="text-2xl font-bold text-yellow-400 mt-1">{value}</div>
                   </div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
-                  <div className="text-slate-400 text-sm">Battery</div>
-                  <div className="text-2xl font-bold text-green-400 mt-1">
-                    {energyStats.batteryLevel}
-                  </div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
-                  <div className="text-slate-400 text-sm">Grid Usage</div>
-                  <div className="text-2xl font-bold text-cyan-400 mt-1">
-                    {energyStats.gridUsage}
-                  </div>
-                </div>
-                <div className="bg-slate-800/50 backdrop-blur-md rounded-xl border border-slate-700 p-4">
-                  <div className="text-slate-400 text-sm">Surplus</div>
-                  <div className="text-2xl font-bold text-purple-400 mt-1">
-                    {energyStats.surplus}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           )}
-          
-          {activeTab === Tab.Mining && (
-            <div className="text-white">Mining Stats Content</div>
-          )}
-          {activeTab === Tab.Energy && (
-            <div className="text-white">Energy Monitor Content</div>
-          )}
-          {activeTab === Tab.ROI && (
-            <div className="text-white">ROI Tracker Content</div>
-          )}
+
+          {activeTab === Tab.Mining && <div className="text-white">Mining Stats Content</div>}
+          {activeTab === Tab.Energy && <div className="text-white">Energy Monitor Content</div>}
+          {activeTab === Tab.ROI && <div className="text-white">ROI Tracker Content</div>}
         </div>
       </div>
     </div>

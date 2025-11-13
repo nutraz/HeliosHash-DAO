@@ -1,5 +1,24 @@
 {
   "canisters": {
+    "governance": {
+      "main": "canisters/governance/Governance.mo",
+      "type": "motoko"
+    },
+    "treasury": {
+      "main": "canisters/treasury/Treasury.mo",
+      "type": "motoko"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "mops sources"
+    }
+  },
+  "version": 1
+}
+{
+  "canisters": {
     "helioshash_backend_backend": {
       "declarations": {
         "node_compatibility": true

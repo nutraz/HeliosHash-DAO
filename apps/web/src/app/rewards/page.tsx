@@ -55,9 +55,9 @@ export default function RewardsPage() {
 
         {/* Status Bar */}
         <div className="bg-gray-900 rounded-xl p-4 text-center">
-          <div className="flex items-center justify-center space-x-6 text-sm text-gray-300">
+            <div className="flex items-center justify-center space-x-6 text-sm text-gray-300">
             <span>🚀 HeliosHash DAO development aliases loaded!</span>
-            <span>📚 Type 'hhdao-help' for available commands</span>
+            <span>📚 Type &apos;hhdao-help&apos; for available commands</span>
           </div>
         </div>
       </div>

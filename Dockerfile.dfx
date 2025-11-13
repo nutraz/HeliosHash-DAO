@@ -1,53 +1,42 @@
+
 FROM ubuntu:22.04
 
 # Set environment to non-interactive
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies (include bash so install scripts that require bash work)
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    bash \
     curl \
     wget \
     git \
     build-essential \
     ca-certificates \
-    xz-utils \
-    tar \
-    gzip \
-    file \
     && rm -rf /var/lib/apt/lists/*
 
-# Install DFX from direct download (specific version)
-ARG DFX_VERSION=0.29.2
-RUN set -e; \
-    echo "Downloading dfx ${DFX_VERSION}"; \
-    wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz -O /tmp/dfx.tar.gz || true; \
-    if [ -f /tmp/dfx.tar.gz ]; then \
-      tar -xzf /tmp/dfx.tar.gz -C /tmp; \
-      if [ -f /tmp/dfx ]; then mv /tmp/dfx /usr/local/bin/dfx && chmod +x /usr/local/bin/dfx; fi; \
-      rm -f /tmp/dfx.tar.gz; \
-    fi
+# Install DFX from direct download
+ARG DFX_VERSION=0.15.1
+RUN wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
+    && tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
+    && mv dfx /usr/local/bin/ \
+    && chmod +x /usr/local/bin/dfx \
+    && rm dfx-${DFX_VERSION}-x86_64-linux.tar.gz
 
-# Install mops using the official install script (handles architecture detection).
-# Keep dfx pinned via ARG above. The install script will put the CLI in
-# /root/.local/bin by default; add that to PATH so subsequent RUNs can find it.
-RUN set -e; \
-    echo "Installing prerequisites (Node.js + npm) for npm-based mops install..."; \
-    apt-get update && apt-get install -y ca-certificates curl git gnupg2 lsb-release bash; \
-    # Install Node.js 18 LTS from NodeSource
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash -; \
-    apt-get install -y nodejs; \
-    # Install mops via npm (official package)
-    npm install -g @dfinity/mops || true; \
-    # Verify installation locations and versions
-    echo "mops file info (if present):"; command -v mops && file "$(command -v mops)" || echo "/usr/local/bin/mops not found"; \
-    echo "mops --version (if available):"; if command -v mops >/dev/null 2>&1; then mops --version || true; else echo "mops not installed"; fi
+# Install Rust (fast and reliable)
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+ENV PATH="/root/.cargo/bin:${PATH}"
 
-ENV PATH="/root/.local/bin:${PATH}"
+# Build and install mops from source (pinned to a known working commit)
+RUN git clone https://github.com/dfinity/mops.git \
+    && cd mops \
+    && cargo install --path . \
+    && cd .. \
+    && rm -rf mops
 
-# Verify installations (best-effort)
-RUN if command -v dfx >/dev/null 2>&1; then dfx --version || true; else echo "dfx not installed"; fi
-RUN if command -v mops >/dev/null 2>&1; then mops --version || true; else echo "mops not installed"; fi
+# Verify installations
+RUN echo "=== DFX Version ===" && dfx --version
+RUN echo "=== Mops Version ===" && mops --version
+RUN echo "=== Mops Binary Info ===" && which mops && file $(which mops)
 
 WORKDIR /workspace
 COPY . .
+

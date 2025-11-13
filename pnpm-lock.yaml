@@ -14,10 +14,10 @@ importers:
     dependencies:
       '@dfinity/candid':
         specifier: ^0.21.2
-        version: 0.21.4(@dfinity/principal@0.21.4)
+        version: 0.21.4(@dfinity/principal@3.4.2)
       '@dfinity/principal':
-        specifier: ^0.21.2
-        version: 0.21.4
+        specifier: ^3.4.2
+        version: 3.4.2
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -29,7 +29,7 @@ importers:
         version: 0.552.0(react@18.3.1)
       next:
         specifier: 14.0.0
-        version: 14.0.0(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.3.1
         version: 18.3.1
@@ -160,16 +160,16 @@ importers:
     dependencies:
       '@dfinity/agent':
         specifier: ^3.4.1
-        version: 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)
+        version: 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0)
       '@dfinity/auth-client':
         specifier: ^3.4.1
-        version: 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)
+        version: 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.2)
       '@dfinity/candid':
         specifier: ^3.4.1
-        version: 3.4.1(@dfinity/principal@3.4.1)
+        version: 3.4.1(@dfinity/principal@3.4.2)
       '@dfinity/principal':
-        specifier: ^3.4.1
-        version: 3.4.1
+        specifier: ^3.4.2
+        version: 3.4.2
       '@radix-ui/react-dialog':
         specifier: ^1.1.15
         version: 1.1.15(@types/react-dom@18.3.7(@types/react@18.3.26))(@types/react@18.3.26)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1120,11 +1120,8 @@ packages:
       '@noble/curves': ^1.9.2
       '@noble/hashes': ^1.8.0
 
-  '@dfinity/principal@0.21.4':
-    resolution: {integrity: sha512-r9d+9BYZdFMzrq1+zcdIg6q6tlWeZ9SKnakVdhQ21qUJ6iDe0yxDlah6k9QKEh6fVsg2yv95nID++nqEosvt1Q==}
-
-  '@dfinity/principal@3.4.1':
-    resolution: {integrity: sha512-pXabsgcJDhRhj7/AaV7dLZKF8L4sK0vuzaGVBBtQ+8FxWXeXlvKn/Vxbwy8BCkIU7SHzJuBpYT2tz1oE6oNmbA==}
+  '@dfinity/principal@3.4.2':
+    resolution: {integrity: sha512-+tY01g4KpCzDVLevgZia60foD+mQ6cMasnKnEDu7XvPdOJ0QMxiUeOoeqv0rGUEpvq2TkCLvN6cm1UOdU5ffDA==}
 
   '@egjs/hammerjs@2.0.17':
     resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
@@ -7917,44 +7914,40 @@ snapshots:
 
   '@csstools/css-tokenizer@3.0.4': {}
 
-  '@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)':
+  '@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0)':
     dependencies:
-      '@dfinity/candid': 3.4.1(@dfinity/principal@3.4.1)
+      '@dfinity/candid': 3.4.1(@dfinity/principal@3.4.2)
       '@dfinity/cbor': 0.2.2
-      '@dfinity/principal': 3.4.1
+      '@dfinity/principal': 3.4.2
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
 
-  '@dfinity/auth-client@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.1)':
+  '@dfinity/auth-client@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/curves@1.9.7)(@noble/hashes@1.8.0))(@dfinity/principal@3.4.2)':
     dependencies:
-      '@dfinity/agent': 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)
-      '@dfinity/identity': 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0)
-      '@dfinity/principal': 3.4.1
+      '@dfinity/agent': 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0)
+      '@dfinity/identity': 3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/curves@1.9.7)(@noble/hashes@1.8.0)
+      '@dfinity/principal': 3.4.2
       idb: 7.1.1
 
-  '@dfinity/candid@0.21.4(@dfinity/principal@0.21.4)':
+  '@dfinity/candid@0.21.4(@dfinity/principal@3.4.2)':
     dependencies:
-      '@dfinity/principal': 0.21.4
+      '@dfinity/principal': 3.4.2
 
-  '@dfinity/candid@3.4.1(@dfinity/principal@3.4.1)':
+  '@dfinity/candid@3.4.1(@dfinity/principal@3.4.2)':
     dependencies:
-      '@dfinity/principal': 3.4.1
+      '@dfinity/principal': 3.4.2
 
   '@dfinity/cbor@0.2.2': {}
 
-  '@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/curves@1.9.7)(@noble/hashes@1.8.0)':
+  '@dfinity/identity@3.4.1(@dfinity/agent@3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0))(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/curves@1.9.7)(@noble/hashes@1.8.0)':
     dependencies:
-      '@dfinity/agent': 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.1))(@dfinity/principal@3.4.1)(@noble/hashes@1.8.0)
-      '@dfinity/candid': 3.4.1(@dfinity/principal@3.4.1)
-      '@dfinity/principal': 3.4.1
+      '@dfinity/agent': 3.4.1(@dfinity/candid@3.4.1(@dfinity/principal@3.4.2))(@dfinity/principal@3.4.2)(@noble/hashes@1.8.0)
+      '@dfinity/candid': 3.4.1(@dfinity/principal@3.4.2)
+      '@dfinity/principal': 3.4.2
       '@noble/curves': 1.9.7
       '@noble/hashes': 1.8.0
 
-  '@dfinity/principal@0.21.4':
-    dependencies:
-      '@noble/hashes': 1.8.0
-
-  '@dfinity/principal@3.4.1':
+  '@dfinity/principal@3.4.2':
     dependencies:
       '@noble/hashes': 1.8.0
 
@@ -13061,7 +13054,7 @@ snapshots:
 
   nested-error-stacks@2.0.1: {}
 
-  next@14.0.0(@babel/core@7.28.5)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.0.0
       '@swc/helpers': 0.5.2

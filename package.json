@@ -27,7 +27,7 @@
     "next": "14.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@dfinity/principal": "^0.21.2",
+    "@dfinity/principal": "^3.4.2",
     "@dfinity/candid": "^0.21.2",
     "lucide-react": "^0.552.0",
     "class-variance-authority": "^0.7.0",

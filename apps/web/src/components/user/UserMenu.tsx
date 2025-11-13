@@ -45,7 +45,7 @@ export default function UserMenu() {
       >
         <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-full text-white text-sm font-semibold">
           {user.avatar ? (
-            <Image src={user.avatar} alt={user.name} width={32} height={32} className="rounded-full" unoptimized />
+            <Image src={user.avatar!} alt={user.name ?? 'User'} width={32} height={32} className="rounded-full" unoptimized />
           ) : (
             getInitials(user.name || 'U')
           )}

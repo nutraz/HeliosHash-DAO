@@ -18,6 +18,8 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
+    // Allow dicebear avatar URLs used across the app
+    domains: ['api.dicebear.com'],
   },
   webpack: (config) => {
     config.resolve.fallback = {

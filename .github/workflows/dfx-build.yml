@@ -9,15 +9,25 @@ on:
 jobs:
   build-canisters:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dfx (DFINITY SDK)
+      - name: Install DFINITY SDK (dfx)
         run: |
           set -e
+          # Install dfx (official installer)
           curl -fsSL https://sdk.dfinity.org/install.sh | sh
-          export PATH="${HOME}/.cache/dfx/versions/$(ls ${HOME}/.cache/dfx/versions)/dfx":$PATH
+          # Add dfx to PATH for this run (installer writes to ~/.cache/dfx)
+          echo "${HOME}/.cache/dfx/versions/$(ls ${HOME}/.cache/dfx/versions)/dfx" >> $GITHUB_PATH
+
+      - name: Install Motoko tools (mops)
+        run: |
+          set -e
+          # Install mops (Motoko package manager) and ensure it's on PATH
+          curl -fsSL https://mops.one/install.sh | bash
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Start local replica
         run: |

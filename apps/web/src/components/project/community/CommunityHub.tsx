@@ -11,7 +11,12 @@ import {
 } from 'lucide-react'
 
 interface CommunityHubProps {
-  user: any
+  // narrowed user shape to avoid `any` while remaining permissive for now
+  user?: {
+    avatar?: string
+    name?: string
+    id?: string
+  }
   language?: string
 }
 
@@ -170,7 +175,7 @@ export default function CommunityHub({ user, language = 'en' }: CommunityHubProp
                 <Card className="bg-gray-800/50 border-gray-700">
                   <CardContent className="pt-6">
                     <div className="flex items-center space-x-4">
-                      <div className="text-4xl">{user.avatar || '👤'}</div>
+                      <div className="text-4xl">{user?.avatar || '👤'}</div>
                       <Input
                         className="bg-gray-900 border-gray-600 text-white"
                         placeholder={language === 'en' ? 'Start a discussion...' : 'चर्चा शुरू करें...'}

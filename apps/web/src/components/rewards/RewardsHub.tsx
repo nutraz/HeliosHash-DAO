@@ -4,7 +4,11 @@ import React from 'react'
 import { Coins, Gift, Trophy, Zap, TrendingUp, Award, Star, Target } from 'lucide-react'
 
 interface RewardsHubProps {
-  user?: any
+  // keep user minimal to avoid use of `any` while remaining flexible
+  user?: {
+    name?: string
+    id?: string
+  }
   onNavigate?: (view: string) => void
 }
 

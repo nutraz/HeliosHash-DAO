@@ -12,6 +12,9 @@ type Props = {
 export default function Governance({ language = 'en' }: Props) {
   const { user } = useAuth()
 
+  type SmallUser = { walletType?: string; principal?: string; role?: string } | null
+  const smallUser = user as SmallUser
+
   const mockProposals = [
     { id: 'p1', title: 'Increase landowner payout share', status: 'Voting' },
     { id: 'p2', title: 'Grant funds for community center', status: 'Open' },
@@ -48,9 +51,9 @@ export default function Governance({ language = 'en' }: Props) {
               </div>
             ))}
 
-            {((user as any)?.walletType === 'internet-identity') && (user as any)?.principal && (
+            {(smallUser?.walletType === 'internet-identity') && smallUser?.principal && (
               <div className="mt-4">
-                {(user as any)?.role === 'trustee' ? (
+                {smallUser?.role === 'trustee' ? (
                   <Button onClick={createProposal}>{language === 'en' ? 'Create Proposal' : 'प्रस्ताव बनाएं'}</Button>
                 ) : (
                   <div className="text-sm text-gray-400">{language === 'en' ? 'Only trustees can create proposals' : 'केवल ट्रस्टी प्रस्ताव बना सकते हैं'}</div>

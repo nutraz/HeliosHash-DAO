@@ -9,8 +9,8 @@ import {
 } from 'lucide-react'
 
 interface RoleSelectionProps {
-  user: any
-  onRoleSelected: (roleData: any) => void
+  user?: { language?: string }
+  onRoleSelected: (roleData: { role: string; roleLabel?: string; roleLabelHi?: string; kycRequired: boolean }) => void
 }
 
 const userRoles = [
@@ -128,7 +128,7 @@ const userRoles = [
 
 export default function RoleSelection({ user, onRoleSelected }: RoleSelectionProps) {
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
-  const language = user.language || 'en'
+  const language = user?.language || 'en'
 
   const handleRoleSelect = (roleId: string) => {
     setSelectedRole(roleId)

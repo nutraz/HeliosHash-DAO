@@ -20,7 +20,8 @@ export default function CommunityPage() {
   }
 
   // Use 'language' only if present in user, else default to 'en'
-  const language = typeof (user as any)?.language === 'string' ? (user as any).language : 'en'
+  type MaybeUser = { language?: string }
+  const language = user && typeof (user as MaybeUser).language === 'string' ? (user as MaybeUser).language : 'en'
 
-  return <CommunityHub user={user} language={language} />
+  return <CommunityHub user={user || undefined} language={language} />
 }

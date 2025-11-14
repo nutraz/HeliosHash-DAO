@@ -3,6 +3,7 @@ import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import List "mo:base/List";
 import Debug "mo:base/Debug";
+import Text "mo:base/Text";
 
 module {
   public type ProposalId = Nat;
@@ -24,14 +25,14 @@ module {
 
   public type ProposalResult = Result.Result<ProposalId, Text>;
 
-  public class Governance() {
+  persistent actor class Governance() {
     var nextId: ProposalId = 0;
     var proposals: List.List<Proposal> = List.nil();
 
     public shared(msg) func createProposal(args: CreateProposalArgs): async ProposalResult {
       let caller = msg.caller;
       if (Principal.isAnonymous(caller)) {
-        return #err("Anonymous principals cannot create proposals")
+        return #err("Anonymous principals cannot create proposals");
       };
 
       let id = nextId;
@@ -50,7 +51,7 @@ module {
 
       proposals := List.push(proposal, proposals);
       Debug.print("Proposal created: id=" # Nat.toText(id));
-      #ok(id)
+      #ok(id);
     };
 
     public query func getProposals(): async [Proposal] {

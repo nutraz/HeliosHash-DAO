@@ -14,28 +14,22 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Build Docker image with dfx and mops (multi-stage)
+    - name: Build Docker image with dfx and mops
       run: |
-        docker build -t dfx-builder -f Dockerfile.dfx.multistage .
+        docker build -t dfx-builder -f Dockerfile.dfx .
 
     - name: Start replica and build canisters
       run: |
-        set -euo pipefail
-
-        # Start replica in a container
+        # Start replica and build
         docker run -d --name replica dfx-builder dfx start --background --clean
         sleep 5
-
-        # Create canisters and build
         docker exec replica sh -c "dfx canister create --all"
         docker exec replica sh -c "dfx build"
-
-        # Run smoke test and capture logs (non-fatal): write to /tmp/smoke.log inside container
-        docker exec replica sh -c "cd apps/backend && ./test_smoke.sh > /tmp/smoke.log 2>&1 || echo 'Smoke test exited with status: $?' >> /tmp/smoke.log"
-
-        # Copy smoke log out of container for artifact upload; if it fails, create a placeholder
-        docker cp replica:/tmp/smoke.log ./smoke.log || echo "Could not copy smoke log" > ./smoke.log
-
+        
+        # Run smoke test and capture logs
+        docker exec replica sh -c "cd apps/backend && ./test_smoke.sh > /tmp/smoke.log 2>&1 || echo 'Smoke test exited' >> /tmp/smoke.log"
+        docker cp replica:/tmp/smoke.log ./smoke.log || echo "No smoke log" > ./smoke.log
+        
         # Cleanup
         docker stop replica
         docker rm replica

@@ -38,7 +38,8 @@ jobs:
           dfx deps deploy || echo "Pull deps deploy failed, continuing..."
         fi
         
-        dfx build governance treasury
+        dfx build governance
+        dfx build treasury
         
         # Run smoke tests in the same container
         if [ -f apps/backend/test_smoke.sh ]; then

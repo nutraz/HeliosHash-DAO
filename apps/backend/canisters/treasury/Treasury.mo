@@ -1,60 +1,69 @@
-import List "mo:base/List";
-import Result "mo:base/Result";
-import HashMap "mo:base/HashMap";
+import Array "mo:base/Array";
 import Principal "mo:base/Principal";
-import Nat "mo:base/Nat";
-import Text "mo:base/Text";
-import Iter "mo:base/Iter";
 
-shared ({ caller = initializer }) actor class Treasury(init_args : {}) = this {
-    type Operation = {
-        #Transfer : { to : Principal; amount : Nat };
-        #Approve : { spender : Principal; amount : Nat };
+persistent actor Treasury {
+  public type Transaction = {
+    id : Nat;
+    amount : Int;
+    description : Text;
+    timestamp : Int;
+    from : Principal;
+    to : Principal;
+  };
+
+  stable var balance : Int = 0;
+  stable var transactions : [Transaction] = [];
+  stable var nextTransactionId : Nat = 1;
+
+  public query func getBalance() : async Int {
+    return balance;
+  };
+
+  public query func getTransactions() : async [Transaction] {
+    return transactions;
+  };
+
+  public shared ({ caller }) func deposit(amount : Int, description : Text) : async Nat {
+    balance += amount;
+    
+    let transaction : Transaction = {
+      id = nextTransactionId;
+      amount = amount;
+      description = description;
+      timestamp = 0; // Would use Time.now() in production
+      from = caller;
+      to = caller; // Treasury receives from caller
     };
+    
+    transactions := Array.append(transactions, [transaction]);
+    nextTransactionId += 1;
+    
+    return transaction.id;
+  };
 
-    type Transaction = {
-        operation : Operation;
-        timestamp : Int;
-        caller : Principal;
+  public shared ({ caller }) func withdraw(amount : Int, to : Principal, description : Text) : async Bool {
+    if (balance >= amount) {
+      balance -= amount;
+      
+      let transaction : Transaction = {
+        id = nextTransactionId;
+        amount = -amount;
+        description = description;
+        timestamp = 0;
+        from = caller; // Treasury sends to recipient
+        to = to;
+      };
+      
+      transactions := Array.append(transactions, [transaction]);
+      nextTransactionId += 1;
+      
+      return true;
     };
+    
+    return false;
+  };
 
-    private stable var balance : Nat = 0;
-    private stable var owner : Principal = initializer;
-    private var transactions : List.List<Transaction> = List.nil();
-    private var approvals = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
-
-    public shared ({ caller }) func get_balance() : async Nat {
-        assert Principal.isAnonymous(caller) == false;
-        balance;
-    };
-
-    public shared ({ caller }) func transfer(to : Principal, amount : Nat) : async Result.Result<(), Text> {
-        if (Principal.isAnonymous(caller)) {
-            return #err("Anonymous calls not allowed");
-        };
-        if (amount > balance) {
-            return #err("Insufficient balance");
-        };
-        balance -= amount;
-        let transaction : Transaction = {
-            operation = #Transfer({ to; amount });
-            timestamp = 0;
-            caller;
-        };
-        transactions := List.push(transaction, transactions);
-        #ok(());
-    };
-
-    public shared ({ caller }) func get_transactions() : async [Transaction] {
-        assert Principal.isAnonymous(caller) == false;
-        List.toArray(transactions);
-    };
-
-    public shared ({ caller }) func fund() : async Result.Result<(), Text> {
-        if (Principal.isAnonymous(caller)) {
-            return #err("Anonymous calls not allowed");
-        };
-        balance += 1000;
-        #ok(());
-    };
-};
+  public query func getVersion() : async Text {
+    return "HeliosHash DAO Treasury v1.0";
+  };
+}

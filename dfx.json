@@ -1,11 +1,11 @@
 {
   "canisters": {
     "governance": {
-      "main": "canisters/governance/main.mo",
+      "main": "apps/backend/canisters/governance/Governance.mo",
       "type": "motoko"
     },
     "treasury": {
-      "main": "canisters/treasury/main.mo",
+      "main": "apps/backend/canisters/treasury/Treasury.mo",
       "type": "motoko" 
     }
   },

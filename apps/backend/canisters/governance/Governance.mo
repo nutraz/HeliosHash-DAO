@@ -25,11 +25,11 @@ module {
 
   public type ProposalResult = Result.Result<ProposalId, Text>;
 
-  persistent actor class Governance() {
+  actor class Governance() {
     var nextId: ProposalId = 0;
     var proposals: List.List<Proposal> = List.nil();
 
-    public shared(msg) func createProposal(args: CreateProposalArgs): async ProposalResult {
+  public shared (msg) func createProposal(args: CreateProposalArgs): async ProposalResult {
       let caller = msg.caller;
       if (Principal.isAnonymous(caller)) {
         return #err("Anonymous principals cannot create proposals");

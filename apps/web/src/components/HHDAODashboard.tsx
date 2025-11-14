@@ -2,6 +2,9 @@
 
 import React, { useState } from 'react';
 import NextImage from 'next/image';
+import NFTDetailModal from './NFTDetailModal';
+import { useRouter } from 'next/navigation';
+import { nftCollection as sharedNFTs, projects as sharedProjects } from '@/lib/mockData';
 import { 
   Award, Users, TrendingUp, MapPin, Plus, 
   Wallet, Gift, ShoppingBag, Map, MessageSquare, 
@@ -33,7 +36,9 @@ const HHDAODashboard = () => {
   }
 
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [selectedNFT, setSelectedNFT] = useState<{ id:string; name:string; image:string; projectId?: string | null; community?: string; opensea?: { contract?: string; tokenId?: string } } | null>(null);
   const [filterStage, setFilterStage] = useState('all');
+  const router = useRouter();
 
   const userData = {
     name: "Rahul Kumar",
@@ -46,25 +51,10 @@ const HHDAODashboard = () => {
       membersAdded: 45
     },
     tokenBalance: 15000,
-    nftCollection: [
-      { id: 1, name: "Solar Bitcoin Mining Hub", image: "https://api.dicebear.com/7.x/shapes/svg?seed=bitcoin&backgroundColor=10b981", projectId: 1, community: "Green Energy Collective" },
-      { id: 2, name: "EV Charging Network", image: "https://api.dicebear.com/7.x/shapes/svg?seed=ev&backgroundColor=eab308", projectId: 2, community: "Sustainable Transport DAO" },
-      { id: 3, name: "Data Center Green Power", image: "https://api.dicebear.com/7.x/shapes/svg?seed=data&backgroundColor=f97316", projectId: 3, community: "Tech Infrastructure Hub" },
-      { id: 4, name: "Temple Community Solar", image: "https://api.dicebear.com/7.x/shapes/svg?seed=temple&backgroundColor=3b82f6", projectId: 4, community: "Community Power Network" },
-      { id: 5, name: "School Solar Initiative", image: "https://api.dicebear.com/7.x/shapes/svg?seed=school&backgroundColor=6366f1", projectId: 5, community: "Education Energy Alliance" },
-      { id: 6, name: "Urban Rooftop Solar", image: "https://api.dicebear.com/7.x/shapes/svg?seed=rooftop&backgroundColor=8b5cf6", projectId: null, community: "Urban Solar Collective" },
-      { id: 7, name: "Agricultural Solar Pumps", image: "https://api.dicebear.com/7.x/shapes/svg?seed=farm&backgroundColor=ec4899", projectId: null, community: "Agri-Energy Network" },
-      { id: 8, name: "Coastal Wind Project", image: "https://api.dicebear.com/7.x/shapes/svg?seed=wind&backgroundColor=14b8a6", projectId: null, community: "Renewable Coast Alliance" }
-    ]
+    nftCollection: sharedNFTs
   };
 
-  const projects = [
-    { id: 1, name: "Solar Bitcoin Mining Hub", stage: "functioning", color: "green", size: "5 MW", energySupply: "Bitcoin Mining Operation", surplus: "School & Hospital", completion: 100, funding: "₹2.5 Cr", opportunities: [ { type: "Security Guard", positions: 2 }, { type: "Electrical Inspector", positions: 1 }, { type: "Maintenance Tech", positions: 3 } ] },
-    { id: 2, name: "EV Charging Network", stage: "tech-setup", color: "yellow", size: "2 MW", energySupply: "EV Charging Stations", surplus: "Community Center", completion: 65, funding: "₹1.2 Cr", opportunities: [ { type: "Civil Engineer", positions: 1 }, { type: "Funding Required", amount: "₹30L" }, { type: "Supplier - Charging Units", positions: 1 } ] },
-    { id: 3, name: "Data Center Green Power", stage: "solar-setup", color: "orange", size: "10 MW", energySupply: "Data Center", surplus: "Hospital", completion: 45, funding: "₹5 Cr", opportunities: [ { type: "Solar Panel Supplier", positions: 1 }, { type: "Civil Contractor", positions: 1 }, { type: "Project Auditor", positions: 1 } ] },
-    { id: 4, name: "Temple Community Solar", stage: "civil-works", color: "blue", size: "500 KW", energySupply: "Temple & Community", surplus: "Local Residents", completion: 30, funding: "₹60L", opportunities: [ { type: "Electrical Contractor", positions: 2 }, { type: "NFT Art Creator", positions: 1 }, { type: "Tech Support", positions: 1 } ] },
-    { id: 5, name: "School Solar Initiative", stage: "applied", color: "grey", size: "300 KW", energySupply: "School Campus", surplus: "Students & Staff", completion: 5, funding: "₹40L", opportunities: [ { type: "Funding Required", amount: "₹40L" }, { type: "Land Survey", positions: 1 }, { type: "Community Manager", positions: 1 } ] }
-  ];
+  const projects = sharedProjects;
 
   const rewardsMarketplace = [
     { name: "Travel", icon: "✈️", vendors: ["MakeMyTrip", "Yatra", "Goibibo"] },
@@ -151,21 +141,26 @@ const HHDAODashboard = () => {
       </div>
 
       <div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-        <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-          <ImageIcon className="text-purple-400" />
-          <span>My NFT Collection</span>
-          <span className="text-sm font-normal text-gray-400">({userData.nftCollection.length} projects)</span>
-        </h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
+            <ImageIcon className="text-purple-400" />
+            <span>My NFT Collection</span>
+            <span className="text-sm font-normal text-gray-400">({userData.nftCollection.length} projects)</span>
+          </h3>
+          <div>
+            {/* Explore NFTs button navigates to full gallery */}
+            <button onClick={() => router.push('/nfts')} className="bg-blue-600 text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-500 transition-colors">Explore NFTs</button>
+          </div>
+        </div>
         <p className="text-sm text-gray-400 mb-4">Click any NFT to explore project community and real-time data feed</p>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {userData.nftCollection && userData.nftCollection.map((nft) => (
             <button key={nft.id} onClick={() => {
-              if (nft.projectId) {
-                const project = projects.find(p => p.id === nft.projectId);
-                if (project) { setSelectedProject(project); setCurrentView('map'); }
-              } else {
-                alert(`Exploring ${nft.community}... (External project)`);
-              }
+              const project = nft.projectId ? projects.find(p => String(p.id) === String(nft.projectId)) : null;
+              // open unified NFT detail modal (integrates OpenSea + community + realtime feed)
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              setSelectedNFT({ id: nft.id, name: nft.name, image: nft.image, projectId: nft.projectId, community: nft.community, opensea: (nft as any).opensea ?? null });
+              setSelectedProject(project ?? null);
             }} className="group relative bg-gray-900 border-2 border-gray-700 rounded-xl p-3 hover:border-blue-500 hover:shadow-2xl transition-all overflow-hidden">
               <div className="aspect-square rounded-lg overflow-hidden mb-2 bg-gradient-to-br from-gray-800 to-gray-900">
                 <NextImage src={nft.image} alt={nft.name} width={400} height={400} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
@@ -180,6 +175,9 @@ const HHDAODashboard = () => {
           ))}
         </div>
       </div>
+      {selectedNFT && (
+        <NFTDetailModal nft={selectedNFT} project={selectedProject} onClose={() => { setSelectedNFT(null); }} />
+      )}
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         <button onClick={() => setCurrentView('rewards')} className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl p-6 hover:shadow-2xl hover:scale-105 transition-all">

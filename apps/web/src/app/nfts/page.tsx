@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import NFTDetail from '@/components/nft/NFTDetail';
+import NFTGallery from '@/components/NFTGallery';
+import { nftCollection } from '@/lib/mockData';
 
 export default function NFTsPage() {
   const router = useRouter();
@@ -51,11 +53,7 @@ export default function NFTsPage() {
         ) : (
           <div className="max-w-7xl mx-auto px-4">
             <h2 className="text-2xl font-bold text-white mb-6">All NFTs</h2>
-            {/* Your existing NFT gallery component */}
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {/* NFT cards will go here */}
-              <p className="text-slate-400">Gallery view - add your NFT cards here</p>
-            </div>
+            <NFTGallery nfts={nftCollection} />
           </div>
         )}
       </main>

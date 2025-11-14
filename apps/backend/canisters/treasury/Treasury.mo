@@ -2,9 +2,7 @@ import Principal "mo:base/Principal";
 import Result "mo:base/Result";
 import Nat "mo:base/Nat";
 import Debug "mo:base/Debug";
-
-module {
-  public type TransferArgs = {
+}
     to: Principal.Principal;
     amount: Nat.Nat;
   };
@@ -19,23 +17,23 @@ module {
     public shared(msg) func fund(amount: Nat.Nat): async () {
       if (msg.caller != owner) {
         Debug.print("Unauthorized fund attempt");
-        return
+        return;
       };
       balance += amount;
-      Debug.print("Treasury funded: +" # Nat.toText(amount))
+      Debug.print("Treasury funded: " # Nat.toText(amount));
     };
 
     public shared(msg) func transfer(args: TransferArgs): async TransferResult {
       if (msg.caller != owner) {
-        return #err("Only owner can transfer")
+        return #err("Only owner can transfer");
       };
       if (args.amount > balance) {
-        return #err("Insufficient balance")
+        return #err("Insufficient balance");
       };
       balance -= args.amount;
       // In prod: trigger ICP ledger transfer
-      Debug.print("Transferred " # Nat.toText(args.amount) # " to recipient")
-      #ok(balance)
+      Debug.print("Transferred " # Nat.toText(args.amount) # " to recipient");
+      #ok(balance);
     };
 
     public query func getBalance(): async Nat.Nat {

@@ -26,7 +26,8 @@ jobs:
       run: |
         dfx start --background
         sleep 5
-        dfx canister create governance treasury
+        dfx canister create governance
+        dfx canister create treasury
         
         # Handle pull dependencies if they exist
         if dfx deps init 2>&1 | grep -q "No pull dependencies"; then

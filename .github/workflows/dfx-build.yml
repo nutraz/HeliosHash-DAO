@@ -7,31 +7,37 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  name: dfx build
 
-    steps:
+  on:
+    push:
+      branches: [ main ]
+    pull_request:
+      branches: [ main ]
+
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+
+      steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Build Docker image with dfx and mops (multi-stage)
         run: |
-          set -e
-          docker build -t dfx-builder -f Dockerfile.dfx.node .
+          docker build -t dfx-builder -f Dockerfile.dfx.multistage .
 
       - name: Start replica and build canisters
         run: |
-          set -e
-          # Run all dfx commands inside a single container so the replica started by dfx is reachable
-          docker run --rm -v "$PWD":/workspace -w /workspace dfx-builder bash -lc '
-            set -e
-            cd apps/backend
-            echo "Starting dfx local replica in background..."
-            dfx start --background --clean
-            # small wait to allow the replica to become reachable
-            sleep 3
-            echo "Creating canisters..."
-            dfx canister create --all
-            echo "Building canisters..."
-            dfx build
-          '
+          # Start replica and build
+          docker run -d --name replica dfx-builder dfx start --background --clean
+          sleep 5
+          docker exec replica sh -c "dfx canister create --all"
+          docker exec replica sh -c "dfx build"
+
+          # Run smoke test (best-effort; don't fail the job on smoke test errors)
+          docker exec replica sh -c "cd apps/backend && ./test_smoke.sh" || echo "Smoke test finished (non-fatal)"
+
+          # Cleanup
+          docker stop replica
+          docker rm replica

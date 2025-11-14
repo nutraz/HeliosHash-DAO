@@ -32,7 +32,8 @@ jobs:
         if dfx deps init 2>&1 | grep -q "No pull dependencies"; then
           echo "No pull dependencies to deploy"
         else
-          echo "Deploying pull dependencies..."
+          echo "Pulling and deploying pull dependencies..."
+          dfx deps pull || echo "Pull deps pull failed, continuing..."
           dfx deps deploy || echo "Pull deps deploy failed, continuing..."
         fi
         

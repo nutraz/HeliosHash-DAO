@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     tar \
     file \
+    libunwind8 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install DFX from direct download (pinned)

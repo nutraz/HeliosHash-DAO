@@ -1,4 +1,3 @@
----
 name: Quick Test
 
 on:
@@ -6,18 +5,18 @@ on:
     branches: [main, develop]
 
 jobs:
-  quick-test:
+  test:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup DFX
-        uses: dfinity/setup-dfx@main
+    - name: Setup DFX
+      uses: dfinity/setup-dfx@main
 
-      - name: Quick build test
-        run: |
-          dfx start --background
-          dfx build
-          echo "✅ Quick build test passed!"
+    - name: Quick build test
+      run: |
+        dfx start --background
+        dfx build
+        echo "✅ Quick test passed!"

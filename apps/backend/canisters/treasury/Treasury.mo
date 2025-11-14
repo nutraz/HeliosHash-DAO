@@ -11,7 +11,7 @@ module {
 
   public type TransferResult = Result.Result<Nat.Nat, Text>;
 
-  public persistent actor class Treasury(initOwner: Principal.Principal) {
+  persistent actor class Treasury(initOwner: Principal.Principal) {
     var owner: Principal.Principal = initOwner;
     var balance: Nat.Nat = 0;
 

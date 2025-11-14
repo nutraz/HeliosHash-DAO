@@ -1,0 +1,20 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl wget git build-essential ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install DFX using the official method but more reliably
+RUN wget -q -O dfx-installer.sh https://internetcomputer.org/install.sh && \
+    chmod +x dfx-installer.sh && \
+    echo "y" | ./dfx-installer.sh && \
+    rm dfx-installer.sh
+
+# Add DFX to PATH
+ENV PATH="/root/bin:${PATH}"
+
+WORKDIR /workspace
+COPY . .

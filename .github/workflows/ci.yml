@@ -26,7 +26,7 @@ jobs:
       run: |
         dfx start --background
         sleep 5
-        dfx canister create --all
+        dfx canister create governance treasury
         
         # Handle pull dependencies if they exist
         if dfx deps init 2>&1 | grep -q "No pull dependencies"; then
@@ -37,7 +37,7 @@ jobs:
           dfx deps deploy || echo "Pull deps deploy failed, continuing..."
         fi
         
-        dfx build
+        dfx build governance treasury
         
         # Run smoke tests in the same container
         if [ -f apps/backend/test_smoke.sh ]; then

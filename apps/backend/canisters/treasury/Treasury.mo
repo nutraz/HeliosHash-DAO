@@ -20,8 +20,8 @@ shared ({ caller = initializer }) actor class Treasury(init_args : {}) = this {
 
   private stable var balance : Nat = 0;
   private stable var owner : Principal = initializer;
-  private stable var transactions : List.List<Transaction> = List.nil();
-  private stable var approvals = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+  private var transactions : List.List<Transaction> = List.nil();
+  private var approvals = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
 
   public shared ({ caller }) func get_balance() : async Nat {
     assert Principal.isAnonymous(caller) == false;

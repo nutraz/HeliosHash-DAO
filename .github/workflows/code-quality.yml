@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: 18
 
+      - name: Install pnpm
+        run: npm i -g pnpm
+
       - name: Install workspace deps
         run: pnpm -w install --frozen-lockfile
 

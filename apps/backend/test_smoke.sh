@@ -8,26 +8,25 @@ echo "1. Waiting for replica to be ready..."
 sleep 10
 
 # Test basic functionality
-echo "2. Testing getProposals (should return empty array initially)..."
-dfx canister call governance getProposals || true
+echo "2. Testing getActiveProposals (should return empty array initially)..."
+dfx canister call governance getActiveProposals || true
 
 echo "3. Testing createProposal..."
-CREATE_RESULT=$(dfx canister call governance createProposal '(record { title = "Test Proposal"; description = "Smoke test proposal" })')
+CREATE_RESULT=$(dfx canister call governance createProposal '("Test Proposal", "Smoke test proposal", variant { Routine }, 24)')
 echo "Create result: $CREATE_RESULT"
 
-# Extract proposal ID from result
+# Check if proposal was created successfully
 if echo "$CREATE_RESULT" | grep -q "ok"; then
-  PROPOSAL_ID=$(echo "$CREATE_RESULT" | sed -n 's/.*(ok *: *\([0-9]*\)).*/\1/p')
-  echo "Proposal ID: $PROPOSAL_ID"
+  echo "✅ Proposal created successfully!"
   
-  echo "4. Testing getProposals (should now have one proposal)..."
-  dfx canister call governance getProposals || true
+  echo "4. Testing getActiveProposals (should now have proposals)..."
+  dfx canister call governance getActiveProposals || true
 
-  echo "5. Testing getProposal..."
-  dfx canister call governance getProposal "($PROPOSAL_ID : nat)" || true
-
-  echo "6. Testing getVoteCounts..."
-  dfx canister call governance getVoteCounts "($PROPOSAL_ID : nat)" || true
+  echo "5. Testing getConstitutionalConstants..."
+  dfx canister call governance getConstitutionalConstants || true
+  
+  echo "6. Testing getCurrentLeaders..."
+  dfx canister call governance getCurrentLeaders || true
   
   echo "✅ Smoke test completed successfully!"
 else

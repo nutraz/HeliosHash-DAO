@@ -14,10 +14,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image with dfx and mops
+      - name: Build Docker image with dfx and mops (multi-stage)
         run: |
           set -e
-          docker build -t dfx-builder -f Dockerfile.dfx .
+          docker build -t dfx-builder -f Dockerfile.dfx.multistage .
 
       - name: Start replica and build canisters
         run: |

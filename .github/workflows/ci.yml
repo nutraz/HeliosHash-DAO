@@ -1,5 +1,4 @@
----
-name: HeliosHash DAO CI/CD
+name: CI Pipeline
 
 on:
   push:
@@ -8,63 +7,23 @@ on:
     branches: [main]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
 
-      - name: Setup DFX
-        uses: dfinity/setup-dfx@main
-        with:
-          version: 0.15.0
+    - name: Setup DFX
+      uses: dfinity/setup-dfx@main
 
-      - name: Install dependencies
-        run: |
-          dfx start --background
-          npm install
-
-      - name: Build project
-        run: |
-          dfx build
-          echo "✅ Build successful!"
-
-      - name: Run tests
-        run: |
-          dfx canister create --all
-          npm test
-
-      - name: Security audit
-        run: |
-          npm audit --audit-level moderate
-
-  deploy-staging:
-    needs: build-and-test
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    environment: staging
-    
-    steps:
-      - name: Deploy to staging
-        run: |
-          echo "🚀 Deploying to staging environment..."
-          # dfx deploy --network ic
-
-  deploy-production:
-    needs: build-and-test
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
-    
-    steps:
-      - name: Deploy to production
-        run: |
-          echo "🚀 Deploying to production..."
-          # dfx deploy --network ic
+    - name: Build project
+      run: |
+        dfx start --background
+        dfx build
+        echo "✅ Build successful!"

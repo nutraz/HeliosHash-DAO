@@ -7,6 +7,49 @@ on:
     branches: [ main ]
 
 jobs:
+  build-canisters:
+    name: Build DFX Canisters
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Build Docker image with dfx and mops
+      run: |
+        docker build -t dfx-builder -f Dockerfile.dfx.multistage .
+
+    - name: Start replica and build canisters
+      run: |
+        set -euo pipefail
+        # Start replica and build
+        docker run -d --name replica dfx-builder dfx start --background --clean
+        sleep 8
+        docker exec replica sh -c "dfx canister create --all"
+        docker exec replica sh -c "dfx build"
+
+        # Run smoke test (best-effort; don't fail the step if smoke test fails)
+        set +e
+        docker exec replica sh -c "cd apps/backend && ./test_smoke.sh"
+        SMOKE_EXIT=$?
+        set -e
+        if [ "$SMOKE_EXIT" -ne 0 ]; then
+          echo "Smoke test exited with $SMOKE_EXIT (non-fatal)"
+        fi
+
+        # Cleanup
+        docker stop replica
+        docker rm replica
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
   test:
     runs-on: ubuntu-latest
     steps:

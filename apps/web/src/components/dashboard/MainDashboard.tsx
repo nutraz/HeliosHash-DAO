@@ -10,6 +10,7 @@ import {
   Loader2, AlertCircle
 } from 'lucide-react'
 import { useHHDAO } from '@/hooks/useHHDAO'
+import { useQuery } from '@tanstack/react-query'
 
 interface UserProfileLocal {
   name?: string;
@@ -28,6 +29,29 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
   const [showSendTokens, setShowSendTokens] = useState(false)
   const { dashboardData, projects, loading, error, refetch } = useHHDAO()
   const language = user.language || 'en'
+
+  interface UrgamUSummary {
+    villagesConnected: number
+    villagesRemaining: number
+    completionPercent: number
+    currentHashrate?: number
+    dailyEnergyProd?: number
+  }
+
+  // fetch UrgamU summary (mocked fallback)
+  const { data: urgamUData, isLoading: urgamULoading } = useQuery<UrgamUSummary>({
+    queryKey: ['urgamUSummary'],
+    queryFn: async () => {
+      return await new Promise<UrgamUSummary>((res) => setTimeout(() => res({
+        villagesConnected: 547,
+        villagesRemaining: 9453,
+        completionPercent: 5.47,
+        currentHashrate: 12.3,
+        dailyEnergyProd: 420
+      }), 300))
+    },
+    staleTime: 1000 * 60 * 2
+  })
 
   // Real data from IC canister
   const userData = {
@@ -373,30 +397,42 @@ export default function MainDashboard({ user, onNavigate, onLogout }: MainDashbo
           </CardContent>
         </Card>
 
-        {/* UrgamU Progress */}
+        {/* UrgamU Progress (fetched via react-query) */}
         <Card className="bg-gradient-to-r from-orange-900 to-red-900 border-orange-700 mt-6">
           <CardContent className="pt-6">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-              <div>
-                <h3 className="text-2xl font-bold text-white mb-2">
-                  {language === 'en' ? 'UrgamU Initiative' : 'उरगमू पहल'}
-                </h3>
-                <p className="text-gray-200">
-                  {language === 'en' 
-                    ? '547 villages connected • 9,453 remaining' 
-                    : '547 गांव जुड़े • 9,453 बाकी'}
-                </p>
+            {urgamULoading ? (
+              <div className="space-y-2">
+                <div className="w-2/3 h-6 bg-gray-700 animate-pulse rounded" />
+                <div className="w-1/3 h-3 bg-gray-700 animate-pulse rounded" />
               </div>
-              <div className="w-full md:w-1/3">
-                <div className="bg-gray-800 rounded-full h-4 overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-orange-500 to-red-500 h-full" 
-                    style={{ width: '5.47%' }}
-                  />
+            ) : (
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {language === 'en' ? 'UrgamU Initiative' : 'उरगमू पहल'}
+                  </h3>
+                  <p className="text-gray-200">
+                    {language === 'en'
+                      ? `${urgamUData?.villagesConnected} villages connected • ${urgamUData?.villagesRemaining} remaining`
+                      : `${urgamUData?.villagesConnected} गांव जुड़े • ${urgamUData?.villagesRemaining} बाकी`}
+                  </p>
                 </div>
-                <p className="text-right text-white text-sm mt-1">5.47% complete</p>
+                <div className="w-full md:w-1/3">
+                  <div className="bg-gray-800 rounded-full h-4 overflow-hidden">
+                    <div
+                      className="bg-gradient-to-r from-orange-500 to-red-500 h-full"
+                      style={{ width: `${urgamUData?.completionPercent}%` }}
+                    />
+                  </div>
+                  <p className="text-right text-white text-sm mt-1">{urgamUData?.completionPercent}% complete</p>
+                  <div className="mt-3 flex items-center justify-end">
+                    <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => onNavigate('urgamu-delhi')}>
+                      {language === 'en' ? 'View Details' : 'विवरण देखें'}
+                    </Button>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>

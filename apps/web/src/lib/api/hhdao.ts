@@ -80,9 +80,31 @@ export class HHDAOService {
 
   async getDashboardData(): Promise<DashboardData> {
     try {
+      // DEV fallback: if running in the browser and the dev mock flag is set,
+      // return mock data instead of contacting a canister. This helps local
+      // dev/debugging when a DFX replica or canister IDs are not available.
+      if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+        try {
+          const devFlag = window.localStorage.getItem('hhdao-dev-mock');
+          if (devFlag) {
+            return {
+              projects: [
+                { id: BigInt(1), title: 'Mock Project A', description: 'Dev mock project' }
+              ],
+              documents: [],
+              userProfile: [{ principal: 'dev', username: 'dev', displayName: 'Dev User' }],
+              devices: []
+            } as DashboardData;
+          }
+        } catch {
+          // ignore localStorage errors
+        }
+      }
+
       if (!this.actor) {
         await this.initializeActor();
       }
+
       const result = await this.actor!.getDashboardData();
       return result;
     } catch (_error) {
@@ -93,6 +115,19 @@ export class HHDAOService {
 
   async getProjects(): Promise<Project[]> {
     try {
+      if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+        try {
+          const devFlag = window.localStorage.getItem('hhdao-dev-mock');
+          if (devFlag) {
+            return [
+              { id: BigInt(1), title: 'Mock Project A', description: 'Dev mock project' }
+            ];
+          }
+        } catch {
+          // ignore
+        }
+      }
+
       if (!this.actor) {
         await this.initializeActor();
       }

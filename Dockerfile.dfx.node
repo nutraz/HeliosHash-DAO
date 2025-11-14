@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
     tar \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Install DFX from direct download (pinned)

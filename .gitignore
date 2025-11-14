@@ -141,3 +141,15 @@ apps/backend/src/declarations/
 # Backup directories from scripted refactors / quick edits
 .backups/
 .backups/**
+# Diagnostics & Debug
+apps/web/diagnostics*/
+apps/web/diagnosis*.png
+apps/web/analyze-*.cjs
+apps/web/diagnose-*.cjs
+apps/web/diagnose-*.js
+diagnostics/
+tests/playwright/traces/
+.env.local  # Exclude env for security
+
+# Mobile Native
+apps/mobile-rn/node_modules/

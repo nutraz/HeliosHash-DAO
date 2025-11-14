@@ -11,14 +11,6 @@ enum Tab {
   ROI = 'ROI Tracker'
 }
 
-interface MiningStats {
-  hashrate: string;
-  btcMined: number;
-  powerDraw: string;
-  temperature: string;
-  efficiency: string;
-}
-
 interface EnergyStats {
   solarOutput: string;
   batteryLevel: string;
@@ -77,6 +69,7 @@ export default function UrgamUDelhiDashboard({ language }: UrgamUDashboardProps)
       setPreviousSolarKwh(data.solar_kwh);
       setLastUpdateTime(now);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.solar_kwh]);
 
   // Demo simulation (fluctuating stats)

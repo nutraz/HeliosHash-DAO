@@ -124,6 +124,16 @@ Apache 2.0 - See [LICENSE](LICENSE) for details.
 - **Development Status**: [DEVELOPMENT_STATUS.md](DEVELOPMENT_STATUS.md)
 - **Changelog**: [CHANGELOG.md](CHANGELOG.md)
 
+## Module Architecture (canonical)
+
+| Feature           | Path                                  | Status      |
+|-------------------|---------------------------------------|-------------|
+| NFT System        | `apps/web/src/components/nft/*`       | Canonical   |
+| Village Dashboard | `apps/web/src/app/urgamu-delhi/*`     | Active      |
+| Legacy Villages   | `apps/web/src/app/villages/`          | Deprecated  |
+| UrgamU Module     | `src/modules/UrgamUDelhi/*`           | Reusable UI |
+
+
 ---
 
 <div align="center">

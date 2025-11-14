@@ -32,7 +32,10 @@ jobs:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
     needs: lint-and-test
-    if: ${{ secrets.SONAR_TOKEN != '' }}
+    # Do not use secrets in a job-level if (not available during workflow validation).
+    # Instead expose the secret as a job env and guard steps using env checks.
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,18 +58,21 @@ jobs:
         run: pnpm -w install --frozen-lockfile
 
       - name: Run SonarCloud Scan
+        if: ${{ env.SONAR_TOKEN != '' }}
         uses: SonarSource/sonarcloud-github-action@master
         with:
           args: >
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.login=${{ env.SONAR_TOKEN }}
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
 
   codeclimate-scan:
     name: Code Climate
     runs-on: ubuntu-latest
     needs: lint-and-test
-    if: ${{ secrets.CODECLIMATE_REPO_TOKEN != '' }}
+    # Avoid job-level secret checks; expose token via env and guard steps.
+    env:
+      CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -83,6 +89,7 @@ jobs:
         run: pnpm -w install --frozen-lockfile
 
       - name: Run Code Climate analysis
+        if: ${{ env.CODECLIMATE_REPO_TOKEN != '' }}
         uses: paambaati/codeclimate-action@v3.0.0
         with:
-          cc_test_reporter_id: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
+          cc_test_reporter_id: ${{ env.CODECLIMATE_REPO_TOKEN }}

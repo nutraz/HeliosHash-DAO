@@ -34,4 +34,3 @@ RUN echo "=== Mops Binary Info ===" && which mops && file $(which mops)
 
 WORKDIR /workspace
 COPY . .
-COPY --from=builder /usr/local/cargo/bin/mops /usr/local/bin/mops

@@ -1,42 +1,134 @@
+# Multi-stage build for reliable mops installation# Multi-stage build for reliable mops installation
 
-FROM ubuntu:22.04
+FROM rust:1.74-slim AS builder
 
-# Set environment to non-interactive
-ENV DEBIAN_FRONTEND=noninteractive
+FROM rust:1.74-slim AS builderFROM ubuntu:22.04
 
-# Install system dependencies
+# Install build dependencies
+
 RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
+
     git \
-    build-essential \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
 
-# Install DFX from direct download
-ARG DFX_VERSION=0.15.1
-RUN wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
-    && tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
-    && mv dfx /usr/local/bin/ \
-    && chmod +x /usr/local/bin/dfx \
-    && rm dfx-${DFX_VERSION}-x86_64-linux.tar.gz
+    && rm -rf /var/lib/apt/lists/*# Install build dependencies# Set environment to non-interactive
 
-# Install Rust (fast and reliable)
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
-ENV PATH="/root/.cargo/bin:${PATH}"
 
-# Build and install mops from source (pinned to a known working commit)
+
+# Build mops from source in builder stageRUN apt-get update && apt-get install -y \ENV DEBIAN_FRONTEND=noninteractive
+
 RUN git clone https://github.com/dfinity/mops.git \
-    && cd mops \
-    && cargo install --path . \
-    && cd .. \
+
+    && cd mops \    git \
+
+    && cargo install --locked --path . \
+
+    && cd .. \    && rm -rf /var/lib/apt/lists/*# Install system dependencies
+
     && rm -rf mops
 
+RUN apt-get update && apt-get install -y \
+
+# Final stage
+
+FROM ubuntu:22.04# Build mops from source in builder stage    curl \
+
+
+
+# Set environment to non-interactiveRUN git clone https://github.com/dfinity/mops.git \    wget \
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+    && cd mops \    git \
+
+# Install system dependencies
+
+RUN apt-get update && apt-get install -y \    && cargo install --locked --path . \    build-essential \
+
+    curl \
+
+    wget \    && cd .. \    ca-certificates \
+
+    ca-certificates \
+
+    && rm -rf /var/lib/apt/lists/*    && rm -rf mops    && rm -rf /var/lib/apt/lists/*
+
+
+
+# Install DFX from direct download
+
+ARG DFX_VERSION=0.15.1
+
+RUN wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz \# Final stage# Install DFX from direct download
+
+    && tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
+
+    && mv dfx /usr/local/bin/ \FROM ubuntu:22.04ARG DFX_VERSION=0.15.1
+
+    && chmod +x /usr/local/bin/dfx \
+
+    && rm dfx-${DFX_VERSION}-x86_64-linux.tar.gzRUN wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
+
+
+
+# Copy mops from builder stage# Set environment to non-interactive    && tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz \
+
+COPY --from=builder /usr/local/cargo/bin/mops /usr/local/bin/mops
+
+ENV DEBIAN_FRONTEND=noninteractive    && mv dfx /usr/local/bin/ \
+
 # Verify installations
-RUN echo "=== DFX Version ===" && dfx --version
+
+RUN echo "=== DFX Version ===" && dfx --version    && chmod +x /usr/local/bin/dfx \
+
 RUN echo "=== Mops Version ===" && mops --version
+
+RUN echo "=== Mops Binary Info ===" && which mops && file $(which mops)# Install system dependencies    && rm dfx-${DFX_VERSION}-x86_64-linux.tar.gz
+
+
+
+WORKDIR /workspaceRUN apt-get update && apt-get install -y \
+
+COPY . .
+
+    curl \# Install Rust (fast and reliable)
+
+    wget \RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
+
+    ca-certificates \ENV PATH="/root/.cargo/bin:${PATH}"
+
+    && rm -rf /var/lib/apt/lists/*
+
+# Build and install mops from source (pinned to a known working commit)
+
+# Install DFX from direct downloadRUN git clone https://github.com/dfinity/mops.git \
+
+ARG DFX_VERSION=0.15.1    && cd mops \
+
+RUN wget -q https://github.com/dfinity/sdk/releases/download/${DFX_VERSION}/dfx-${DFX_VERSION}-x86_64-linux.tar.gz \    && cargo install --path . \
+
+    && tar -xzf dfx-${DFX_VERSION}-x86_64-linux.tar.gz \    && cd .. \
+
+    && mv dfx /usr/local/bin/ \    && rm -rf mops
+
+    && chmod +x /usr/local/bin/dfx \
+
+    && rm dfx-${DFX_VERSION}-x86_64-linux.tar.gz# Verify installations
+
+RUN echo "=== DFX Version ===" && dfx --version
+
+# Copy mops from builder stageRUN echo "=== Mops Version ===" && mops --version
+
+COPY --from=builder /usr/local/cargo/bin/mops /usr/local/bin/mopsRUN echo "=== Mops Binary Info ===" && which mops && file $(which mops)
+
+
+
+# Verify installationsWORKDIR /workspace
+
+RUN echo "=== DFX Version ===" && dfx --versionCOPY . .
+
+RUN echo "=== Mops Version ===" && mops --version
+
 RUN echo "=== Mops Binary Info ===" && which mops && file $(which mops)
 
 WORKDIR /workspace
 COPY . .
-

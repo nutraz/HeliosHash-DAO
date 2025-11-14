@@ -17,7 +17,7 @@ jobs:
       - name: Build Docker image with dfx and mops (multi-stage)
         run: |
           set -e
-          docker build -t dfx-builder -f Dockerfile.dfx.multistage .
+          docker build -t dfx-builder -f Dockerfile.dfx.node .
 
       - name: Start replica and build canisters
         run: |

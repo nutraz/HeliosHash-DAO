@@ -41,10 +41,8 @@ jobs:
         
         # Run smoke tests in the same container
         if [ -f apps/backend/test_smoke.sh ]; then
-          cd apps/backend
-          ./test_smoke.sh > /tmp/smoke.log 2>&1 || echo "Smoke test exited with status: $?" >> /tmp/smoke.log
+          ./apps/backend/test_smoke.sh > /tmp/smoke.log 2>&1 || echo "Smoke test exited with status: $?" >> /tmp/smoke.log
           cat /tmp/smoke.log
-          cd ../..
         else
           echo "No smoke test found at apps/backend/test_smoke.sh"
         fi

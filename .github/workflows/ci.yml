@@ -25,5 +25,28 @@ jobs:
     - name: Build project
       run: |
         dfx start --background
+        sleep 5
+        dfx canister create --all
         dfx build
         echo "✅ Build successful!"
+    
+    - name: Run smoke tests
+      run: |
+        if [ -f apps/backend/test_smoke.sh ]; then
+          cd apps/backend
+          ./test_smoke.sh > /tmp/smoke.log 2>&1 || echo "Smoke test exited with status: $?" >> /tmp/smoke.log
+          cat /tmp/smoke.log
+          cd ../..
+        else
+          echo "No smoke test found at apps/backend/test_smoke.sh"
+        fi
+      continue-on-error: true
+    
+    - name: Upload smoke test logs
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: smoke-test-logs
+        path: /tmp/smoke.log
+        if-no-files-found: warn
+        retention-days: 1

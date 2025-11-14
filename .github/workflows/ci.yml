@@ -27,6 +27,15 @@ jobs:
         dfx start --background
         sleep 5
         dfx canister create --all
+        
+        # Handle pull dependencies if they exist
+        if dfx deps init 2>&1 | grep -q "No pull dependencies"; then
+          echo "No pull dependencies to deploy"
+        else
+          echo "Deploying pull dependencies..."
+          dfx deps deploy || echo "Pull deps deploy failed, continuing..."
+        fi
+        
         dfx build
         echo "✅ Build successful!"
     

@@ -1,0 +1,7 @@
+[package]
+name = "treasury"
+version = "0.1.0"
+
+[package.metadata]
+# Minimal mops configuration file to satisfy CI builds. If this canister
+# needs external Motoko packages, expand this file with proper dependencies.

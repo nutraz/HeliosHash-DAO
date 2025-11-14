@@ -1,47 +1,91 @@
-import Principal "mo:base/Principal";
+import List "mo:base/List";
 import Result "mo:base/Result";
+import HashMap "mo:base/HashMap";
+import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
-import Debug "mo:base/Debug";
-}
-    to: Principal.Principal;
-    amount: Nat.Nat;
+import Text "mo:base/Text";
+import Iter "mo:base/Iter";
+
+shared ({ caller = initializer }) actor class Treasury(init_args : {}) = this {
+  type Operation = {
+    #Transfer : { to : Principal; amount : Nat };
+    #Approve : { spender : Principal; amount : Nat };
   };
 
-  public type TransferResult = Result.Result<Nat.Nat, Text>;
+  type Transaction = {
+    operation : Operation;
+    timestamp : Int;
+    caller : Principal;
+  };
 
-  persistent actor class Treasury(initOwner: Principal.Principal) {
-    var owner: Principal.Principal = initOwner;
-    var balance: Nat.Nat = 0;
+  private stable var balance : Nat = 0;
+  private stable var owner : Principal = initializer;
+  private stable var transactions : List.List<Transaction> = List.nil();
+  private stable var approvals = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
 
-    // Only owner can fund (for demo; later: governance calls)
-    public shared(msg) func fund(amount: Nat.Nat): async () {
-      if (msg.caller != owner) {
-        Debug.print("Unauthorized fund attempt");
-        return;
+  public shared ({ caller }) func get_balance() : async Nat {
+    assert Principal.isAnonymous(caller) == false;
+    balance;
+  };
+
+  public shared ({ caller }) func transfer(to : Principal, amount : Nat) : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Anonymous calls not allowed");
+    };
+    if (amount > balance) {
+      return #err("Insufficient balance");
+    };
+    balance -= amount;
+    let transaction : Transaction = {
+      operation = #Transfer({ to; amount });
+      timestamp = 0;
+      caller;
+    };
+    transactions := List.push(transaction, transactions);
+    #ok(());
+  };
+
+  public shared ({ caller }) func get_transactions() : async [Transaction] {
+    assert Principal.isAnonymous(caller) == false;
+    List.toArray(transactions);
+  };
+
+  public shared ({ caller }) func fund() : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Anonymous calls not allowed");
+    };
+    balance += 1000;
+    #ok(());
+  };
+
+  public shared ({ caller }) func approve(spender : Principal, amount : Nat) : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Anonymous calls not allowed");
+    };
+    if (amount > balance) {
+      return #err("Insufficient balance");
+    };
+    approvals.put(spender, amount);
+    #ok(());
+  };
+
+  public shared ({ caller }) func transfer_from(from : Principal, to : Principal, amount : Nat) : async Result.Result<(), Text> {
+    if (Principal.isAnonymous(caller)) {
+      return #err("Anonymous calls not allowed");
+    };
+    switch (approvals.get(from)) {
+      case (?approved_amount) {
+        if (approved_amount >= amount) {
+          balance -= amount;
+          approvals.put(from, approved_amount - amount);
+          #ok(());
+        } else {
+          #err("Amount exceeds approved limit");
+        };
       };
-      balance += amount;
-      Debug.print("Treasury funded: " # Nat.toText(amount));
-    };
-
-    public shared(msg) func transfer(args: TransferArgs): async TransferResult {
-      if (msg.caller != owner) {
-        return #err("Only owner can transfer");
+      case null {
+        #err("No approval found for spender");
       };
-      if (args.amount > balance) {
-        return #err("Insufficient balance");
-      };
-      balance -= args.amount;
-      // In prod: trigger ICP ledger transfer
-      Debug.print("Transferred " # Nat.toText(args.amount) # " to recipient");
-      #ok(balance);
     };
-
-    public query func getBalance(): async Nat.Nat {
-      balance
-    };
-
-    public query func getOwner(): async Principal.Principal {
-      owner
-    };
-  }
-}
+  };
+};

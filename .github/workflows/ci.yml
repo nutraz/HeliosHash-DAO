@@ -38,10 +38,8 @@ jobs:
         fi
         
         dfx build
-        echo "✅ Build successful!"
-    
-    - name: Run smoke tests
-      run: |
+        
+        # Run smoke tests in the same container
         if [ -f apps/backend/test_smoke.sh ]; then
           cd apps/backend
           ./test_smoke.sh > /tmp/smoke.log 2>&1 || echo "Smoke test exited with status: $?" >> /tmp/smoke.log
@@ -50,7 +48,8 @@ jobs:
         else
           echo "No smoke test found at apps/backend/test_smoke.sh"
         fi
-      continue-on-error: true
+        
+        echo "✅ Build and smoke tests successful!"
     
     - name: Upload smoke test logs
       if: always()

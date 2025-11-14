@@ -161,7 +161,7 @@ actor GovernanceRules {
     // === GOVERNANCE ENFORCEMENT FUNCTIONS ===
     
     // 1. Women's Quota Enforcement
-    public func enforceWomensQuota(candidates : [Candidate]) : Result.Result<[Candidate], Text> {
+    public shared ({ caller }) func enforceWomensQuota(candidates : [Candidate]) : async Result.Result<[Candidate], Text> {
         if (candidates.size() == 0) {
             return #err("No candidates provided");
         };
@@ -185,7 +185,7 @@ actor GovernanceRules {
     };
     
     // 2. Voting Threshold Validation
-    public func validateVotingThreshold(proposalType : ProposalType, votesFor : Nat, totalVotes : Nat) : Bool {
+    public shared ({ caller }) func validateVotingThreshold(proposalType : ProposalType, votesFor : Nat, totalVotes : Nat) : async Bool {
         if (totalVotes == 0) { return false };
         
         let percentage = (votesFor * 100) / totalVotes;
@@ -199,7 +199,7 @@ actor GovernanceRules {
     };
     
     // 3. Revenue Allocation Validation
-    public func validateRevenueAllocation(allocation : RevenueAllocation) : Result.Result<RevenueAllocation, Text> {
+    public shared ({ caller }) func validateRevenueAllocation(allocation : RevenueAllocation) : async Result.Result<RevenueAllocation, Text> {
         // Check if percentages sum to 100
         if (allocation.total != 100) {
             return #err("Revenue allocations must sum to 100%");
@@ -231,8 +231,8 @@ actor GovernanceRules {
         #ok(allocation)
     };
     
-    // 4. Multi-Signature Validation
-    public func validateMultiSigThreshold(signatures : [Principal]) : Bool {
+        // 4. Multi-Signature Threshold Validation
+    public shared ({ caller }) func validateMultiSigThreshold(signatures : [Principal]) : async Bool {
         signatures.size() >= MULTI_SIG_THRESHOLD
     };
     
@@ -279,8 +279,8 @@ actor GovernanceRules {
         #ok(emergency)
     };
     
-    // 6. Constitutional Compliance Audit
-    public func auditConstitutionalCompliance() : async GovernanceReport {
+    // 5. Constitutional Compliance Audit
+    public shared ({ caller }) func auditConstitutionalCompliance() : async GovernanceReport {
         let currentTime = Time.now();
         
         // Check women's representation in current leadership

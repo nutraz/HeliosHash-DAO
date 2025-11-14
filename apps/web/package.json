@@ -33,6 +33,7 @@
     "i18next": "^25.6.0",
     "i18next-browser-languagedetector": "^8.2.0",
     "lucide-react": "^0.552.0",
+  "framer-motion": "^10.12.5",
     "next": "^14.2.33",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

@@ -5,6 +5,8 @@ on:
     branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  # Allow manual runs from the Actions UI or gh workflow run
+  workflow_dispatch: {}
 
 jobs:
   lint-and-test:

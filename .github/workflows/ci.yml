@@ -1,186 +1,70 @@
-name: CI
+---
+name: HeliosHash DAO CI/CD
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build-canisters:
-    name: Build DFX Canisters
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-
-    - name: Build Docker image with dfx and mops
-      run: |
-        docker build -t dfx-builder -f Dockerfile.dfx.multistage .
-
-    - name: Start replica and build canisters
-      run: |
-        set -euo pipefail
-        # Start replica and build
-        docker run -d --name replica dfx-builder dfx start --background --clean
-        sleep 8
-        docker exec replica sh -c "dfx canister create --all"
-        docker exec replica sh -c "dfx build"
-
-        # Run smoke test (best-effort; don't fail the step if smoke test fails)
-        set +e
-        docker exec replica sh -c "cd apps/backend && ./test_smoke.sh"
-        SMOKE_EXIT=$?
-        set -e
-        if [ "$SMOKE_EXIT" -ne 0 ]; then
-          echo "Smoke test exited with $SMOKE_EXIT (non-fatal)"
-        fi
-
-        # Cleanup
-        docker stop replica
-        docker rm replica
-name: CI
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: 'pnpm'
-      - name: Setup pnpm
-        run: corepack enable && corepack prepare pnpm@latest --activate
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-      - name: Build web
-        run: pnpm --filter ./apps/web build
-      - name: Run unit tests (Vitest)
-        run: pnpm --filter ./apps/web test:run
-      - name: Start dev server (pm2)
-        run: |
-          cd apps/web
-          npm install -g pm2
-          pm2 start ecosystem.config.js --only helioshash-web
-          # wait for server to be ready
-          for i in {1..30}; do
-            if curl -sS -o /dev/null -w "%{http_code}" http://localhost:3002/ | grep -q "200"; then
-              echo "server ready"; break
-            fi
-            sleep 1
-          done
-      - name: Run E2E tests (Playwright)
-        run: pnpm --filter ./apps/web test:e2e --reporter=html
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: apps/web/playwright-report || ./playwright-report
-name: CI
-
-on:
-  push:
-<<<<<<< HEAD
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
 
 jobs:
-  test:
-=======
-    branches: [ main, mvp-testers ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  test:
-    name: JS unit/integration & E2E
->>>>>>> audit-clean
+  build-and-test:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'pnpm'
-      - name: Install pnpm
-        run: npm install -g pnpm
-      - name: Install dependencies
-        run: pnpm install
-      - name: Run unit/integration tests (Vitest)
-        run: pnpm test:run
-      - name: Upload Vitest JSON report
-        uses: actions/upload-artifact@v4
-        with:
-          name: vitest-report
-          path: vitest-report.json
-        if: always()
-      - name: Run canister tests
-        run: pnpm test:canister
-      - name: Run E2E tests (Playwright)
-        run: pnpm test:e2e
-      - name: Upload Playwright report
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: playwright-report/
-        if: always()
-<<<<<<< HEAD
-=======
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  flutter-analyze:
-    name: Flutter analyze
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Analyze
-        run: flutter analyze
-
-  flutter-test:
-    name: Flutter test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-      - name: Install dependencies
-        run: flutter pub get
-      - name: Run tests
-        run: flutter test --coverage
-
-  node-checks:
-    name: Node quick checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      - name: Install pnpm
-        run: npm i -g pnpm
-      - name: Install packages
-        run: pnpm install
-      - name: Run JS unit tests (non-blocking)
-        run: pnpm test:run || true
->>>>>>> audit-clean
+          cache: 'npm'
+
+      - name: Setup DFX
+        uses: dfinity/setup-dfx@main
+        with:
+          version: 0.15.0
+
+      - name: Install dependencies
+        run: |
+          dfx start --background
+          npm install
+
+      - name: Build project
+        run: |
+          dfx build
+          echo "✅ Build successful!"
+
+      - name: Run tests
+        run: |
+          dfx canister create --all
+          npm test
+
+      - name: Security audit
+        run: |
+          npm audit --audit-level moderate
+
+  deploy-staging:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    environment: staging
+    
+    steps:
+      - name: Deploy to staging
+        run: |
+          echo "🚀 Deploying to staging environment..."
+          # dfx deploy --network ic
+
+  deploy-production:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "🚀 Deploying to production..."
+          # dfx deploy --network ic

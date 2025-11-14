@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import NextImage from 'next/image';
 
 interface NFTItem {
-  id: number;
+  id: string;
   name: string;
   image: string;
-  projectId?: number | null;
+  projectId?: string | null;
   community?: string;
   opensea?: { contract?: string; tokenId?: string };
 }

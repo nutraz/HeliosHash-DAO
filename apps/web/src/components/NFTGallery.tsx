@@ -2,101 +2,23 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import type { NFT } from '@/types/nft';
 import { ChevronLeft, ChevronRight, Heart, Share2, ExternalLink, Download, Grid3x3 } from 'lucide-react';
 
-interface NFTItem {
-  id: string;
-  name: string;
-  image: string;
-  community: string;
-  projectId?: string;
-  description?: string;
-  attributes?: {
-    trait_type: string;
-    value: string;
-  }[];
-}
-
 interface NFTGalleryProps {
-  nfts: NFTItem[];
-  onNFTSelect?: (nft: NFTItem) => void;
+  nfts: NFT[];
+  onNFTSelect?: (nft: NFT) => void;
   onBack?: () => void;
 }
 
 const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) => {
-  const [selectedNFT, setSelectedNFT] = useState<NFTItem | null>(null);
+  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'carousel'>('grid');
 
-  const sampleNFTs: NFTItem[] = [
-    {
-      id: 'solar-btc-1',
-      name: 'Solar Bitcoin Miner #001',
-      image: '/assets/icons/helioshash.svg',
-      community: 'Green Energy Collective',
-      projectId: '1',
-      description: 'Genesis solar miner powered by Bitcoin rewards',
-      attributes: [
-        { trait_type: 'Power Output', value: '500 TH/s' },
-        { trait_type: 'Location', value: 'Baghpat, India' },
-        { trait_type: 'Energy Source', value: 'Solar + Bitcoin' }
-      ]
-    },
-    {
-      id: 'ev-charging-2',
-      name: 'EV Charging Station #002',
-      image: '/assets/icons/urgam.svg',
-      community: 'Sustainable Transport DAO',
-      projectId: '2',
-      description: 'Fast-charging station with renewable energy backup',
-      attributes: [
-        { trait_type: 'Charging Speed', value: '150kW DC' },
-        { trait_type: 'Location', value: 'Delhi Highway' },
-        { trait_type: 'Energy Source', value: 'Solar + Grid' }
-      ]
-    },
-    {
-      id: 'data-center-3',
-      name: 'Green Data Center #003',
-      image: '/icons/llogo-nobackground.svg',
-      community: 'Tech Infrastructure Hub',
-      projectId: '3',
-      description: 'Carbon-neutral data center powered by renewable energy',
-      attributes: [
-        { trait_type: 'Processing Power', value: '1000 cores' },
-        { trait_type: 'Energy Source', value: '100% Solar' },
-        { trait_type: 'Carbon Offset', value: '5000 tons/year' }
-      ]
-    },
-    {
-      id: 'temple-solar-4',
-      name: 'Temple Solar Array #004',
-      image: '/assets/icons/governance.svg',
-      community: 'Community Power Network',
-      projectId: '4',
-      description: 'Community-owned solar array powering local temple',
-      attributes: [
-        { trait_type: 'Capacity', value: '500 kW' },
-        { trait_type: 'Location', value: 'Uttarakhand' },
-        { trait_type: 'Energy Source', value: '100% Solar' },
-        { trait_type: 'Community Impact', value: '2500 households' }
-      ]
-    },
-    {
-      id: 'school-solar-5',
-      name: 'School Solar Initiative #005',
-      image: '/logo-simple.svg',
-      community: 'Education Energy Alliance',
-      projectId: '5',
-      description: 'Solar installation at rural school providing clean energy education',
-      attributes: [
-        { trait_type: 'Educational Impact', value: '500 students' },
-        { trait_type: 'Energy Source', value: '100% Solar' },
-        { trait_type: 'Location', value: 'Rural Village' }
-      ]
-    }
-  ];
+  // small local fallback (kept minimal) — prefer passing `nfts` prop from shared data
+  const FALLBACK_NFTS: NFT[] = [];
 
-  const handleNFTClick = (nft: NFTItem) => {
+  const handleNFTClick = (nft: NFT) => {
     setSelectedNFT(nft);
     if (onNFTSelect) {
       onNFTSelect(nft);
@@ -136,7 +58,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
       {/* NFT Grid/Carousel View */}
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...nfts, ...sampleNFTs].map((nft) => (
+          {[...(nfts || []), ...FALLBACK_NFTS].map((nft) => (
             <div
               key={nft.id}
               onClick={() => handleNFTClick(nft)}
@@ -295,7 +217,7 @@ const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) =>
                 </div>
                 <p className="text-lg">Select an NFT to view details</p>
                 <div className="flex justify-center space-x-4 mt-4">
-                  {[...sampleNFTs].slice(0, 3).map((nft, idx) => (
+                  {FALLBACK_NFTS.slice(0, 3).map((nft, idx) => (
                     <button
                       key={idx}
                       onClick={() => handleNFTClick(nft)}

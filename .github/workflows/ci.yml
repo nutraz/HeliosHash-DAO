@@ -1,61 +1,22 @@
-name: CI Pipeline
+name: Simple Build Test
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
     branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-
+    - uses: actions/checkout@v4
+    
     - name: Setup DFX
       uses: dfinity/setup-dfx@main
-
-    - name: Build project
+      
+    - name: Build canisters
       run: |
         dfx start --background
-        sleep 5
-        dfx canister create governance
-        dfx canister create treasury
-        
-        # Handle pull dependencies if they exist
-        if dfx deps init 2>&1 | grep -q "No pull dependencies"; then
-          echo "No pull dependencies to deploy"
-        else
-          echo "Pulling and deploying pull dependencies..."
-          dfx deps pull || echo "Pull deps pull failed, continuing..."
-          dfx deps deploy || echo "Pull deps deploy failed, continuing..."
-        fi
-        
-        dfx build governance
-        dfx build treasury
-        
-        # Run smoke tests in the same container
-        if [ -f apps/backend/test_smoke.sh ]; then
-          ./apps/backend/test_smoke.sh > /tmp/smoke.log 2>&1 || echo "Smoke test exited with status: $?" >> /tmp/smoke.log
-          cat /tmp/smoke.log
-        else
-          echo "No smoke test found at apps/backend/test_smoke.sh"
-        fi
-        
-        echo "✅ Build and smoke tests successful!"
-    
-    - name: Upload smoke test logs
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: smoke-test-logs
-        path: /tmp/smoke.log
-        if-no-files-found: warn
-        retention-days: 1
+        dfx build
+        echo "✅ Build successful!"

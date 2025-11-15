@@ -236,8 +236,8 @@ export default function OWPAnimation({ onComplete }: { onComplete: () => void })
 
             {/* HeliosHash Logo */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="relative w-24 h-24" style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.6))' }}>
-                <Image src="/hhdaologo.svg" alt="HeliosHash" fill className="object-contain" />
+                <div className="relative w-24 h-24" style={{ filter: 'drop-shadow(0 0 20px rgba(34,211,238,0.6))' }}>
+                <Image src="/hhdaologo.svg" alt="HeliosHash" fill className="object-contain" priority />
               </div>
             </div>
           </div>

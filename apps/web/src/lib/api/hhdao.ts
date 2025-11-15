@@ -48,8 +48,49 @@ export class HHDAOService {
   // Initialization is performed lazily inside each method when needed.
 
   private async initializeActor() {
+    // Ensure agent initialization only happens in the browser (client-side).
+    // Avoid creating an agent during SSR — that can cause relative requests
+    // to be routed to the Next.js server (resulting in 404s like
+    // GET /api/v2/status). If server-side code needs canister data it
+    // should use dedicated server-side adapters.
+    if (typeof window === 'undefined') {
+      return;
+    }
+    // Allow forcing all backend calls to use mocks during local dev. Set
+    // NEXT_PUBLIC_FORCE_MOCK=true in `apps/web/.env.local` to enable this.
+    if (process.env.NEXT_PUBLIC_FORCE_MOCK === 'true') {
+      // eslint-disable-next-line no-console
+      console.log('HHDAO: NEXT_PUBLIC_FORCE_MOCK=true - skipping agent initialization (using mocks)');
+      return;
+    }
+
+    const configuredHost = process.env.NEXT_PUBLIC_IC_HOST || 'http://127.0.0.1:4943';
+
+    // If the configured host is a local replica, probe it first from the
+    // browser. If it's unreachable, avoid initializing the agent so we don't
+    // trigger repeated connection-refused errors that can break client
+    // hydration in dev. In that case, consumers will fall back to dev mocks.
+    let replicaReachable = true;
+    if (typeof window !== 'undefined' && /127\.0\.0\.1|localhost/.test(configuredHost)) {
+      try {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), 1000);
+        await fetch(`${configuredHost}/api/v2/status`, { signal: controller.signal }).finally(() => clearTimeout(id));
+      } catch {
+        // local replica not reachable, skip agent initialization
+        // eslint-disable-next-line no-console
+        console.log('Local ICP replica unreachable at', configuredHost, '; using mock data.');
+        replicaReachable = false;
+      }
+    }
+
+    // If replica is not reachable, don't create the agent - consumers will use mocks
+    if (!replicaReachable) {
+      return;
+    }
+
     const agent = new HttpAgent({
-      host: process.env.NEXT_PUBLIC_IC_HOST || 'http://127.0.0.1:4943'
+      host: configuredHost
     });
 
     // Only fetch root key in the browser (client-side) and in non-production
@@ -59,11 +100,11 @@ export class HHDAOService {
     if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
       try {
         await agent.fetchRootKey();
-      } catch (_e) {
+      } catch (err) {
         // Non-fatal in dev; log and continue. This prevents Next.js from
         // crashing during SSR when a local replica is not running.
         // eslint-disable-next-line no-console
-        console.warn('Warning: agent.fetchRootKey() failed (client-side):', _e);
+        console.warn('Warning: agent.fetchRootKey() failed (client-side):', err);
       }
     }
 
@@ -107,9 +148,9 @@ export class HHDAOService {
 
       const result = await this.actor!.getDashboardData();
       return result;
-    } catch (_error) {
-      console.error('Error fetching dashboard data:', _error);
-      throw _error;
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+      throw error;
     }
   }
 
@@ -133,9 +174,9 @@ export class HHDAOService {
       }
       const result = await this.actor!.getProjects();
       return result;
-    } catch (_error) {
-      console.error('Error fetching projects:', _error);
-      throw _error;
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      throw error;
     }
   }
 
@@ -146,9 +187,9 @@ export class HHDAOService {
       }
       const result = await this.actor!.getProject(id);
       return result;
-    } catch (_error) {
-      console.error('Error fetching project:', _error);
-      throw _error;
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      throw error;
     }
   }
 
@@ -164,9 +205,9 @@ export class HHDAOService {
       }
       const result = await this.actor!.createProposal(proposalData);
       return result;
-    } catch (_error) {
-      console.error('Error creating proposal:', _error);
-      throw _error;
+    } catch (error) {
+      console.error('Error creating proposal:', error);
+      throw error;
     }
   }
 
@@ -175,11 +216,11 @@ export class HHDAOService {
       if (!this.actor) {
         await this.initializeActor();
       }
-      const result = await this.actor!.getCyclesBalance();
+  const result = await this.actor!.getCyclesBalance();
       return result;
-    } catch (_error) {
-      console.error('Error fetching cycles balance:', _error);
-      throw _error;
+    } catch (error) {
+      console.error('Error fetching cycles balance:', error);
+      throw error;
     }
   }
 }

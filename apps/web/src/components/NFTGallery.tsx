@@ -1,8 +1,7 @@
-# Create a fixed NFT Gallery component
-cat > src/components/NFTGallery.tsx << 'EOF'
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
+import type NFT from '@/types/nft';
 import { motion } from 'framer-motion';
 
 interface NFTProject {
@@ -17,8 +16,7 @@ interface NFTProject {
   status: 'active' | 'upcoming' | 'completed';
 }
 
-const NFTGallery: React.FC = () => {
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+const NFTGallery: React.FC<{ nfts?: NFT[] }> = ({ nfts = [] }) => {
 
   const nftProjects: NFTProject[] = [
     {
@@ -64,50 +62,6 @@ const NFTGallery: React.FC = () => {
       liveData: '12 Temples • 5.6 MW Total',
       badges: ['Community', 'Cultural'],
       status: 'active'
-    },
-    {
-      id: 'hydro-mining',
-      title: 'Hydro Mining Collective',
-      description: 'Hydropower based crypto mining in Himalayan regions',
-      category: 'Renewable Mining',
-      image: '/api/placeholder/400/300',
-      communitySize: 678,
-      liveData: 'Coming Soon • Q1 2024',
-      badges: ['Upcoming', 'High Potential'],
-      status: 'upcoming'
-    },
-    {
-      id: 'wind-farm',
-      title: 'Coastal Wind Farm',
-      description: 'Offshore wind energy generation with tokenized ownership',
-      category: 'Wind Energy DAO',
-      image: '/api/placeholder/400/300',
-      communitySize: 1543,
-      liveData: '200 Turbines • 150 MW',
-      badges: ['Marine', 'Scalable'],
-      status: 'active'
-    },
-    {
-      id: 'bio-energy',
-      title: 'Bio Energy Plants',
-      description: 'Agricultural waste to energy conversion facilities',
-      category: 'Circular Economy',
-      image: '/api/placeholder/400/300',
-      communitySize: 432,
-      liveData: '8 Plants • 25 MW Total',
-      badges: ['Rural', 'Sustainable'],
-      status: 'active'
-    },
-    {
-      id: 'geo-thermal',
-      title: 'Geothermal Energy',
-      description: 'Harnessing geothermal energy for baseload power generation',
-      category: 'Deep Tech Energy',
-      image: '/api/placeholder/400/300',
-      communitySize: 289,
-      liveData: 'Pilot Phase • 5 MW Test',
-      badges: ['Innovation', 'R&D'],
-      status: 'upcoming'
     }
   ];
 
@@ -136,7 +90,21 @@ const NFTGallery: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          {nftProjects.map((project, index) => (
+          {(
+            (nfts && nfts.length > 0)
+              ? (nfts.map((nft) => ({
+                  id: nft.id,
+                  title: nft.name,
+                  description: nft.description || '',
+                  category: nft.projectId || 'NFT',
+                  image: nft.image,
+                  communitySize: 0,
+                  liveData: '',
+                  badges: [],
+                  status: 'active' as const
+                })) as NFTProject[])
+              : nftProjects
+          ).map((project, index) => (
             <motion.div
               key={project.id}
               initial={{ opacity: 0, scale: 0.9 }}
@@ -144,7 +112,7 @@ const NFTGallery: React.FC = () => {
               transition={{ delay: index * 0.1 }}
               whileHover={{ scale: 1.05, y: -5 }}
               className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300 cursor-pointer"
-              onClick={() => setSelectedProject(project.id)}
+              onClick={() => { /* TODO: open project detail / navigate to project page */ }}
             >
               {/* NFT Image */}
               <div className="relative h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
@@ -206,7 +174,6 @@ const NFTGallery: React.FC = () => {
           <div className="inline-flex items-center gap-8 text-sm text-gray-600">
             <span>🎯 {nftProjects.length} Projects Total</span>
             <span>⚡ {nftProjects.filter(p => p.status === 'active').length} Active</span>
-            <span>🚀 {nftProjects.filter(p => p.status === 'upcoming').length} Upcoming</span>
             <span>👥 {nftProjects.reduce((acc, p) => acc + p.communitySize, 0).toLocaleString()} Community Members</span>
           </div>
         </motion.div>
@@ -216,6 +183,3 @@ const NFTGallery: React.FC = () => {
 };
 
 export default NFTGallery;
-EOF              Explore Community
-            </button>
-          </div>

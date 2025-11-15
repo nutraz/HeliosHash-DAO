@@ -1,19 +1,27 @@
 "use client"
 
 import { useState, useCallback, useEffect } from 'react'
-import OWPAnimation from '@/components/entry/OWPAnimation'
+import AshokaChakraEntry from '@/components/splash/AshokaChakraEntry'
 import AuthSelection from '@/components/auth/AuthSelection'
 import { useRouter } from 'next/navigation'
-import { useHHDAO } from '@/hooks/useHHDAO'
-// removed unused icons: CheckCircle, Wifi, WifiOff
+import { useAuth } from '@/contexts/AuthContext'
 
 type Stage = 'splash' | 'auth'
 
 export default function Home() {
+  const { isAuthenticated } = useAuth()
+  const router = useRouter()
+  
   // Allow skipping the splash in dev via env or query param
   const skipSplashEnv = process.env.NEXT_PUBLIC_DISABLE_SPLASH === 'true'
   const [stage, setStage] = useState<Stage>(skipSplashEnv ? 'auth' : 'splash')
-  const { loading, error } = useHHDAO()
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard')
+    }
+  }, [isAuthenticated, router])
 
   // Check query param on the client only (avoid useSearchParams during prerender)
   useEffect(() => {
@@ -26,35 +34,22 @@ export default function Home() {
       void _e
     }
   }, [])
-  const router = useRouter()
 
   const handleSplashComplete = useCallback(() => {
     setStage('auth')
   }, [])
 
-  // reference loading/error here to avoid unused-var in this file
-  void loading
-  void error
-
-  const handleAuthenticated = useCallback((authData: unknown) => {
-    // Redirect to dashboard after auth. Narrow unknown to avoid `any`.
-    try {
-      if (authData && typeof authData === 'object') {
-        // no-op: future use of authData can be safely narrowed here
-      }
-    } catch {
-      // ignore
-    }
+  const handleAuthenticated = useCallback(() => {
     router.push('/dashboard')
   }, [router])
 
   if (stage === 'splash') {
-    return <OWPAnimation onComplete={handleSplashComplete} />
+    return <AshokaChakraEntry onComplete={handleSplashComplete} />
   }
 
-  if (stage === 'auth') {
-    return <AuthSelection onAuthenticated={handleAuthenticated} />
-  }
-
-  return null
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <AuthSelection onAuthenticated={handleAuthenticated} />
+    </div>
+  )
 }

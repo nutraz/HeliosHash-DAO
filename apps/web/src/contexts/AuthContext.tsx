@@ -108,10 +108,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      // Determine identity provider. In local dev we may prefer a local
+      // identity provider (dfx replica), but if it's unreachable we should
+      // fall back to the public identity provider to avoid connection-refused
+      // errors that can interrupt client rendering.
+      let identityProvider = 'https://identity.ic0.app';
+      if (process.env.NEXT_PUBLIC_DFX_NETWORK !== 'ic') {
+        const localIi = `http://127.0.0.1:4943/?canisterId=${process.env.NEXT_PUBLIC_INTERNET_IDENTITY_CANISTER_ID}`;
+        try {
+          // probe local replica health endpoint
+          const controller = new AbortController();
+          const id = setTimeout(() => controller.abort(), 1000);
+          const host = 'http://127.0.0.1:4943';
+          await fetch(`${host}/api/v2/status`, { signal: controller.signal }).finally(() => clearTimeout(id));
+          // local replica reachable, prefer local II in dev
+          identityProvider = localIi;
+        } catch {
+          // fallback stays as https://identity.ic0.app
+          // eslint-disable-next-line no-console
+          console.warn('Local identity provider unreachable, falling back to https://identity.ic0.app');
+        }
+      }
+
       await authClient.login({
-        identityProvider: process.env.NEXT_PUBLIC_DFX_NETWORK === "ic"
-          ? "https://identity.ic0.app"
-          : `http://127.0.0.1:4943/?canisterId=${process.env.NEXT_PUBLIC_INTERNET_IDENTITY_CANISTER_ID}`,
+        identityProvider,
         onSuccess: async () => {
           await handleAuthentication(authClient.getIdentity());
         },

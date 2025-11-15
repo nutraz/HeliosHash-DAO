@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect } from 'react';
+import NextImage from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface SplashProps {
@@ -64,11 +65,11 @@ export default function SplashScreen({ delay = 0.3, duration = 1.0, particleCoun
 
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
             <motion.div variants={logoVariant} className="pointer-events-auto text-center">
-              {showLogo ? (
-                <div className="w-28 h-28 mx-auto rounded-lg bg-white/5 flex items-center justify-center shadow-lg">
-                  {/* Replace with your svg/logo file */}
-                  <img src="/your-logo.svg" alt="HeliosHash" className="w-20 h-20" />
-                </div>
+                  {showLogo ? (
+                    <div className="w-28 h-28 mx-auto rounded-lg bg-white/5 flex items-center justify-center shadow-lg">
+                      {/* Replace with your svg/logo file */}
+                      <NextImage src="/your-logo.svg" alt="HeliosHash" width={80} height={80} />
+                    </div>
               ) : (
                 <div className="text-3xl font-bold text-white">HeliosHash</div>
               )}

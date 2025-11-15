@@ -66,8 +66,8 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
 
       {/* Centered logo at top of auth screen */}
       <div className="absolute top-8 left-0 right-0 flex justify-center pointer-events-none">
-        <div className="w-28 h-28 relative pointer-events-none">
-          <Image src="/hhdaologo.svg" alt="HHDAO logo" fill className="object-contain" />
+          <div className="w-28 h-28 relative pointer-events-none">
+          <Image src="/hhdaologo.svg" alt="HHDAO logo" fill className="object-contain" priority />
         </div>
       </div>
 

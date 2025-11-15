@@ -1,11 +1,30 @@
- "use client";
+"use client";
 
- import React from 'react';
- import HHDAODashboard from '@/components/HHDAODashboard';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
+import HHDAODashboard from '@/components/HHDAODashboard';
+import LoadingScreen from '@/components/splash/LoadingScreen';
 
- const DashboardPage = () => {
-   return <HHDAODashboard />;
- };
+const DashboardPage = () => {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
 
- export default DashboardPage;
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/');
+    }
+  }, [isLoading, isAuthenticated, router]);
 
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  return <HHDAODashboard />;
+};
+
+export default DashboardPage;

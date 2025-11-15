@@ -1,684 +1,143 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Gift, ShoppingBag, MapPin } from 'lucide-react';
+import { useTheme } from '@/lib/theme';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import DashboardHeader from './DashboardHeader';
 
-// Types
-type ColorKey = 'green' | 'yellow' | 'orange' | 'blue' | 'grey';
+type Stage = 'planning' | 'development' | 'testing' | 'deployment' | 'completed';
 
-interface Opportunity {
-	type: string;
-	positions?: number;
-	amount?: string;
-}
+interface Opportunity { id: string; title: string; description: string; budget: number; status: 'Open' | 'Closed' }
+interface Project { id: string; title: string; description: string; stage: Stage; opportunities: Opportunity[] }
 
-interface Project {
-	id: number;
-	name: string;
-	stage: string;
-	color: ColorKey;
-	size: string;
-	energySupply: string;
-	surplus: string;
-	completion: number;
-	funding: string;
-	opportunities: Opportunity[];
-}
-import { 
-  Award, Users, TrendingUp, MapPin, Plus, 
-  Wallet, Gift, ShoppingBag, Map, MessageSquare, 
-  FileText, DollarSign, Send, 
-  ArrowDownLeft, Image as ImageIcon, Video, 
-  Briefcase, Zap, Building, Shield, Wrench, Eye,
-  Store, ChevronRight, CheckCircle, Home
-} from 'lucide-react';
-import NextImage from 'next/image';
+const HHDAODashboard: React.FC = () => {
+  const { theme } = useTheme();
+  const { user, isAuthenticated } = useAuth();
+  const router = useRouter();
+  const [filterStage, setFilterStage] = useState<Stage | 'all'>('all');
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-const HHDAODashboard = () => {
-	const [currentView, setCurrentView] = useState<'dashboard' | 'rewards' | 'map' | 'community' | 'project-detail'>('dashboard');
-	const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-	const [filterStage, setFilterStage] = useState<string>('all');
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
 
-	const userData = {
-		name: "Rahul Kumar",
-		pfp: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul",
-		rank: "Investor & Collaborator",
-		communityRole: "Community Manager",
-		stats: {
-			projectsStarted: 3,
-			projectsHelped: 12,
-			membersAdded: 45,
-			nftCollections: 8
-		},
-		tokenBalance: 15000,
-		connectedCommunities: [
-			"Solar Energy DAO", "Green Building Collective", "Tech Innovation Hub"
-		]
-	};
+  useEffect(() => {
+    // Load projects (mock data for now)
+    setProjects([
+      { id: 'p1', title: 'Baghpat Solar Grid', description: 'Village solar microgrid', stage: 'development', opportunities: [{ id: 'o1', title: 'Panel Supplier', description: 'Supply PV panels', budget: 50000, status: 'Open' }] },
+      { id: 'p2', title: 'Mining Farm (pilot)', description: 'Renewable-powered mining pilot', stage: 'planning', opportunities: [] }
+    ]);
+  }, []);
 
-	const projects: Project[] = [
-		{
-			id: 1,
-			name: "Solar Bitcoin Mining Hub",
-			stage: "functioning",
-			color: "green",
-			size: "5 MW",
-			energySupply: "Bitcoin Mining Operation",
-			surplus: "School & Hospital",
-			completion: 100,
-			funding: "₹2.5 Cr",
-			opportunities: [
-				{ type: "Security Guard", positions: 2 },
-				{ type: "Electrical Inspector", positions: 1 },
-				{ type: "Maintenance Tech", positions: 3 }
-			]
-		},
-		{
-			id: 2,
-			name: "EV Charging Network",
-			stage: "tech-setup",
-			color: "yellow",
-			size: "2 MW",
-			energySupply: "EV Charging Stations",
-			surplus: "Community Center",
-			completion: 65,
-			funding: "₹1.2 Cr",
-			opportunities: [
-				{ type: "Civil Engineer", positions: 1 },
-				{ type: "Funding Required", amount: "₹30L" },
-				{ type: "Supplier - Charging Units", positions: 1 }
-			]
-		},
-		{
-			id: 3,
-			name: "Data Center Green Power",
-			stage: "solar-setup",
-			color: "orange",
-			size: "10 MW",
-			energySupply: "Data Center",
-			surplus: "Hospital",
-			completion: 45,
-			funding: "₹5 Cr",
-			opportunities: [
-				{ type: "Solar Panel Supplier", positions: 1 },
-				{ type: "Civil Contractor", positions: 1 },
-				{ type: "Project Auditor", positions: 1 }
-			]
-		},
-		{
-			id: 4,
-			name: "Temple Community Solar",
-			stage: "civil-works",
-			color: "blue",
-			size: "500 KW",
-			energySupply: "Temple & Community",
-			surplus: "Local Residents",
-			completion: 30,
-			funding: "₹60L",
-			opportunities: [
-				{ type: "Electrical Contractor", positions: 2 },
-				{ type: "NFT Art Creator", positions: 1 },
-				{ type: "Tech Support", positions: 1 }
-			]
-		},
-		{
-			id: 5,
-			name: "School Solar Initiative",
-			stage: "applied",
-			color: "grey",
-			size: "300 KW",
-			energySupply: "School Campus",
-			surplus: "Students & Staff",
-			completion: 5,
-			funding: "₹40L",
-			opportunities: [
-				{ type: "Funding Required", amount: "₹40L" },
-				{ type: "Land Survey", positions: 1 },
-				{ type: "Community Manager", positions: 1 }
-			]
-		}
-	];
+  const filtered = useMemo(() => (filterStage === 'all' ? projects : projects.filter(p => p.stage === filterStage)), [projects, filterStage]);
 
-	const rewardsMarketplace = [
-		{ name: "Travel", icon: "✈️", vendors: ["MakeMyTrip", "Yatra", "Goibibo"] },
-		{ name: "Food", icon: "🍔", vendors: ["Zomato", "Swiggy", "Dunzo"] },
-		{ name: "Hotels", icon: "🏨", vendors: ["OYO", "Airbnb", "Booking.com"] },
-		{ name: "Shopping", icon: "🛍️", vendors: ["Amazon", "Flipkart", "Myntra"] },
-		{ name: "Entertainment", icon: "🎬", vendors: ["BookMyShow", "Netflix"] }
-	];
+  if (!user || !isAuthenticated) {
+    return null; // Will redirect via useEffect
+  }
 
-	const getColorClasses = (color: ColorKey): { bg: string; text: string } => {
-		const colors: Record<string, { bg: string; text: string }> = {
-			green: { bg: 'bg-green-500', text: 'text-green-400' },
-			yellow: { bg: 'bg-yellow-500', text: 'text-yellow-400' },
-			orange: { bg: 'bg-orange-500', text: 'text-orange-400' },
-			blue: { bg: 'bg-blue-500', text: 'text-blue-400' },
-			grey: { bg: 'bg-gray-500', text: 'text-gray-400' }
-		};
-		return colors[String(color)] || colors.grey;
-	};
+  // Get user stats (mock for now, will connect to canister later)
+  const userStats = {
+    contributions: 42,
+    rewards: 320,
+    projectCount: projects.length
+  };
 
-	const renderDashboard = () => (
-		<div className="space-y-6">
-			<div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl">
-				<div className="flex items-start justify-between">
-					<div className="flex items-center space-x-4">
-								<NextImage
-									src={userData.pfp}
-									alt={`Profile of ${userData.name}`}
-									width={80}
-									height={80}
-									className="rounded-full border-4 border-white shadow-lg"
-								/>
-						<div>
-							<h2 className="text-2xl font-bold">{userData.name}</h2>
-							<div className="flex items-center space-x-2 mt-1">
-								<Award className="w-5 h-5" />
-								<span className="text-blue-100">{userData.rank}</span>
-							</div>
-							<div className="flex items-center space-x-2 mt-1">
-								<Users className="w-4 h-4" />
-								<span className="text-sm text-blue-100">{userData.communityRole}</span>
-							</div>
-						</div>
-					</div>
-					<Wallet className="w-8 h-8" />
-				</div>
+  return (
+    <div className={`min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white text-gray-900'}`}>
+      <div className="container mx-auto p-6">
+        <DashboardHeader />
 
-				<div className="mt-6 bg-white bg-opacity-20 rounded-xl p-4">
-					<div className="flex items-center justify-between">
-						<div>
-							<p className="text-sm text-blue-100">Token Balance</p>
-							<p className="text-3xl font-bold">{userData.tokenBalance.toLocaleString()} HHD</p>
-						</div>
-						<div className="flex space-x-2">
-							<button className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center space-x-1">
-								<Send size={16} />
-								<span>Send</span>
-							</button>
-							<button className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center space-x-1">
-								<ArrowDownLeft size={16} />
-								<span>Receive</span>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="p-4 rounded shadow-sm bg-white dark:bg-gray-800">
+            <div className="text-sm text-gray-500">Contributions</div>
+            <div className="text-xl font-bold">{userStats.contributions}</div>
+          </div>
+          <div className="p-4 rounded shadow-sm bg-white dark:bg-gray-800">
+            <div className="text-sm text-gray-500">Rewards</div>
+            <div className="text-xl font-bold">{userStats.rewards} HHU</div>
+          </div>
+          <div className="p-4 rounded shadow-sm bg-white dark:bg-gray-800">
+            <div className="text-sm text-gray-500">Projects</div>
+            <div className="text-xl font-bold">{userStats.projectCount}</div>
+          </div>
+        </div>
 
-			<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-					<div className="flex items-center space-x-2 text-green-400 mb-2">
-						<TrendingUp size={20} />
-						<span className="text-sm font-medium">Projects Started</span>
-					</div>
-					<p className="text-3xl font-bold text-white">{userData.stats.projectsStarted}</p>
-				</div>
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-					<div className="flex items-center space-x-2 text-blue-400 mb-2">
-						<CheckCircle size={20} />
-						<span className="text-sm font-medium">Projects Helped</span>
-					</div>
-					<p className="text-3xl font-bold text-white">{userData.stats.projectsHelped}</p>
-				</div>
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-					<div className="flex items-center space-x-2 text-purple-400 mb-2">
-						<Users size={20} />
-						<span className="text-sm font-medium">Members Added</span>
-					</div>
-					<p className="text-3xl font-bold text-white">{userData.stats.membersAdded}</p>
-				</div>
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-		            <div className="flex items-center space-x-2 text-orange-400 mb-2">
-		            	<ImageIcon size={20} />
-						<span className="text-sm font-medium">NFT Collections</span>
-					</div>
-					<p className="text-3xl font-bold text-white">{userData.stats.nftCollections}</p>
-				</div>
-			</div>
+        {/* Projects & Actions Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <div className="p-4 rounded bg-white dark:bg-gray-800">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="font-semibold">Projects</h2>
+                <div className="space-x-2">
+                  <button onClick={() => setFilterStage('all')} className={`px-2 py-1 rounded text-sm ${filterStage === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>All</button>
+                  <button onClick={() => setFilterStage('development')} className={`px-2 py-1 rounded text-sm ${filterStage === 'development' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Development</button>
+                  <button onClick={() => setFilterStage('planning')} className={`px-2 py-1 rounded text-sm ${filterStage === 'planning' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Planning</button>
+                </div>
+              </div>
 
-			<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-				<h3 className="text-xl font-bold text-white mb-4">Connected Communities</h3>
-				<div className="flex flex-wrap gap-2">
-						{userData.connectedCommunities.map((community) => (
-							<span key={community} className="bg-blue-900 bg-opacity-50 text-blue-300 border border-blue-700 px-4 py-2 rounded-full text-sm font-medium">
-								{community}
-							</span>
-						))}
-				</div>
-			</div>
+              <div className="space-y-3">
+                {filtered.map(p => (
+                  <div key={p.id} onClick={() => setSelectedProject(p)} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <div className="font-medium">{p.title}</div>
+                        <div className="text-sm text-gray-500">{p.description}</div>
+                      </div>
+                      <MapPin className="text-blue-500" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
-			<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-				<button 
-					onClick={() => setCurrentView('rewards')}
-					className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl p-6 hover:shadow-2xl hover:scale-105 transition-all"
-				>
-					<Gift className="w-8 h-8 mb-2" />
-					<p className="font-bold">Rewards Exchange</p>
-					<p className="text-xs mt-1 opacity-90">Redeem tokens</p>
-				</button>
-				<button 
-					onClick={() => setCurrentView('map')}
-					className="bg-gradient-to-r from-green-600 to-teal-600 text-white rounded-xl p-6 hover:shadow-2xl hover:scale-105 transition-all"
-				>
-					<Map className="w-8 h-8 mb-2" />
-					<p className="font-bold">Explore Projects</p>
-					<p className="text-xs mt-1 opacity-90">Map view</p>
-				</button>
-				<button 
-					onClick={() => setCurrentView('community')}
-					className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl p-6 hover:shadow-2xl hover:scale-105 transition-all"
-				>
-					<MessageSquare className="w-8 h-8 mb-2" />
-					<p className="font-bold">Community Hub</p>
-					<p className="text-xs mt-1 opacity-90">Connect & discuss</p>
-				</button>
-			</div>
-		</div>
-	);
+          <div>
+            <div className="p-4 rounded bg-white dark:bg-gray-800">
+              <h3 className="font-semibold mb-2">Quick Actions</h3>
+              <button className="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition" onClick={() => router.push('/rewards')}><Gift className="mr-2" /> Rewards</button>
+              <button className="w-full px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition" onClick={() => router.push('/opportunities')}><ShoppingBag className="mr-2" /> Vendors</button>
+            </div>
+          </div>
+        </div>
 
-	const renderRewards = () => (
-		<div className="space-y-6">
-			<div className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-xl p-6 mb-6 shadow-xl">
-				<p className="text-lg mb-2">Available Balance</p>
-				<p className="text-4xl font-bold">{userData.tokenBalance.toLocaleString()} HHD</p>
-				<p className="text-sm mt-2 opacity-90">≈ ₹{(userData.tokenBalance * 10).toLocaleString()}</p>
-			</div>
-
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-				{rewardsMarketplace.map((category) => (
-					<div key={category.name} className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg hover:border-blue-500 transition-all">
-						<div className="flex items-center space-x-3 mb-4">
-							<span className="text-4xl">{category.icon}</span>
-							<h3 className="text-xl font-bold text-white">{category.name}</h3>
-						</div>
-						<div className="space-y-2">
-							{category.vendors.map((vendor) => (
-								<button 
-									key={vendor}
-									className="w-full bg-gray-900 bg-opacity-50 hover:bg-blue-900 hover:bg-opacity-30 text-left px-4 py-3 rounded-lg transition-colors flex items-center justify-between group border border-gray-700 hover:border-blue-500"
-								>
-									<span className="text-gray-200 font-medium">{vendor}</span>
-									<ShoppingBag className="text-gray-500 group-hover:text-blue-400" size={18} />
-								</button>
-							))}
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-
-	const renderMap = () => {
-		const filteredProjects = filterStage === 'all' 
-			? projects 
-			: projects.filter(p => p.stage === filterStage);
-
-		return (
-			<div className="space-y-6">
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-4 shadow-lg">
-					<div className="flex flex-wrap gap-2">
-						<button 
-							onClick={() => setFilterStage('all')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-								filterStage === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-							}`}
-						>
-							All Projects
-						</button>
-						<button 
-							onClick={() => setFilterStage('functioning')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-								filterStage === 'functioning' ? 'bg-green-600 text-white' : 'bg-green-900 bg-opacity-30 text-green-400 hover:bg-green-900 hover:bg-opacity-50 border border-green-700'
-							}`}
-						>
-							<span className="w-3 h-3 rounded-full bg-green-500"></span>
-							<span>Functioning</span>
-						</button>
-						<button 
-							onClick={() => setFilterStage('tech-setup')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-								filterStage === 'tech-setup' ? 'bg-yellow-600 text-white' : 'bg-yellow-900 bg-opacity-30 text-yellow-400 hover:bg-yellow-900 hover:bg-opacity-50 border border-yellow-700'
-							}`}
-						>
-							<span className="w-3 h-3 rounded-full bg-yellow-500"></span>
-							<span>Tech Setup</span>
-						</button>
-						<button 
-							onClick={() => setFilterStage('solar-setup')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-								filterStage === 'solar-setup' ? 'bg-orange-600 text-white' : 'bg-orange-900 bg-opacity-30 text-orange-400 hover:bg-orange-900 hover:bg-opacity-50 border border-orange-700'
-							}`}
-						>
-							<span className="w-3 h-3 rounded-full bg-orange-500"></span>
-							<span>Solar Setup</span>
-						</button>
-						<button 
-							onClick={() => setFilterStage('civil-works')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-								filterStage === 'civil-works' ? 'bg-blue-600 text-white' : 'bg-blue-900 bg-opacity-30 text-blue-400 hover:bg-blue-900 hover:bg-opacity-50 border border-blue-700'
-							}`}
-						>
-							<span className="w-3 h-3 rounded-full bg-blue-500"></span>
-							<span>Civil Works</span>
-						</button>
-						<button 
-							onClick={() => setFilterStage('applied')}
-							className={`px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2 ${
-								filterStage === 'applied' ? 'bg-gray-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700 border border-gray-600'
-							}`}
-						>
-							<span className="w-3 h-3 rounded-full bg-gray-500"></span>
-							<span>Applied</span>
-						</button>
-					</div>
-				</div>
-
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-					<div className="relative bg-gradient-to-br from-gray-900 to-gray-800 rounded-lg h-96 overflow-hidden border border-gray-700">
-						<div className="absolute inset-0 opacity-10">
-							<Map className="w-full h-full text-blue-500" />
-						</div>
-						{filteredProjects.map((project) => {
-							const colorClasses = getColorClasses(project.color);
-							return (
-								<button
-									key={project.id}
-									onClick={() => setSelectedProject(project)}
-									className={`absolute w-10 h-10 rounded-full flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 shadow-2xl hover:scale-125 transition-transform ${colorClasses.bg} ring-4 ring-gray-900`}
-									style={{
-										left: `${(project.id * 15) + 20}%`,
-										top: `${(project.id * 12) + 25}%`
-									}}
-								>
-									<MapPin className="text-white" size={22} />
-								</button>
-							);
-						})}
-					</div>
-				</div>
-
-				{/* Non-interactive placeholder — remove interactive button to avoid actions under Create Projects */}
-				<div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-4 transition-all flex items-center justify-center space-x-2 font-bold text-lg shadow-xl opacity-90 select-none" role="note" aria-disabled="true">
-					<Plus size={24} />
-					<span>Create / Apply for Project</span>
-				</div>
-
-				<div className="space-y-4">
-					{filteredProjects.map((project) => {
-						const colorClasses = getColorClasses(project.color);
-						return (
-							<button
-								key={project.id}
-								onClick={() => setSelectedProject(project)}
-								className="w-full bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg hover:shadow-2xl hover:border-blue-500 transition-all text-left"
-							>
-								<div className="flex items-start justify-between">
-									<div className="flex items-start space-x-4">
-										<div className={`w-12 h-12 rounded-full ${colorClasses.bg} flex items-center justify-center shadow-lg`}>
-											<MapPin className="text-white" size={24} />
-										</div>
-										<div>
-											<h3 className="text-xl font-bold text-white">{project.name}</h3>
-											<p className="text-sm text-gray-400 mt-1">
-												{project.size} • {project.energySupply}
-											</p>
-											<div className="mt-2 flex items-center space-x-4 text-sm">
-												<span className="text-gray-400">Progress: {project.completion}%</span>
-												<span className="text-gray-600">•</span>
-												<span className="text-green-400 font-medium">{project.funding}</span>
-											</div>
-										</div>
-									</div>
-									<ChevronRight className="text-gray-600" size={24} />
-								</div>
-							</button>
-						);
-					})}
-				</div>
-			</div>
-		);
-	};
-
-	const renderProjectDetail = () => {
-		if (!selectedProject) return null;
-
-		const colorClasses = getColorClasses(selectedProject.color);
-
-		return (
-			<div className="space-y-6">
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-					<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-						<div>
-							<p className="text-sm text-gray-400 mb-1">Size</p>
-							<p className="text-2xl font-bold text-white">{selectedProject.size}</p>
-						</div>
-						<div>
-							<p className="text-sm text-gray-400 mb-1">Completion</p>
-							<p className="text-2xl font-bold text-green-400">{selectedProject.completion}%</p>
-						</div>
-						<div>
-							<p className="text-sm text-gray-400 mb-1">Funding</p>
-							<p className="text-2xl font-bold text-blue-400">{selectedProject.funding}</p>
-						</div>
-						<div>
-							<p className="text-sm text-gray-400 mb-1">Stage</p>
-							<p className={`text-lg font-bold capitalize ${colorClasses.text}`}>
-								{selectedProject.stage.replace('-', ' ')}
-							</p>
-						</div>
-					</div>
-
-					<div className="mt-6 space-y-3">
-						<div className="flex items-start space-x-3">
-							<Zap className="text-orange-400 mt-1" size={20} />
-							<div>
-								<p className="font-semibold text-white">Prime Consumer</p>
-								<p className="text-gray-400">{selectedProject.energySupply}</p>
-							</div>
-						</div>
-						<div className="flex items-start space-x-3">
-							<Building className="text-blue-400 mt-1" size={20} />
-							<div>
-								<p className="font-semibold text-white">Surplus Energy Consumer</p>
-								<p className="text-gray-400">{selectedProject.surplus}</p>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-					<h3 className="text-xl font-bold text-white mb-4 flex items-center space-x-2">
-						<Briefcase className="text-blue-400" />
-						<span>Project Opportunities</span>
-					</h3>
-					<div className="space-y-3">
-						{selectedProject.opportunities.map((opp) => (
-							<div key={opp.type} className="border border-gray-700 rounded-lg p-4 hover:border-blue-500 transition-colors bg-gray-900 bg-opacity-50">
-								<div className="flex items-center justify-between">
-									<div className="flex items-center space-x-3">
-										{opp.type.includes('Funding') && <DollarSign className="text-green-400" size={20} />}
-										{opp.type.includes('Guard') && <Shield className="text-blue-400" size={20} />}
-										{opp.type.includes('Engineer') && <Wrench className="text-orange-400" size={20} />}
-										{opp.type.includes('Inspector') && <Eye className="text-purple-400" size={20} />}
-										{opp.type.includes('Supplier') && <Store className="text-indigo-400" size={20} />}
-										{opp.type.includes('NFT') && <ImageIcon className="text-pink-400" size={20} />}
-										{opp.type.includes('Contractor') && <Building className="text-gray-400" size={20} />}
-										{opp.type.includes('Tech') && <Wrench className="text-blue-400" size={20} />}
-										{opp.type.includes('Manager') && <Users className="text-purple-400" size={20} />}
-										{opp.type.includes('Survey') && <MapPin className="text-orange-400" size={20} />}
-										<div>
-											<p className="font-semibold text-white">{opp.type}</p>
-											{opp.positions && (
-												<p className="text-sm text-gray-400">{opp.positions} position{opp.positions > 1 ? 's' : ''} available</p>
-											)}
-											{opp.amount && (
-												<p className="text-sm text-green-400 font-medium">{opp.amount} required</p>
-											)}
-										</div>
-									</div>
-									<button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
-										Apply
-									</button>
-								</div>
-							</div>
-						))}
-					</div>
-				</div>
-
-				<button 
-					onClick={() => setCurrentView('community')}
-					className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl p-4 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center space-x-2 font-bold text-lg shadow-xl"
-				>
-					<MessageSquare size={24} />
-					<span>Open Community Hub</span>
-				</button>
-			</div>
-		);
-	};
-
-	const renderCommunity = () => (
-		<div className="space-y-6">
-			<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-				<h3 className="text-lg font-bold text-white mb-4">Share with Community</h3>
-				<textarea 
-					className="w-full bg-gray-900 border border-gray-700 text-white rounded-lg p-4 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-					rows={4}
-					placeholder="What's on your mind? Share updates, ideas, or questions..."
-				/>
-				<div className="flex items-center justify-between mt-4">
-					<div className="flex space-x-2">
-						<button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-							<ImageIcon className="text-gray-400" size={20} />
-						</button>
-						<button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-							<Video className="text-gray-400" size={20} />
-						</button>
-						<button className="p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
-							<FileText className="text-gray-400" size={20} />
-						</button>
-					</div>
-					<button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
-						Post
-					</button>
-				</div>
-			</div>
-
-			<div className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-				<h3 className="text-lg font-bold text-white mb-4">Community Moderators</h3>
-				<div className="space-y-3">
-					{['Priya Singh', 'Amit Patel', 'Sarah Johnson'].map((mod) => (
-						<div key={mod} className="flex items-center justify-between">
-							<div className="flex items-center space-x-3">
-								<NextImage
-									src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${mod}`}
-									alt={mod}
-									width={40}
-									height={40}
-									className="rounded-full border-2 border-gray-700"
-								/>
-								<div>
-									<p className="font-semibold text-white">{mod}</p>
-									<p className="text-xs text-gray-400">Moderator</p>
-								</div>
-							</div>
-							<button className="bg-blue-900 bg-opacity-50 text-blue-400 border border-blue-700 px-4 py-1 rounded-lg hover:bg-blue-900 hover:bg-opacity-70 transition-colors text-sm font-medium">
-								Message
-							</button>
-						</div>
-					))}
-				</div>
-			</div>
-
-			<div className="space-y-4">
-				<h3 className="text-lg font-bold text-white">Recent Activity</h3>
-				{[1, 2, 3].map((post) => (
-					<div key={post} className="bg-gray-800 border border-gray-700 rounded-xl p-6 shadow-lg">
-						<div className="flex items-start space-x-3">
-							<NextImage
-								src={`https://api.dicebear.com/7.x/avataaars/svg?seed=post${post}`}
-								alt={`User ${post}`}
-								width={48}
-								height={48}
-								className="rounded-full border-2 border-gray-700"
-							/>
-							<div className="flex-1">
-								<div className="flex items-center justify-between mb-2">
-									<div>
-										<p className="font-semibold text-white">Community Member {post}</p>
-										<p className="text-xs text-gray-400">2 hours ago</p>
-									</div>
-								</div>
-								<p className="text-gray-300 mb-3">
-									Excited to share progress on our solar project! We have completed the civil works phase and moving to installation next week. 🌞
-								</p>
-								<div className="flex items-center space-x-4 text-sm text-gray-400">
-									<button className="hover:text-blue-400 transition-colors">👍 12 Likes</button>
-									<button className="hover:text-blue-400 transition-colors">💬 5 Comments</button>
-									<button className="hover:text-blue-400 transition-colors">🔄 Share</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				))}
-			</div>
-		</div>
-	);
-
-	return (
-		<div className="min-h-screen bg-gray-900 p-4 md:p-8">
-			<div className="max-w-7xl mx-auto">
-				<div className="mb-6 flex items-center justify-between">
-					<div className="flex items-center space-x-4">
-						{currentView !== 'dashboard' && (
-							<button 
-								onClick={() => {
-									setCurrentView('dashboard');
-									setSelectedProject(null);
-								}}
-								className="text-blue-400 hover:text-blue-300 font-medium flex items-center space-x-2"
-							>
-								<Home size={20} />
-								<span>← Back to Dashboard</span>
-							</button>
-						)}
-					</div>
-          
-					<div className="flex items-center space-x-4">
-						<h1 className="text-3xl md:text-4xl font-bold text-white">HHDAO</h1>
-						<div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-xl">
-							<Zap className="text-white" size={24} />
-						</div>
-					</div>
-				</div>
-
-				{selectedProject != null && (currentView === 'map' || currentView === 'project-detail') ? (
-					<div className="mb-6">
-						<h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{selectedProject.name}</h2>
-						<button 
-							onClick={() => setSelectedProject(null)}
-							className="text-gray-400 hover:text-gray-300 text-sm"
-						>
-							← Back to all projects
-						</button>
-					</div>
-				) : (
-					<div className="mb-6">
-						<h2 className="text-2xl md:text-3xl font-bold text-white">
-							{currentView === 'dashboard' && 'Dashboard'}
-							{currentView === 'rewards' && 'Rewards Marketplace'}
-							{currentView === 'map' && 'Project Map'}
-							{currentView === 'community' && 'Community Hub'}
-						</h2>
-					</div>
-				)}
-
-				{currentView === 'dashboard' && renderDashboard()}
-				{currentView === 'rewards' && renderRewards()}
-				{currentView === 'map' && !selectedProject && renderMap()}
-				{currentView === 'community' && renderCommunity()}
-				{selectedProject && (currentView === 'map' || currentView === 'project-detail') && renderProjectDetail()}
-			</div>
-		</div>
-	);
+        {/* Selected Project Detail */}
+        {selectedProject && (
+          <div className="mt-6 p-4 rounded bg-white dark:bg-gray-800">
+            <h3 className="font-semibold">{selectedProject.title}</h3>
+            <p className="text-sm text-gray-500">{selectedProject.description}</p>
+            <div className="mt-3">
+              <h4 className="font-medium">Opportunities</h4>
+              <div className="space-y-2 mt-2">
+                {selectedProject.opportunities.length > 0 ? (
+                  selectedProject.opportunities.map(o => (
+                    <div key={o.id} className="p-2 border rounded">
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-medium">{o.title}</div>
+                          <div className="text-xs text-gray-500">{o.description}</div>
+                        </div>
+                        <div className="text-sm">${o.budget.toLocaleString()}</div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-400">No opportunities available yet.</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default HHDAODashboard;
+

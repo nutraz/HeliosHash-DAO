@@ -32,6 +32,8 @@ model User {
   dateOfBirth           DateTime?
   governmentId          String?   // Aadhaar, PAN, etc.
   governmentIdType      GovernmentIdType?
+  passwordHash          String    // Store hashed passwords
+  lastLogin             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 

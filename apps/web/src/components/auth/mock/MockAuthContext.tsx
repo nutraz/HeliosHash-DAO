@@ -24,35 +24,26 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate checking for existing session
-    const checkSession = () => {
-      const savedUser = localStorage.getItem('mockUser');
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
-      }
+    // Simulate async session check (in-memory only)
+    const timer = setTimeout(() => {
       setIsLoading(false);
-    };
-
-    const timer = setTimeout(checkSession, 1000);
+    }, 500);
     return () => clearTimeout(timer);
   }, []);
 
   const login = () => {
-    // Create a mock user
+    // Create a mock user (in-memory only)
     const mockUser: MockUser = {
       id: 'user-123',
       name: 'Demo User',
-      principal: 'rrkah-fqaaa-aaaaa-aaaaq-cai', // Mock principal
+      principal: 'rrkah-fqaaa-aaaaa-aaaaq-cai',
       avatar: 'https://picsum.photos/seed/user123/200/200.jpg'
     };
-
     setUser(mockUser);
-    localStorage.setItem('mockUser', JSON.stringify(mockUser));
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('mockUser');
   };
 
   return (

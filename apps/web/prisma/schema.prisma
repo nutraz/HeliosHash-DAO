@@ -1,3 +1,41 @@
+model DAOProposal {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  creatorId    String
+  user         User?    @relation(fields: [creatorId], references: [id])
+  votes        Vote[]   @relation("ProposalVotes")
+}
+
+model Vote {
+  id           String   @id @default(cuid())
+  userId       String
+  proposalId   String
+  createdAt    DateTime @default(now())
+  user         User?    @relation(fields: [userId], references: [id])
+  proposal     DAOProposal @relation("ProposalVotes", fields: [proposalId], references: [id])
+}
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  role         String   @default("USER")
+  emailVerified Boolean @default(false)
+  kycStatus    String   @default("PENDING")
+  lastLogin    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  proposals    DAOProposal[]
+  votes        Vote[]
+  consents     UserConsent[]
+  auditLogs    PrivacyAuditLog[]
+  encryptedData EncryptedUserData?
+}
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -8,31 +46,36 @@ generator client {
 }
 
 model UserConsent {
-  id              String   @id @default(cuid())
-  userId          String
-  consentType     String
-  granted         Boolean
-  grantedAt       DateTime @default(now())
-  withdrawnAt     DateTime?
-  ipAddressHash   String?
-  userAgentHash   String?
+  user         User?    @relation(fields: [userId], references: [id])
+  id            String    @id @default(cuid())
+  userId        String
+  consentType   String
+  granted       Boolean
+  grantedAt     DateTime  @default(now())
+  withdrawnAt   DateTime?
+  ipAddressHash String?
+  userAgentHash String?
+
   @@index([userId])
   @@index([consentType])
 }
 
 model PrivacyAuditLog {
-  id          String   @id @default(cuid())
-  userId      String
-  action      String
-  details     String
-  timestamp   DateTime @default(now())
-  ipHash      String?
+  user         User?    @relation(fields: [userId], references: [id])
+  id        String   @id @default(cuid())
+  userId    String
+  action    String
+  details   String
+  timestamp DateTime @default(now())
+  ipHash    String?
+
   @@index([userId])
   @@index([action])
   @@index([timestamp])
 }
 
 model EncryptedUserData {
+  user         User?    @relation(fields: [userId], references: [id])
   id              String   @id @default(cuid())
   userId          String   @unique
   encryptedData   String

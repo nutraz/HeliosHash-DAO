@@ -7,7 +7,22 @@ const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET!);
 // POST: login and set session cookie
 export async function POST(request: NextRequest) {
   try {
-    const { email, password } = await request.json();
+    // CSRF protection
+    const { validateOrigin } = await import('@/lib/middleware/csrf');
+    if (!validateOrigin(request)) {
+      return NextResponse.json({ error: 'Invalid origin' }, { status: 403 });
+    }
+    // Rate limiting
+    const { rateLimit } = await import('@/lib/middleware/rateLimit');
+    const rateLimitResponse = rateLimit(request, 5, 60000); // 5 req/min
+    if (rateLimitResponse) return rateLimitResponse;
+    const { LoginSchema } = await import('@/lib/validation/schemas');
+    const body = await request.json();
+    const validation = LoginSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ error: validation.error.errors }, { status: 400 });
+    }
+    const { email, password } = validation.data;
     // TODO: Replace with real authentication
     if (email !== 'admin@helioshash.com' || password !== 'password123') {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });

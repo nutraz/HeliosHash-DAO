@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 // Simple sandbox verifier - replace with real UIDAI call in production
 async function callUidaiSandbox(payload: { name: string; aadhaar: string }) {
@@ -17,13 +17,24 @@ async function callUidaiSandbox(payload: { name: string; aadhaar: string }) {
   };
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const { name, aadhaar } = body || {};
-    if (!name || !aadhaar) {
-      return NextResponse.json({ status: 'error', error: 'Missing fields' }, { status: 400 });
+    // CSRF protection
+    const { validateOrigin } = await import('@/lib/middleware/csrf');
+    if (!validateOrigin(request)) {
+      return NextResponse.json({ status: 'error', error: 'Invalid origin' }, { status: 403 });
     }
+    // Rate limiting
+    const { rateLimit } = await import('@/lib/middleware/rateLimit');
+    const rateLimitResponse = rateLimit(request, 5, 60000); // 5 req/min
+    if (rateLimitResponse) return rateLimitResponse;
+    const { KycSchema } = await import('@/lib/validation/schemas');
+    const body = await request.json();
+    const validation = KycSchema.safeParse(body);
+    if (!validation.success) {
+      return NextResponse.json({ status: 'error', error: validation.error.errors }, { status: 400 });
+    }
+    const { name, aadhaar } = validation.data;
 
   // Masking can be used for logs or storage if needed
   // const masked = aadhaar.replace(/\d(?=\d{4})/g, '*');

@@ -1,19 +1,37 @@
-# Build outputs
-.next/
-build/
-dist/
+# Dependencies
 node_modules/
-*.tgz
-*.tar.gz
+/.pnpm-store
+/.turbo
 
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Production builds
+.next/
+/out/
+/build/
 
-# IDE
+# Environment variables
+.env*
+!.env.example
+
+# DFX and Canisters
+.dfx/
+**/declarations/
+**/dist/
+
+# Diagnostics and testing
+/diagnostics/
+/test-results/
+/playwright-report/
+diagnosis-*.png
+diagnose-*.js
+diagnose-*.cjs
+
+# Logs
+*.log
+logs/
+web_dev.log
+build.log
+
+# IDEs
 .vscode/
 .idea/
 *.iml
@@ -22,24 +40,83 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# Dependencies
-node_modules/
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Dependency directories
 jspm_packages/
 
 # Optional npm cache directory
 .npm
 
-# Optional eslint cache
-.eslintcache
+# Optional REPL history
+.node_repl_history
 
-# DFX
-.dfx/
-**/declarations/
-**/dist/
+# Output of 'npm pack'
+*.tgz
+*.tar.gz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# Temporary folders
+tmp/
+temp/
+.backups/
+
+# Mobile build artifacts
+apps/mobile/build/
+apps/mobile/android/app/
+apps/mobile/ios/
+apps/mobile/macos/
+apps/mobile_native/android/app/
+apps/mobile_native/ios/
+apps/mobile_native/macos/
+
+# Flutter
+.dart_tool/
+.packages
+**/GeneratedPluginRegistrant.swift
+
+# Diagnostic scripts
+dev-workflow.sh
+start-dev.sh
+analyze-*.cjs
+diagnose-*.cjs

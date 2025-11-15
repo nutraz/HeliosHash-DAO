@@ -1,0 +1,42 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model UserConsent {
+  id              String   @id @default(cuid())
+  userId          String
+  consentType     String
+  granted         Boolean
+  grantedAt       DateTime @default(now())
+  withdrawnAt     DateTime?
+  ipAddressHash   String?
+  userAgentHash   String?
+  @@index([userId])
+  @@index([consentType])
+}
+
+model PrivacyAuditLog {
+  id          String   @id @default(cuid())
+  userId      String
+  action      String
+  details     String
+  timestamp   DateTime @default(now())
+  ipHash      String?
+  @@index([userId])
+  @@index([action])
+  @@index([timestamp])
+}
+
+model EncryptedUserData {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  encryptedData   String
+  encryptionKeyId String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

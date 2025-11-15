@@ -2,8 +2,8 @@
   "name": "helioshash-web",
   "version": "1.0.0",
   "scripts": {
-  "dev": "next dev -p 3001",
-  "dev:web": "cd apps/web && pnpm dev -p 3002",
+    "dev": "next dev -p 3001",
+    "dev:web": "cd apps/web && pnpm dev -p 3002",
     "type-check": "cd apps/web && npx tsc --noEmit -p tsconfig.json",
     "build": "cd apps/web && next build",
     "start": "next start",
@@ -26,10 +26,12 @@
   },
   "dependencies": {
     "@dfinity/candid": "^0.21.2",
+    "@prisma/client": "^6.19.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "lucide-react": "^0.552.0",
     "next": "^14.2.33",
+    "prisma": "^6.19.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tailwind-merge": "^2.0.0"
@@ -58,9 +60,8 @@
       "react": "^18.3.1",
       "react-dom": "^18.3.1"
     }
-  }
-
-  ,"overrides": {
+  },
+  "overrides": {
     "@dfinity/agent": "3.4.2",
     "@dfinity/principal": "3.4.2",
     "@dfinity/candid": "3.4.2",

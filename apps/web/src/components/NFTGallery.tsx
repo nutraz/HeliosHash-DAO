@@ -1,244 +1,221 @@
+# Create a fixed NFT Gallery component
+cat > src/components/NFTGallery.tsx << 'EOF'
 "use client";
 
 import React, { useState } from 'react';
-import Image from 'next/image';
-import type { NFT } from '@/types/nft';
-import { ChevronLeft, ChevronRight, Heart, Share2, ExternalLink, Download, Grid3x3 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-interface NFTGalleryProps {
-  nfts: NFT[];
-  onNFTSelect?: (nft: NFT) => void;
-  onBack?: () => void;
+interface NFTProject {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  image: string;
+  communitySize: number;
+  liveData: string;
+  badges: string[];
+  status: 'active' | 'upcoming' | 'completed';
 }
 
-const NFTGallery: React.FC<NFTGalleryProps> = ({ nfts, onNFTSelect, onBack }) => {
-  const [selectedNFT, setSelectedNFT] = useState<NFT | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'carousel'>('grid');
+const NFTGallery: React.FC = () => {
+  const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
-  // small local fallback (kept minimal) — prefer passing `nfts` prop from shared data
-  const FALLBACK_NFTS: NFT[] = [];
-
-  const handleNFTClick = (nft: NFT) => {
-    setSelectedNFT(nft);
-    if (onNFTSelect) {
-      onNFTSelect(nft);
+  const nftProjects: NFTProject[] = [
+    {
+      id: 'solar-bitcoin',
+      title: 'Solar Bitcoin Mining Hub',
+      description: 'Green energy powered Bitcoin mining collective with real-time yield tracking',
+      category: 'Green Energy Collective',
+      image: '/api/placeholder/400/300',
+      communitySize: 1247,
+      liveData: '2.4 MW Active • 98% Uptime',
+      badges: ['Live', 'High Yield', 'Green'],
+      status: 'active'
+    },
+    {
+      id: 'ev-charging',
+      title: 'EV Charging Network',
+      description: 'Decentralized electric vehicle charging infrastructure across major highways',
+      category: 'Sustainable Transport DApp',
+      image: '/api/placeholder/400/300',
+      communitySize: 892,
+      liveData: '47 Stations • 2.3K Charges/Day',
+      badges: ['Expanding', 'Gov Partner'],
+      status: 'active'
+    },
+    {
+      id: 'data-center',
+      title: 'Data Center Green Power',
+      description: 'Renewable energy powered data centers for Web3 infrastructure',
+      category: 'Tool Infrastructure Hub',
+      image: '/api/placeholder/400/300',
+      communitySize: 567,
+      liveData: '15 MW Capacity • 0 Carbon',
+      badges: ['Enterprise', 'Scalable'],
+      status: 'active'
+    },
+    {
+      id: 'temple-solar',
+      title: 'Temple Community Solar',
+      description: 'Community-owned solar power plants for rural temple complexes',
+      category: 'Community Power Network',
+      image: '/api/placeholder/400/300',
+      communitySize: 2341,
+      liveData: '12 Temples • 5.6 MW Total',
+      badges: ['Community', 'Cultural'],
+      status: 'active'
+    },
+    {
+      id: 'hydro-mining',
+      title: 'Hydro Mining Collective',
+      description: 'Hydropower based crypto mining in Himalayan regions',
+      category: 'Renewable Mining',
+      image: '/api/placeholder/400/300',
+      communitySize: 678,
+      liveData: 'Coming Soon • Q1 2024',
+      badges: ['Upcoming', 'High Potential'],
+      status: 'upcoming'
+    },
+    {
+      id: 'wind-farm',
+      title: 'Coastal Wind Farm',
+      description: 'Offshore wind energy generation with tokenized ownership',
+      category: 'Wind Energy DAO',
+      image: '/api/placeholder/400/300',
+      communitySize: 1543,
+      liveData: '200 Turbines • 150 MW',
+      badges: ['Marine', 'Scalable'],
+      status: 'active'
+    },
+    {
+      id: 'bio-energy',
+      title: 'Bio Energy Plants',
+      description: 'Agricultural waste to energy conversion facilities',
+      category: 'Circular Economy',
+      image: '/api/placeholder/400/300',
+      communitySize: 432,
+      liveData: '8 Plants • 25 MW Total',
+      badges: ['Rural', 'Sustainable'],
+      status: 'active'
+    },
+    {
+      id: 'geo-thermal',
+      title: 'Geothermal Energy',
+      description: 'Harnessing geothermal energy for baseload power generation',
+      category: 'Deep Tech Energy',
+      image: '/api/placeholder/400/300',
+      communitySize: 289,
+      liveData: 'Pilot Phase • 5 MW Test',
+      badges: ['Innovation', 'R&D'],
+      status: 'upcoming'
     }
-  };
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4">
-          <h2 className="text-2xl font-bold">My NFT Collection</h2>
-          <span className="bg-blue-600 text-white text-sm px-2 py-1 rounded-full">
-            {nfts.length} NFTs
-          </span>
-        </div>
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => setViewMode(viewMode === 'grid' ? 'carousel' : 'grid')}
-            className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
-          >
-            <Grid3x3 className="w-5 h-5" />
-            <span>{viewMode === 'grid' ? 'Carousel View' : 'Grid View'}</span>
-          </button>
-          {onBack && (
-            <button
-              onClick={onBack}
-              className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span>Back</span>
-            </button>
-          )}
-        </div>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-8">
+      <div className="container mx-auto px-4">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            My NFT Collection
+          </h1>
+          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+            Click any NFT to explore project community and real-time data feed
+          </p>
+          <div className="w-24 h-1 bg-blue-500 mx-auto mt-4 rounded-full"></div>
+        </motion.div>
 
-      {/* NFT Grid/Carousel View */}
-      {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...(nfts || []), ...FALLBACK_NFTS].map((nft) => (
-            <div
-              key={nft.id}
-              onClick={() => handleNFTClick(nft)}
-              className={`relative bg-gray-800 rounded-xl overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                selectedNFT?.id === nft.id ? 'ring-4 ring-blue-500' : ''
-              }`}
+        {/* NFT Grid */}
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
+          {nftProjects.map((project, index) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: index * 0.1 }}
+              whileHover={{ scale: 1.05, y: -5 }}
+              className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200 hover:shadow-2xl transition-all duration-300 cursor-pointer"
+              onClick={() => setSelectedProject(project.id)}
             >
-              <div className="aspect-square bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg relative overflow-hidden">
-                <Image
-                  src={nft.image}
-                  alt={nft.name}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-lg font-bold text-white mb-1">{nft.name}</h3>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-400">#{nft.id}</span>
-                    {nft.community && (
-                      <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full">
-                        {nft.community}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                
-                {nft.description && (
-                  <p className="text-sm text-gray-300 mb-3 line-clamp-2">{nft.description}</p>
-                )}
-                
-                {/* Attributes */}
-                {nft.attributes && nft.attributes.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="text-sm font-semibold text-gray-400 mb-2">Attributes</h4>
-                    <div className="grid grid-cols-2 gap-2">
-                      {nft.attributes.map((attr, idx) => (
-                        <div key={idx} className="bg-gray-700 rounded-lg p-3">
-                          <div className="text-xs text-gray-500">{attr.trait_type}</div>
-                          <div className="text-sm text-white font-medium">{attr.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Hover Actions */}
-              <div className="absolute top-2 right-2 flex space-x-2 opacity-0 hover:opacity-100 transition-opacity">
-                <button className="p-1 bg-red-600 rounded-full hover:bg-red-700 transition-colors">
-                  <Heart className="w-4 h-4" />
-                </button>
-                <button className="p-1 bg-blue-600 rounded-full hover:bg-blue-700 transition-colors">
-                  <Share2 className="w-4 h-4" />
-                </button>
-                <button className="p-1 bg-green-600 rounded-full hover:bg-green-700 transition-colors">
-                  <ExternalLink className="w-4 h-4" />
-                </button>
-                <button className="p-1 bg-purple-600 rounded-full hover:bg-purple-700 transition-colors">
-                  <Download className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        /* Carousel View */
-        <div className="relative max-w-4xl mx-auto">
-          <div className="flex items-center justify-center mb-6">
-            <button
-              onClick={() => setViewMode('grid')}
-              className="p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors flex items-center space-x-2"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span>Grid View</span>
-            </button>
-            <button
-              onClick={() => setViewMode('carousel')}
-              className="p-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-            >
-              <span>Carousel View</span>
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="relative bg-gray-800 rounded-xl p-8">
-            {selectedNFT ? (
-              <div className="text-center">
-                  <div className="aspect-square max-w-2xl mx-auto mb-6 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl overflow-hidden relative">
-                  <Image
-                    src={selectedNFT.image}
-                    alt={selectedNFT.name}
-                    fill
-                    className="object-contain"
-                  />
-                </div>
-                
-                <h3 className="text-2xl font-bold text-white mb-4">{selectedNFT.name}</h3>
-                <p className="text-gray-300 mb-4">#{selectedNFT.id}</p>
-                
-                {selectedNFT.community && (
-                  <div className="mb-4">
-                    <span className="bg-blue-600 text-white text-lg px-4 py-2 rounded-full">
-                      {selectedNFT.community}
-                    </span>
-                  </div>
-                )}
-                
-                {selectedNFT.description && (
-                  <p className="text-gray-300 mb-6 text-center max-w-2xl">{selectedNFT.description}</p>
-                )}
-                
-                {/* Attributes in Carousel */}
-                {selectedNFT.attributes && selectedNFT.attributes.length > 0 && (
-                  <div className="space-y-4 max-w-2xl mx-auto">
-                    <h4 className="text-lg font-semibold text-white mb-4">Attributes</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedNFT.attributes.map((attr, idx) => (
-                        <div key={idx} className="bg-gray-700 rounded-lg p-4">
-                          <div className="text-sm text-gray-500 mb-1">{attr.trait_type}</div>
-                          <div className="text-lg text-white font-medium">{attr.value}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Action Buttons */}
-                <div className="flex justify-center space-x-4 mt-8">
-                  <button className="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors flex items-center space-x-2">
-                    <Heart className="w-5 h-5" />
-                    <span>Favorite</span>
-                  </button>
-                  <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2">
-                    <Share2 className="w-5 h-5" />
-                    <span>Share</span>
-                  </button>
-                  <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-2">
-                    <ExternalLink className="w-5 h-5" />
-                    <span>View on Explorer</span>
-                  </button>
-                  <button className="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors flex items-center space-x-2">
-                    <Download className="w-5 h-5" />
-                    <span>Download</span>
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center text-gray-400">
-                <div className="mb-8">
-                  <div className="w-24 h-24 mx-auto bg-gray-700 rounded-full flex items-center justify-center">
-                    <Grid3x3 className="w-12 h-12 text-gray-500" />
-                  </div>
-                </div>
-                <p className="text-lg">Select an NFT to view details</p>
-                <div className="flex justify-center space-x-4 mt-4">
-                  {FALLBACK_NFTS.slice(0, 3).map((nft, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleNFTClick(nft)}
-                      className="w-16 h-16 bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 transition-colors relative"
+              {/* NFT Image */}
+              <div className="relative h-48 bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                <div className="text-4xl">⚡</div>
+                <div className="absolute top-3 right-3 flex gap-1">
+                  {project.badges.map((badge, i) => (
+                    <span 
+                      key={i}
+                      className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                        badge === 'Live' ? 'bg-green-100 text-green-800' :
+                        badge === 'Upcoming' ? 'bg-yellow-100 text-yellow-800' :
+                        badge === 'High Yield' ? 'bg-blue-100 text-blue-800' :
+                        'bg-purple-100 text-purple-800'
+                      }`}
                     >
-                      <Image
-                        src={nft.image}
-                        alt={nft.name}
-                        fill
-                        className="object-cover"
-                      />
-                    </button>
+                      {badge}
+                    </span>
                   ))}
                 </div>
               </div>
-            )}
+
+              {/* NFT Content */}
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-blue-600 font-semibold mb-3">
+                  {project.category}
+                </p>
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                  {project.description}
+                </p>
+                
+                {/* Live Data */}
+                <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                  <span>👥 {project.communitySize.toLocaleString()} members</span>
+                  <span>📊 {project.liveData}</span>
+                </div>
+
+                {/* Action Button */}
+                <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors duration-200 flex items-center justify-center gap-2">
+                  <span>View Project</span>
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </button>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        {/* Stats Footer */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-12 text-center"
+        >
+          <div className="inline-flex items-center gap-8 text-sm text-gray-600">
+            <span>🎯 {nftProjects.length} Projects Total</span>
+            <span>⚡ {nftProjects.filter(p => p.status === 'active').length} Active</span>
+            <span>🚀 {nftProjects.filter(p => p.status === 'upcoming').length} Upcoming</span>
+            <span>👥 {nftProjects.reduce((acc, p) => acc + p.communitySize, 0).toLocaleString()} Community Members</span>
           </div>
-        </div>
-      )}
+        </motion.div>
+      </div>
     </div>
   );
 };
 
 export default NFTGallery;
+EOF              Explore Community
+            </button>
+          </div>

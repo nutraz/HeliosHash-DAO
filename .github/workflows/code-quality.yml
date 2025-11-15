@@ -93,6 +93,6 @@ jobs:
 
       - name: Run Code Climate analysis
         if: ${{ env.CODECLIMATE_REPO_TOKEN != '' }}
-        uses: paambaati/codeclimate-action@v3.0.0
+        uses: paambaati/codeclimate-action@v9.0.0
         env:
           CODECLIMATE_REPO_TOKEN: ${{ env.CODECLIMATE_REPO_TOKEN }}

@@ -396,10 +396,11 @@ const HHDAODashboard = () => {
 					</div>
 				</div>
 
-				<button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-4 hover:shadow-2xl hover:scale-105 transition-all flex items-center justify-center space-x-2 font-bold text-lg shadow-xl">
+				{/* Non-interactive placeholder — remove interactive button to avoid actions under Create Projects */}
+				<div className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl p-4 transition-all flex items-center justify-center space-x-2 font-bold text-lg shadow-xl opacity-90 select-none" role="note" aria-disabled="true">
 					<Plus size={24} />
 					<span>Create / Apply for Project</span>
-				</button>
+				</div>
 
 				<div className="space-y-4">
 					{filteredProjects.map((project) => {

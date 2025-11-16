@@ -31,7 +31,7 @@ IP_FIELD=$(echo "$RESP" | jq -r '.ip // empty' 2>/dev/null || true)
 UPTIME=$(echo "$RESP" | jq -r '.uptime // empty' 2>/dev/null || true)
 
 <<<<<<< HEAD
-if [[ "$STATUS" != "ok" && "$STATUS" != "up" ]]; then
+if [[ "$STATUS" != "ok" && "$STATUS" != "up" && "$STATUS" != "healthy" ]]; then
 =======
 if [[ "$STATUS" != "ok" && "$STATUS" != "up" && "$STATUS" != "healthy" ]]; then
 >>>>>>> audit-clean

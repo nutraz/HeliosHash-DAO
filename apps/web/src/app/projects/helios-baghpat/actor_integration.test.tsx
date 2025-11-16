@@ -76,7 +76,7 @@ beforeEach(() => {
 
 // Import the real Overview component (it will use the real hook which in turn
 // should call our mocked actor implementation above).
-import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'
+import HeliosBaghpatOverview from '@/components/project/HeliosBaghpatOverview'
 
 describe('Helios#Baghpat actor integration', () => {
   it('renders actor-backed stats', async () => {

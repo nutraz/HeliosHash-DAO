@@ -99,6 +99,8 @@ export default function Layout({ children }: LayoutProps) {
         <title>{getPageTitle()}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <meta name="description" content="HeliosHash DAO - Decentralized Autonomous Organization for Solar Energy" />
+        <link rel="icon" type="image/avif" href="/assets/icons/hhdaologo.avif" />
+        <link rel="icon" href="/assets/icons/hhdaologo.svg" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 

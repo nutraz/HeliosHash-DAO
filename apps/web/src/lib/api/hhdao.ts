@@ -1,5 +1,5 @@
 import { Actor, HttpAgent } from '@dfinity/agent';
-import { idlFactory } from '../../../src/declarations/hhdao/hhdao.did.js';
+import { idlFactory } from '@/declarations/hhdao/hhdao.did.js';
 
 // Minimal domain types used by the web client. Keep these small and extend
 // them later if more fields are required.

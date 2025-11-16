@@ -1,19 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    externalDir: true,
+    appDir: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
   },
   images: {
-    // allow dicebear avatars and other external avatar providers
-    domains: ['api.dicebear.com'],
+    domains: ['localhost'],
   },
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-    };
-    return config;
-  },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

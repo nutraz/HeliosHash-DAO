@@ -9,7 +9,7 @@ import { nftCollection } from '@/lib/mockData';
 export default function NFTsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const nftId = searchParams.get('id');
+  const nftId = searchParams?.get('id') ?? null;
   
   const [view, setView] = useState<'gallery' | 'create' | 'detail'>('gallery');
 

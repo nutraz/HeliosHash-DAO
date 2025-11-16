@@ -3,20 +3,12 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "build/**"]
+      "outputs": [".next/**", "dist/**"]
     },
     "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "test": {},
-    "test:e2e": {
-      "dependsOn": ["^build"],
-      "outputs": ["test-results/**", "playwright-report/**"]
+      "cache": false
     },
     "lint": {},
-    "clean": {
-      "cache": false
-    }
+    "test": {}
   }
 }

@@ -7,7 +7,10 @@ MOC="$(dfx cache show)/moc"
 
 
 # Set paths
-CANISTER_DIR="canisters/hhdao"
+CANISTERS=("hhdao" "auth")
+SCRIPT_DIR="$(dirname "$0")"
+# Repo root is two levels above canisters/test-runner
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 TEST_DIR="$CANISTER_DIR/test"
 SRC_DIR="$CANISTER_DIR/src"
 WASM_DIR="wasm"
@@ -16,26 +19,39 @@ WASM_DIR="wasm"
 mkdir -p $WASM_DIR
 
 
-# Compile the test canister with all dependencies
-echo "Compiling test canister..."
-$MOC -o $WASM_DIR/hhdao-test.wasm \
-  --package base "$(dfx cache show)/base" \
+function build_canister_test() {
+  local C=${1}
+  local CANISTER_DIR="$ROOT_DIR/canisters/$C"
+  local TEST_DIR="$CANISTER_DIR/test"
+  local SRC_DIR="$CANISTER_DIR/src"
+  local OUT="$WASM_DIR/$(basename $C)-test.wasm"
+
+  echo "Compiling tests for $C..."
+  $MOC -o $OUT \
+    --package base "$(dfx cache show)/base" \
+  $TEST_DIR/test-imports.mo \
+  $SRC_DIR/test-utils.mo \
   $SRC_DIR/lib.mo \
-  $TEST_DIR/test-utils.mo \
-  $TEST_DIR/hhdao.test.mo
+  $TEST_DIR/test-runner-entry.mo
+  if [ $? -ne 0 ]; then
+    echo "Compilation failed for $C!"
+    exit 1
+  fi
+}
 
 if [ $? -ne 0 ]; then
   echo "Compilation failed!"
   exit 1
 fi
 
-echo "Running tests..."
-<<<<<<< HEAD
-node test-runner.js $WASM_DIR/hhdao-test.wasm
-=======
+echo "Running tests for all canisters..."
 SCRIPT_DIR="$(dirname "$0")"
-node "$SCRIPT_DIR/test-runner.js" $WASM_DIR/hhdao-test.wasm
->>>>>>> audit-clean
+for cdir in "${CANISTERS[@]}"; do
+  build_canister_test $cdir
+  wasmfile="$WASM_DIR/$(basename $cdir)-test.wasm"
+  echo "=== Running tests for $(basename $cdir) ==="
+  node "$SCRIPT_DIR/test-runner.js" $wasmfile
+done
 
 # Check exit code
 if [ $? -ne 0 ]; then

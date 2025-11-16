@@ -1,7 +1,12 @@
 
+import Debug "mo:base/Debug";
+import Result "mo:base/Result";
+import Nat "mo:base/Nat";
+import Text "mo:base/Text";
+import Array "mo:base/Array";
+import Principal "mo:base/Principal";
 
-
-module {
+module TestUtils_OLD {
   // Custom assertion functions with better error messages
   public func assertTrue(condition : Bool, message : Text) : () {
     if (not condition) {

@@ -5,11 +5,19 @@ export default function useMockWorker() {
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (process.env.NEXT_PUBLIC_APP_MODE !== 'demo' && process.env.APP_MODE !== 'demo') return
-    // Dynamically import and start the worker
-    import('../mocks/browser').then(({ worker }) => {
-      worker.start()
-        .then(() => console.log('MSW started'))
-        .catch((e) => console.warn('MSW failed', e))
-    }).catch(e => console.warn('MSW import failed', e))
+    
+    // Check if mocks are available before importing
+    const loadMockWorker = async () => {
+      try {
+        const { worker } = await import('../mocks/browser')
+        await worker.start()
+        console.log('MSW started successfully')
+      } catch (error) {
+        console.warn('MSW not available - continuing without mocks', error.message)
+        // Continue without mocks - this is safe for production
+      }
+    }
+    
+    loadMockWorker()
   }, [])
 }

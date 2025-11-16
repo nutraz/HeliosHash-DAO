@@ -1,0 +1,50 @@
+name: Build Flutter Mobile
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-flutter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for mobile app
+        id: check_mobile
+        run: |
+          if [ -d "apps/mobile" ]; then
+            echo "mobile_exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "mobile_exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Flutter
+        if: steps.check_mobile.outputs.mobile_exists == 'true'
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'
+
+      - name: Install dependencies
+        if: steps.check_mobile.outputs.mobile_exists == 'true'
+        run: |
+          cd apps/mobile
+          flutter pub get
+
+      - name: Build Android APK
+        if: steps.check_mobile.outputs.mobile_exists == 'true'
+        run: |
+          cd apps/mobile
+          flutter build apk --release
+
+      - name: Upload APK
+        if: steps.check_mobile.outputs.mobile_exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-apk
+          path: apps/mobile/build/app/outputs/flutter-apk/*.apk
+
+      - name: Skip notice
+        if: steps.check_mobile.outputs.mobile_exists == 'false'
+        run: echo "apps/mobile not present — skipping Flutter build."

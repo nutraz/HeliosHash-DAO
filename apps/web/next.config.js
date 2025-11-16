@@ -1,10 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   transpilePackages: ["@helioshash/shared"],
   experimental: {
     optimizeCss: false,
     esmExternals: 'loose'
+  },
+  typescript: {
+    ignoreBuildErrors: false
+  },
+  eslint: {
+    ignoreDuringBuilds: false
   },
   pageExtensions: ["tsx", "ts", "jsx", "js"],
   generateBuildId: async () => {
@@ -12,8 +19,8 @@ const nextConfig = {
   },
   trailingSlash: true,
   images: {
-    unoptimized: true,
-    domains: ['api.dicebear.com']
+    domains: ['api.dicebear.com', 'localhost', 'your-app.vercel.app'],
+    unoptimized: process.env.NODE_ENV === 'development'
   },
   webpack: (config) => {
     config.resolve.fallback = {
@@ -21,6 +28,10 @@ const nextConfig = {
       fs: false,
       net: false,
       tls: false
+    };
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true
     };
     return config;
   }

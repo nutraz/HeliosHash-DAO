@@ -50,12 +50,7 @@
     "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
-  "pnpm": {
-    "overrides": {
-      "react": "18.3.1",
-      "react-dom": "18.3.1"
-    }
-  },
+
   "devDependencies": {
     "@dfinity/agent": "^3.4.2",
     "@dfinity/principal": "^3.4.2",
@@ -72,6 +67,7 @@
     "@vitest/ui": "^4.0.8",
     "autoprefixer": "^10.0.0",
     "eslint": "^8.0.0",
+    "eslint-config-next": "^16.0.3",
     "jsdom": "^27.1.0",
     "postcss": "^8.0.0",
     "prisma": "^6.19.0",

@@ -78,6 +78,36 @@ pnpm install
 pnpm dev  # Runs on port 3002
 ```
 
+
+## 🚀 Vercel Deployment
+
+### Quick Deploy
+1. Go to [vercel.com](https://vercel.com)
+2. Import from GitHub → Select `HeliosHash-DAO`
+3. Configure project:
+  - **Framework**: Next.js
+  - **Root Directory**: `apps/web`
+  - **Build Command**: `cd apps/web && pnpm build`
+  - **Output Directory**: `.next`
+4. Add environment variables from `.env.vercel.example`
+
+### Environment Variables
+Copy all variables from `.env.vercel.example` to your Vercel project settings.
+
+### Manual Deployment
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy from web directory
+cd apps/web && vercel --prod
+```
+
+### Post-Deployment
+- Test main application
+- Verify ICP blockchain connectivity
+- Check API routes functionality
+
 ### Mobile Development
 ```bash
 cd apps/mobile

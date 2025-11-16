@@ -1,9 +1,9 @@
-<<<<<<< HEAD
+// Clean CommonJS Motoko WASM test-runner
 const fs = require('fs');
-const { TextDecoder } = require('util');
 
-// Load the WASM file
-const wasmBuffer = fs.readFileSync(process.argv[2]);
+// Minimal CommonJS Motoko WASM runner with ic0 stubs.
+const wasmPath = process.argv[2] || 'wasm/hhdao-test.wasm';
+const wasmBuffer = fs.readFileSync(wasmPath);
 
 // Mock IC system state
 const icState = {
@@ -238,163 +238,81 @@ const importObject = {
   },
 };
 
-// Compile and instantiate the WASM module
-WebAssembly.compile(wasmBuffer)
-  .then((module) => WebAssembly.instantiate(module, importObject))
-  .then((instance) => {
-    // Store instance for use in trap function
-    global.instance = instance;
-
-    // Run the tests
-    console.log('=== Starting HHDAO Canister Tests ===');
-
-    try {
-      // Call the test function
-      instance.exports.run();
-      console.log('=== Tests Completed Successfully ===');
-    } catch (error) {
-      console.error('Test execution failed:', error);
-      process.exit(1);
-    }
-  })
-  .catch((error) => {
-    console.error('Error instantiating WASM module:', error);
-    process.exit(1);
-  });
-=======
-// Minimal test-runner: instantiate wasm and call a simple export
-import { readFileSync } from 'fs';
-
-const wasmPath = process.argv[2] || 'wasm/hhdao-test.wasm';
-const wasmBuffer = readFileSync(wasmPath);
-
-// Create a type-aware ic0 import object. Many ic0 functions return i32 (JS Number)
-// while others return i64 (BigInt). Returning the wrong JS type causes traps.
-function createIc0(memory) {
-  function readString(ptr, len) {
-    try {
-      const p = Number(ptr);
-      const l = Number(len);
-      const mem = new Uint8Array(memory.buffer);
-      if (p < 0 || l <= 0 || p >= mem.length) return '';
-      const available = Math.min(l, mem.length - p);
-      return new TextDecoder().decode(mem.subarray(p, p + available));
-    } catch (e) { return ''; }
-  }
-
-  return new Proxy({}, {
-    get: (_t, k) => {
-      const name = String(k);
-      // debug_print expects (ptr, len) -> void
-      if (name === 'debug_print') return (ptr, len) => { console.log(readString(ptr, len)); };
-
-      // Functions that should return BigInt (i64)
-      if (name.match(/time|performance|cycles|balance|mint|refunded|_128|128|counter/)) {
-        return (..._args) => 0n;
-      }
-
-      // Functions that should return Number (i32)
-      if (name.match(/size|copy|len|_size|_copy|caller|self|stable|data_certificate/)) {
-        return (..._args) => 0;
-      }
-
-      // Default: return 0 (i32)
-      return (..._args) => 0;
-    }
-  });
-}
-
-async function run() {
+// Instantiate the WASM module and print available exports. Then attempt
+// to call canister_query exports or the usual test entrypoints.
+(async () => {
   try {
-    const memory = new WebAssembly.Memory({ initial: 20, maximum: 200 });
+    const memory = new WebAssembly.Memory({ initial: 100 });
+    let reply = Buffer.alloc(0);
 
-    // Inspect module imports to create type-correct ic0 stubs
-    const module = new WebAssembly.Module(wasmBuffer);
-    const imports = WebAssembly.Module.imports(module).filter(i => i.module === 'ic0');
-    const ic0Obj = {};
-    // Heuristic: which ic0 functions should return BigInt (i64)
-  const bigintHint = /(time|performance|counter|cycles|balance|mint|refunded|_128|128|64|stable64|now|size)/i;
-    for (const imp of imports) {
-      const name = imp.name;
-      if (name === 'debug_print') {
-        ic0Obj[name] = (ptr, len) => {
-          try {
-            const p = Number(ptr);
-            const l = Number(len);
-            const mem = new Uint8Array(memory.buffer);
-            const available = Math.min(l, Math.max(0, mem.length - p));
-            const s = new TextDecoder().decode(mem.subarray(p, p + available));
-            console.log('[wasm debug_print] ', s);
-          } catch (e) {}
-        };
-        continue;
-      }
-      if (bigintHint.test(name)) {
-        ic0Obj[name] = (..._a) => 0n;
-      } else {
-        ic0Obj[name] = (..._a) => 0;
-      }
-    }
+    function readString(ptr, len) { try { return new TextDecoder().decode(new Uint8Array(memory.buffer, Number(ptr), Number(len))); } catch (e) { return ''; } }
 
-    const ic0 = new Proxy(ic0Obj, { get: (t, k) => (k in t ? t[k] : (..._a) => 0) });
-    const importObject = { ic0, env: { memory } };
-  const instResult = await WebAssembly.instantiate(module, importObject);
-  const instance = instResult.instance ? instResult.instance : instResult;
-  const exports = instance.exports || {};
+    const ic0 = {
+      trap: (ptr, len) => { const m = readString(ptr, len); console.error('IC trap:', m); throw new Error(m); },
+      time: () => BigInt(Date.now()) * 1000000n,
+      msg_arg_data_size: () => 0n,
+      msg_arg_data_copy: () => 0n,
+      msg_caller_size: () => 0n,
+      msg_caller_copy: () => 0n,
+      msg_method_name_size: () => 0n,
+      msg_method_name_copy: () => 0n,
+      accept_message: () => 1n,
+      msg_reply_data_append: (src, size) => { try { const bytes = new Uint8Array(memory.buffer, Number(src), Number(size)); reply = Buffer.concat([reply, Buffer.from(bytes)]); } catch (e) {} },
+      msg_reply: () => {},
+      msg_reply_data_size: () => BigInt(reply.length),
+      msg_reply_data_copy: (dst, off, size) => { try { const n = Math.min(Number(size), reply.length - Number(off)); if (n > 0) new Uint8Array(memory.buffer, Number(dst), n).set(reply.slice(Number(off), Number(off) + n)); return 0n; } catch (e) { return 0n; } },
+      msg_cycles_available: () => 0n,
+      msg_cycles_accept: () => 0n,
+      canister_cycle_balance: () => 0n,
+      canister_cycle_balance128: () => 0n,
+      msg_cycles_refunded128: () => 0n,
+      canister_self_size: () => 0n,
+      canister_self_copy: () => 0n,
+      stable_size: () => 0n,
+      stable_grow: () => 0n,
+      stable_read: () => 0n,
+      stable_write: () => 0n,
+      debug_print: (ptr, len) => { try { console.log('debug_print:', readString(ptr, len)); } catch (e) {} }
+    };
 
-    // First, attempt canister_init (some Motoko modules perform initialization here)
-    if (typeof exports['canister_init'] === 'function') {
-      console.log('Invoking canister_init...');
+    const { instance } = await WebAssembly.instantiate(wasmBuffer, { ic0, env: { memory } });
+    const exports = instance.exports;
+    console.log('Available exports:', Object.keys(exports).sort());
+
+    // runtime info
+    const r = 'canister_query __motoko_runtime_information';
+    if (exports[r]) {
+      console.log('\nCalling', r);
+      reply = Buffer.alloc(0);
       try {
-        exports['canister_init']();
-        console.log('canister_init completed');
+        exports[r]();
+        console.log('Reply length:', reply.length);
+        if (reply.length) console.log('Text:', new TextDecoder().decode(reply));
       } catch (e) {
-        console.error('canister_init failed:', e);
+        console.error('Query failed:', e.message);
+      }
+    } else {
+      console.log('\nNo __motoko_runtime_information export found');
+    }
+
+    // Discover and call all canister_query <name> exports (no args)
+    const exportedQueries = Object.keys(exports).filter(k => k.startsWith('canister_query '));
+    for (const q of exportedQueries.sort()) {
+      console.log('\nCalling', q);
+      reply = Buffer.alloc(0);
+      try {
+        exports[q]();
+        console.log(q, 'ok — reply len', reply.length);
+        if (reply.length) console.log('Text:', new TextDecoder().decode(reply));
+      } catch (e) {
+        console.error(q, 'failed:', e.message);
       }
     }
 
-    // First, try plain candidate names
-    const candidates = ['run', 'runTests', 'runAllTests', 'runAll', 'main', 'test'];
-    for (const c of candidates) {
-      if (typeof exports[c] === 'function') {
-        console.log('Invoking plain export:', c);
-        try {
-          const r = exports[c]();
-          console.log('Result:', r);
-          return process.exit(0);
-        } catch (e) {
-          console.error('Invocation failed for', c, e);
-        }
-      }
-    }
-
-    // Next, Motoko often emits update/query entrypoints as 'canister_update <name>'
-    // or 'canister_query <name>'. Try those variants by scanning available exports.
-    const allKeys = Object.keys(exports);
-    const candidatesFound = allKeys.filter(k => {
-      const lower = k.toLowerCase();
-      return (lower.startsWith('canister_update ') || lower.startsWith('canister_query ')) && (lower.includes('run') || lower.includes('test') || lower.includes('all'));
-    });
-    for (const key of candidatesFound) {
-      if (typeof exports[key] === 'function') {
-        console.log('Invoking Motoko-style export:', key);
-        try {
-          const r = exports[key]();
-          console.log('Result:', r);
-          return process.exit(0);
-        } catch (e) {
-          console.error('Invocation failed for', key, e);
-        }
-      }
-    }
-
-    console.log('No callable test entry found. Exports:', allKeys);
-    return process.exit(1);
-  } catch (e) {
-    console.error('Runner error:', e);
-    return process.exit(1);
+    process.exit(0);
+  } catch (err) {
+    console.error('Instantiate failed:', err);
+    process.exit(1);
   }
-}
-
-run();
->>>>>>> audit-clean
+})();
+// end of file

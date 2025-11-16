@@ -6,19 +6,35 @@ import { useTheme } from '@/lib/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import DashboardHeader from './DashboardHeader';
+import UserProfileCard from './dashboard/UserProfileCard';
+import StatsCards from './dashboard/StatsCards';
+import TokenTransfer from './dashboard/TokenTransfer';
+import LoadingSpinner from './dashboard/LoadingSpinner';
+import { ICPAuthService, ICPCanisterService } from '@/lib/services/icpService';
+import { SecurityService } from '@/lib/services/securityService';
+import { useDashboardStore } from '@/lib/stores/dashboardStore';
 
-type Stage = 'planning' | 'development' | 'testing' | 'deployment' | 'completed';
+type Stage = string;
 
-interface Opportunity { id: string; title: string; description: string; budget: number; status: 'Open' | 'Closed' }
-interface Project { id: string; title: string; description: string; stage: Stage; opportunities: Opportunity[] }
+interface Opportunity { id: string; title: string; description?: string; budget: number; status: 'Open' | 'Closed' }
+interface Project { id: number; name: string; title?: string; description?: string; stage: Stage; opportunities?: Opportunity[] }
 
 const HHDAODashboard: React.FC = () => {
   const { theme } = useTheme();
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const [filterStage, setFilterStage] = useState<Stage | 'all'>('all');
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  // Use store for projects (single source of truth)
+  const projects = useDashboardStore((s) => s.projects);
+  const userStore = useDashboardStore((s) => s.user);
+  const tokenBalance = useDashboardStore((s) => s.tokenBalance);
+  const setUserStore = useDashboardStore((s) => s.setUser);
+  const setTokenBalance = useDashboardStore((s) => s.setTokenBalance);
+  const setProjects = useDashboardStore((s) => s.setProjects);
+  const setAuthenticated = useDashboardStore((s) => s.setAuthenticated);
+  const setLoadingStore = useDashboardStore((s) => s.setLoading);
+  const setError = useDashboardStore((s) => s.setError);
+  const [selectedProject, setSelectedProject] = useState<any | null>(null);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -28,18 +44,67 @@ const HHDAODashboard: React.FC = () => {
   }, [isAuthenticated, router]);
 
   useEffect(() => {
-    // Load projects (mock data for now)
-    setProjects([
-      { id: 'p1', title: 'Baghpat Solar Grid', description: 'Village solar microgrid', stage: 'development', opportunities: [{ id: 'o1', title: 'Panel Supplier', description: 'Supply PV panels', budget: 50000, status: 'Open' }] },
-      { id: 'p2', title: 'Mining Farm (pilot)', description: 'Renewable-powered mining pilot', stage: 'planning', opportunities: [] }
-    ]);
-  }, []);
+    // Migrate old mocked project list into the store
+    const mock = [
+      { id: 1, name: 'Baghpat Solar Grid', stage: 'development', size: '5 MW', completion: 80, funding: '₹2.1 Cr' },
+      { id: 2, name: 'Mining Farm (pilot)', stage: 'planning', size: '2 MW', completion: 25, funding: '₹50 L' }
+    ];
+    setProjects(mock as any);
+  }, [setProjects]);
 
-  const filtered = useMemo(() => (filterStage === 'all' ? projects : projects.filter(p => p.stage === filterStage)), [projects, filterStage]);
+  const filtered = useMemo(() => (filterStage === 'all' ? projects : projects.filter((p: any) => p.stage === filterStage)), [projects, filterStage]);
+
+  // Services must be created before any early returns so hooks order is stable
+  const authService = useMemo(() => new ICPAuthService(), []);
+  const canisterService = useMemo(() => new ICPCanisterService(), []);
+  const securityService = useMemo(() => new SecurityService(), []);
 
   if (!user || !isAuthenticated) {
     return null; // Will redirect via useEffect
   }
+
+  // services
+  
+
+  // Get fresh user/project/token data when needed
+  const refreshBalance = async () => {
+    const principal = authService.getPrincipal();
+    if (principal) {
+      const balance = await canisterService.getTokenBalance(principal);
+      setTokenBalance(balance);
+    }
+  };
+
+  // Initialize via canister when user signs in
+  useEffect(() => {
+    const init = async () => {
+      if (!isAuthenticated) return;
+      setLoadingStore(true);
+      try {
+        const principal = authService.getPrincipal();
+        if (!principal) {
+          setLoadingStore(false);
+          return;
+        }
+        const [userData, balance, projectsData] = await Promise.all([
+          canisterService.getUserData(principal),
+          canisterService.getTokenBalance(principal),
+          canisterService.getProjects(),
+        ]);
+
+        setUserStore(userData as any);
+        setTokenBalance(balance);
+  setProjects(projectsData as any);
+        setAuthenticated(true);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : String(err));
+      } finally {
+        setLoadingStore(false);
+      }
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated]);
 
   // Get user stats (mock for now, will connect to canister later)
   const userStats = {
@@ -53,7 +118,13 @@ const HHDAODashboard: React.FC = () => {
       <div className="container mx-auto p-6">
         <DashboardHeader />
 
-        {/* Stats Cards */}
+        <div className="space-y-6">
+          <UserProfileCard user={userStore || user} balance={tokenBalance} />
+          <StatsCards stats={userStats} />
+          <TokenTransfer canisterService={canisterService} securityService={securityService} onSuccess={refreshBalance} />
+        </div>
+
+        {/* Projects Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="p-4 rounded shadow-sm bg-white dark:bg-gray-800">
             <div className="text-sm text-gray-500">Contributions</div>
@@ -80,19 +151,23 @@ const HHDAODashboard: React.FC = () => {
                   <button onClick={() => setFilterStage('development')} className={`px-2 py-1 rounded text-sm ${filterStage === 'development' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Development</button>
                   <button onClick={() => setFilterStage('planning')} className={`px-2 py-1 rounded text-sm ${filterStage === 'planning' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Planning</button>
                 </div>
-              </div>
-
-              <div className="space-y-3">
+                
                 {filtered.map(p => (
-                  <div key={p.id} onClick={() => setSelectedProject(p)} className="p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                  <button
+                    key={p.id}
+                    onClick={() => setSelectedProject(p)}
+                    aria-label={`Open project ${((p as any).title || p.name)}`}
+                    className="w-full text-left p-3 border rounded hover:bg-gray-50 dark:hover:bg-gray-700"
+                    type="button"
+                  >
                     <div className="flex justify-between items-start">
                       <div>
-                        <div className="font-medium">{p.title}</div>
-                        <div className="text-sm text-gray-500">{p.description}</div>
+                        <div className="font-medium">{(p as any).title || p.name}</div>
+                        <div className="text-sm text-gray-500">{(p as any).description}</div>
                       </div>
                       <MapPin className="text-blue-500" />
                     </div>
-                  </div>
+                  </button>
                 ))}
               </div>
             </div>
@@ -110,13 +185,13 @@ const HHDAODashboard: React.FC = () => {
         {/* Selected Project Detail */}
         {selectedProject && (
           <div className="mt-6 p-4 rounded bg-white dark:bg-gray-800">
-            <h3 className="font-semibold">{selectedProject.title}</h3>
+              <h3 className="font-semibold">{selectedProject.title || selectedProject.name}</h3>
             <p className="text-sm text-gray-500">{selectedProject.description}</p>
             <div className="mt-3">
               <h4 className="font-medium">Opportunities</h4>
               <div className="space-y-2 mt-2">
-                {selectedProject.opportunities.length > 0 ? (
-                  selectedProject.opportunities.map(o => (
+                {selectedProject.opportunities && selectedProject.opportunities.length > 0 ? (
+                  selectedProject.opportunities.map((o: Opportunity) => (
                     <div key={o.id} className="p-2 border rounded">
                       <div className="flex justify-between">
                         <div>

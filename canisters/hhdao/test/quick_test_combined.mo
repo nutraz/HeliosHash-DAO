@@ -3,7 +3,7 @@ import Principal "mo:base/Principal";
 import Nat "mo:base/Nat";
 import Text "mo:base/Text";
 
-persistent actor QuickTestActor {
+module QuickTestActor {
   // Internal helper: basic
   private func runBasicTestImpl() : Text {
     "Basic test passed - actor compiled and function called successfully"
@@ -22,7 +22,7 @@ persistent actor QuickTestActor {
     "Principal test passed - parsing succeeded";
   };
 
-  public query func runBasicTest() : async Text { runBasicTestImpl(); };
-  public query func runLogicTest() : async Text { runLogicTestImpl(); };
-  public query func runPrincipalTest() : async Text { runPrincipalTestImpl(); };
+  public func runBasicTest() : Text { runBasicTestImpl(); };
+  public func runLogicTest() : Text { runLogicTestImpl(); };
+  public func runPrincipalTest() : Text { runPrincipalTestImpl(); };
 }

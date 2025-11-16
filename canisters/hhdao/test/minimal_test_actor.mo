@@ -1,12 +1,13 @@
 import Text "mo:base/Text";
 
-// Minimal persistent actor providing trivial query entrypoints.
-persistent actor MinimalTest {
-  public query func runBasicTest() : async Text {
+// Minimal module providing trivial test functions — made a module so the
+// main anonymous test actor remains the single actor in this compilation.
+module MinimalTest {
+  public func runBasicTest() : Text {
     "Minimal test ok"
   };
 
-  public query func runEcho(msg : Text) : async Text {
+  public func runEcho(msg : Text) : Text {
     msg
   };
 };

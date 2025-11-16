@@ -1,5 +1,6 @@
-'use client'
+"use client"
 
+import Link from 'next/link'
 import { useState } from 'react'
 import Image from 'next/image'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -74,13 +75,16 @@ export default function AuthSelection({ onAuthenticated }: AuthSelectionProps) {
       <div className="w-full max-w-md space-y-6">
         {/* Language Toggle */}
         <div className="flex justify-center space-x-4">
-          <Button
+            <Button
             variant={language === 'en' ? 'default' : 'outline'}
             onClick={() => setLanguage('en')}
             className="bg-blue-600 hover:bg-blue-700"
           >
             English
           </Button>
+          <div className="mt-6 text-center">
+            <Link href="/auth/multi" className="text-sm text-blue-400 hover:underline">Try Multi-Auth (developer preview)</Link>
+          </div>
           <Button
             variant={language === 'hi' ? 'default' : 'outline'}
             onClick={() => setLanguage('hi')}

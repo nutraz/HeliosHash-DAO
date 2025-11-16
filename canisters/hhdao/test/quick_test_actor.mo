@@ -1,15 +1,15 @@
 import QuickTest "./quick_test";
 
-persistent actor QuickTestActor {
-  public query func runBasicTest() : async Text {
+module QuickTestActor {
+  public func runBasicTest() : Text {
     QuickTest.runBasicTest();
   };
 
-  public query func runLogicTest() : async Text {
+  public func runLogicTest() : Text {
     QuickTest.runLogicTest();
   };
 
-  public query func runPrincipalTest() : async Text {
+  public func runPrincipalTest() : Text {
     QuickTest.runPrincipalTest();
   };
 };

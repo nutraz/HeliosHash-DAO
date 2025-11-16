@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { test, expect } from '@playwright/test';
-=======
-import { expect, test } from '@playwright/test';
->>>>>>> audit-clean
 
 // Mobile smoke (mocked actor): open mobile URL, submit animal-care report, open detail, vote
 test.use({ viewport: { width: 412, height: 915 } });
@@ -69,10 +65,7 @@ test('mobile smoke - animal care flow (mocked)', async ({ page }) => {
   const votesText = await page.locator('text=Votes:').innerText();
   expect(votesText).toContain('/');
 });
-<<<<<<< HEAD
-import { expect, test } from '@playwright/test';
-=======
->>>>>>> audit-clean
+// keep a single import line above
 
 // Mobile smoke: open mobile URL, submit animal-care report, open detail, vote
 test.use({ viewport: { width: 412, height: 915 } });

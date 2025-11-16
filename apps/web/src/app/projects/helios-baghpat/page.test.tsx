@@ -20,32 +20,35 @@ vi.mock('@/lib/api/heliosBaghpat', () => ({
 // Mock heavy child components to avoid path/alias resolution in test runner
 vi.mock('@/components/project/community/CommunityHub', () => ({
   __esModule: true,
-  default: () => React.createElement('div', {}, 'Community Hub')
+  default: (props: any) => React.createElement('div', props, props.children || 'Community Hub')
 }))
 vi.mock('@/components/project/opportunities/OpportunitiesHub', () => ({
   __esModule: true,
-  default: () => React.createElement('div', {}, 'Opportunities')
+  default: (props: any) => React.createElement('div', props, props.children || 'Opportunities')
 }))
 
 // Mock simple UI primitives used by the page
 vi.mock('@/components/ui/badge', () => ({
   __esModule: true,
-  Badge: () => React.createElement('span', {}, 'Badge')
+  Badge: (props: any) => React.createElement('span', props, props.children || 'Badge')
 }))
 vi.mock('@/components/ui/button', () => ({
   __esModule: true,
-  Button: () => React.createElement('button', {}, 'Button')
+  Button: (props: any) => React.createElement('button', {
+    ...props,
+    onClick: props?.onClick,
+  }, props.children || 'Button')
 }))
 vi.mock('@/components/ui/card', () => ({
   __esModule: true,
-  Card: () => React.createElement('div', {}, 'Card'),
-  CardHeader: () => React.createElement('div', {}, 'CardHeader'),
-  CardContent: () => React.createElement('div', {}, 'CardContent'),
-  CardTitle: () => React.createElement('div', {}, 'CardTitle'),
-  CardDescription: () => React.createElement('div', {}, 'CardDescription')
+  Card: (props: any) => React.createElement('div', props, props.children),
+  CardHeader: (props: any) => React.createElement('div', props, props.children),
+  CardContent: (props: any) => React.createElement('div', props, props.children),
+  CardTitle: (props: any) => React.createElement('div', props, props.children),
+  CardDescription: (props: any) => React.createElement('div', props, props.children),
 }))
 
-import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'
+import HeliosBaghpatOverview from '@/components/project/HeliosBaghpatOverview'
 
 describe('Helios#Baghpat Overview', () => {
   it('renders overview and live stats', () => {

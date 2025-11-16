@@ -2,8 +2,8 @@ import HHDAOLib "../src/lib";
 import Nat "mo:base/Nat";
 import Debug "mo:base/Debug";
 
-persistent actor DirectTest {
-  public query func runAllTests() : async Text {
+module DirectTest {
+  public func runAllTests() : Text {
     Debug.print("DirectTest: starting lightweight tests...");
     try {
       let state = HHDAOLib.HHDAOState();

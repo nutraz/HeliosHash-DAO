@@ -115,6 +115,16 @@ apps/mobile_native/macos/
 .packages
 **/GeneratedPluginRegistrant.swift
 
+# Archive / legacy
+archive/
+archives/
+*.bak
+
+# Personal or note files
+*.docx
+*.pdf
+*.txt
+
 # Diagnostic scripts
 dev-workflow.sh
 start-dev.sh

@@ -1,3 +1,5 @@
+"use client"
+
 // Lightweight API client for Helios#Baghpat project data.
 // Tries to call an HTTP proxy endpoint (configure NEXT_PUBLIC_HELIOS_API),
 // otherwise falls back to mocked data.

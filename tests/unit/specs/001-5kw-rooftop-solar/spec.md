@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# Feature Specification: 5kW Rooftop Solar Co-Ownership MVP
-=======
 # Feature Specification: 50kW Rooftop Solar Co-Ownership MVP
->>>>>>> audit-clean
 
 **Status**: Reality Check
 **Timeline**: 30 days

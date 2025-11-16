@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom'
-import { Button } from '../button';
+import { Button } from '@/components/ui/button';
 import { describe, it, expect } from 'vitest';
 
 describe('Button', () => {

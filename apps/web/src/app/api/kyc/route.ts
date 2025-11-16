@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validation = KycSchema.safeParse(body);
     if (!validation.success) {
-      return NextResponse.json({ status: 'error', error: validation.error.errors }, { status: 400 });
+      return NextResponse.json({ status: 'error', error: validation.error.issues }, { status: 400 });
     }
     const { name, aadhaar } = validation.data;
 

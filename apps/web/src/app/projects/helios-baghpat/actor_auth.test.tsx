@@ -32,7 +32,7 @@ vi.mock('@dfinity/agent', () => ({
 
 vi.mock('@dfinity/candid', () => ({ IDL: {} }))
 
-import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'
+import HeliosBaghpatOverview from '@/components/project/HeliosBaghpatOverview'
 
 describe('Helios#Baghpat authenticated actor path', () => {
   it('uses authenticated identity and shows actor stats', async () => {

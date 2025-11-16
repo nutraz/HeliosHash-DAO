@@ -8,6 +8,11 @@
       "main": "apps/backend/canisters/treasury/Treasury.mo",
       "type": "motoko" 
     }
+    ,
+    "auth": {
+      "main": "canisters/auth/src/main.mo",
+      "type": "motoko"
+    }
   },
   "version": 1
 }

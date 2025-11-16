@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, fireEvent } from '@testing-library/react';
 import AnimalCareForm from '@/components/community/AnimalCareForm';
-=======
-import AnimalCareForm from '@/components/community/AnimalCareForm';
-import { fireEvent, render } from '@testing-library/react';
-import React from 'react';
-import { describe, expect, it, vi } from 'vitest';
->>>>>>> audit-clean
 
 vi.mock('@/hooks/useAuthContext', () => ({
   useAuthContext: () => ({ user: { principal: 'test-principal' } }),

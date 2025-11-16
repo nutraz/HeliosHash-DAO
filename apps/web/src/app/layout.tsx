@@ -19,8 +19,17 @@ export default function RootLayout({
       <head>
         <title>HeliosHash DAO</title>
         <meta name="description" content="Decentralized Autonomous Organization" />
+        {/* Development-only CSP additions to allow local mock API/websocket connections */}
+        {process.env.NODE_ENV !== 'production' && (
+          <meta
+            httpEquiv="Content-Security-Policy"
+            content={`connect-src 'self' http://localhost:4000 ws://localhost:3002 http://localhost:3002;`}
+          />
+        )}
+        <link rel="icon" type="image/avif" href="/assets/icons/hhdaologo.avif" />
+        <link rel="icon" href="/assets/icons/hhdaologo.svg" />
         <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" href="/hhdaologo.svg" />
+        <link rel="apple-touch-icon" href="/assets/icons/hhdaologo.avif" />
       </head>
       <body className={inter.className}>
         <ClientLayout>{children}</ClientLayout>

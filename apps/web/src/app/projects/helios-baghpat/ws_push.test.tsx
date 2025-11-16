@@ -37,7 +37,7 @@ class MockWebSocket {
 
 global.WebSocket = MockWebSocket as unknown as typeof WebSocket
 
-import HeliosBaghpatOverview from '../../../components/project/HeliosBaghpatOverview'
+import HeliosBaghpatOverview from '@/components/project/HeliosBaghpatOverview'
 
 describe('Helios#Baghpat WS push', () => {
   beforeEach(() => {

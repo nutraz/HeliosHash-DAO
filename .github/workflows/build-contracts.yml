@@ -1,0 +1,35 @@
+name: Build Contracts
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: |
+          if [ -d "contracts" ] && [ -f "contracts/package.json" ]; then
+            cd contracts
+            npm ci
+          else
+            echo "No contracts package.json found; skipping install"
+          fi
+      - name: Compile contracts
+        run: |
+          if [ -d "contracts" ]; then
+            cd contracts
+            if [ -f "hardhat.config.js" ] || [ -f "hardhat.config.ts" ]; then
+              npx hardhat compile
+            else
+              echo "No Hardhat config found; skipping compile"
+            fi
+          else
+            echo "No contracts directory found; skipping"
+          fi

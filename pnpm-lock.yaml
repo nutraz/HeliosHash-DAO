@@ -25,8 +25,8 @@ importers:
         specifier: ^2.0.0
         version: 2.1.1
       lucide-react:
-        specifier: ^0.552.0
-        version: 0.552.0(react@18.3.1)
+        specifier: ^0.554.0
+        version: 0.554.0(react@18.3.1)
       next:
         specifier: ^14.2.33
         version: 14.2.33(@babel/core@7.28.5)(@playwright/test@1.56.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -210,8 +210,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1
       lucide-react:
-        specifier: ^0.552.0
-        version: 0.552.0(react@18.3.1)
+        specifier: ^0.554.0
+        version: 0.554.0(react@18.3.1)
       msw:
         specifier: ^2.12.2
         version: 2.12.2(@types/node@20.19.24)(typescript@5.9.3)
@@ -4262,8 +4262,8 @@ packages:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
 
-  lucide-react@0.552.0:
-    resolution: {integrity: sha512-g9WCjmfwqbexSnZE+2cl21PCfXOcqnGeWeMTNAOGEfpPbm/ZF4YIq77Z8qWrxbu660EKuLB4nSLggoKnCb+isw==}
+  lucide-react@0.554.0:
+    resolution: {integrity: sha512-St+z29uthEJVx0Is7ellNkgTEhaeSoA42I7JjOCBCrc5X6LYMGSv0P/2uS5HDLTExP5tpiqRD2PyUEOS6s9UXA==}
     peerDependencies:
       react: ^18.3.1
 
@@ -10180,7 +10180,7 @@ snapshots:
     dependencies:
       yallist: 4.0.0
 
-  lucide-react@0.552.0(react@18.3.1):
+  lucide-react@0.554.0(react@18.3.1):
     dependencies:
       react: 18.3.1
 

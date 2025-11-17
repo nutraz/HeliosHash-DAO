@@ -234,8 +234,8 @@ importers:
         specifier: ^1.0.7
         version: 1.0.7(tailwindcss@3.4.18(tsx@4.19.2)(yaml@2.8.1))
       vercel:
-        specifier: ^48.10.2
-        version: 48.10.2(rollup@4.52.5)(typescript@5.9.3)
+        specifier: ^48.10.3
+        version: 48.10.3(rollup@4.52.5)(typescript@5.9.3)
       zod:
         specifier: ^4.1.12
         version: 4.1.12
@@ -538,8 +538,14 @@ packages:
   '@emnapi/core@1.6.0':
     resolution: {integrity: sha512-zq/ay+9fNIJJtJiZxdTnXS20PllcYMX3OE23ESc4HK/bdYu3cOWYVhsOhVnXALfU/uqJIxn5NBPd9z4v+SfoSg==}
 
+  '@emnapi/core@1.7.1':
+    resolution: {integrity: sha512-o1uhUASyo921r2XtHYOHy7gdkGLge8ghBEQHMWmyJFoXlpU58kIrhhN3w26lpQb6dspetweapMn2CSNwQ8I4wg==}
+
   '@emnapi/runtime@1.6.0':
     resolution: {integrity: sha512-obtUmAHTMjll499P+D9A3axeJFlhdjOWdKUNs/U6QIGT7V5RjcUW1xToAzjvmgTSQhDbYn/NwfTRoJcQ2rNBxA==}
+
+  '@emnapi/runtime@1.7.1':
+    resolution: {integrity: sha512-PVtJr5CmLwYAU9PZDMITZoR5iAOShYREoR45EyyLrbntV50mdePTgUn4AmOw90Ifcj+x2kRjdzr1HP3RrNiHGA==}
 
   '@emnapi/wasi-threads@1.1.0':
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
@@ -2250,8 +2256,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@vercel/backends@0.0.7':
-    resolution: {integrity: sha512-WVbk1yXW58fj6Cl+zDZbXDnsNGRr0W+xsC9V0RZqN5yS8oNceRFpJLh6cb1XnRUGmal6EBB8wwyU3OSH6PxuWg==}
+  '@vercel/backends@0.0.8':
+    resolution: {integrity: sha512-knjz9CFa67V6bJLHZFMqdHMRGZQEz/6rrtwCTsIugiG/tmr7VJe31UTS2WhoOEio20gp9Dcl/nta0ZxdinYOFQ==}
 
   '@vercel/blob@1.0.2':
     resolution: {integrity: sha512-Im/KeFH4oPx7UsM+QiteimnE07bIUD7JK6CBafI9Z0jRFogaialTBMiZj8EKk/30ctUYsrpIIyP9iIY1YxWnUQ==}
@@ -2260,8 +2266,8 @@ packages:
   '@vercel/build-utils@13.0.1':
     resolution: {integrity: sha512-RVWYBhVAwoJsuRRq/93OnKVaYEdPlceYnz5f3daRQvrhmjoYRup3y/uy+/SQ5W9I+c0kWdsbogkJ5oBkaWWMOQ==}
 
-  '@vercel/cervel@0.0.3':
-    resolution: {integrity: sha512-6PlqMIGAaKc8aSPhsv6foqVTosUpehonMk4LgL5CIskHz2WHzqB8WMtDuw6f2EBvFCbOdPZCSq6aGjyLF6aT/w==}
+  '@vercel/cervel@0.0.4':
+    resolution: {integrity: sha512-Jk58wDex0lt2RUkSDVHEtszKZNWwHjonAKUNciSD5F30h3JQceP8CAgBa7ZeCNYrmsYPL2bc8sdM0E16ePy4tg==}
     hasBin: true
     peerDependencies:
       typescript: ^4.0.0 || ^5.0.0
@@ -2276,8 +2282,8 @@ packages:
   '@vercel/error-utils@2.0.3':
     resolution: {integrity: sha512-CqC01WZxbLUxoiVdh9B/poPbNpY9U+tO1N9oWHwTl5YAZxcqXmmWJ8KNMFItJCUUWdY3J3xv8LvAuQv2KZ5YdQ==}
 
-  '@vercel/express@0.1.7':
-    resolution: {integrity: sha512-z01QeThs5eUqywoG7/QNHRDhAJCRetymkYF8HpTTD+vwYpRxlm7uVcDgsXk1mAmpBk/11ZJbaXSYvBI/CQfEFg==}
+  '@vercel/express@0.1.8':
+    resolution: {integrity: sha512-iQ0jzh83zyNIkCsPbU1QywRtoN5Y3vafdkuEp/EXosaXVUyWUuwhuT0iQ+i3e+bUGxad3ErOHszeU2dJiFiYzQ==}
 
   '@vercel/fastify@0.1.7':
     resolution: {integrity: sha512-3s3Noioc6kkDWXvNk71QzO0GArgUC7wOPcg4JTbGYUHtEieht/I0O0zcGcWyKxQuzt6U2nvEgntkvKjyxTkiqQ==}
@@ -5628,8 +5634,8 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  vercel@48.10.2:
-    resolution: {integrity: sha512-xGmb5uzlaHO5TiszILTDSVQJnpda22EBnuHk1x49l9VpJmDaFMdURDvIf+pApC2g4cc4f3tUI7xWjlYcXkLViQ==}
+  vercel@48.10.3:
+    resolution: {integrity: sha512-aT8usdP3pqUs2ubV3vPZTT/GpV7FIvEypofa6LceSAC04Ou8heCAx4pKVgMfzWK1vjX6WbAvcRBDX6zrqDcIWg==}
     engines: {node: '>= 18'}
     hasBin: true
 
@@ -6161,7 +6167,18 @@ snapshots:
       tslib: 2.8.1
     optional: true
 
+  '@emnapi/core@1.7.1':
+    dependencies:
+      '@emnapi/wasi-threads': 1.1.0
+      tslib: 2.8.1
+    optional: true
+
   '@emnapi/runtime@1.6.0':
+    dependencies:
+      tslib: 2.8.1
+    optional: true
+
+  '@emnapi/runtime@1.7.1':
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -6606,8 +6623,8 @@ snapshots:
 
   '@napi-rs/wasm-runtime@1.0.7':
     dependencies:
-      '@emnapi/core': 1.6.0
-      '@emnapi/runtime': 1.6.0
+      '@emnapi/core': 1.7.1
+      '@emnapi/runtime': 1.7.1
       '@tybys/wasm-util': 0.10.1
     optional: true
 
@@ -7622,9 +7639,9 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vercel/backends@0.0.7(rollup@4.52.5)(typescript@5.9.3)':
+  '@vercel/backends@0.0.8(rollup@4.52.5)(typescript@5.9.3)':
     dependencies:
-      '@vercel/cervel': 0.0.3(typescript@5.9.3)
+      '@vercel/cervel': 0.0.4(typescript@5.9.3)
       '@vercel/introspection': 0.0.2
       '@vercel/nft': 0.30.1(rollup@4.52.5)
       '@vercel/static-config': 3.1.2
@@ -7646,7 +7663,7 @@ snapshots:
 
   '@vercel/build-utils@13.0.1': {}
 
-  '@vercel/cervel@0.0.3(typescript@5.9.3)':
+  '@vercel/cervel@0.0.4(typescript@5.9.3)':
     dependencies:
       execa: 3.2.0
       rolldown: 1.0.0-beta.35
@@ -7669,9 +7686,9 @@ snapshots:
 
   '@vercel/error-utils@2.0.3': {}
 
-  '@vercel/express@0.1.7(rollup@4.52.5)(typescript@5.9.3)':
+  '@vercel/express@0.1.8(rollup@4.52.5)(typescript@5.9.3)':
     dependencies:
-      '@vercel/cervel': 0.0.3(typescript@5.9.3)
+      '@vercel/cervel': 0.0.4(typescript@5.9.3)
       '@vercel/nft': 0.30.1(rollup@4.52.5)
       '@vercel/node': 5.5.6(rollup@4.52.5)
       '@vercel/static-config': 3.1.2
@@ -11650,14 +11667,14 @@ snapshots:
 
   vary@1.1.2: {}
 
-  vercel@48.10.2(rollup@4.52.5)(typescript@5.9.3):
+  vercel@48.10.3(rollup@4.52.5)(typescript@5.9.3):
     dependencies:
-      '@vercel/backends': 0.0.7(rollup@4.52.5)(typescript@5.9.3)
+      '@vercel/backends': 0.0.8(rollup@4.52.5)(typescript@5.9.3)
       '@vercel/blob': 1.0.2
       '@vercel/build-utils': 13.0.1
       '@vercel/detect-agent': 1.0.0
       '@vercel/elysia': 0.1.4(rollup@4.52.5)
-      '@vercel/express': 0.1.7(rollup@4.52.5)(typescript@5.9.3)
+      '@vercel/express': 0.1.8(rollup@4.52.5)(typescript@5.9.3)
       '@vercel/fastify': 0.1.7(rollup@4.52.5)
       '@vercel/fun': 1.1.6
       '@vercel/go': 3.2.3

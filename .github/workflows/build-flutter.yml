@@ -40,7 +40,7 @@ jobs:
 
       - name: Upload APK
         if: steps.check_mobile.outputs.mobile_exists == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: mobile-apk
           path: apps/mobile/build/app/outputs/flutter-apk/*.apk

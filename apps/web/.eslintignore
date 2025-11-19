@@ -1,0 +1,2 @@
+# Ignore generated canister declarations which are noisy for ESLint
+src/declarations/**

@@ -1,0 +1,8 @@
+{
+  "name": "@hhdao/mobile-native", 
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'Mobile native build placeholder' && exit 0",
+    "dev": "echo 'Mobile native dev placeholder' && exit 0"
+  }
+}

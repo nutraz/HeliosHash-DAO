@@ -1,0 +1,13 @@
+persistent actor Governance {
+  public query func version() : async Text {
+    "Governance v1.0";
+  };
+  
+  public query func get_proposal_count() : async Nat {
+    0;
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+};

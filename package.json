@@ -1,0 +1,24 @@
+{
+  "name": "helioshash-dao",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:backend\"",
+    "dev:web": "cd apps/web && pnpm dev -p 3002",
+    "dev:backend": "dfx start --background",
+    "build": "pnpm build:web && pnpm build:backend",
+    "build:web": "cd apps/web && pnpm build",
+    "build:backend": "dfx deploy",
+    "test": "pnpm test:web && pnpm test:backend",
+    "test:web": "cd apps/web && pnpm test",
+    "test:backend": "cd canisters && pnpm test",
+    "type-check": "cd apps/web && npx tsc --noEmit -p tsconfig.json"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}

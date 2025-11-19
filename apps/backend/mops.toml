@@ -1,0 +1,18 @@
+[name]
+name = "helios-hash-dao"
+version = "0.1.0"
+description = "HeliosHash DAO backend canisters"
+
+[dependencies]
+base = "0.8.4"
+
+# Optional: Add common DFINITY packages
+# ic-cdk = "0.12.0"
+# ic-cdk-timers = "0.7.0"
+
+[dev-dependencies]
+
+[scripts]
+
+[registry]
+default = "ic"

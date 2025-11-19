@@ -1,0 +1,247 @@
+// === HeliosHash DAO - Community Governance Canister ===
+// Enforces ≥60% community approval for proposals
+// Supports non-financial contributions (mentorship, care, teaching)
+
+import HashMap "mo:base/HashMap";
+import Iter "mo:base/Iter";
+import Nat "mo:base/Nat";
+import Principal "mo:base/Principal";
+import Time "mo:base/Time";
+import Error "mo:base/Error";
+import Array "mo:base/Array";
+import Hash "mo:base/Hash";
+
+actor DAO {
+
+  // === Types ===
+
+  public type MemberId = Principal;
+  public type ProposalId = Nat;
+
+  public type ContributionType = {
+    #Mentorship;
+    #CommunityCare;
+    #Teaching;
+    #PanelMaintenance;
+    #DisputeResolution;
+    #Other : Text;
+  };
+
+  public type Member = {
+    id : MemberId;
+    joinedAt : Time.Time;
+    contributionScore : Nat;
+  };
+
+  public type Proposal = {
+    id : ProposalId;
+    title : Text;
+    description : Text;
+    proposer : MemberId;
+    createdAt : Time.Time;
+    votesFor : Nat;
+    votesAgainst : Nat;
+    finalized : Bool;
+    approved : Bool;
+    category : ContributionType;
+  };
+
+  // === State ===
+  
+  private var nextProposalId : ProposalId = 0;
+  private var memberEntries : [(MemberId, Member)] = [];
+  private var proposalEntries : [(ProposalId, Proposal)] = [];
+  private var voteEntries : [((ProposalId, MemberId), Bool)] = [];
+
+  private var members = HashMap.HashMap<MemberId, Member>(10, Principal.equal, Principal.hash);
+  private var proposals = HashMap.HashMap<ProposalId, Proposal>(10, Nat.equal, Hash.hash);
+  private var votes = HashMap.HashMap<(ProposalId, MemberId), Bool>(20, 
+    func((a, b), (c, d)) : Bool { Nat.equal(a, c) and Principal.equal(b, d) },
+    func((id, p)) : Hash.Hash { Nat32.fromNat(id + Principal.hash(p)) }
+  );
+
+  // === Helpers ===
+
+  private let deployer = Principal.fromText("tsz6u-gwe2g-lrhc7-we6wc-rbdtb-lhszp-mzuxg-qnbru-xca7v-l2yxd-tae");
+
+  private func isAdmin(caller : Principal) : Bool {
+    Principal.equal(caller, deployer)
+  };
+
+  private func getInternalMemberCount() : Nat {
+    members.size()
+  };
+
+  private func hasMember(id : MemberId) : Bool {
+    switch (members.get(id)) {
+      case null false;
+      case (?_) true;
+    }
+  };
+
+  private func hasVoteKey(key : (ProposalId, MemberId)) : Bool {
+    switch (votes.get(key)) {
+      case null false;
+      case (?_) true;
+    }
+  };
+
+  private func meetsApprovalThreshold(proposal : Proposal) : Bool {
+    let total = getInternalMemberCount();
+    if (total == 0) return false;
+    let threshold = (total * 60) / 100; // ≥60%
+    proposal.votesFor >= threshold
+  };
+
+  // === Upgrade Hooks ===
+
+  system func preupgrade() {
+    memberEntries := Iter.toArray(members.entries());
+    proposalEntries := Iter.toArray(proposals.entries());
+    voteEntries := Iter.toArray(votes.entries());
+  };
+
+  system func postupgrade() {
+    members := HashMap.fromIter(memberEntries.vals(), memberEntries.size(), Principal.equal, Principal.hash);
+    proposals := HashMap.fromIter(proposalEntries.vals(), proposalEntries.size(), Nat.equal, Hash.hash);
+    votes := HashMap.fromIter(voteEntries.vals(), voteEntries.size(), 
+      func((a, b), (c, d)) : Bool { Nat.equal(a, c) and Principal.equal(b, d) },
+      func((id, p)) : Hash.Hash { Nat32.fromNat(id + Principal.hash(p)) }
+    );
+    memberEntries := [];
+    proposalEntries := [];
+    voteEntries := [];
+  };
+
+  // === Public Functions ===
+
+  public shared({ caller }) func join() : async () {
+    if (not hasMember(caller)) {
+      members.put(caller, {
+        id = caller;
+        joinedAt = Time.now();
+        contributionScore = 0;
+      });
+    };
+  };
+
+  public shared({ caller }) func createProposal(
+    title : Text,
+    description : Text,
+    category : ContributionType
+  ) : async ProposalId {
+    if (not hasMember(caller)) {
+      throw Error.reject("Must join DAO first");
+    };
+    let id = nextProposalId;
+    nextProposalId += 1;
+    proposals.put(id, {
+      id;
+      title;
+      description;
+      proposer = caller;
+      createdAt = Time.now();
+      votesFor = 0;
+      votesAgainst = 0;
+      finalized = false;
+      approved = false;
+      category;
+    });
+    id
+  };
+
+  public shared({ caller }) func vote(proposalId : ProposalId, approve : Bool) : async () {
+    if (not hasMember(caller)) {
+      throw Error.reject("Only members can vote");
+    };
+    switch (proposals.get(proposalId)) {
+      case null { throw Error.reject("Proposal not found") };
+      case (?proposal) {
+        if (proposal.finalized) throw Error.reject("Proposal finalized");
+        let key = (proposalId, caller);
+        if (hasVoteKey(key)) throw Error.reject("Already voted");
+        votes.put(key, approve);
+        
+        // Update vote counts
+        let updatedProposal = {
+          proposal with
+          votesFor = if (approve) proposal.votesFor + 1 else proposal.votesFor;
+          votesAgainst = if (not approve) proposal.votesAgainst + 1 else proposal.votesAgainst;
+        };
+        proposals.put(proposalId, updatedProposal);
+      }
+    };
+  };
+
+  public shared({ caller }) func finalizeProposal(proposalId : ProposalId) : async () {
+    if (not isAdmin(caller)) {
+      throw Error.reject("Only deployer can finalize (for now)");
+    };
+    switch (proposals.get(proposalId)) {
+      case null { throw Error.reject("Proposal not found") };
+      case (?proposal) {
+        if (proposal.finalized) throw Error.reject("Already finalized");
+        let approved = meetsApprovalThreshold(proposal);
+        
+        proposals.put(proposalId, {
+          proposal with
+          finalized = true;
+          approved = approved;
+        });
+        
+        // If approved, boost proposer's contribution score
+        if (approved) {
+          switch (members.get(proposal.proposer)) {
+            case null {};
+            case (?member) {
+              members.put(proposal.proposer, {
+                member with
+                contributionScore = member.contributionScore + 10;
+              });
+            }
+          };
+        };
+      }
+    };
+  };
+
+  // === Query Functions ===
+
+  public query func getProposal(id : ProposalId) : async ?Proposal {
+    proposals.get(id)
+  };
+
+  public query func getMember(id : MemberId) : async ?Member {
+    members.get(id)
+  };
+
+  public query func getMemberCount() : async Nat {
+    getInternalMemberCount()
+  };
+
+  public query func getAllProposals() : async [Proposal] {
+    Iter.toArray(proposals.vals())
+  };
+
+  public query func getAllMembers() : async [Member] {
+    Iter.toArray(members.vals())
+  };
+
+  public query func getVoteCount(proposalId : ProposalId) : async ?(Nat, Nat) {
+    switch (proposals.get(proposalId)) {
+      case null null;  
+      case (?proposal) ?(proposal.votesFor, proposal.votesAgainst);
+    }
+  };
+
+  public query func hasVoted(proposalId : ProposalId, memberId : MemberId) : async Bool {
+    hasVoteKey((proposalId, memberId))
+  };
+
+  public query func getApprovalThreshold() : async Nat {
+    let total = getInternalMemberCount();
+    if (total == 0) return 0;
+    (total * 60) / 100
+  };
+
+}

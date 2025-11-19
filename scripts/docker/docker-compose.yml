@@ -1,0 +1,27 @@
+#!/bin/bash
+# Purpose: 
+# Location: scripts/docker/
+services:
+  hhdao-dev:
+    build:
+      context: .
+      target: development
+    container_name: hhdao-dev
+    ports:
+      - '3000:3000'
+      - '9229:9229'
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+      - WATCHPACK_POLLING=true
+    user: "${UID:-1000}:${GID:-1000}"
+    command: pnpm dev
+    restart: unless-stopped
+    networks:
+      - hhdao-network
+
+networks:
+  hhdao-network:
+    driver: bridge

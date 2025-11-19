@@ -1,0 +1,71 @@
+:root {
+  --hh-primary: #FB923C; /* primary / accent */
+  --hh-accent: #4ADE80;  /* positive / success */
+  --hh-deep-blue: #2563EB; /* deep accent */
+  --hh-background-start: #0F172A; /* dark background start */
+  --hh-background-end: #071322;   /* dark background end */
+  --hh-surface: rgba(15,15,15,0.95);
+  --hh-text: #FFFFFF;
+  --hh-muted: #97A6B2;
+  --hh-glow-opacity: 0.6;
+  --hh-glow-intensity: 1;
+  --hh-animation-speed: 1s;
+}
+
+html, body {
+  background: linear-gradient(180deg, var(--hh-background-start), var(--hh-background-end));
+  color: var(--hh-text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+.hhdao-bg-gradient { background: linear-gradient(180deg, var(--hh-background-end), #0f0f0f); }
+
+/* Layout helpers used by RootLayout */
+.hhdao-root { margin: 0; min-height: 100vh; }
+.hhdao-nav { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.04); background: var(--hh-surface); }
+.hhdao-nav-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+.hhdao-title { margin: 0; font-size: 1.5rem; }
+.hhdao-links { display: flex; gap: 1rem; }
+.hhdao-link { color: var(--hh-white); text-decoration: none; }
+.hhdao-link:hover { color: var(--hh-energy-orange); }
+
+/* Fix: remove list markers and ensure nav links are inline and accessible */
+.hhdao-links, .hhdao-links ul, .hhdao-links li { list-style: none; margin: 0; padding: 0; }
+.hhdao-links { display: flex; align-items: center; gap: 1rem; }
+.hhdao-link { display: inline-flex; align-items: center; padding: 6px 10px; border-radius: 6px; }
+
+/* Header / hero tweaks to match screenshot expectations */
+.hhdao-title { font-size: 2rem; letter-spacing: -0.5px; color: var(--hh-text); }
+
+/* If a page uses .hero or .hiidao-fusion classes, center main headings */
+.hero, .hiidao-fusion .hero, .hhdao-hero { text-align: center; padding: 72px 0; }
+.hero h1, .hhdao-hero h1, .hiidao-fusion .hero h1 { font-size: 3rem; margin: 0 auto 12px; }
+.hero p, .hhdao-hero p { color: var(--hh-muted); max-width: 780px; margin: 0 auto; }
+
+/* Small screens: reduce header size */
+@media (max-width: 720px) {
+  .hhdao-title { font-size: 1.25rem; }
+  .hero h1, .hhdao-hero h1 { font-size: 2rem; }
+  .hhdao-links { gap: 0.5rem; }
+}
+
+.hhdao-glow {
+  /* Use primary color with configurable intensity */
+  box-shadow: 0 8px 24px rgba(251,146,60, calc(var(--hh-glow-intensity) * 0.12));
+}
+
+.hhdao-accent {
+  color: var(--hh-primary);
+}
+
+.hhdao-surface {
+  background: var(--hh-surface);
+}
+
+/* utility for animations */
+.hhdao-pulse { animation: pulse var(--hh-animation-speed) infinite; }
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1 }
+  50% { transform: scale(1.03); opacity: 0.92 }
+  100% { transform: scale(1); opacity: 1 }
+}

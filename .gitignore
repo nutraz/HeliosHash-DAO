@@ -160,3 +160,7 @@ Thumbs.db
 .pnpm-store/
 .pnpm-store/
 .pnpm-store/
+.pnpm-store/
+node_modules/
+*.log
+dist/

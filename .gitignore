@@ -157,3 +157,4 @@ build/
 .DS_Store
 Thumbs.db
 .pnpm-store/
+.pnpm-store/

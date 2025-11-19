@@ -1,0 +1,28 @@
+name: CI - Motoko Tests
+on:
+  push:
+    branches: [ main, chore/**, feat/**, fix/** ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  motoko-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install DFX
+        run: |
+          sh -ci "$(curl -fsSL https://internetcomputer.org/install.sh)"
+          echo "DFX_INSTALL_ROOT=$HOME/bin" >> $GITHUB_ENV
+          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Cache dfx
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/dfinity
+          key: dfx-cache-${{ runner.os }}
+      - name: Show versions
+        run: |
+          dfx --version
+      - name: Run Motoko tests
+        run: pnpm test:canister

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import AuthLib "lib";
 import Principal "mo:base/Principal";
 import Result "mo:base/Result";
@@ -17,3 +18,18 @@ actor Auth {
     "auth-ready"
   };
 }
+=======
+persistent actor Auth {
+  public query func version() : async Text {
+    "Authentication v1.0";
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+  
+  public query func get_auth_methods() : async [Text] {
+    ["Internet Identity", "NFID", "Stoic", "Plug"];
+  };
+};
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

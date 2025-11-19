@@ -1,0 +1,4 @@
+/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/db
+/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/db
+/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/db
+/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/db

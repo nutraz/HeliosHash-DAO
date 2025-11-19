@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // HeliosHash DAO Governance Rules Canister
 // Codifies constitutional rules as immutable constants and enforcement functions
 
@@ -531,3 +532,18 @@ actor GovernanceRules {
         emergencyEntries := [];
     };
 }
+=======
+persistent actor Governance {
+  public query func version() : async Text {
+    "Governance v1.0";
+  };
+  
+  public query func get_proposal_count() : async Nat {
+    0;
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+};
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

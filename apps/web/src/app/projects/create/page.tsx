@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 'use client'
 
 import React, { useState } from 'react';
@@ -428,5 +429,21 @@ export default function HHDAOProjectCreation() {
         </div>
       </div>
     </div>
+=======
+"use client";
+
+import React from 'react';
+import { AuthProvider } from '@/context/AuthContext';
+import ProjectCreation from '@/components/dashboard/ProjectCreation';
+
+export default function CreateProjectPage() {
+  return (
+    <AuthProvider>
+      <div className="p-6">
+        <h1 className="text-2xl font-semibold mb-4">Create Project</h1>
+        <ProjectCreation />
+      </div>
+    </AuthProvider>
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
   );
 }

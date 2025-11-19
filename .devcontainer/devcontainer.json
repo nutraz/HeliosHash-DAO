@@ -20,7 +20,7 @@
     }
   },
 
-  "forwardPorts": [3000, 8000],
+  "forwardPorts": [3000, 8000, 5173],
   
   "postCreateCommand": "npm install -g pnpm && pnpm install",
 

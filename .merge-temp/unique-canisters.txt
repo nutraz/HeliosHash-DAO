@@ -1,0 +1,8 @@
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/build
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/main.mo
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/build
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/main.mo
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/build
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/main.mo
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/build
+/home/nutarzz/Development/archive/HeliosHash-DAO/canisters/main.mo

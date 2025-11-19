@@ -1,18 +1,32 @@
 {
   "canisters": {
     "governance": {
-                                    "main": "apps/backend/canisters/governance/Governance.mo",
+      "main": "canisters/governance/main.mo",
       "type": "motoko"
     },
     "treasury": {
-      "main": "apps/backend/canisters/treasury/Treasury.mo",
-      "type": "motoko" 
-    }
-    ,
-    "auth": {
-      "main": "canisters/auth/src/main.mo",
+      "main": "canisters/treasury/main.mo", 
+      "type": "motoko"
+    },
+    "hhdao": {
+      "main": "canisters/hhdao/src/main.mo",
+      "type": "motoko"
+    },
+    "project_hub": {
+      "main": "canisters/project_hub/src/main.mo",
+      "type": "motoko"
+    },
+    "hhu_token": {
+      "main": "canisters/hhu_token/main.mo",
       "type": "motoko"
     }
   },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "mops sources"
+    }
+  },
+  "output_env_file": ".env",
   "version": 1
 }

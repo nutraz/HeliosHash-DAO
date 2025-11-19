@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client";
 
 import React, { useEffect } from 'react';
@@ -28,3 +29,19 @@ const DashboardPage = () => {
 };
 
 export default DashboardPage;
+=======
+import React from 'react';
+import Dashboard from '@/components/dashboard/Dashboard';
+import { AuthProvider } from '@/context/AuthContext';
+import { ProtectedRoute } from '@/components/auth/ProtectedRoute';
+
+export default function DashboardPage() {
+  return (
+    <AuthProvider>
+      <ProtectedRoute>
+        <Dashboard />
+      </ProtectedRoute>
+    </AuthProvider>
+  );
+}
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

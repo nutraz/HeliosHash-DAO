@@ -1,0 +1,67 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 18
+        cache: 'pnpm'
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v2
+      with:
+        version: 8
+    
+    - name: Install dependencies
+      run: pnpm install
+    
+    - name: Install Playwright Browsers
+      run: pnpm --filter @hhdao/web exec playwright install --with-deps
+    
+    - name: Build web app
+      run: pnpm --filter @hhdao/web build
+
+    - name: Start web server (background)
+      run: |
+        pnpm --filter @hhdao/web start &> web-server.log &
+        echo $! > web.pid
+        # wait for the server to become available (up to 60s)
+        for i in {1..60}; do
+          if curl -sSf http://localhost:3000/ > /dev/null; then
+            echo "web server is up"; break
+          fi
+          sleep 1
+        done
+
+    - name: Run Playwright tests
+      run: pnpm --filter @hhdao/web run test:e2e
+
+    - name: Stop web server
+      if: always()
+      run: |
+        if [ -f web.pid ]; then
+          kill $(cat web.pid) || true
+          rm -f web.pid
+        fi
+        # fallback: kill any lingering next start processes
+        pkill -f 'next start' || true
+    
+    - name: Upload Playwright report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: playwright-report
+        path: apps/web/playwright-report/
+        retention-days: 30

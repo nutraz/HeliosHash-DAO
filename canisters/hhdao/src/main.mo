@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 
 import HHDAOLib "lib";
@@ -797,3 +798,22 @@ persistent actor class HHDAO(
 		summary
 	};
 }
+=======
+persistent actor HHDAO {
+  public query func version() : async Text {
+    "HHDAO Fusion v1.0";
+  };
+  
+  public query func greet(name : Text) : async Text {
+    "Hello, " # name # "! Welcome to HHDAO Fusion";
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+  
+  public query func get_canisters() : async [Text] {
+    ["hhdao", "governance", "identity", "auth", "treasury", "nft"];
+  };
+};
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

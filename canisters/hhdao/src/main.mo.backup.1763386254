@@ -1,0 +1,17 @@
+persistent actor HHDAO {
+  public query func version() : async Text {
+    "HHDAO Fusion v1.0";
+  };
+  
+  public query func greet(name : Text) : async Text {
+    "Hello, " # name # "! Welcome to HHDAO Fusion";
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+  
+  public query func get_canisters() : async [Text] {
+    ["hhdao", "governance", "identity", "auth", "treasury", "nft"];
+  };
+};

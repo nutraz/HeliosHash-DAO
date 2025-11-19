@@ -1,4 +1,4 @@
-Title: PRIV-001 — Replace localStorage usage in `app/dashboard/page.tsx`
+# PRIV-001 — Replace localStorage usage in `app/dashboard/page.tsx`
 
 Description:
 This task tracks replacing client-side `localStorage` usage of the `user` profile in `app/dashboard/page.tsx` with a secure server-side session or HTTP-only cookie and adding consent checks before storing any profile/demographic data.

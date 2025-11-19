@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 "use client"
 
 import React from 'react'
@@ -63,4 +64,16 @@ export default function RewardsPage() {
       </div>
     </div>
   )
+=======
+import React from 'react';
+
+export default function RewardsPage() {
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-semibold mb-4">Rewards Exchange</h1>
+      <p className="text-sm text-slate-600">This is a demo rewards exchange page. Redeem tokens for rewards here.</p>
+      <div className="mt-6 bg-white rounded-md p-4 shadow-sm">(Redeem UI stub)</div>
+    </div>
+  );
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

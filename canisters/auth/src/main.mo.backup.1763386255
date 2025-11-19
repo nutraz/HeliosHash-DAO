@@ -1,0 +1,13 @@
+persistent actor Auth {
+  public query func version() : async Text {
+    "Authentication v1.0";
+  };
+  
+  public query func ping() : async Text {
+    "pong";
+  };
+  
+  public query func get_auth_methods() : async [Text] {
+    ["Internet Identity", "NFID", "Stoic", "Plug"];
+  };
+};

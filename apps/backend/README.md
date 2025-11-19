@@ -1,98 +1,74 @@
-DFX / Motoko canisters (local build instructions)
+<div align="center">
+  <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400" style="animation: pulse 2s infinite;" />
+  
+  # HeliosHash DAO
+  **A OneWorldProject Initiative India** 
+  **https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity**
+  **Decentralized Renewable Energy Platform on Internet Computer**
+  
+  [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
+  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+</div>
 
-This folder contains minimal Motoko canister skeletons (governance, treasury) and a `dfx.json` configuration.
+<style>
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+</style>
 
-Quick local build steps
-1. Ensure the DFINITY SDK (dfx) is installed and on your PATH. If not installed, install it with:
+---
 
-   curl -fsSL https://sdk.dfinity.org/install.sh | sh
-
-2. Start a clean local replica and build the canisters:
-
-   cd /path/to/repo/apps/backend
-   dfx start --background --clean
-   dfx canister create --all
-   dfx build
-
-3. Deploy (optional):
-
-   dfx deploy
-
-Common local build issue encountered in this environment
-- Error: Failed to invoke the package tool "mops" / "No such file or directory (os error 2)"
-
-What this means
-- The Motoko package toolchain (mops/moc) is not available in the running environment. Installing the DFINITY SDK via the official install script should provide the required Motoko tooling.
-
-If you run into this locally
-- Ensure you've installed dfx using the install script above and reopened your shell so the dfx path is available.
-- If the error persists, run:
-
-  dfx --version
-  which mops || true
-  which moc || true
-
-You can also rely on CI: a GitHub Actions workflow is included at `/.github/workflows/dfx-build.yml` that performs a fresh dfx install and builds the canisters on Ubuntu CI.
-
-If you'd like, I can:
-- Add a more complete CI job that also runs Motoko tests and uploads build artifacts.
-- Attempt to install the Motoko toolchain in this environment (requires network install).
-# `helioshash_backend`
-
-Welcome to your new `helioshash_backend` project and to the Internet Computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
-
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
-
-To learn more before you start working with `helioshash_backend`, see the following documentation available online:
-
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Motoko Programming Language Guide](https://internetcomputer.org/docs/current/motoko/main/motoko)
-- [Motoko Language Quick Reference](https://internetcomputer.org/docs/current/motoko/main/language-manual)
-
-If you want to start working on your project right away, you might want to try the following commands:
+## 🚀 Quick Start
 
 ```bash
-cd helioshash_backend/
-dfx help
-dfx canister --help
-```
+git clone https://github.com/nutraz/HeliosHash-DAO.git
+cd HeliosHash-DAO
+./scripts/dev-setup.sh  # or manually: pnpm install && dfx start --background --clean && dfx deploy && pnpm dev
+Visit http://localhost:3002
 
-## Running the project locally
+🏗️ Architecture
+Frontend: Next.js 14 + TypeScript + Tailwind
 
-If you want to test your project locally, you can use the following commands:
+Backend: Motoko canisters on Internet Computer
 
-```bash
-# Starts the replica, running in the background
+Mobile: Flutter (Android/iOS/Linux)
+
+Smart Contracts: Solidity for bridges
+
+💻 Development
+bash
+# Web development
+cd apps/web && pnpm dev
+
+# Backend development  
 dfx start --background
-
-# Deploys your canisters to the replica and generates your candid interface
 dfx deploy
-```
 
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
+# Mobile development
+cd apps/mobile && flutter run
+📚 Documentation
+Backend/DFX Setup
 
-If you have made changes to your backend canister, you can generate a new candid interface with
+Development Guide
 
-```bash
-npm run generate
-```
+Architecture
 
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
+API Reference
 
-If you are making frontend changes, you can start a development server with
+🔧 Features
+DAO Governance & Voting
 
-```bash
-npm start
-```
+Token Management (HHU)
 
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
+Renewable Energy Projects
 
-### Note on frontend environment variables
+Multi-platform Access
 
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
+Community Governance
 
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+🤝 Contributing
+See CONTRIBUTING.md for guidelines.
+
+<div align="center"> Made with ❤️ by the OneWorldProject Community </div> EOF

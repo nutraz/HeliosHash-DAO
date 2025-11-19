@@ -1,5 +1,9 @@
 {
   "compilerOptions": {
+<<<<<<< HEAD
+=======
+    "target": "es2020",
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
     "lib": [
       "dom",
       "dom.iterable",
@@ -11,6 +15,10 @@
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
+<<<<<<< HEAD
+=======
+    "downlevelIteration": true,
+>>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,

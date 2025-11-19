@@ -1,4 +1,4 @@
-<div align="center">
+# HeliosHash DAO
   <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400" style="animation: pulse 2s infinite;" />
   
   # HeliosHash DAO

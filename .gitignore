@@ -164,3 +164,6 @@ Thumbs.db
 node_modules/
 *.log
 dist/
+# Long duplicate documentation files
+*HeliosHash DAO Decentralized Application*.md
+*Enhanced Overview.md

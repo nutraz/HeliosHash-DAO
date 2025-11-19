@@ -1,12 +1,5 @@
 {
   "compilerOptions": {
-<<<<<<< HEAD
-    "target": "es5",
-    "lib": ["dom", "dom.iterable", "es6"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-=======
     "target": "es2020",
     "lib": [
       "dom",
@@ -15,8 +8,7 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
+    "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -25,11 +17,8 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-<<<<<<< HEAD
-=======
     "downlevelIteration": true,
     "noUncheckedIndexedAccess": true,
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
     "plugins": [
       {
         "name": "next"
@@ -37,18 +26,12 @@
     ],
     "baseUrl": ".",
     "paths": {
-<<<<<<< HEAD
-      "@/*": ["./src/*"]
-    }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
-=======
       "@/*": [
         "./src/*"
       ]
     },
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "next-env.d.ts",
@@ -59,5 +42,4 @@
   "exclude": [
     "node_modules"
   ]
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

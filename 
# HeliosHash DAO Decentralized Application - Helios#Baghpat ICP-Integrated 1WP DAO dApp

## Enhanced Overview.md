@@ -1,5 +1,3 @@
-I'll refine and enhance the HeliosHash DAO dApp specification by adding a comprehensive social hub feature. Here's the complete refined specification:
-
 # HeliosHash DAO Decentralized Application - Helios#Baghpat ICP-Integrated 1WP DAO dApp
 
 ## Enhanced Overview

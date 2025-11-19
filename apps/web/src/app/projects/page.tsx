@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client'
 
 import React from 'react'
@@ -66,44 +65,4 @@ export default function ProjectsPage() {
       </div>
     </div>
   )
-=======
-import React from 'react';
-import ProjectMap from '@/components/ProjectMap/ProjectMap';
-import Link from 'next/link';
-
-export const metadata = {
-  title: 'Projects - HHDAO',
-}
-
-export default function ProjectsPage() {
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Projects</h1>
-        <div>
-          <Link href="/projects/create" className="text-sm bg-indigo-600 text-white px-3 py-1 rounded-md">Create Project</Link>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <ProjectMap />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="col-span-2 bg-white rounded-md p-4 shadow-sm">
-            <h2 className="font-medium">Featured</h2>
-            <p className="text-sm text-slate-600">Helios#Baghpat — agrivoltaic microgrid pilot with community funding options.</p>
-            <div className="mt-3">
-              <Link href="/projects/helios-baghpat" className="text-indigo-600">Open Helios#Baghpat</Link>
-            </div>
-          </div>
-
-          <aside className="bg-white rounded-md p-4 shadow-sm">
-            <h3 className="font-medium">Filters</h3>
-            <p className="text-xs text-slate-500">(stub)</p>
-          </aside>
-        </div>
-      </div>
-    </div>
-  );
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

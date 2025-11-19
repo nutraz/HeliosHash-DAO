@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Inter } from 'next/font/google'
 import './globals.css'
 import ClientLayout from './ClientLayout'
@@ -34,31 +33,6 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <ClientLayout>{children}</ClientLayout>
-=======
-export const metadata = {
-  title: 'HHDAO Fusion',
-  description: 'HeliosHash DAO Platform',
-};
-
-import './styles/hhdao-theme.css';
-import '@/index.css';
-import HHDAOThemeProvider from '@/components/HHDAOThemeProvider';
-import Nav from '@/components/Nav';
-import { AuthProvider } from '@/context/AuthContext';
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body className="min-h-screen bg-background font-sans antialiased">
-        <AuthProvider>
-          <HHDAOThemeProvider>
-            <Nav />
-            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-              {children}
-            </main>
-          </HHDAOThemeProvider>
-        </AuthProvider>
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
       </body>
     </html>
   )

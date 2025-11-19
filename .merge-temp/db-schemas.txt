@@ -1,4 +1,0 @@
-/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/schema.prisma
-/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/schema.prisma
-/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/schema.prisma
-/home/nutarzz/Development/archive/HeliosHash-DAO/prisma/schema.prisma

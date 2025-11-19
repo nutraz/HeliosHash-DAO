@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-<<<<<<< HEAD
   output: 'standalone',
   reactStrictMode: true,
   transpilePackages: ["@helioshash/shared"],
@@ -59,14 +58,3 @@ export default {
     ];
   }
 };
-=======
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  }
-};
-
-module.exports = nextConfig;
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

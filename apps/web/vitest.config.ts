@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { defineConfig } from "vitest/config";
 import path from "path";
 
@@ -16,20 +15,4 @@ export default defineConfig({
       "@web": path.resolve(__dirname, "src"),
     },
   },
-=======
-import { defineConfig } from 'vitest/config';
-import path from 'path';
-
-export default defineConfig({
-  resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-    },
-  },
-  test: {
-    environment: 'node',
-    globals: true,
-    setupFiles: [],
-  },
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 });

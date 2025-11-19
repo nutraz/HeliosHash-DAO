@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client"
 
 import { useAuth } from '@/contexts/AuthContext'
@@ -25,19 +24,4 @@ export default function CommunityPage() {
   const language = user && typeof (user as MaybeUser).language === 'string' ? (user as MaybeUser).language : 'en'
 
   return <CommunityHub user={user || undefined} language={language} />
-=======
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-
-export default function CommunityRedirect() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace('/social/communities');
-  }, [router]);
-  return (
-    <div className="p-6">
-      <p>Redirecting to communities…</p>
-    </div>
-  );
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

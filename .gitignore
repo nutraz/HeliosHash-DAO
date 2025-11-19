@@ -156,3 +156,4 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+.pnpm-store/

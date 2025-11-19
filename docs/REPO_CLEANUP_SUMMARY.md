@@ -1,6 +1,7 @@
 # HeliosHash-DAO Clean Repo Summary (Oct 2025)
 
 ## Actions Taken
+
 - Removed duplicate, legacy, and irrelevant folders (e.g., HeliosHash-DAO/, temp/, cache/, build/, artifacts/, node_modules/, etc.)
 - Deleted all log, backup, and temp files
 - Merged all tests into `test/` directory
@@ -10,6 +11,7 @@
 - Removed all hidden/config files not essential for builds or CI
 
 ## Current Structure (Key Directories/Files)
+
 - app/
 - src/
 - pages/
@@ -54,10 +56,15 @@
 - CRITICAL_FIXES_TODO.md
 
 ## Next Steps
+
 - Review the repo for any missing essentials
-- Reinstall dependencies as needed (e.g., pnpm install)
+- Reinstall dependencies as needed (`pnpm install`)
 - Reinitialize git if required
 - Confirm all builds/tests pass
 
----
-This repo is now clean, minimal, and ready for focused development.
+Repo structure confirmed as of Nov 2025. All legacy, duplicate, and irrelevant files have been removed. The repo is clean, minimal, and ready for focused development and production-readiness improvements.
+
+Next steps:
+- Reinstall dependencies (`pnpm install`)
+- Confirm all builds and tests pass
+- Continue updating documentation and compliance files

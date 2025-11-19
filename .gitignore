@@ -130,3 +130,29 @@ dev-workflow.sh
 start-dev.sh
 analyze-*.cjs
 diagnose-*.cjs
+
+# Dependency directories
+node_modules/
+.pnpm-store/
+apps/*/node_modules/
+
+# Build artifacts
+dist/
+build/
+*.tgz
+*.tar.gz
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

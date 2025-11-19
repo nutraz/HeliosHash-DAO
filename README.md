@@ -5,6 +5,8 @@
   **A OneWorldProject Initiative India** 
   **https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity**
   **Decentralized Renewable Energy Platform on Internet Computer**
+
+
   
   [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
   [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
@@ -14,6 +16,11 @@
 ---
 
 A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend and Flutter mobile app. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.
+  
+  ** Refer to 
+https://claude.ai/public/artifacts/bf7b4445-dac1-4e25-b87d-6fb0fbfb17e1  UI look Feel
+https://claude.ai/public/artifacts/b60c6997-4a0b-4730-a792-742859d59e55 Project creation flow 
+https://claude.ai/public/artifacts/75542e5a-9fa9-42b8-b636-55080e9b4dba Dashboard
 
 ## 🏗️ Architecture
 

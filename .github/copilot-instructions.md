@@ -1,3 +1,71 @@
+# HeliosHash DAO – Copilot & AI Agent Instructions (Updated Nov 19 2025)
+
+You are working on **HeliosHash-DAO**, a renewable-energy + DePIN DAO that is the flagship India/subcontinent extension of One World Project (1WP).  
+Core mission: Tokenize solar-powered Bitcoin mining and rural smart-city infrastructure so villages own the profits.
+
+## 1. Project Structure (never guess paths)
+```
+/apps
+  /web          → Next.js 14 App Router, TypeScript, Tailwind, shadcn/ui
+  /mobile       → Flutter 3.35 (Android/iOS/Linux)
+/canisters      → Motoko (ICP) – governance, treasury, proposals
+/contracts      → Solidity – Polygon/Ethereum bridge + RWA tokenization
+/.github
+  /copilot-instructions.md  ← you are reading this
+/scripts        → dev-setup.sh, deploy-icp.sh, bridge-sync.sh
+```
+
+## 2. Sacred Rules (break nothing)
+- Never write plain JavaScript → always TypeScript with strict mode
+- Never commit mock auth → replace with ICP Internet Identity or 1WP session wallet ASAP
+- Never hard-code chain IDs or canister IDs → use .env + dfx.json / hardhat.config.ts
+- All new features must have a Playwright E2E test in `/apps/web/e2e` or Flutter integration test
+- Every proposal flow must go: create → vote → queue → execute (timelock 48 h on mainnet)
+
+## 3. One-Liner Commands Agents Must Know
+```bash
+# Full local dev
+./scripts/dev-setup.sh          # installs everything + starts all 4 dev servers
+dfx deploy --network=local        # deploys all canisters
+npm run web:dev & flutter run -d chrome & dfx start --background
+npm run bridge:sync               # syncs proposals from ICP → Polygon
+npm run audit:prep                # runs slither + mythril + cargo-audit for Motoko
+```
+
+## 4. Naming Conventions (enforced by CI)
+- Canisters: `hh_governance`, `hh_treasury`, `hh_rwa_factory`
+- Flutter screens: `SolarProjectDetailScreen`, `ProposalVoteScreen`
+- Next.js pages: `/app/(dashboard)/proposals/[id]/page.tsx`
+- Tokens: HHU (HeliosHash Utility), sHHU (staked), xHHU (Polygon-wrapped)
+
+## 5. Current High-Priority TODOs (as of Nov 19 2025)
+1. Replace all mock auth with ICP Internet Identity + 1WP session fallback
+2. Implement cross-chain message verification for bridge (EIP-712 + ICP threshold sigs)
+3. Add Playwright flow: login → create solar proposal → vote → execute → verify RWA minted on Polygon
+4. Write KYC module using IndiaStack/Aadhaar Verified API for Baghpat pilot
+5. Add UrgamU Delhi live dashboard to 1WP dApp (already linked at `/daodetail/UrgamUSmartCity`)
+
+## 6. India / 1WP Specific Context (use in every PR description)
+- This DAO is the official 1WP India chapter (@1wpindia)
+- All RWAs launched here automatically feed 100 % profits back to community (1WP rule)
+- Use @nutraazz (current 1WP global #1) and @crypdohcrypto (1WP founder) as reviewer handles
+- Any new feature that can earn $1WP merit points must include referral tracking
+
+## 7. Tone & Style for Commit Messages & PRs
+- Commit: `<type>(scope): short imperative description`  
+  Example: `feat(governance): add 48h timelock to proposal execution`
+- PR titles: `[INDIA-RWA] Add Baghpat Solar Pilot Dashboard`
+- Always add `1WP-Merit:+2500` label if the feature drives referrals
+
+## 8. Agent Cheat Sheet (copy-paste these prompts)
+```text
+@copilot explain the full proposal lifecycle from frontend to ICP to Polygon bridge
+@copilot generate Playwright test for "village member votes on solar farm proposal"
+@copilot add IndiaStack KYC flow with mock fallback for local dev
+@copilot make this component responsive for Hindi/English RTL toggle
+```
+
+Stick to these instructions and the project will ship mainnet before Q1 2026.
 <<<<<<< HEAD
 # HeliosHash DAO — Copilot Agent Instructions
 

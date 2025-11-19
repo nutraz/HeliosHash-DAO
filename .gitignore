@@ -167,3 +167,16 @@ dist/
 # Long duplicate documentation files
 *HeliosHash DAO Decentralized Application*.md
 *Enhanced Overview.md
+
+# Temp and editor files
+*.tmp
+*~
+*.l.tmp
+*:l.tmp
+HEAD.tmp
+.sign
+
+# Local dev and coverage
+.next/
+.dfx/
+coverage/

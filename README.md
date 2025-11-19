@@ -11,6 +11,7 @@
   
 </div>
 
+<<<<<<< HEAD
 <style>
 @keyframes pulse {
   0% { transform: scale(1); }
@@ -19,6 +20,8 @@
 }
 </style>
 
+=======
+>>>>>>> 4baeadb74ac960ffef992a86ecb684bc0fd67c1f
 ---
 
 A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend and Flutter mobile app. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.

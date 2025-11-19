@@ -17,7 +17,8 @@
 
 A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend and Flutter mobile app. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.
   
-  ** Refer to 
+  ** Refer to **
+https://claude.ai/public/artifacts/d610b349-a837-47d7-a9f1-82b913b9d88e  Claude (AI Security Auditor) Date: November 19, 2025
 https://claude.ai/public/artifacts/bf7b4445-dac1-4e25-b87d-6fb0fbfb17e1  UI look Feel
 https://claude.ai/public/artifacts/b60c6997-4a0b-4730-a792-742859d59e55 Project creation flow 
 https://claude.ai/public/artifacts/75542e5a-9fa9-42b8-b636-55080e9b4dba Dashboard

@@ -45,14 +45,18 @@ persistent actor NFTMembership {
   public shared(msg) func transfer(tokenId : Nat, to : Principal) : async Bool {
     var i : Nat = 0;
     var ok : Bool = false;
+    var out : [Token] = [];
     while (i < tokens.size()) {
       if (tokens[i].id == tokenId) {
-        tokens[i].owner := to;
+        let modified : Token = { id = tokens[i].id; owner = to; tier = tokens[i].tier; metadata = tokens[i].metadata; mintedAt = tokens[i].mintedAt };
+        out := Array.append(out, [modified]);
         ok := true;
-        break;
+      } else {
+        out := Array.append(out, [tokens[i]]);
       };
       i += 1;
     };
+    tokens := out;
     ok
   };
 
@@ -65,7 +69,6 @@ persistent actor NFTMembership {
       if (tokens[i].id == tokenId) {
         owner := tokens[i].owner;
         found := true;
-        break;
       };
       i += 1;
     };

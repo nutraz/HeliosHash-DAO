@@ -26,7 +26,6 @@ actor MetadataGovernance {
       let (pid, _cid, _c) = proposals[i];
       if (pid == proposalId) {
         found := true;
-        break;
       };
       i += 1;
     };

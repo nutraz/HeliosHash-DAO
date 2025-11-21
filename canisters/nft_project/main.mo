@@ -43,14 +43,18 @@ persistent actor NFTProject {
   public shared(msg) func transfer(tokenId : Nat, to : Principal) : async Bool {
     var i : Nat = 0;
     var ok : Bool = false;
+    var out : [ProjectToken] = [];
     while (i < tokens.size()) {
       if (tokens[i].id == tokenId) {
-        tokens[i].owner := to;
+        let modified : ProjectToken = { id = tokens[i].id; owner = to; projectId = tokens[i].projectId; metadata = tokens[i].metadata; mintedAt = tokens[i].mintedAt };
+        out := Array.append(out, [modified]);
         ok := true;
-        break;
+      } else {
+        out := Array.append(out, [tokens[i]]);
       };
       i += 1;
     };
+    tokens := out;
     ok
   };
 

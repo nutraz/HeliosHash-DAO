@@ -42,4 +42,4 @@ actor MetadataGovernance {
   public query func listProposals() : async [ (Nat, Text, Text) ] {
     proposals
   };
-};
+}

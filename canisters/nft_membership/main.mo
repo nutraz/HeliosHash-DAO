@@ -96,4 +96,4 @@ persistent actor NFTMembership {
     };
     res
   };
-};
+}

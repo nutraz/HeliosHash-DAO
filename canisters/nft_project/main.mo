@@ -69,4 +69,4 @@ persistent actor NFTProject {
     };
     res
   };
-};
+}

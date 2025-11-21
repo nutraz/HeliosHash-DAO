@@ -1,0 +1,4 @@
+[
+  {"id": "tx-1", "from": "ryjl3-tyaaa-aaaaa-aaaba-cai", "to": "proj-1", "amount": 1000, "type": "mint", "time": "2025-11-21T08:00:00Z"},
+  {"id": "tx-2", "from": "rkp4c-7iaaa-aaaaa-aaaca-cai", "to": "proj-2", "amount": 200, "type": "contribute", "time": "2025-11-21T09:30:00Z"}
+]

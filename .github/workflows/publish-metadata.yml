@@ -1,0 +1,32 @@
+name: Publish NFT Metadata (staging)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/opensea/**'
+      - 'scripts/demo/**'
+
+jobs:
+  export-and-pin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+      - name: Render metadata
+        run: node scripts/opensea/render_metadata.js scripts/demo/members.json build/opensea
+      - name: Dry-run pin
+        run: scripts/opensea/export_and_pin.sh build/opensea scripts/demo/members.json
+        env:
+          WEB3_STORAGE_TOKEN: ${{ secrets.WEB3_STORAGE_TOKEN }}
+      - name: Create candidate manifest (PR)
+        run: |
+          echo "Creating manifest..."
+          node -e "const fs=require('fs'); const files=fs.readdirSync('build/opensea'); fs.writeFileSync('build/opensea/manifest.json', JSON.stringify(files)); console.log('manifest written');"
+      - name: Create PR (placeholder)
+        run: echo "Create a PR with build/opensea/manifest.json for review and governance approval."

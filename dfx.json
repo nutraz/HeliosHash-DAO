@@ -20,6 +20,18 @@
       "main": "canisters/hhu_token/main.mo",
       "type": "motoko"
     }
+    ,"metadata_governance": {
+      "main": "canisters/metadata_governance/main.mo",
+      "type": "motoko"
+    },
+    "nft_membership": {
+      "main": "canisters/nft_membership/main.mo",
+      "type": "motoko"
+    },
+    "nft_project": {
+      "main": "canisters/nft_project/main.mo",
+      "type": "motoko"
+    }
   },
   "defaults": {
     "build": {

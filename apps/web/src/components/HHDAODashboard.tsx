@@ -6,13 +6,13 @@ import { useTheme } from '@/lib/theme';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import DashboardHeader from './DashboardHeader';
-import UserProfileCard from './dashboard/UserProfileCard';
-import StatsCards from './dashboard/StatsCards';
-import TokenTransfer from './dashboard/TokenTransfer';
 import LoadingSpinner from './dashboard/LoadingSpinner';
 import { ICPAuthService, ICPCanisterService } from '@/lib/services/icpService';
 import { SecurityService } from '@/lib/services/securityService';
 import { useDashboardStore } from '@/lib/stores/dashboardStore';
+import ProfileSection, { ProfileStats } from './hhdao/ProfileSection';
+import WalletPanel from './hhdao/WalletPanel';
+import HeliosBaghpatButton from './hhdao/HeliosBaghpatButton';
 
 type Stage = string;
 
@@ -107,10 +107,10 @@ const HHDAODashboard: React.FC = () => {
   }, [isAuthenticated]);
 
   // Get user stats (mock for now, will connect to canister later)
-  const userStats = {
+  const userStats: ProfileStats = {
     contributions: 42,
     rewards: 320,
-    projectCount: projects.length
+    projectCount: projects.length,
   };
 
   return (
@@ -119,9 +119,13 @@ const HHDAODashboard: React.FC = () => {
         <DashboardHeader />
 
         <div className="space-y-6">
-          <UserProfileCard user={userStore || user} balance={tokenBalance} />
-          <StatsCards stats={userStats} />
-          <TokenTransfer canisterService={canisterService} securityService={securityService} onSuccess={refreshBalance} />
+          <ProfileSection user={userStore || user} balance={tokenBalance} stats={userStats} />
+          <WalletPanel
+            stats={userStats}
+            canisterService={canisterService}
+            securityService={securityService}
+            onTransferSuccess={refreshBalance}
+          />
         </div>
 
         {/* Projects Section */}
@@ -143,16 +147,17 @@ const HHDAODashboard: React.FC = () => {
         {/* Projects & Actions Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <div className="p-4 rounded bg-white dark:bg-gray-800">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="font-semibold">Projects</h2>
-                <div className="space-x-2">
-                  <button onClick={() => setFilterStage('all')} className={`px-2 py-1 rounded text-sm ${filterStage === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>All</button>
-                  <button onClick={() => setFilterStage('development')} className={`px-2 py-1 rounded text-sm ${filterStage === 'development' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Development</button>
-                  <button onClick={() => setFilterStage('planning')} className={`px-2 py-1 rounded text-sm ${filterStage === 'planning' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Planning</button>
-                </div>
-                
-                {filtered.map(p => (
+          <div className="p-4 rounded bg-white dark:bg-gray-800">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="font-semibold">Projects</h2>
+              <div className="space-x-2">
+                <button onClick={() => setFilterStage('all')} className={`px-2 py-1 rounded text-sm ${filterStage === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>All</button>
+                <button onClick={() => setFilterStage('development')} className={`px-2 py-1 rounded text-sm ${filterStage === 'development' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Development</button>
+                <button onClick={() => setFilterStage('planning')} className={`px-2 py-1 rounded text-sm ${filterStage === 'planning' ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-gray-700'}`}>Planning</button>
+              </div>
+            </div>
+
+            {filtered.map(p => (
                   <button
                     key={p.id}
                     onClick={() => setSelectedProject(p)}
@@ -174,10 +179,27 @@ const HHDAODashboard: React.FC = () => {
           </div>
 
           <div>
-            <div className="p-4 rounded bg-white dark:bg-gray-800">
+            <div className="p-4 rounded bg-white dark:bg-gray-800 space-y-3">
               <h3 className="font-semibold mb-2">Quick Actions</h3>
-              <button className="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition" onClick={() => router.push('/rewards')}><Gift className="mr-2" /> Rewards</button>
-              <button className="w-full px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition" onClick={() => router.push('/opportunities')}><ShoppingBag className="mr-2" /> Vendors</button>
+              <button
+                className="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                onClick={() => router.push('/rewards')}
+              >
+                <Gift className="mr-2" /> Rewards / Exchange Hub
+              </button>
+              <button
+                className="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                onClick={() => router.push('/projects')}
+              >
+                <MapPin className="mr-2" /> Explore Projects Map
+              </button>
+              <button
+                className="w-full mb-2 px-3 py-2 rounded bg-gray-100 dark:bg-gray-700 flex items-center hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                onClick={() => router.push('/projects/create')}
+              >
+                <ShoppingBag className="mr-2" /> Create / Apply for Project
+              </button>
+              <HeliosBaghpatButton />
             </div>
           </div>
         </div>

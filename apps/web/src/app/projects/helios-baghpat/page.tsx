@@ -1,4 +1,3 @@
-<<<<<<< HEAD
  'use client'
 
 import React, { useState } from 'react'
@@ -121,54 +120,5 @@ export default function HeliosBaghpatProject() {
       </div>
     </div>
   )
-=======
-"use client"
-import React, {useState} from 'react';
-import OverviewTab from '@/components/projects/OverviewTab';
-import CommunityTab from '@/components/projects/CommunityTab';
-import OpportunitiesTab from '@/components/projects/OpportunitiesTab';
-import GovernanceTab from '@/components/projects/GovernanceTab';
-import RwaTab from '@/components/projects/RwaTab';
-import IoTTab from '@/components/projects/IoTTab';
 
-const tabs = [
-  {key: 'overview', label: 'Overview'},
-  {key: 'community', label: 'Community'},
-  {key: 'opportunities', label: 'Opportunities'},
-  {key: 'governance', label: 'Governance'},
-  {key: 'rwa', label: 'RWA'},
-  {key: 'iot', label: 'IoT'},
-];
-
-export default function HeliosBaghpatPage() {
-  const [active, setActive] = useState<string>('overview');
-
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">Helios#Baghpat</h1>
-        <div className="text-sm text-slate-600">Status: Pilot</div>
-      </div>
-
-      <div className="mb-4">
-        <nav className="flex gap-2">
-          {tabs.map(t => (
-            <button key={t.key} onClick={() => setActive(t.key)} className={`px-3 py-1 rounded-md ${active===t.key? 'bg-indigo-600 text-white':'bg-slate-100 text-slate-700'}`}>
-              {t.label}
-            </button>
-          ))}
-        </nav>
-      </div>
-
-      <div className="bg-white rounded-md p-4 shadow-sm">
-        {active === 'overview' && <OverviewTab />}
-        {active === 'community' && <CommunityTab />}
-        {active === 'opportunities' && <OpportunitiesTab />}
-        {active === 'governance' && <GovernanceTab />}
-        {active === 'rwa' && <RwaTab />}
-        {active === 'iot' && <IoTTab />}
-      </div>
-    </div>
-  );
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

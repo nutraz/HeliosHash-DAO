@@ -4,7 +4,8 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/lib/theme';
 import { useRouter } from 'next/navigation';
-import { Sun, Moon, Image as ImageIcon, LogOut } from 'lucide-react';
+import { Sun, Moon, LogOut } from 'lucide-react';
+import NFTCollectionButton from './hhdao/NFTCollectionButton';
 
 export default function DashboardHeader() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -61,13 +62,7 @@ export default function DashboardHeader() {
       {/* Action Buttons */}
       <div className="flex items-center gap-3">
         {/* NFT Collection Button */}
-        <button
-          onClick={() => router.push('/nfts')}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-600 hover:bg-purple-700 text-white font-medium transition-colors shadow-md"
-        >
-          <ImageIcon size={18} />
-          <span className="hidden sm:inline">NFT Collection</span>
-        </button>
+        <NFTCollectionButton />
 
         {/* Theme Toggle */}
         <button

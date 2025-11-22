@@ -1,17 +1,28 @@
-<<<<<<< HEAD
-import { redirect } from 'next/navigation'
+import Link from "next/link";
 
-export default function Page() {
-  // Redirect root to the server-rendered test page so GET / doesn't return a
-  // Next.js App Router NotFound (this keeps the heavy client-only home as a
-  // client-side route while providing a usable server entrypoint).
-  redirect('/test-home')
-=======
-import { redirect } from 'next/navigation';
+export default function Home() {
+  return (
+    <main className="flex flex-col items-center justify-center h-screen gap-8 text-white bg-black">
+      <h1 className="text-4xl font-bold">HeliosHash / UrgamU Platform</h1>
 
-export default function Page() {
-  // Server-side redirect to the authentication entry point
-  redirect('/auth');
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
+      <div className="flex flex-col gap-4 text-center">
+        <Link href="/hiidao-fusion/login" className="text-xl underline">
+          Multi-Auth Login
+        </Link>
+        <Link href="/dashboard" className="text-xl underline">
+          Main User Dashboard
+        </Link>
+        <Link href="/project-hub" className="text-xl underline">
+          Project Hub
+        </Link>
+        <Link href="/dao" className="text-xl underline">
+          DAO Center
+        </Link>
+        <Link href="/urgamu-delhi" className="text-xl underline">
+          UrgamU Delhi Dashboard
+        </Link>
+      </div>
+    </main>
+  );
 }
 

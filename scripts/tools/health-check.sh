@@ -30,11 +30,8 @@ PORT_FIELD=$(echo "$RESP" | jq -r '.port // empty' 2>/dev/null || true)
 IP_FIELD=$(echo "$RESP" | jq -r '.ip // empty' 2>/dev/null || true)
 UPTIME=$(echo "$RESP" | jq -r '.uptime // empty' 2>/dev/null || true)
 
-<<<<<<< HEAD
 if [[ "$STATUS" != "ok" && "$STATUS" != "up" && "$STATUS" != "healthy" ]]; then
-=======
-if [[ "$STATUS" != "ok" && "$STATUS" != "up" && "$STATUS" != "healthy" ]]; then
->>>>>>> audit-clean
+ audit-clean
   echo "❌ API status not OK (status=$STATUS)"
   echo "Raw response:"
   echo "$RESP" | jq '.' 2>/dev/null || echo "$RESP"

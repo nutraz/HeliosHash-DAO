@@ -12,7 +12,6 @@ import Nat32 "mo:base/Nat32";
 import Buffer "mo:base/Buffer";
 import Option "mo:base/Option";
 import Array "mo:base/Array";
-<<<<<<< HEAD
 
 import HashMap "mo:base/HashMap";
 import Time "mo:base/Time";
@@ -26,9 +25,7 @@ import Array "mo:base/Array";
 import Result "mo:base/Result";
 import Buffer "mo:base/Buffer";
 import Option "mo:base/Option";
-=======
-import Float "mo:base/Float";
->>>>>>> audit-clean
+ audit-clean
 
 persistent actor MeetingManagement {
 

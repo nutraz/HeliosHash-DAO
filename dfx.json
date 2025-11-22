@@ -32,6 +32,19 @@
       "main": "canisters/nft_project/main.mo",
       "type": "motoko"
     }
+    ,"identity_canister": {
+      "main": "canisters/identity_canister/main.mo",
+      "type": "motoko"
+    },
+    
+    "audit_log": {
+      "main": "canisters/audit_log_canister/main.mo",
+      "type": "motoko"
+    },
+    "revocation_canister": {
+      "main": "canisters/revocation_canister/main.mo",
+      "type": "motoko"
+    }
   },
   "defaults": {
     "build": {

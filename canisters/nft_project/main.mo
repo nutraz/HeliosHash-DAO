@@ -1,7 +1,9 @@
-import Debug "mo:debug";
+import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
+import Blob "mo:base/Blob";
+import Nat "mo:base/Nat";
 
 /// Minimal NFT Project canister stub for demo & integration.
 persistent actor NFTProject {
@@ -13,8 +15,8 @@ persistent actor NFTProject {
     mintedAt: Time.Time;
   };
 
-  private stable var tokens : [ProjectToken] = [];
-  private stable var nextId : Nat = 1;
+  private var tokens : [ProjectToken] = [];
+  private var nextId : Nat = 1;
 
   public shared(msg) func mint(owner : Principal, projectId : Text, metadata : Blob) : async Nat {
     let t : ProjectToken = { id = nextId; owner = owner; projectId = projectId; metadata = metadata; mintedAt = Time.now() };

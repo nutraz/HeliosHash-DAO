@@ -8,20 +8,21 @@ import Option "mo:base/Option";
 import Result "mo:base/Result";
 import Text "mo:base/Text";
 import Iter "mo:base/Iter";
+import Array "mo:base/Array";
 
 /// HHU Token Canister
 /// Implements ICRC-1 token standard for HHU token on Internet Computer
 
-actor HHUToken {
+persistent actor HHUToken {
 
   // ============================================================================
   // CONSTANTS
   // ============================================================================
 
-  private let TOKEN_NAME = "HeliosHash Utility Token";
-  private let TOKEN_SYMBOL = "HHU";
-  private let DECIMALS : Nat8 = 8;
-  private let TOTAL_SUPPLY : Nat = 1_000_000_000 * (10 ** 8); // 1 billion tokens
+  private func token_name() : Text { "HeliosHash Utility Token" };
+  private func token_symbol() : Text { "HHU" };
+  private func token_decimals() : Nat8 { 8 };
+  private func token_total_supply() : Nat { 1_000_000_000 * (10 ** 8) };
 
   // ============================================================================
   // TYPE DEFINITIONS
@@ -60,23 +61,24 @@ actor HHUToken {
   // STATE
   // ============================================================================
 
-  private var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
-  private var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
-  private var transactions : [Transaction] = [];
-  private var totalSupply : Nat = 0;
-  private var burntSupply : Nat = 0;
+  private transient var balances = HashMap.HashMap<Principal, Nat>(1, Principal.equal, Principal.hash);
+  private transient var allowances = HashMap.HashMap<Principal, HashMap.HashMap<Principal, Nat>>(1, Principal.equal, Principal.hash);
+  private stable var transactions : [Transaction] = [];
+  private stable var totalSupply : Nat = 0;
+  private stable var burntSupply : Nat = 0;
 
-  // Initialize with minting to owner (this canister)
-  let owner : Principal = Principal.fromActor(actor "");
+  // Initialize owner placeholder. Real minting should be done via `mint` call.
+  // Use a stable textual placeholder to avoid runtime traps during init.
+  private transient var owner : Principal = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai");
 
   // ============================================================================
   // INITIALIZATION
   // ============================================================================
 
   private func _initialize() {
-    // Mint initial supply to canister
-    balances.put(owner, TOTAL_SUPPLY);
-    totalSupply := TOTAL_SUPPLY;
+    // No automatic mint at init to avoid depending on canister principal during deployment.
+    // Use `mint` externally to distribute initial supply when ready.
+    ();
   };
 
   // ============================================================================
@@ -85,22 +87,22 @@ actor HHUToken {
 
   /// Get token name
   public query func name() : async Text {
-    TOKEN_NAME
+    token_name()
   };
 
   /// Get token symbol
   public query func symbol() : async Text {
-    TOKEN_SYMBOL
+    token_symbol()
   };
 
   /// Get number of decimals
   public query func decimals() : async Nat8 {
-    DECIMALS
+    token_decimals()
   };
 
   /// Get total supply
   public query func total_supply() : async Nat {
-    totalSupply
+    token_total_supply()
   };
 
   /// Get burnt tokens
@@ -372,7 +374,14 @@ actor HHUToken {
     if (transactionCount <= limit) {
       transactions
     } else {
-      Array.slice(transactions, transactionCount - limit, transactionCount)
+      let start = transactionCount - limit;
+      var res : [Transaction] = [];
+      var i : Nat = start;
+      while (i < transactionCount) {
+        res := Array.append(res, [transactions[i]]);
+        i += 1;
+      };
+      res
     }
   };
 

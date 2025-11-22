@@ -71,7 +71,6 @@ if grep -q 'qrcode' package.json 2>/dev/null; then
   if node -e "require('qrcode')" 2>/dev/null; then
     TARGET_URL="${APP_URL_LAN:-$APP_URL_LOCAL}/auth/login"
     echo "🧾 QR for: $TARGET_URL"
-<<<<<<< HEAD
     TARGET_URL="$TARGET_URL" node - <<'NODE'
 const QRCode = require('qrcode');
 const target = process.env.TARGET_URL;
@@ -79,15 +78,7 @@ if (!target) {
   console.error('TARGET_URL not provided');
   process.exit(1);
 }
-=======
-    TARGET_URL="$TARGET_URL" node - <<'NODE'
-const QRCode = require('qrcode');
-const target = process.env.TARGET_URL;
-if (!target) {
-  console.error('TARGET_URL not provided');
-  process.exit(1);
-}
->>>>>>> audit-clean
+ audit-clean
 QRCode.toString(target, { type: 'terminal', small: true }, (e, out) => {
   if (e) return console.error('QR error', e);
   console.log(out);

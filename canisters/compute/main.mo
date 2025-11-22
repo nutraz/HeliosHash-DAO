@@ -1,13 +1,8 @@
-<<<<<<< HEAD
 // Chain Fusion imports for ckBTC integration
 // Note: These would be actual imports in production
 // import CKBTC "mo:ckbtc/ckbtc";
 // import AICompute "canister:ai-service";
 
-// Added missing base imports
-
-
-=======
 // Core imports
 import HashMap "mo:base/HashMap";
 import Principal "mo:base/Principal";
@@ -21,7 +16,6 @@ import Float "mo:base/Float";
 import Debug "mo:base/Debug";
 import Buffer "mo:base/Buffer";
 import Iter "mo:base/Iter";
->>>>>>> audit-clean
 
 persistent actor Compute {
   

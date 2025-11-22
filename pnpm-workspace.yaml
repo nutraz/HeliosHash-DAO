@@ -1,9 +1,12 @@
 packages:
-  - 'apps/*'
-  - 'packages/*'
-  - 'canisters/*'
-  - 'scripts/*'
-  - 'infra/*'
+  - apps/*
+  - packages/*
+  - canisters/*
+  - scripts/*
+  - infra/*
+
+ignoredBuiltDependencies:
+  - esbuild
 
 overrides:
   tar@=7.5.1: '>=7.5.2'

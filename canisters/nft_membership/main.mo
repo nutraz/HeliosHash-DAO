@@ -1,8 +1,9 @@
-import Debug "mo:debug";
+import Debug "mo:base/Debug";
 import Principal "mo:base/Principal";
-import Option "mo:base/Option";
 import Array "mo:base/Array";
 import Time "mo:base/Time";
+import Blob "mo:base/Blob";
+import Nat "mo:base/Nat";
 
 /// Minimal NFT Membership canister stub for demo and integration.
 persistent actor NFTMembership {
@@ -15,8 +16,8 @@ persistent actor NFTMembership {
     mintedAt: Time.Time;
   };
 
-  private stable var tokens : [Token] = [];
-  private stable var nextId : Nat = 1;
+  private var tokens : [Token] = [];
+  private var nextId : Nat = 1;
 
   public shared(msg) func mint(owner : Principal, tier : Nat, metadata : Blob) : async Bool {
     let t : Token = { id = nextId; owner = owner; tier = tier; metadata = metadata; mintedAt = Time.now() };
@@ -72,10 +73,10 @@ persistent actor NFTMembership {
       };
       i += 1;
     };
-    if (!found) { return false };
-    await burn(tokenId);
+    if (not found) { return false };
+    let _ = await burn(tokenId);
     // metadata left empty in demo
-    await mint(owner, targetTier, Blob.fromArray([0]));
+    let _ = await mint(owner, targetTier, Blob.fromArray([0]));
     true
   };
 

@@ -1,20 +1,21 @@
-import Debug "mo:debug";
-import Principal "mo:base/Principal";
+import Debug "mo:base/Debug";
 import Text "mo:base/Text";
+import Array "mo:base/Array";
+import Nat "mo:base/Nat";
 
-actor MetadataGovernance {
+persistent actor MetadataGovernance {
 
   // Simple local stub to record metadata publish proposals.
   // In production, integrate with existing governance canister.
 
-  private var proposals : [ (Nat, Text, Text) ] = [];
-  private var nextId : Nat = 1;
+  private transient var proposals : [ (Nat, Text, Text) ] = [];
+  private transient var nextId : Nat = 1;
 
   public shared(msg) func proposeMetadataPublish(collectionId : Text, cid : Text, summary : Text) : async Nat {
     let id = nextId;
     proposals := Array.append(proposals, [(id, collectionId, cid)]);
     nextId += 1;
-    Debug.print("Proposed metadata publish: " # Text.fromNat(id) # " cid=" # cid);
+    Debug.print("Proposed metadata publish: " # Nat.toText(id) # " cid=" # cid);
     id
   };
 
@@ -30,10 +31,10 @@ actor MetadataGovernance {
       i += 1;
     };
     if (found) {
-      Debug.print("Executing publish for proposal " # Text.fromNat(proposalId));
+      Debug.print("Executing publish for proposal " # Nat.toText(proposalId));
       true
     } else {
-      Debug.print("Proposal not found: " # Text.fromNat(proposalId));
+      Debug.print("Proposal not found: " # Nat.toText(proposalId));
       false
     }
   };

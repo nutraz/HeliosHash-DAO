@@ -1,18 +1,5 @@
 "use client";
 
-export default function ProfileSection() {
-  return (
-    <div className="p-4 bg-white/5 rounded mb-4">
-      <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-gray-500 rounded-full" />
-        <div>
-          <div className="font-semibold">Guest User</div>
-          <div className="text-sm text-gray-400">Rank: Visitor</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 import React from 'react';
 import UserProfileCard from '../dashboard/UserProfileCard';
 import StatsCards from '../dashboard/StatsCards';

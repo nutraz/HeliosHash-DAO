@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>HeliosHash DAO - Authenticated Dashboard</title>
+        <script src="https://cdn.jsdelivr.net/npm/@dfinity/agent/dist/prod/agent.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@dfinity/auth-client/dist/prod/auth-client.umd.min.js"></script>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            :root {
+                --primary: #6366f1; --primary-dark: #4338ca; --secondary: #10b981;
+                --dark: #0f172a; --darker: #020617; --light: #f8fafc;
+            }
+            body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%); color: var(--light); min-height: 100vh; }
+            .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; padding: 40px; background: rgba(255,255,255,0.05); border-radius: 20px; margin-bottom: 30px; }
+            .header h1 { font-size: 3rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+            .auth-section { text-align: center; margin-bottom: 30px; }
+            .btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-weight: 600; margin: 5px; }
+            .btn:hover { background: var(--primary-dark); }
+            .btn.secondary { background: var(--secondary); }
+            .btn.danger { background: #ef4444; }
+            .user-info { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 8px; margin: 10px 0; }
+            .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+            .stat-card { background: rgba(255,255,255,0.1); padding: 25px; border-radius: 12px; text-align: center; }
+            .stat-card .value { font-size: 2rem; font-weight: bold; color: var(--secondary); }
+            .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; }
+            .log { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-top: 20px; font-family: monospace; max-height: 200px; overflow-y: auto; }
+            .hidden { display: none; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚀 HeliosHash DAO</h1>
+                <p>Secure Decentralized Autonomous Organization</p>
+            </div>
+
+            <!-- Authentication Section -->
+            <div class="auth-section">
+                <div id="signedOutUI">
+                    <button class="btn" onclick="signIn()">🔐 Sign in with Internet Identity</button>
+                    <button class="btn secondary" onclick="simulateSignIn()">🔄 Simulate Sign In (Dev)</button>
+                </div>
+                <div id="signedInUI" class="hidden">
+                    <div class="user-info">
+                        <h3>👤 Authenticated User</h3>
+                        <p>Principal: <code id="userPrincipal">Loading...</code></p>
+                        <button class="btn danger" onclick="signOut()">🚪 Sign Out</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard (only shown when authenticated) -->
+            <div id="dashboard" class="hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Token Balance</h3>
+                        <div class="value" id="balance">0 HHD</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Canister Status</h3>
+                        <div class="value" id="status">Checking...</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>My Proposals</h3>
+                        <div class="value" id="myProposals">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Proposals</h3>
+                        <div class="value" id="totalProposals">0</div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" onclick="deposit()">💰 Deposit 100 HHD</button>
+                    <button class="btn secondary" onclick="createProposal()">📋 Create Proposal</button>
+                    <button class="btn" onclick="getBalance()">🔄 Refresh Balance</button>
+                    <button class="btn secondary" onclick="loadProposals()">📊 Load All Proposals</button>
+                </div>
+
+                <div class="log">
+                    <strong>Activity Log:</strong>
+                    <div id="log"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Canister IDs
+            const TREASURY_CANISTER_ID = "w7lou-c7777-77774-qaamq-cai";
+            const GOVERNANCE_CANISTER_ID = "wykia-ph777-77774-qaama-cai";
+
+            // Global variables
+            let authClient;
+            let identity;
+            let treasuryActor;
+            let governanceActor;
+            let isAuthenticated = false;
+
+            // Initialize auth client
+            async function initializeAuth() {
+                try {
+                    log("🔌 Initializing authentication...");
+                    // Prefer UMD export on window.AuthClient
+                    const AC = window.AuthClient || (window.authClient && window.authClient.AuthClient) || (window.dfinity && window.dfinity.AuthClient);
+                    if (!AC) {
+                        try {
+                            await loadScript('https://cdn.jsdelivr.net/npm/@dfinity/auth-client/dist/prod/auth-client.umd.min.js');
+                        } catch (e) {
+                            log('⚠️ Could not load AuthClient from CDN: ' + e);
+                        }
+                    }
+
+                    const AuthClientImpl = window.AuthClient || (window.authClient && window.authClient.AuthClient) || (window.dfinity && window.dfinity.AuthClient);
+                    if (!AuthClientImpl) {
+                        log('⚠️ AuthClient not available; falling back to unsigned UI');
+                        showSignedOutUI();
+                        return;
+                    }
+
+                    authClient = await AuthClientImpl.create();
+                    if (await authClient.isAuthenticated()) {
+                        await handleAuthenticated(authClient.getIdentity());
+                    } else {
+                        showSignedOutUI();
+                    }
+                } catch (error) {
+                    log("❌ Auth initialization failed: " + (error && error.message ? error.message : error));
+                    log("🔄 Falling back to simulation mode");
+                    showSignedOutUI();
+                }
+            }
+
+            // Sign in with Internet Identity
+            async function signIn() {
+                try {
+                    log("🔐 Starting Internet Identity flow...");
+                    await authClient.login({
+                        identityProvider: "https://identity.ic0.app/#authorize",
+                        onSuccess: async () => {
+                            await handleAuthenticated(authClient.getIdentity());
+                        },
+                        onError: (error) => {
+                            log("❌ Authentication failed: " + error);
+                        }
+                    });
+                } catch (error) {
+                    log("❌ Sign in failed: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Simulated sign in for development
+            async function simulateSignIn() {
+                log("🔄 Using simulated authentication for development");
+                const simulatedIdentity = {
+                    getPrincipal: () => ({ toString: () => "2vxsx-fae-simulated-user-12345" })
+                };
+                await handleAuthenticated(simulatedIdentity);
+            }
+
+            // Sign out
+            async function signOut() {
+                try {
+                    if (authClient && authClient.logout) await authClient.logout();
+                    showSignedOutUI();
+                    log("✅ Signed out successfully");
+                } catch (error) {
+                    log("❌ Sign out failed: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Handle successful authentication
+            async function handleAuthenticated(userIdentity) {
+                try {
+                    identity = userIdentity;
+                    isAuthenticated = true;
+                    const principal = identity.getPrincipal ? identity.getPrincipal().toString() : (identity.getPrincipal && identity.getPrincipal().toString ? identity.getPrincipal().toString() : String(identity));
+                    log("✅ Authenticated as: " + principal);
+                    document.getElementById('userPrincipal').textContent = principal;
+                    showSignedInUI();
+                    await initializeActors();
+                    await loadDashboardData();
+                } catch (error) {
+                    log("❌ Authentication handling failed: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Initialize actors with authenticated identity
+            async function initializeActors() {
+                try {
+                    log("🔄 Initializing authenticated actors...");
+                    const agent = new window.ic.HttpAgent({ 
+                        identity: identity,
+                        host: window.location.hostname.includes('localhost') ? 'http://127.0.0.1:4943' : 'https://ic0.app'
+                    });
+                    // For local development, fetch the root key
+                    if (window.location.hostname.includes('localhost')) {
+                        await agent.fetchRootKey();
+                    }
+
+                    treasuryActor = await window.ic.Actor.createActor(
+                        ({ IDL }) => IDL.Service({
+                            getBalance: IDL.Func([], [IDL.Int], ['query']),
+                            deposit: IDL.Func([IDL.Int, IDL.Text], [IDL.Text], []),
+                            withdraw: IDL.Func([IDL.Int, IDL.Principal, IDL.Text], [IDL.Text], []),
+                            getTransactions: IDL.Func([], [IDL.Vec(IDL.Record({ id: IDL.Nat, amount: IDL.Int, description: IDL.Text, timestamp: IDL.Int, from: IDL.Principal, to: IDL.Principal }))], ['query']),
+                            getVersion: IDL.Func([], [IDL.Text], ['query'])
+                        }),
+                        { agent, canisterId: TREASURY_CANISTER_ID }
+                    );
+
+                    governanceActor = await window.ic.Actor.createActor(
+                        ({ IDL }) => IDL.Service({
+                            createProposal: IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
+                            getProposals: IDL.Func([], [IDL.Vec(IDL.Record({ id: IDL.Nat, title: IDL.Text, description: IDL.Text, proposer: IDL.Principal, timestamp: IDL.Int, votesFor: IDL.Nat, votesAgainst: IDL.Nat, executed: IDL.Bool }))], ['query']),
+                            getVersion: IDL.Func([], [IDL.Text], ['query'])
+                        }),
+                        { agent, canisterId: GOVERNANCE_CANISTER_ID }
+                    );
+
+                    log("✅ Authenticated actors initialized");
+                    document.getElementById('status').textContent = 'Connected ✅';
+                
+                } catch (error) {
+                    log("❌ Actor initialization failed: " + (error && error.message ? error.message : error));
+                    document.getElementById('status').textContent = 'Error ❌';
+                }
+            }
+
+            // Load initial dashboard data
+            async function loadDashboardData() {
+                await getBalance();
+                await loadProposals();
+            }
+
+            // Get balance from treasury
+            async function getBalance() {
+                if (!isAuthenticated) return;
+                try {
+                    const balance = await treasuryActor.getBalance();
+                    document.getElementById('balance').textContent = balance + ' HHD';
+                    log(`💰 Balance: ${balance} HHD`);
+                } catch (error) {
+                    log("❌ Failed to get balance: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Deposit tokens (authenticated)
+            async function deposit() {
+                if (!isAuthenticated) return;
+                try {
+                    log("⏳ Depositing 100 HHD...");
+                    const result = await treasuryActor.deposit(100, "Authenticated deposit");
+                    log("✅ " + result);
+                    await getBalance();
+                } catch (error) {
+                    log("❌ Deposit failed: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Create proposal (authenticated - will show your principal as proposer)
+            async function createProposal() {
+                if (!isAuthenticated) return;
+                try {
+                    const title = "Feature Proposal from " + new Date().toLocaleDateString();
+                    const description = "This proposal was created by an authenticated user via the HeliosHash DAO dashboard";
+                
+                    log("⏳ Creating authenticated proposal...");
+                    const result = await governanceActor.createProposal(title, description);
+                    log("✅ " + result);
+                    await loadProposals();
+                } catch (error) {
+                    log("❌ Proposal creation failed: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // Load all proposals
+            async function loadProposals() {
+                if (!isAuthenticated) return;
+                try {
+                    log("⏳ Loading proposals...");
+                    const proposals = await governanceActor.getProposals();
+                    document.getElementById('totalProposals').textContent = proposals.length;
+                
+                    // Count proposals from current user
+                    const userPrincipal = identity.getPrincipal ? identity.getPrincipal().toString() : String(identity);
+                    const myProposals = proposals.filter(p => p.proposer.toString() === userPrincipal);
+                    document.getElementById('myProposals').textContent = myProposals.length;
+                
+                    log(`📊 Found ${proposals.length} total proposals, ${myProposals.length} created by you`);
+                
+                    // Log recent proposals
+                    proposals.slice(-3).forEach(proposal => {
+                        const isMine = proposal.proposer.toString() === userPrincipal;
+                        log(`   ${isMine ? '👤' : '👥'} #${proposal.id}: ${proposal.title}`);
+                    });
+                } catch (error) {
+                    log("❌ Failed to load proposals: " + (error && error.message ? error.message : error));
+                }
+            }
+
+            // UI helpers
+            function showSignedOutUI() {
+                document.getElementById('signedOutUI').style.display = 'block';
+                document.getElementById('signedInUI').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'none';
+            }
+
+            function showSignedInUI() {
+                document.getElementById('signedOutUI').style.display = 'none';
+                document.getElementById('signedInUI').style.display = 'block';
+                document.getElementById('dashboard').style.display = 'block';
+            }
+
+            // Log utility
+            function log(message) {
+                const logElement = document.getElementById('log');
+                const timestamp = new Date().toLocaleTimeString();
+                logElement.innerHTML = `[${timestamp}] ${message}<br>` + logElement.innerHTML;
+            }
+
+            // Load helper to fetch UMD scripts
+            function loadScript(url) {
+                return new Promise((resolve, reject) => {
+                    const s = document.createElement('script');
+                    s.src = url;
+                    s.async = true;
+                    s.onload = () => resolve();
+                    s.onerror = (e) => reject(e);
+                    document.head.appendChild(s);
+                });
+            }
+
+            // Initialize when page loads
+            document.addEventListener('DOMContentLoaded', initializeAuth);
+        </script>
+    </body>
+    </html>

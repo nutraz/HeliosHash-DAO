@@ -1,13 +1,5 @@
 "use client";
 
-export default function WalletPanel() {
-  return (
-    <div>
-      <h2 className="text-xl font-semibold mb-3">Wallet</h2>
-      <p className="text-sm text-gray-400">Balance, transactions and staking UI go here.</p>
-    </div>
-  );
-}
 import React from 'react';
 import TokenTransfer from '../dashboard/TokenTransfer';
 import { ICPCanisterService } from '@/lib/services/icpService';

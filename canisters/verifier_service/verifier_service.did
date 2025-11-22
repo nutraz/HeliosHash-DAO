@@ -1,0 +1,6 @@
+service : {
+  "recordIssuance" : (text, text, text, int) -> (bool);
+  "getIssuance" : (text) -> (opt (text, text, int)) query;
+  "recordIssuanceWithProject" : (text, text, text, int, text, int) -> (bool);
+  "status" : () -> (text) query;
+}

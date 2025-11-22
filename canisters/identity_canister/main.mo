@@ -1,26 +1,91 @@
+import Debug "mo:base/Debug";
+import Array "mo:base/Array";
+
 /*
-  Identity Canister (skeleton)
-  - Stores minimal VC anchors (vcHash) for subjects
-  - TODO: Harden access control, indexing, pagination
+  Minimal IdentityCanister scaffold.
+  - Stores VC hashes per subject in stable memory (simple array map)
+  - Keeps a simple revocation list
+  Notes: This is explicitly a development scaffold; replace with more robust storage/indexing in production.
 */
 
-persistent actor Identity {
-  // Minimal scaffold types and stateless behavior for initial deployment.
-  public type VC = { subject : Text; vcHash : Text; issuer : Text; iat : Text; exp : Text };
+persistent actor IdentityCanister {
+  stable var vcStore : [(Text, [Text])] = [];
+  stable var revocations : [(Text, Bool)] = [];
 
-  // Anchor a verifiable credential hash for a subject (no persistent storage in scaffold).
-  public shared(msg) func anchorVC(subject : Text, vcHash : Text, issuer : Text, iat : Text, exp : Text) : async Bool {
-    // In production, persist and index anchors; here we simply acknowledge.
-    true
+  public shared(msg) func addVC(subject : Text, vcHash : Text) : async Bool {
+    let n = Array.size(vcStore);
+    var found = false;
+    var i : Nat = 0;
+    while (i < n) {
+      if (vcStore[i].0 == subject) { found := true; i := n };
+      i += 1;
+    };
+    if (found) {
+      vcStore := Array.map(vcStore, func (entry) {
+        if (entry.0 == subject) (entry.0, Array.append(entry.1, [vcHash])) else entry
+      });
+      return true;
+    };
+    vcStore := Array.append(vcStore, [(subject, [vcHash])]);
+    return true;
   };
 
-  // Return an empty list in the scaffold.
-  public query func getVCs(subject : Text) : async [VC] {
-    []
+  public query func getVCs(subject : Text) : async [Text] {
+    let n = Array.size(vcStore);
+    var i : Nat = 0;
+    while (i < n) {
+      if (vcStore[i].0 == subject) return vcStore[i].1;
+      i += 1;
+    };
+    return [];
   };
 
-  // Mark a VC as revoked (scaffold no-op).
+  public query func hasVC(subject : Text, vcHash : Text) : async Bool {
+    let n = Array.size(vcStore);
+    var i : Nat = 0;
+    while (i < n) {
+      if (vcStore[i].0 == subject) {
+        let arr = vcStore[i].1;
+        var j : Nat = 0;
+        let m = Array.size(arr);
+        while (j < m) {
+          if (arr[j] == vcHash) return true;
+          j += 1;
+        };
+        return false;
+      };
+      i += 1;
+    };
+    return false;
+  };
+
   public shared(msg) func revokeVC(vcHash : Text) : async Bool {
-    true
+    let n = Array.size(revocations);
+    var found = false;
+    var i : Nat = 0;
+    while (i < n) {
+      if (revocations[i].0 == vcHash) { found := true; i := n };
+      i += 1;
+    };
+    if (found) {
+      revocations := Array.map(revocations, func (r) { if (r.0 == vcHash) (vcHash, true) else r });
+      return true;
+    };
+    revocations := Array.append(revocations, [(vcHash, true)]);
+    return true;
+  };
+
+  public query func isRevoked(vcHash : Text) : async Bool {
+    let n = Array.size(revocations);
+    var i : Nat = 0;
+    while (i < n) {
+      if (revocations[i].0 == vcHash) return revocations[i].1;
+      i += 1;
+    };
+    return false;
+  };
+
+  public query func status() : async Text {
+    return "identity_canister: OK";
   };
 };

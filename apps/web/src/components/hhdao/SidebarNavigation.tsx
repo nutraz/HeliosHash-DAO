@@ -1,38 +1,39 @@
-"use client";
+"use client"
 
-import React from "react";
+import React from 'react';
 
-interface Props {
-  setActiveModule: (module: string) => void;
-}
+const navigationItems = [
+  { id: 'projects', label: 'Projects', icon: '📋' },
+  { id: 'rewards', label: 'Rewards', icon: '🎁' },
+  { id: 'social', label: 'Social Hub', icon: '👥' },
+  { id: 'dao', label: 'DAO Center', icon: '🏛️' },
+  { id: 'nfts', label: 'NFT Collection', icon: '🖼️' },
+  { id: 'wallet', label: 'Wallet', icon: '💰' },
+  { id: 'opportunities', label: 'Opportunities', icon: '🔍' },
+  { id: 'urgam', label: 'UrgamU Delhi', icon: '🌆' },
+];
 
-export default function SidebarNavigation({ setActiveModule }: Props) {
-  const menu = [
-    { label: "Home", key: "home" },
-    { label: "Wallet", key: "wallet" },
-    { label: "NFT Collection", key: "nft" },
-    { label: "Opportunities", key: "opportunities" },
-    { label: "Explore Projects", key: "projects" },
-    { label: "Rewards", key: "rewards" },
-    { label: "Social Hub", key: "social" },
-    { label: "DAO Center", key: "dao" },
-    { label: "UrgamU Delhi", key: "urgamU" },
-  ];
-
+export default function SidebarNavigation() {
+  // This component likely uses context or router for navigation
+  // For now, we'll create a static sidebar that looks good
+  
   return (
-    <aside className="w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
-      <div className="px-4 py-6 font-bold text-gray-900 dark:text-gray-100">Navigation</div>
-      <nav className="flex-1 px-2 space-y-2">
-        {menu.map((item) => (
+    <nav className="mt-4">
+      <div className="space-y-1">
+        {navigationItems.map((item) => (
           <button
-            key={item.key}
-            onClick={() => setActiveModule(item.key)}
-            className="w-full text-left px-4 py-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+            key={item.id}
+            className="w-full flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white transition-colors"
+            onClick={() => {
+              // Navigation would be handled by context or router in real implementation
+              console.log(`Navigate to: ${item.id}`);
+            }}
           >
+            <span className="mr-3 text-lg">{item.icon}</span>
             {item.label}
           </button>
         ))}
-      </nav>
-    </aside>
+      </div>
+    </nav>
   );
 }

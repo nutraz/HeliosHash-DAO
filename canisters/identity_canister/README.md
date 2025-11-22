@@ -1,3 +1,16 @@
+Identity Canister (skeleton)
+
+Purpose:
+- Store VC hashes for principals/subjects
+- Provide revocation check
+
+Example usage (dfx):
+  dfx canister call identity_canister addVC '("did:ic:principal1","sha256:abcd...")'
+  dfx canister call identity_canister getVCs '("did:ic:principal1")'
+  dfx canister call identity_canister isRevoked '("sha256:abcd...")'
+
+Notes:
+- This is a minimal development scaffold. For production, implement stable structures and signature verification.
 # Identity Canister (skeleton)
 
 This canister stores minimal references (VC hashes) anchored for subjects.

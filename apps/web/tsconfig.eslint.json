@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "exclude": [
     "node_modules",
-    "src/app/hiidao-fusion/**",
+    "src/app/helioshash-dao-fusion/**",
     "generated/**",
     "canisters/**"
   ]

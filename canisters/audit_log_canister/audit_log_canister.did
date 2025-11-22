@@ -1,0 +1,6 @@
+service : {
+  "append" : (text) -> (int);
+  "getLog" : (int) -> (opt text) query;
+  "tail" : (int) -> (vec (int, text)) query;
+  "status" : () -> (text) query;
+}

@@ -1,57 +1,33 @@
 {
+  "version": 1,
   "canisters": {
-    "governance": {
-      "main": "canisters/governance/main.mo",
-      "type": "motoko"
-    },
     "treasury": {
-      "main": "canisters/treasury/main.mo", 
+      "main": "canisters/treasury/Treasury.mo",
       "type": "motoko"
     },
-    "hhdao": {
-      "main": "canisters/hhdao/src/main.mo",
+    "governance": {
+      "main": "canisters/governance/Governance.mo",
       "type": "motoko"
     },
-    "project_hub": {
-      "main": "canisters/project_hub/src/main.mo",
-      "type": "motoko"
-    },
-    "hhu_token": {
-      "main": "canisters/hhu_token/main.mo",
-      "type": "motoko"
-    }
-    ,"metadata_governance": {
-      "main": "canisters/metadata_governance/main.mo",
-      "type": "motoko"
-    },
-    "nft_membership": {
-      "main": "canisters/nft_membership/main.mo",
-      "type": "motoko"
-    },
-    "nft_project": {
-      "main": "canisters/nft_project/main.mo",
-      "type": "motoko"
-    }
-    ,"identity_canister": {
+    "identity_canister": {
       "main": "canisters/identity_canister/main.mo",
       "type": "motoko"
     },
-    
-    "audit_log": {
+    "verifier_service": {
+      "main": "canisters/verifier_service/main.mo",
+      "type": "motoko"
+    },
+    "audit_log_canister": {
       "main": "canisters/audit_log_canister/main.mo",
       "type": "motoko"
     },
     "revocation_canister": {
       "main": "canisters/revocation_canister/main.mo",
       "type": "motoko"
+    },
+    "frontend": {
+      "type": "assets",
+      "source": ["src/frontend/assets"]
     }
-  },
-  "defaults": {
-    "build": {
-      "args": "",
-      "packtool": "mops sources"
-    }
-  },
-  "output_env_file": ".env",
-  "version": 1
+  }
 }

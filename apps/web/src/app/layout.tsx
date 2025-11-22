@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
-// Temporarily disable global CSS import to avoid PostCSS parse errors during debugging
-// import './globals.css'
+// Import global styles
+import './globals.css'
 import ClientLayout from './ClientLayout'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -24,6 +24,7 @@ export default function RootLayout({
       <head>
         <title>HeliosHash DAO</title>
         <meta name="description" content="Decentralized Autonomous Organization" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         {/* Development-only CSP additions to allow local mock API/websocket connections */}
         {process.env.NODE_ENV !== 'production' && (
           <meta

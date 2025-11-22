@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+echo "🚀 HeliosHash DAO development shortcuts loaded"
+
+alias hhdao-help='ls scripts'
+alias hhdao-build='dfx build'
+alias hhdao-deploy='dfx deploy'
+alias hhdao-start='dfx start'

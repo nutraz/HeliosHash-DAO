@@ -1,0 +1,6 @@
+type Issued = record { subject: text; vcHash: text; issuer: text; iat: nat };
+
+service : {
+  issueVC: (text, text) -> (text);
+  notifyAttestation: (text, text) -> (bool);
+}

@@ -1,0 +1,11 @@
+[package]
+name = "helioshash-root"
+version = "0.1.0"
+
+[dependencies]
+base = "0.16.0"
+
+[package.metadata]
+# Root-level mops.toml to satisfy `mops sources` when dfx runs from repository root.
+# If your canisters use per-canister mops.toml, keep them — this root file just
+# ensures `mops sources` doesn't fail during `dfx build`.

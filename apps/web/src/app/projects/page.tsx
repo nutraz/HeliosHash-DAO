@@ -1,8 +1,48 @@
-<<<<<<< HEAD
+'use client';
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import ProjectMap from '@/components/projects/ProjectMap';
+
+export default function ProjectsPage() {
+  const router = useRouter();
+
+  const handleNavigate = (view: string, projectId?: string) => {
+    // Central routing for the project map
+    if (view === 'create-project') {
+      router.push('/projects/create');
+      return;
+    }
+
+    // Generic "project" view with an ID
+    if (view === 'project' && projectId) {
+      if (projectId === '1' || projectId === 'helios-baghpat') {
+        router.push('/projects/helios-baghpat');
+      } else {
+        router.push(`/projects/${projectId}`);
+      }
+      return;
+    }
+
+    // String paths like 'project/helios-baghpat' from HeliosBaghpatMapNode
+    if (view.startsWith('project/')) {
+      const slug = view.split('/')[1] || 'helios-baghpat';
+      if (slug === 'helios-baghpat') {
+        router.push('/projects/helios-baghpat');
+      } else {
+        router.push(`/projects/${slug}`);
+      }
+      return;
+    }
+  };
+
+  return <ProjectMap user={{ language: 'en' }} onNavigate={handleNavigate} />;
+}
+
 'use client'
 
-import React from 'react'
 import Link from 'next/link'
+
 
 export default function ProjectsPage() {
   return (
@@ -66,44 +106,4 @@ export default function ProjectsPage() {
       </div>
     </div>
   )
-=======
-import React from 'react';
-import ProjectMap from '@/components/ProjectMap/ProjectMap';
-import Link from 'next/link';
-
-export const metadata = {
-  title: 'Projects - HHDAO',
-}
-
-export default function ProjectsPage() {
-  return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold">Projects</h1>
-        <div>
-          <Link href="/projects/create" className="text-sm bg-indigo-600 text-white px-3 py-1 rounded-md">Create Project</Link>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <ProjectMap />
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="col-span-2 bg-white rounded-md p-4 shadow-sm">
-            <h2 className="font-medium">Featured</h2>
-            <p className="text-sm text-slate-600">Helios#Baghpat — agrivoltaic microgrid pilot with community funding options.</p>
-            <div className="mt-3">
-              <Link href="/projects/helios-baghpat" className="text-indigo-600">Open Helios#Baghpat</Link>
-            </div>
-          </div>
-
-          <aside className="bg-white rounded-md p-4 shadow-sm">
-            <h3 className="font-medium">Filters</h3>
-            <p className="text-xs text-slate-500">(stub)</p>
-          </aside>
-        </div>
-      </div>
-    </div>
-  );
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 }

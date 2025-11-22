@@ -8,11 +8,8 @@ _Honest Development Phases for Real Solar Infrastructure_
 
 ### Requirements
 
-<<<<<<< HEAD
 - Build 5kW co-ownership MVP platform
-=======
-- Build 50kW co-ownership MVP platform
->>>>>>> audit-clean
+ audit-clean
 - Find 3 real investors willing to test with actual money (minimum ₹1000 each)
 - Validate that ownership calculations work correctly
 - Test platform usability with real users

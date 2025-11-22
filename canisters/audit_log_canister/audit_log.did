@@ -1,0 +1,6 @@
+type Entry = record { ts: nat; actor: text; note: text };
+
+service : {
+  recordAudit: (text, text) -> (nat);
+  getEntries: () -> (vec Entry) query;
+}

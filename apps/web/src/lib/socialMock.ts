@@ -70,30 +70,30 @@ function persist() {
 
 loadData();
 
-export function getFeed() {
+export async function getFeed() {
   return posts.slice().sort((a,b)=> b.createdAt.localeCompare(a.createdAt));
 }
 
-export function getProfile(handle: string) {
+export async function getProfile(handle: string) {
   return profiles.find(p=>p.handle===handle) ?? null;
 }
 
-export function getAllProfiles() {
+export async function getAllProfiles() {
   return profiles.slice();
 }
 
-export function addPost(authorHandle: string, content: string) {
+export async function addPost(authorHandle: string, content: string) {
   const p: Post = { id: `p${Date.now()}`, authorHandle, content, createdAt: now() };
   posts.unshift(p);
   persist();
   return p;
 }
 
-export function getMessagesFor(user: string) {
+export async function getMessagesFor(user: string) {
   return messages.filter(m => m.from === user || m.to === user).sort((a,b)=> a.createdAt.localeCompare(b.createdAt));
 }
 
-export function addMessage(from: string, to: string, text: string) {
+export async function addMessage(from: string, to: string, text: string) {
   const m: Message = { id: `m${Date.now()}`, from, to, text, createdAt: now() };
   messages.push(m);
   persist();

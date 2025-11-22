@@ -12,12 +12,7 @@
     "lit": "^2.7.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "vite": "^5.2.0",
-    "typescript": "^5.2.0"
-=======
     "typescript": "^5.2.0",
     "vite": "^7.2.2"
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
   }
 }

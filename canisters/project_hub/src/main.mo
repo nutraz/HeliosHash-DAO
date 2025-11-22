@@ -3,10 +3,7 @@ import Result "mo:base/Result";
 
 persistent actor class ProjectHub() = this {
 
-<<<<<<< HEAD
-=======
   stable var _state = 0; // Persistent state variable
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
   type Project = {
     id: Text;
     name: Text;

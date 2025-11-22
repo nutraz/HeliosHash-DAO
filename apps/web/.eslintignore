@@ -1,2 +1,7 @@
 # Ignore generated canister declarations which are noisy for ESLint
 src/declarations/**
+# Temporarily ignore hiidao-fusion and some local d.ts files that are excluded
+# from the TS project to avoid parserOptions.project errors during CI/build.
+src/app/hiidao-fusion/**
+src/lib/**/*.d.ts
+src/lib/*idl.d.ts

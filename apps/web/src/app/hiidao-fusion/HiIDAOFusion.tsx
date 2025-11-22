@@ -9,7 +9,8 @@ import Onboarding from './components/Onboarding';
 import ProfileSection from './components/ProfileSection';
 import SettingsSection from './components/SettingsSection';
 import Footer from './components/Footer';
-import HHDAODashboard from './components/HHDAODashboard';
+import * as HHModule from '@/components/HHDAODashboard';
+const HHDAODashboard = (HHModule as any).default ?? HHModule;
 import '../styles/hiidao-fusion.css';
 
 export default function HiIDAOFusion() {

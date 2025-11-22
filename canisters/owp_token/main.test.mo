@@ -8,11 +8,8 @@ persistent actor OWPTokenTest {
 
     // --- Test Principals ---
     // The owner will be this test canister itself, determined at runtime.
-<<<<<<< HEAD
     let userA = Principal.fromText("6ac5f-zrbmg-nnoo6-5i66v-bmv57-smqm4-yjlgk-mwwkd-xbozy-3ofaz-sqe"); // nutrazz
-=======
-    let userA = Principal.fromText("TEST_PRINCIPAL_PLACEHOLDER"); // replaced real principal for tests
->>>>>>> audit-clean
+ audit-clean
     let userB = Principal.fromText("kb3zf-7ggcy-tbd2h-vgglj-4tfvk-mfvgv-6kmt3-dac6p-6cpqv-rrm6k-4qe"); // test_user_a
 
     // --- Test Utils ---

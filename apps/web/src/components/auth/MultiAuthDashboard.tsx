@@ -1,3 +1,39 @@
+"use client";
+
+import React from "react";
+
+type Props = {
+  onSuccess: (method: string, principal?: string) => void;
+};
+
+export default function MultiAuthDashboard({ onSuccess }: Props) {
+  return (
+    <div className="space-y-4">
+      <button
+        className="px-4 py-2 bg-blue-600 text-white rounded"
+        onClick={() => onSuccess('email')}
+      >
+        Sign in with Email
+      </button>
+
+      <button
+        className="px-4 py-2 bg-gray-800 text-white rounded"
+        onClick={() => onSuccess('wallet')}
+      >
+        Connect Wallet
+      </button>
+
+      <button
+        className="px-4 py-2 bg-green-600 text-white rounded"
+        onClick={() => onSuccess('google')}
+      >
+        Sign in with Google
+      </button>
+
+      <div className="text-sm text-gray-400">Other flows: MFA, Aadhaar/PAN, OTP (placeholders)</div>
+    </div>
+  );
+}
 import React, { useMemo, useState } from 'react';
 import { 
   Shield, Smartphone, Mail, Chrome, Facebook, Twitter,

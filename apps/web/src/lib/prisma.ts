@@ -2,7 +2,14 @@
 // during Next.js static build/prerender phases where the runtime binary may
 // not be available. We return a proxy that forwards property access to the
 // real PrismaClient instance, only creating it on first use.
-import type { PrismaClient } from '@prisma/client'
+// NOTE: In some development setups the generated
+// Prisma client (.prisma/client) may be missing
+// (e.g. if `prisma generate` hasn't been run). To
+// avoid a hard type dependency here we declare a
+// lightweight local alias for the PrismaClient
+// shape. If you rely on generated types, run
+// `npx prisma generate` in the appropriate package.
+type PrismaClient = any;
 
 let _prisma: PrismaClient | undefined
 

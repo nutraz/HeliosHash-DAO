@@ -15,11 +15,8 @@
 
 - [ ] Real User Data Loading (nutrazz vs Arjun Patel)
 - [ ] Identity Display Verification
-<<<<<<< HEAD
 - [ ] OWP Balance Display (OWP_BALANCE_PLACEHOLDER)
-=======
-- [ ] OWP Balance Display (OWP_BALANCE_PLACEHOLDER)
->>>>>>> audit-clean
+ audit-clean
 - [ ] User Profile Information
 - [ ] Authentication State Persistence
 - [ ] Session Management

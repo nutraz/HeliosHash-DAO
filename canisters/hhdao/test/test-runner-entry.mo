@@ -5,16 +5,10 @@ import QuickTestActor "./quick_test_combined";
 import SimpleTestRunner "./simple_runner";
 import TestRunner "./hhdao.test";
 
-<<<<<<< HEAD
 // Single top-level persistent actor — moc requires only one actor or actor class
 persistent actor HHDAO_Test_Entry {
   public query func run() : async Text {
-=======
-// Single top-level persistent actor — moc requires only one actor or persistent actor class
-persistent actor HHDAO_Test_Entry {
-  public query func run() : async Text {
-  stable var _state = 0; // Persistent state variable
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
+ 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
     TestUtils.printTestHeader("Combined HHDAO Test Runner");
 
     // run lightweight quick tests

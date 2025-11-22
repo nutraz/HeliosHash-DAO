@@ -26,7 +26,7 @@ const DashboardView: React.FC<Props> = (_props) => {
 
   return (
     <div className="space-y-6">
-      <Navigation dashboard={dashboard} userData={mockUserData as any} />
+      <Navigation />
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Dashboard' }]} />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

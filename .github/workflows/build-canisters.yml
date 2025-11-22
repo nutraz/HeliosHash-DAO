@@ -1,0 +1,25 @@
+name: Build Canisters
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-canisters:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dfx
+        run: |
+          DFX_VERSION=0.21.2
+          curl -fsSL https://internetcomputer.org/install.sh | sh -s -- --version $DFX_VERSION
+          echo "$HOME/bin" >> $GITHUB_PATH
+      - name: Build canisters
+        run: dfx build
+      - name: Upload canister WASM
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canisters-wasm
+          path: .dfx/**/**/*.wasm

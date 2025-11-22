@@ -156,3 +156,27 @@ build/
 # OS files
 .DS_Store
 Thumbs.db
+.pnpm-store/
+.pnpm-store/
+.pnpm-store/
+.pnpm-store/
+.pnpm-store/
+node_modules/
+*.log
+dist/
+# Long duplicate documentation files
+*HeliosHash DAO Decentralized Application*.md
+*Enhanced Overview.md
+
+# Temp and editor files
+*.tmp
+*~
+*.l.tmp
+*:l.tmp
+HEAD.tmp
+.sign
+
+# Local dev and coverage
+.next/
+.dfx/
+coverage/

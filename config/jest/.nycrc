@@ -1,0 +1,10 @@
+{
+  "all": true,
+  "exclude": ["node_modules", "canisters/**/*.mo"],
+  "include": ["src/**/*.jsx", "src/**/*.js"],
+  "reporter": ["text", "html"],
+  "lines": 80,
+  "functions": 80,
+  "branches": 80,
+  "statements": 80
+}

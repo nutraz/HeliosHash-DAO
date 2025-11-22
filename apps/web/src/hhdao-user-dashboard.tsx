@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from './hhdao-user-dashboard.module.css';
 import { Project } from '@/lib/types';
 import { userData, projects, posts, applicantTypes, rewardsMarketplace } from '@/lib/data';
 import { 
@@ -350,16 +351,13 @@ const HHDAODashboard = () => {
                   onClick={() => setSelectedProject(project)}
                   aria-label={project?.name ? `Open project ${project.name}` : `Open project ${project.id}`}
                   title={project?.name ? `Open ${project.name}` : `Open project`}
-                  className={`absolute w-10 h-10 rounded-full flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 shadow-2xl hover:scale-125 transition-transform ${colorClasses.bg} ring-4 ring-gray-900 ${project.isLive ? 'animate-pulse' : ''} map-pin`}
-                  style={{
-                      ['--pin-left' as any]: `${(Number(project.id) * 13) + 18}%`,
-                      ['--pin-top' as any]: `${(Number(project.id) * 10) + 22}%`,
-                    } as React.CSSProperties}
+                  className={`absolute w-10 h-10 rounded-full flex items-center justify-center transform -translate-x-1/2 -translate-y-1/2 shadow-2xl hover:scale-125 transition-transform ${colorClasses.bg} ring-4 ring-gray-900 ${project.isLive ? 'animate-pulse' : ''} map-pin pin-pos-${project.id}`}
                 >
                   <MapPin className="text-white" size={22} />
                   {project.isLive && (
                     <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white animate-ping"></span>
                   )}
+                </button>
                 </button>
               );
             })}

@@ -1,0 +1,9 @@
+extends: default
+
+rules:
+  document-start: disable
+  truthy: disable
+  trailing-spaces: enable
+  indentation:
+    spaces: 2
+    indent-sequences: consistent

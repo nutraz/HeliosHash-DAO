@@ -1,188 +1,278 @@
-<div align="center">
-  <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400" style="animation: pulse 2s infinite;" />
-  
-  # HeliosHash DAO
-  **A OneWorldProject Initiative India** 
-  **https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity**
-  **Decentralized Renewable Energy Platform on Internet Computer**
-  
-  [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
-  [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
-  
-</div>
+# **HeliosHash DAO**
 
-<style>
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-</style>
+<div align="center">
+  <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="360" style="animation: pulse 2s infinite;" />
+
+**A OneWorldProject Initiative — India**
+**[https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)**
+**Fintech RWA Monitoring & Management Platform for Solar, Compute & Mining Infrastructure**
+
+[![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+</div>
 
 ---
 
-A decentralized autonomous organization built on the Internet Computer Protocol (ICP) with a modern Next.js frontend and Flutter mobile app. HeliosHash DAO enables community-driven renewable energy projects with transparent governance and tokenized participation.
+## 🌍 **HeliosHash DAO (HHDAO)** is a **fintech RWA (Real-World Asset) monitoring & management platform**, enabling community-driven investment, oversight, and governance of **solar microgrids, modular data centers, and Bitcoin mining infrastructure**.
 
-## 🏗️ Architecture
+Built on the **Internet Computer Protocol (ICP)** and deployed with **Next.js + Flutter**, HHDAO provides:
 
-### Backend: Internet Computer
-- **Language**: Motoko
-- **Canisters**: Modular smart contracts for DAO functionality
-- **Location**: `/canisters/` directory
+* **Real-time monitoring of physical infrastructure**
+* **Tokenized participation in RWA-backed projects**
+* **Transparent yield tracking & dashboards**
+* **DAO-driven governance & treasury oversight**
+* **Community-owned renewable energy impact**
 
-### Frontend: Next.js Web Application  
-- **Framework**: Next.js 14 with App Router
-- **Language**: TypeScript
-- **Styling**: TailwindCSS + shadcn/ui
-- **Location**: `/apps/web/` directory
+HHDAO is a **real-world infrastructure engine**, not a theoretical DAO.
 
-### Mobile: Flutter Application
-- **Framework**: Flutter 3.35.7
-- **Language**: Dart
-- **Platforms**: Android, iOS, Linux desktop
-- **Location**: `/apps/mobile/` directory
+**Real assets → Real-time data → Real revenue → DAO governance.**
 
-### Smart Contracts
-- **Solidity**: Bridge and integration contracts
-- **Location**: `/contracts/` directory
+---
 
-## 🚀 Quick Start
+### **1️⃣ Fintech RWA Infrastructure Layer**
+
+A fully integrated monitoring stack for:
+
+* Solar energy generation
+* Data center compute load
+* ASIC/GPU mining performance
+* Temperature, uptime, and operational metrics
+* Yield + revenue per asset cluster
+
+All exposed in **transparent, on-chain dashboards**.
+
+### **2️⃣ Tokenized Participation**
+
+Members participate in:
+
+* DAO proposals
+* Infrastructure-backed rewards
+* On-chain verification of revenue
+* Governance through NFT tiers
+* Cross-chain compatibility via Solidity bridges
+
+### **3️⃣ Real-World Impact (India-first Model)**
+
+HHDAO powers:
+
+* Villages
+* Community buildings
+* Schools
+* Hospitals
+* SEZ Smart Regions (Urgam Valley)
+
+With **free energy** provided under the OneWorldProject charter.
+
+### **4️⃣ Fully Open Source Infrastructure**
+
+You can audit, fork, deploy, or extend the entire stack.
+
+---
+
+## 🏗️ **Architecture**
+
+### **Backend — Internet Computer (ICP)**
+
+* **Language:** Motoko
+* **Canisters:** DAO logic, treasury, members, proposals
+* **Directory:** `/canisters/`
+
+### **Frontend — Next.js 14 Web App**
+
+* **Framework:** Next.js App Router
+* **Tech:** TypeScript, TailwindCSS, shadcn/ui
+* **Directory:** `/apps/web/`
+
+### **Mobile — Flutter Application**
+
+* **Platforms:** Android, iOS, Linux
+* **Directory:** `/apps/mobile/`
+
+### **Smart Contracts — Solidity**
+
+* **Components:** Bridge contracts, cross-chain verification
+* **Directory:** `/contracts/`
+
+---
+
+## 🚀 **Quick Start**
 
 ```bash
 # Clone and setup
 git clone https://github.com/nutraz/HeliosHash-DAO.git
 cd HeliosHash-DAO
 
-# Automated setup (recommended)
+# Automated developer environment
 ./scripts/dev-setup.sh
 
-# Or manual setup
+# Manual setup
 pnpm install
 dfx start --background --clean
 dfx deploy
 pnpm dev
 ```
 
-Visit [http://localhost:3002](http://localhost:3002) to see your app.
+Visit: **[http://localhost:3002](http://localhost:3002)**
 
-## 💻 Development
+---
 
-### Web Development
+## 💻 **Development Commands**
+
+### **Web**
+
 ```bash
 cd apps/web
 pnpm install
-pnpm dev  # Runs on port 3002
+pnpm dev
 ```
 
-### Mobile Development
+### **Mobile**
+
 ```bash
 cd apps/mobile
 flutter pub get
-flutter run  # For Android/iOS
-flutter run -d linux  # For Linux desktop
+flutter run
 ```
 
-### Backend Development
+### **Backend (ICP)**
+
 ```bash
 dfx start --background
 dfx deploy
-dfx generate  # Regenerate TypeScript bindings
+dfx generate
 ```
 
-## 🚀 Vercel Deployment
+---
 
-### Quick Deploy
-1. Go to [vercel.com](https://vercel.com)
-2. Import from GitHub → Select `HeliosHash-DAO`
-3. Configure project:
-  - **Framework**: Next.js
-  - **Root Directory**: `apps/web`
-  - **Build Command**: `cd apps/web && pnpm build`
-  - **Output Directory**: `.next`
-4. Add environment variables from `.env.vercel.example`
+## 🌐 **Deployment (Vercel)**
 
-### Environment Variables
-Copy all variables from `.env.vercel.example` to your Vercel project settings.
+### **Vercel Setup**
 
-### Manual Deployment
+* Framework: **Next.js**
+* Root dir: `apps/web`
+* Build: `cd apps/web && pnpm build`
+* Output: `.next`
+
+Copy env vars from: `.env.vercel.example`
+
+### **Manual**
+
 ```bash
-# Install Vercel CLI
 npm i -g vercel
-
-# Deploy from web directory
-cd apps/web && vercel --prod
+cd apps/web
+vercel --prod
 ```
 
-## 🔧 Key Features
+---
 
-- **DAO Governance**: Proposal creation, voting, execution
-- **Token Management**: HHU token distribution and rewards  
-- **Project Hub**: Renewable energy project coordination
-- **Identity System**: Multi-modal authentication and KYC
-- **Mobile Access**: Full-featured Flutter mobile app
-- **Social Integration**: Community engagement framework
+## 🔧 **Key Features**
 
-**Project Phases**:
-- **Phase 1**: Baghpat pilot implementation
-- **Phase 2**: Urgam Valley SEZ national rollout
+### **RWA Monitoring & Analytics**
 
-## 📱 Platforms
+* Solar generation
+* Data center health
+* Mining stats & rewards
+* Yield dashboards
+* Geographic analytics
 
-- **Web**: Desktop and mobile browsers
-- **Android**: Native mobile app
-- **iOS**: Native mobile app (requires macOS for build)
-- **Linux**: Desktop application
+### **DAO Governance**
 
-## 🔧 CI/CD
+* Proposal creation
+* Voting & execution
+* Weighted/flat governance via NFTs
+* Treasury transparency
 
-GitHub Actions workflows automatically build and test on every push:
-- **Flutter CI**: Builds Android APK, runs analysis
-- **Web CI**: Builds Next.js production bundle
-- **Backend CI**: Deploys IC canisters
+### **Identity & Security**
 
-View workflow status: [GitHub Actions](https://github.com/nutraz/HeliosHash-DAO/actions)
+* Multi-modal login
+* KYC options
+* On-chain data integrity
 
-## 🗂️ Module Architecture
+### **Mobile + Web Access**
 
-| Feature           | Path                                  | Status      |
-|-------------------|---------------------------------------|-------------|
-| NFT System        | `apps/web/src/components/nft/*`       | Canonical   |
-| Village Dashboard | `apps/web/src/app/urgamu-delhi/*`     | Active      |
-| Legacy Villages   | `apps/web/src/app/villages/`          | Deprecated  |
-| UrgamU Module     | `src/modules/UrgamUDelhi/*`           | Reusable UI |
-| Shared Components | `src/`                                | Core UI     |
+* Full RWA dashboards on mobile
+* Real-time notifications
+* Energy & compute alerts
 
-## 🛠️ Troubleshooting
+---
 
-- Ensure DFX is running for canister operations
-- Regenerate TypeScript bindings after canister changes (`dfx generate`)
-- See [docs/CRITICAL_FIXES_TODO.md](docs/CRITICAL_FIXES_TODO.md) for urgent issues
-- Check mock auth implementation for development
-- Verify canister IDs in frontend configuration
+## 🏢 **Project Phases**
 
-## 🤝 Contributing
+### **Phase 1: Baghpat Pilot**
 
-Contributions are welcome! Please see our [Contributing Guide](docs/CONTRIBUTING.md) for details.
+* Solar generation
+* Mining cluster
+* Operational telemetry
 
-## 📄 License
+### **Phase 2: Urgam Valley Smart Region**
 
-Apache 2.0 - See [LICENSE](LICENSE) for details.
+* SEZ micro data center
+* Large-scale renewable deployment
+* DAO-governed civic infrastructure
 
-## 📚 Documentation
+### **Phase 3: Mumbai HPC Hub**
 
-- **Full Documentation**: [docs/](docs/)
-- **Project Vision**: [docs/COPILOT_CONTEXT.md](docs/COPILOT_CONTEXT.md)
-- **API Design**: [API_DESIGN.md](API_DESIGN.md)
-- **Development Status**: [DEVELOPMENT_STATUS.md](DEVELOPMENT_STATUS.md)
-- **Security Checklist**: [docs/SECURITY_CHECKLIST.md](docs/SECURITY_CHECKLIST.md)
-- **Critical Fixes**: [docs/CRITICAL_FIXES_TODO.md](docs/CRITICAL_FIXES_TODO.md)
-- **Repo Cleanup**: [docs/REPO_CLEANUP_SUMMARY.md](docs/REPO_CLEANUP_SUMMARY.md)
-- **Changelog**: [CHANGELOG.md](CHANGELOG.md)
+* Tier 3 micro data center
+* 500 kW solar park
+* National scaling
+
+---
+
+## 🗂️ **Module Architecture**
+
+| Feature            | Path                                 | Status     |
+| ------------------ | ------------------------------------ | ---------- |
+| NFT System         | `apps/web/src/components/nft/*`      | Stable     |
+| Village Dashboard  | `apps/web/src/app/urgamu-delhi/*`    | Active     |
+| Legacy Modules     | `apps/web/src/app/villages/`         | Deprecated |
+| Urgam U Smart City | `apps/web/src/modules/UrgamUDelhi/*` | Core       |
+| Shared Components  | `apps/web/src/*`                     | Core UI    |
+
+---
+
+## 🛠️ **Troubleshooting**
+
+* Ensure **DFX** is running
+* After editing IC canisters: `dfx generate`
+* Check `docs/CRITICAL_FIXES_TODO.md`
+* Verify canister IDs in frontend env config
+* Mobile issues: run with `flutter clean`
+
+---
+
+## 🤝 **Contributing**
+
+All contributions are welcome!
+Please read the **Contributing Guide** in:
+
+```
+docs/CONTRIBUTING.md
+```
+
+---
+
+## 📄 **License**
+
+Open-source under **Apache 2.0**.
+See: `LICENSE`
+
+---
+
+## 📚 **Documentation**
+
+* Full Docs → `docs/`
+* Vision → `docs/COPILOT_CONTEXT.md`
+* API Design → `API_DESIGN.md`
+* Dev Status → `DEVELOPMENT_STATUS.md`
+* Security Checklist → `docs/SECURITY_CHECKLIST.md`
+* Critical Fixes → `docs/CRITICAL_FIXES_TODO.md`
+* Repo Cleanup → `docs/REPO_CLEANUP_SUMMARY.md`
+* Changelog → `CHANGELOG.md`
 
 ---
 
 <div align="center">
-  Made with ❤️ by the OneWorldProject Community
+  Made with ❤️ by the OneWorldProject Community  
 </div>
-
 

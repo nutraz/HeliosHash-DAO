@@ -1,0 +1,16 @@
+type Transaction = 
+ record {
+   amount: int;
+   description: text;
+   from: principal;
+   id: nat;
+   timestamp: int;
+   to: principal;
+ };
+service : {
+  deposit: (amount: int, description: text) -> (text);
+  getBalance: () -> (int) query;
+  getTransactions: () -> (vec Transaction) query;
+  getVersion: () -> (text) query;
+  withdraw: (amount: int, to: principal, description: text) -> (text);
+}

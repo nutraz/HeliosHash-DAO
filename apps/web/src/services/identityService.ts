@@ -30,7 +30,7 @@ export interface UserProfile {
 }
 
 class IdentityService {
-  private agent: HttpAgent | null = null;
+  private agent: any = null;
   private actor: any = null;
 
   private async getActor() {

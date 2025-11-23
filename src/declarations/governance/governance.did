@@ -1,0 +1,16 @@
+type Proposal = 
+ record {
+   description: text;
+   executed: bool;
+   id: nat;
+   proposer: principal;
+   timestamp: int;
+   title: text;
+   votesAgainst: nat;
+   votesFor: nat;
+ };
+service : {
+  createProposal: (title: text, description: text) -> (text);
+  getProposals: () -> (vec Proposal) query;
+  getVersion: () -> (text) query;
+}

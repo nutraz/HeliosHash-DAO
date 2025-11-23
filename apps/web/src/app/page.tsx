@@ -1,6 +1,5 @@
-import { redirect } from 'next/navigation';
+import AuthEntry from '@/components/auth/AuthEntry'
 
 export default function Home() {
-  redirect('/helioshash-dao');
-  return null;
+  return <AuthEntry />
 }

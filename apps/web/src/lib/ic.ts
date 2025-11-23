@@ -1,5 +1,5 @@
 import { AuthClient } from "@dfinity/auth-client";
-import { Actor, HttpAgent, Identity } from "@dfinity/agent";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
 let authClient: AuthClient | null = null;
 
@@ -25,17 +25,17 @@ export async function disconnect() {
   await ac.logout();
 }
 
-export async function getIdentity(): Promise<Identity | null> {
+export async function getIdentity(): Promise<any | null> {
   const ac = await getAuthClient();
   try {
     const id = await ac.getIdentity();
-    return id;
+    return id as any;
   } catch (e) {
     return null;
   }
 }
 
-export async function actorFor<T>(idlFactory: any, canisterId: string) : Promise<T> {
+export async function actorFor(idlFactory: any, canisterId: string) : Promise<any> {
   const identity = await getIdentity();
   const agent = new HttpAgent({ identity: identity as any });
   try {
@@ -44,7 +44,7 @@ export async function actorFor<T>(idlFactory: any, canisterId: string) : Promise
   } catch (e) {
     // ignore in prod
   }
-  const actor = Actor.createActor(idlFactory, { agent, canisterId }) as unknown as T;
+  const actor = Actor.createActor(idlFactory, { agent, canisterId }) as any;
   return actor;
 }
 

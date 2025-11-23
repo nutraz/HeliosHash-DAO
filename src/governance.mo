@@ -1,7 +1,7 @@
 // Governance canister for HeliosHash DAO
-actor Governance {
-  stable var proposalCount : Nat = 0;
-  stable var votes : [(Nat, Nat)] = []; // (proposalId, voteCount)
+persistent actor Governance {
+  var proposalCount : Nat = 0;
+  var votes : [(Nat, Nat)] = []; // (proposalId, voteCount)
   
   public func createProposal(title : Text, description : Text) : async Nat {
     proposalCount += 1;

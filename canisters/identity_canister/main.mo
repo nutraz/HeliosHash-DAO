@@ -1,5 +1,62 @@
 import Debug "mo:base/Debug";
 import Array "mo:base/Array";
+import HashMap "mo:base/HashMap";
+import Time "mo:base/Time";
+import Principal "mo:base/Principal";
+
+// Minimal Identity canister skeleton for storing VC hashes and revocations
+actor IdentityCanister {
+
+  // Minimal in-memory store: subject -> vec<vcHash>
+  stable var vcStore : HashMap.HashMap<Text, [Text]> = HashMap.HashMap<Text, [Text]>();
+
+  // Map revocation pointers for issued VCs: vcHash -> bool (revoked)
+  stable var revocations : HashMap.HashMap<Text, Bool> = HashMap.HashMap<Text, Bool>();
+
+  public shared(msg) func addVC(subject : Text, vcHash : Text) : async Bool {
+    switch (vcStore.get(subject)) {
+      case (null) {
+        vcStore.put(subject, [vcHash]);
+      };
+      case (?vec) {
+        vcStore.put(subject, Array.append(vec, [vcHash]));
+      };
+    };
+    true
+  };
+
+  public query func getVCs(subject : Text) : async [Text] {
+    switch (vcStore.get(subject)) {
+      case (null) { [] };
+      case (?vec) { vec };
+    }
+  };
+
+  public query func hasVC(subject : Text, vcHash : Text) : async Bool {
+    switch (vcStore.get(subject)) {
+      case (null) { false };
+      case (?vec) { Array.find<Text>(vcHash, vec) != null };
+    }
+  };
+
+  public shared(msg) func revokeVC(vcHash : Text) : async Bool {
+    revocations.put(vcHash, true);
+    true
+  };
+
+  public query func isRevoked(vcHash : Text) : async Bool {
+    switch (revocations.get(vcHash)) {
+      case (null) { false };
+      case (?b) { b };
+    }
+  };
+
+  public query func status() : async Text {
+    "identity_canister: OK"
+  };
+};
+import Debug "mo:base/Debug";
+import Array "mo:base/Array";
 
 /*
   Minimal IdentityCanister scaffold.

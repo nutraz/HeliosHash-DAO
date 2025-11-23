@@ -1,49 +1,27 @@
 import Debug "mo:base/Debug";
-import Array "mo:base/Array";
-import Int "mo:base/Int";
+import HashMap "mo:base/HashMap";
 
+// Persistent verifier service - lightweight issuance anchor
 persistent actor VerifierService {
-  // issuance records: vcHash -> (issuer, subject, issuedAt)
-  stable var issuance : [(Text, (Text, Text, Int))] = [];
 
-  func findIndexLocal(vcHash : Text) : Nat {
-    let n = Array.size(issuance);
-    var i : Nat = 0;
-    while (i < n) {
-      if (issuance[i].0 == vcHash) return i;
-      i += 1;
-    };
-    return n; // sentinel: not found
-  };
+  // issuance records: vcHash -> (issuer, subject, issuedAt)
+  stable var issuance : HashMap.HashMap<Text, (Text, Text, Int)> = HashMap.HashMap<Text, (Text, Text, Int)>();
 
   public shared(msg) func recordIssuance(vcHash : Text, issuer : Text, subject : Text, issuedAt : Int) : async Bool {
-    let idx = findIndexLocal(vcHash);
-    if (idx < Array.size(issuance)) {
-      issuance := Array.map(issuance, func (e) { if (e.0 == vcHash) (vcHash, (issuer, subject, issuedAt)) else e });
-    } else {
-      issuance := Array.append(issuance, [(vcHash, (issuer, subject, issuedAt))]);
-    };
-    return true;
+    issuance.put(vcHash, (issuer, subject, issuedAt));
+    true
   };
 
-  public query func getIssuance(vcHash : Text) : async Text {
-    let idx = findIndexLocal(vcHash);
-    if (idx < Array.size(issuance)) {
-      let t = issuance[idx].1;
-      return t.0 # "|" # t.1 # "|" # Int.toText(t.2);
-    } else { return "NOT_FOUND" }
+  public query func getIssuance(vcHash : Text) : async Opt<(Text, Text, Int)> {
+    issuance.get(vcHash)
   };
 
   public shared(msg) func recordIssuanceWithProject(vcHash : Text, issuer : Text, subject : Text, issuedAt : Int, projectId : Text, level : Int) : async Bool {
-    let issuerExtended = issuer # ("|" # projectId);
-    let idx = findIndexLocal(vcHash);
-    if (idx < Array.size(issuance)) {
-      issuance := Array.map(issuance, func (e) { if (e.0 == vcHash) (vcHash, (issuerExtended, subject, issuedAt)) else e });
-    } else {
-      issuance := Array.append(issuance, [(vcHash, (issuerExtended, subject, issuedAt))]);
-    };
-    return true;
+    issuance.put(vcHash, (issuer # ("|" # projectId), subject, issuedAt));
+    true
   };
 
-  public query func status() : async Text { "verifier_service: OK" };
+  public query func status() : async Text {
+    "verifier_service: OK"
+  };
 };

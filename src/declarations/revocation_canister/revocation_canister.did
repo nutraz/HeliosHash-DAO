@@ -1,0 +1,7 @@
+service : {
+  isRevoked: (vcHash: text) -> (bool) query;
+  listRevoked: () -> (vec text) query;
+  revoke: (vcHash: text, issuer: text, revokedAt: int, reason: text) ->
+   (bool);
+  status: () -> (text) query;
+}

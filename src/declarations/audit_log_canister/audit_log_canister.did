@@ -1,0 +1,9 @@
+service : {
+  append: (logHash: text) -> (nat);
+  getLog: (id: nat) -> (text) query;
+  status: () -> (text) query;
+  tail: (limit: nat) -> (vec record {
+                               nat;
+                               text;
+                             }) query;
+}

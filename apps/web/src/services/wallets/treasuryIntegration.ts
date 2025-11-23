@@ -2,21 +2,21 @@ import { treasury } from '@/declarations/treasury';
 import type { _SERVICE as TreasuryService } from '@/declarations/treasury/treasury.did';
 import { logger } from '@/utils/logger';
 import { retry } from '@/utils/retry';
-import type { ActorSubclass } from '@dfinity/agent';
+// Relax DFINITY actor types to `any` to avoid namespace-as-type TS errors
 import { Principal } from '@dfinity/principal';
 import { WalletError, WalletErrorCodes } from './errors';
 
 export class TreasuryIntegrationService {
-  private treasuryActor: ActorSubclass<TreasuryService> | null = null;
+  private treasuryActor: any = null;
 
   constructor(private identity: any | null = null) {}
 
-  private async getTreasuryActor(): Promise<ActorSubclass<TreasuryService>> {
+  private async getTreasuryActor(): Promise<any> {
     if (!this.treasuryActor) {
       // Patch: allow stubbed actor for local build
       this.treasuryActor = (await treasury.createActor()) as any;
     }
-    return this.treasuryActor as any;
+    return this.treasuryActor;
   }
 
   async getBalance(principal: Principal): Promise<bigint> {

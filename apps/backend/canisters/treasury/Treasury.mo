@@ -3,7 +3,7 @@ import Principal "mo:base/Principal";
 import Time "mo:base/Time";
 import Error "mo:base/Error";
 
-actor Treasury {
+persistent actor Treasury {
   public type Transaction = {
     id : Nat;
     amount : Int;

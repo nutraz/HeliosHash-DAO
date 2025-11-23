@@ -1,25 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import ProfileCard from './ProfileCard'
+import WalletComponent from './WalletComponent'
+import NFTCollection from './NFTCollection'
+import ActionButtons from './ActionButtons'
 import AuthButtons from "@/components/auth/AuthButtons";
 import { useRouter } from "next/navigation";
-
 import {
   Award,
   Users,
   TrendingUp,
-  Gift,
-  Map,
-  MessageSquare,
+  CheckCircle,
   Send,
   ArrowDownLeft,
   Image,
   ChevronRight,
-  CheckCircle,
   Zap,
 } from "lucide-react";
 
-const HHDAODashboard = () => {
+export default function Dashboard() {
   const [showNFTCollection, setShowNFTCollection] = useState(false);
   const router = useRouter();
   const [userData, setUserData] = useState<any>(null);
@@ -238,7 +238,5 @@ const HHDAODashboard = () => {
       </footer>
     </div>
   );
-};
-
-export default HHDAODashboard;
+}
 

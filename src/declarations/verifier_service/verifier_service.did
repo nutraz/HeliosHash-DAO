@@ -1,0 +1,8 @@
+service : {
+  getIssuance: (vcHash: text) -> (text) query;
+  recordIssuance: (vcHash: text, issuer: text, subject: text, issuedAt:
+   int) -> (bool);
+  recordIssuanceWithProject: (vcHash: text, issuer: text, subject: text,
+   issuedAt: int, projectId: text, level: int) -> (bool);
+  status: () -> (text) query;
+}

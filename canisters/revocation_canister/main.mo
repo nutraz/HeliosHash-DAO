@@ -1,3 +1,22 @@
+import Debug "mo:base/Debug";
+import HashMap "mo:base/HashMap";
+
+actor RevocationCanister {
+
+  // store revocation entries: vcHash -> (issuer, revokedAt, reason)
+  stable var revoked : HashMap.HashMap<Text, (Text, Int, Text)> = HashMap.HashMap<Text, (Text, Int, Text)>();
+
+  public shared(msg) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
+    revoked.put(vcHash, (issuer, revokedAt, reason));
+    true
+  };
+
+  public query func isRevoked(vcHash : Text) : async Opt<(Text, Int, Text)> {
+    revoked.get(vcHash)
+  };
+
+  public query func status() : async Text { "revocation_canister: OK" };
+};
 import Array "mo:base/Array";
 import Int "mo:base/Int";
 

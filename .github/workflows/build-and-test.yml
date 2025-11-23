@@ -13,6 +13,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Download canister declarations
+        uses: actions/download-artifact@v4
+        with:
+          name: canister-declarations
+          path: src/declarations || true
+
+      - name: Copy canister declarations into web app
+        run: |
+          if [ -d src/declarations ]; then
+            mkdir -p apps/web/src/declarations
+            cp -R src/declarations/* apps/web/src/declarations/ || true
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:

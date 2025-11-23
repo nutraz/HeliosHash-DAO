@@ -119,7 +119,7 @@ export interface SubmitApplicationRequest {
 }
 
 class ApplicationService {
-  private agent: HttpAgent | null = null;
+  private agent: any = null;
   private actor: any = null;
 
   private async getActor() {

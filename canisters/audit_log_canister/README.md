@@ -1,3 +1,11 @@
+Audit Log Canister
+
+Purpose:
+- Store append-only audit hashes for actions (VC issuance anchored hash, milestone release proofs)
+
+Example:
+  dfx canister call audit_log_canister append '("sha256:abcd...")'
+  dfx canister call audit_log_canister tail '(10)'
 Audit Log Canister (skeleton)
 
 Purpose:

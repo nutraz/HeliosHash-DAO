@@ -1,7 +1,9 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
-import type { Identity } from '@dfinity/agent';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
+// Note: avoid importing Identity as a TS namespace type here to prevent
+// compatibility issues with different @dfinity/agent type exports.
 import { AuthClient } from '@dfinity/auth-client';
 import { createActor } from '@/lib/actorFactory';
 import { hhdaoIdlFactory } from '@/lib/hhdaoIdl';
@@ -30,10 +32,13 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [authClient, setAuthClient] = useState<AuthClient | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
   const logout = useCallback(async () => {
     if (authClient) {
@@ -44,63 +49,137 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
     setUser(null);
+    // Reset auth-checked guard on logout so login flows can re-run
+    authenticationChecked.current = false;
   }, [authClient]);
 
-  const handleAuthentication = useCallback(async (identity: unknown): Promise<void> => {
-    try {
-      // Narrow the unknown identity to the minimal shape we need
-      type PrincipalLike = { toText?: () => string; isAnonymous?: () => boolean }
-      const maybeIdentity = identity as { getPrincipal?: () => PrincipalLike };
-      if (typeof maybeIdentity.getPrincipal !== 'function') {
-        throw new Error('Invalid identity object');
-      }
+  // Stable ref to the authentication handler to avoid recreating the function
+  // and triggering effect dependency loops.
+  const handleAuthenticationRef = useRef<((identity: unknown) => Promise<void>) | null>(null);
 
-      const principal = maybeIdentity.getPrincipal();
-      if (principal) {
-        const p = principal as PrincipalLike
-        if (typeof p.isAnonymous === 'function' && p.isAnonymous()) {
-          throw new Error('Anonymous identity not allowed');
+  useEffect(() => {
+    handleAuthenticationRef.current = async (identity: unknown): Promise<void> => {
+      console.log('handleAuthentication called');
+      try {
+        // Narrow the unknown identity to the minimal shape we need
+        type PrincipalLike = { toText?: () => string; isAnonymous?: () => boolean }
+        const maybeIdentity = identity as { getPrincipal?: () => PrincipalLike };
+        if (typeof maybeIdentity.getPrincipal !== 'function') {
+          throw new Error('Invalid identity object');
         }
+
+        const principal = maybeIdentity.getPrincipal();
+        if (principal) {
+          const p = principal as PrincipalLike
+          if (typeof p.isAnonymous === 'function' && p.isAnonymous()) {
+            throw new Error('Anonymous identity not allowed');
+          }
+        }
+
+        // Create actor and verify authentication with backend if configured.
+        // Actor creation can fail in dev (CSP, network, or replica down). We
+        // should not throw on actor creation failure — proceed without backend
+        // connectivity so the UI remains usable.
+        const shouldCreateActor = process.env.NEXT_PUBLIC_ENABLE_ACTOR === 'true';
+
+        if (!shouldCreateActor) {
+          // Actor creation disabled by env; skip creating actor in dev by default
+          // eslint-disable-next-line no-console
+          console.warn('Actor creation skipped (NEXT_PUBLIC_ENABLE_ACTOR is not true)');
+        } else {
+          const canisterId = process.env.NEXT_PUBLIC_HHDAO_CANISTER_ID;
+          if (!canisterId) {
+            // In local dev it's common not to have canister IDs; continue but warn.
+            // Avoid throwing here so the UI can proceed and developer can still
+            // test the login flow without a backend configured.
+            // eslint-disable-next-line no-console
+            console.warn('HHDAO canister ID not configured; skipping backend actor creation for local dev');
+          } else {
+            // createActor expects an identity-like object; cast to `any` to avoid
+            // type errors stemming from mismatched Identity declarations.
+            try {
+              await createActor(canisterId, hhdaoIdlFactory, identity as any);
+            } catch (actorError) {
+              // Log and continue — don't throw to avoid triggering global auth error loops
+              // eslint-disable-next-line no-console
+              console.warn('Actor creation failed, continuing without backend connection:', actorError);
+            }
+          }
+        }
+
+        const principalText = typeof principal?.toText === 'function' ? principal.toText() : String(principal);
+        setUser({
+          principal: principalText,
+          name: `User ${principalText.slice(0, 8)}...`,
+        });
+
+        // Navigate to the dashboard after successful authentication.
+        try {
+          router.push('/helioshash-dao');
+        } catch (e) {
+          // ignore navigation errors during SSR or tests
+        }
+      } catch (error) {
+        console.error('Authentication failed:', error);
+        await logout();
       }
+    };
+  }, [logout, router]);
 
-      // Create actor and verify authentication with backend
-      const canisterId = process.env.NEXT_PUBLIC_HHDAO_CANISTER_ID;
-      if (!canisterId) {
-        throw new Error('HHDAO canister ID not configured');
-      }
+  // Debug: log re-renders and key auth state
+  useEffect(() => {
+    console.log('AuthContext re-rendered', {
+      user,
+      authClient: !!authClient,
+      isLoading,
+      isClient,
+    });
+  });
 
-  // createActor expects an `Identity` instance from @dfinity/agent
-  await createActor(canisterId, hhdaoIdlFactory, identity as Identity);
-
-      const principalText = typeof principal?.toText === 'function' ? principal.toText() : String(principal);
-      setUser({
-        principal: principalText,
-        name: `User ${principalText.slice(0, 8)}...`,
-      });
-    } catch (error) {
-      console.error('Authentication failed:', error);
-      await logout();
-    }
-  }, [logout]);
+  // Prevent multiple authentication checks from racing/re-triggering
+  const authenticationChecked = useRef(false);
 
   useEffect(() => {
     setIsClient(true);
 
-    (async function initializeAuth() {
+    (async function initializeAuthClient() {
       try {
         const client = await AuthClient.create();
         setAuthClient(client);
-
-        if (await client.isAuthenticated()) {
-          await handleAuthentication(client.getIdentity());
-        }
       } catch (error) {
         console.error("Failed to initialize auth client:", error);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [handleAuthentication]);
+  }, []); // Run only once on mount
+
+  // Separate effect to check authentication once authClient is available
+  useEffect(() => {
+    if (!authClient) return;
+    if (authenticationChecked.current) return;
+    if (retryCount >= MAX_RETRIES) return;
+    if (user) return; // already authenticated in state, no need to re-run
+
+    (async function checkAuthentication() {
+      authenticationChecked.current = true;
+      try {
+        console.log('Auth check triggered');
+        if (await authClient.isAuthenticated()) {
+          console.log('User is authenticated, proceeding with authentication...');
+          await handleAuthenticationRef.current?.(authClient.getIdentity());
+        } else {
+          console.log('User is not authenticated');
+        }
+      } catch (error) {
+        console.error("Failed to check authentication:", error);
+        // increment retry count to avoid infinite retry loops
+        setRetryCount((prev) => prev + 1);
+        // allow another attempt later
+        authenticationChecked.current = false;
+      }
+    })();
+  }, [authClient, retryCount]); // Now handleAuthentication is stable
 
   const login = async () => {
     if (!authClient) {
@@ -133,7 +212,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await authClient.login({
         identityProvider,
         onSuccess: async () => {
-          await handleAuthentication(authClient.getIdentity());
+          await handleAuthenticationRef.current?.(authClient.getIdentity());
         },
         onError: (error) => {
           console.error("Login failed:", error);

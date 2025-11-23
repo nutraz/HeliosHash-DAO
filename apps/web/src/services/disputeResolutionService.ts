@@ -123,7 +123,7 @@ const idlFactory = ({ IDL }: any) => {
 
 class DisputeResolutionService {
   private actor: any;
-  private agent: HttpAgent;
+  private agent: any;
 
   constructor() {
     // Initialize the agent - in development, this connects to local replica

@@ -1,0 +1,8 @@
+service : {
+  addVC: (subject: text, vcHash: text) -> (bool);
+  getVCs: (subject: text) -> (vec text) query;
+  hasVC: (subject: text, vcHash: text) -> (bool) query;
+  isRevoked: (vcHash: text) -> (bool) query;
+  revokeVC: (vcHash: text) -> (bool);
+  status: () -> (text) query;
+}

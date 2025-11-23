@@ -1,11 +1,10 @@
-import { Actor, HttpAgent, Identity, ActorSubclass } from "@dfinity/agent";
-import { IDL } from "@dfinity/candid";
+import { Actor, HttpAgent } from "@dfinity/agent";
 
 export async function createActor<T>(
   canisterId: string,
-  idlFactory: IDL.InterfaceFactory,
-  identity?: Identity
-): Promise<ActorSubclass<T>> {
+  idlFactory: any,
+  identity?: any
+): Promise<any> {
   if (!canisterId) {
     throw new Error(`Canister ID not defined for actor creation`);
   }
@@ -24,5 +23,8 @@ export async function createActor<T>(
     throw new Error(`Invalid canister ID: ${canisterId}`);
   }
 
-  return Actor.createActor<T>(idlFactory, { agent, canisterId });
+  // Actor.createActor may not accept TS generics depending on @dfinity/agent
+  // typings present; call without type arguments and cast to `any` to avoid
+  // compilation errors in mixed-typing environments.
+  return Actor.createActor(idlFactory, { agent, canisterId }) as any;
 }

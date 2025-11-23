@@ -17,6 +17,16 @@ jobs:
           echo "$HOME/bin" >> $GITHUB_PATH
       - name: Build canisters
         run: dfx build
+      - name: Generate TypeScript bindings
+        run: |
+          # Generate TypeScript declarations for frontend usage
+          dfx generate || true
+      - name: Upload canister declarations
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canister-declarations
+          path: src/declarations/**
       - name: Upload canister WASM
         if: success()
         uses: actions/upload-artifact@v4

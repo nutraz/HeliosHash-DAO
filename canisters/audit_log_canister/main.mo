@@ -1,3 +1,37 @@
+import Debug "mo:base/Debug";
+import Array "mo:base/Array";
+
+actor AuditLog {
+
+  stable var logs : [ (Int, Text) ] = [];
+  stable var counter : Int = 0;
+
+  public shared(msg) func append(logHash : Text) : async Int {
+    counter += 1;
+    logs := Array.append(logs, [ (counter, logHash) ]);
+    counter
+  };
+
+  public query func getLog(id : Int) : async Opt<Text> {
+    let idx = Array.findIndex<(Int, Text)>(func (x) { x.0 == id }, logs);
+    switch (idx) {
+      case (null) { null };
+      case (?i) { ?(logs[i].1) };
+    }
+  };
+
+  public query func tail(limit : Int) : async [ (Int, Text) ] {
+    if (limit <= 0) {
+      logs
+    } else {
+      let n = Array.length(logs);
+      let start = if (n <= limit) 0 else (n - limit);
+      Array.slice(logs, start, n)
+    }
+  };
+
+  public query func status() : async Text { "audit_log_canister: OK" };
+};
 import Array "mo:base/Array";
 /* Minimal AuditLog scaffold */
 persistent actor AuditLog {

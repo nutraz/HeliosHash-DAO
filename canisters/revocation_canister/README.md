@@ -1,3 +1,11 @@
+Revocation Canister
+
+Purpose:
+- Store revocation entries and provide lookup for VC revocation info
+
+Example:
+  dfx canister call revocation_canister revoke '("sha256:vc1234","did:web:verifier.example.org",1711334600,"fraud suspected")'
+  dfx canister call revocation_canister isRevoked '("sha256:vc1234")'
 Revocation Canister (skeleton)
 
 Purpose:

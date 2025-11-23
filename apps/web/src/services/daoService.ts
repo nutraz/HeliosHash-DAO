@@ -2,7 +2,7 @@
 // Connects React frontend to Internet Computer DAO canister
 // Handles governance: proposals, voting, membership
 
-import { ActorSubclass, HttpAgent } from '@dfinity/agent';
+import { HttpAgent } from '@dfinity/agent';
 import { Principal } from '@dfinity/principal';
 // Note: AuthClient import removed - will use basic identity for now
 import { createActor, canisterId as generatedCanisterId } from '../declarations/hhdao_dao';
@@ -117,7 +117,7 @@ export type {
 } from '../declarations/hhdao_dao/hhdao_dao.did.d.ts';
 
 export class HHDAOService {
-  private actor: ActorSubclass<_SERVICE> | null = null;
+  private actor: any = null;
   private mockMode: boolean = false;
 
   /**
@@ -162,7 +162,7 @@ export class HHDAOService {
     }
   }
 
-  private getActor(): ActorSubclass<_SERVICE> {
+  private getActor(): any {
     if (!this.actor && !this.mockMode) {
       throw new HHDAOError(
         'Service not initialized (no actor). Ensure CANISTER_ID_HHDAO_DAO is set and call initialize().'

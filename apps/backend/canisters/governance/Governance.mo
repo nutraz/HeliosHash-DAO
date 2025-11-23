@@ -17,10 +17,10 @@ persistent actor Governance {
     joined : Int;
   };
 
-  // State - using stable vars for persistence
-  stable var nextProposalId : Nat = 1;
-  stable var proposals : [Proposal] = [];
-  stable var members : [Member] = [];
+  // State (non-stable for local/dev builds)
+  var nextProposalId : Nat = 1;
+  var proposals : [Proposal] = [];
+  var members : [Member] = [];
 
   // Public queries
   public query func getVersion() : async Text {

@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import NFTDetail from '@/components/nft/NFTDetail';
@@ -9,7 +10,7 @@ export default function NFTsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const nftId = searchParams?.get('id') ?? null;
-  
+
   const [view, setView] = useState<'gallery' | 'create' | 'detail'>('gallery');
 
   useEffect(() => {

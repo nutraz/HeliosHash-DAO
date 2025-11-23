@@ -9,7 +9,7 @@ jobs:
   build-flutter:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Check for mobile app
         id: check_mobile

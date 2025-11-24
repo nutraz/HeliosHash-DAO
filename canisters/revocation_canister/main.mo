@@ -1,68 +1,52 @@
 import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
+import Option "mo:base/Option";
+import Text "mo:base/Text";
+import Iter "mo:base/Iter";
 
-actor RevocationCanister {
+/* Revocation canister — single persistent actor using HashMap with stable backing */
+persistent actor RevocationCanister {
+  // stable array of entries: vcHash -> (issuer, revokedAt, reason)
+  var revokedEntries : [(Text, (Text, Int, Text))] = [];
 
-  // store revocation entries: vcHash -> (issuer, revokedAt, reason)
-  stable var revoked : HashMap.HashMap<Text, (Text, Int, Text)> = HashMap.HashMap<Text, (Text, Int, Text)>();
+  // transient HashMap rebuilt after upgrades
+  private transient var revoked : HashMap.HashMap<Text, (Text, Int, Text)> =
+    HashMap.HashMap(10, Text.equal, Text.hash);
 
-  public shared(msg) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
+  // Persist transient map into stable array before upgrade
+  system func preupgrade() {
+    revokedEntries := Iter.toArray(revoked.entries());
+  };
+
+  // Rebuild transient map from stable array after upgrade
+  system func postupgrade() {
+    revoked := HashMap.fromIter<Text, (Text, Int, Text)>(
+      revokedEntries.vals(), 10, Text.equal, Text.hash
+    );
+    revokedEntries := [];
+  };
+
+  public shared(_msg) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
     revoked.put(vcHash, (issuer, revokedAt, reason));
     true
   };
 
-  public query func isRevoked(vcHash : Text) : async Opt<(Text, Int, Text)> {
+  public query func getRevocation(vcHash : Text) : async ?(Text, Int, Text) {
     revoked.get(vcHash)
   };
 
-  public query func status() : async Text { "revocation_canister: OK" };
-};
-import Array "mo:base/Array";
-import Int "mo:base/Int";
-
-/* Revocation canister scaffold: single persistent actor */
-persistent actor RevocationCanister {
-  // store revocation entries: vcHash -> (issuer, revokedAt, reason)
-  stable var revoked : [ (Text, (Text, Int, Text)) ] = [];
-
-  public shared(msg) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
-    let n = Array.size(revoked);
-    var i : Nat = 0;
-    while (i < n) {
-      if (revoked[i].0 == vcHash) {
-        // replace existing entry
-        revoked := Array.map(revoked, func (e) {
-          if (e.0 == vcHash) (vcHash, (issuer, revokedAt, reason)) else e
-        });
-        return true;
-      };
-      i += 1;
-    };
-    // append new revocation
-    revoked := Array.append(revoked, [ (vcHash, (issuer, revokedAt, reason)) ]);
-    return true;
-  };
-
   public query func isRevoked(vcHash : Text) : async Bool {
-    let n = Array.size(revoked);
-    var i : Nat = 0;
-    while (i < n) {
-      if (revoked[i].0 == vcHash) return true;
-      i += 1;
-    };
-    return false;
+    switch (revoked.get(vcHash)) {
+      case (null) false;
+      case (?_) true;
+    }
   };
 
   public query func listRevoked() : async [Text] {
-    let n = Array.size(revoked);
-    var out : [Text] = [];
-    var i : Nat = 0;
-    while (i < n) {
-      out := Array.append(out, [revoked[i].0]);
-      i += 1;
-    };
-    return out;
+    Iter.toArray(revoked.keys())
   };
 
-  public query func status() : async Text { "revocation_canister: OK" };
+  public query func status() : async Text {
+    "revocation_canister: OK"
+  };
 };

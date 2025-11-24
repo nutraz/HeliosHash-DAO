@@ -1,37 +1,82 @@
-"use client"
+"use client";
+import React from "react";
+import { useRenderTrace } from '@/lib/useRenderTrace';
+import Image from "next/image";
 
-import React from 'react'
+export type ProfileCardProps = {
+  name: string;
+  pfpUrl?: string;
+  roleTags?: string[];
+  level?: number;
+  reputation?: number;
+  badges?: string[];
+  onEdit?: () => void;
+  onViewNFTs?: () => void;
+};
 
-type Badge = { id: string; title: string }
-
-export default function ProfileCard() {
-  const badges: Badge[] = [
-    { id: 'b1', title: 'Founder' },
-    { id: 'b2', title: 'Solar Pilot' },
-    { id: 'b3', title: 'Validator' },
-  ]
-
+export const ProfileCard: React.FC<ProfileCardProps> = ({
+  name,
+  pfpUrl,
+  roleTags = [],
+  level = 1,
+  reputation = 0,
+  badges = [],
+  onEdit,
+  onViewNFTs,
+}) => {
+  useRenderTrace('ProfileCard', { name });
   return (
-    <div className="bg-slate-800 p-4 rounded-2xl shadow-md">
+    <div className="bg-white/80 dark:bg-slate-900/70 rounded-2xl p-4 shadow-md">
       <div className="flex items-center gap-4">
-        <img src="/hhdaologo-main.svg" alt="pfp" className="w-16 h-16 rounded-full ring-2 ring-emerald-400" />
-        <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-lg font-bold">Sanjay Verma</h3>
-            <span className="text-xs px-2 py-1 bg-emerald-500 text-slate-900 rounded">Level 7</span>
-          </div>
-          <div className="text-sm text-slate-300">Position: Community Lead</div>
-          <div className="text-sm text-slate-400">Rank: Gold</div>
+        <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden">
+          {pfpUrl ? (
+            // Next Image if you want optimization
+            <Image src={pfpUrl} alt={`${name} avatar`} width={80} height={80} />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-amber-200 to-rose-100 flex items-center justify-center text-xl">
+              {name?.[0] ?? "U"}
+            </div>
+          )}
         </div>
-      </div>
 
-      <div className="mt-4">
-        <div className="flex flex-wrap gap-2">
-          {badges.map((b) => (
-            <span key={b.id} className="text-xs bg-white/5 px-2 py-1 rounded">{b.title}</span>
-          ))}
+        <div className="flex-1">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-semibold">{name}</h3>
+              <div className="text-sm text-muted-foreground">{roleTags.join(" • ")}</div>
+            </div>
+
+            <div className="text-right">
+              <div className="text-xs text-gray-500">Level</div>
+              <div className="font-bold">{level}</div>
+            </div>
+          </div>
+
+          <div className="mt-3 flex items-center gap-2">
+            <div className="text-sm">Reputation</div>
+            <div className="font-semibold">{reputation}</div>
+            <div className="flex gap-1 ml-4">
+              {badges.slice(0, 4).map((b) => (
+                <span key={b} className="px-2 py-1 text-xs rounded bg-blue-50">
+                  {b}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-3 flex gap-2">
+            <button onClick={onEdit} className="btn-primary">
+              Edit Profile
+            </button>
+            <button onClick={onViewNFTs} className="btn-secondary">
+              View NFTs
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default ProfileCard;
+

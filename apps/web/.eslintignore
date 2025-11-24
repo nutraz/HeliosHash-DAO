@@ -1,3 +1,10 @@
+# Ignore generated frontend assets that are copied during canister deploy/export
+src/frontend/assets/
+
+# Ignore node_modules and build outputs
+node_modules/
+.next/
+out/
 # Ignore generated canister declarations which are noisy for ESLint
 src/declarations/**
 # Temporarily ignore hiidao-fusion and some local d.ts files that are excluded

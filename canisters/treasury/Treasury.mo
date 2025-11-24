@@ -2,7 +2,6 @@ import Array "mo:base/Array";
 import Principal "mo:base/Principal";
 import Time "mo:base/Time";
 import Int "mo:base/Int";
-import Error "mo:base/Error";
 
 persistent actor Treasury {
   public type Transaction = {
@@ -14,9 +13,9 @@ persistent actor Treasury {
     to : Principal;
   };
 
-  transient var balance : Int = 0;
-  transient var transactions : [Transaction] = [];
-  transient var nextTransactionId : Nat = 1;
+  var balance : Int = 0;
+  var transactions : [Transaction] = [];
+  var nextTransactionId : Nat = 1;
 
   public query func getBalance() : async Int {
     return balance;
@@ -48,7 +47,7 @@ persistent actor Treasury {
     return "Deposit successful! New balance: " # Int.toText(balance);
   };
 
-  public shared ({ caller }) func withdraw(amount : Int, to : Principal, description : Text) : async Text {
+  public shared func withdraw(amount : Int, to : Principal, description : Text) : async Text {
     if (amount <= 0) {
       return "Error: Withdrawal amount must be positive";
     };

@@ -1,8 +1,17 @@
 service : {
-  getIssuance: (vcHash: text) -> (text) query;
-  recordIssuance: (vcHash: text, issuer: text, subject: text, issuedAt:
-   int) -> (bool);
-  recordIssuanceWithProject: (vcHash: text, issuer: text, subject: text,
-   issuedAt: int, projectId: text, level: int) -> (bool);
-  status: () -> (text) query;
+  getAllIssuances: () -> (vec record {
+                                text;
+                                record {
+                                  text;
+                                  text;
+                                  int;
+                                };
+                              }) query;
+  getIssuance: (issuance_id: text) -> (opt record {
+                                             text;
+                                             text;
+                                             int;
+                                           }) query;
+  recordIssuance: (issuance_id: text, project_id: text, verifier_id: 
+   text, amount: int) -> ();
 }

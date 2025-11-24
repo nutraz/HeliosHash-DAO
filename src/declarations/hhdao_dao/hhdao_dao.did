@@ -1,0 +1,30 @@
+type Status = 
+ variant {
+   Open;
+   Passed;
+   Rejected;
+ };
+type Proposal = 
+ record {
+   category: Category;
+   description: text;
+   expiresAt: int;
+   id: nat;
+   status: Status;
+   title: text;
+   votesAgainst: nat;
+   votesFor: nat;
+   votesRequired: nat;
+ };
+type Category = 
+ variant {
+   Governance;
+   Project;
+   Treasury;
+ };
+service : {
+  addMember: (m: principal) -> (bool);
+  addProposal: (p: Proposal) -> (bool);
+  getMembers: () -> (vec principal) query;
+  getProposals: () -> (vec Proposal) query;
+}

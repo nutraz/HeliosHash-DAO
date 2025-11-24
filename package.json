@@ -4,15 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "concurrently \"pnpm dev:web\" \"pnpm dev:backend\"",
-    "dev:web": "cd apps/web && pnpm dev -p 3002",
+    "dev:web": "cd apps/web && pnpm dev",
     "dev:backend": "dfx start --background",
-    "build": "pnpm build:web && pnpm build:backend",
+    "build": "echo \"Use deploy:frontend or build:web instead\"",
     "build:web": "cd apps/web && pnpm build",
     "build:backend": "dfx deploy",
     "test": "pnpm test:web && pnpm test:backend",
     "test:web": "cd apps/web && pnpm test",
     "test:backend": "cd canisters && pnpm test",
-    "type-check": "cd apps/web && npx tsc --noEmit -p tsconfig.json"
+    "type-check": "cd apps/web && npx tsc --noEmit -p tsconfig.json",
+    "deploy:web-canister": "sh ./deploy-web-canister.sh",
+    "deploy:frontend": "sh ./deploy-web-canister.sh",
+    "deploy:all": "sh ./deploy-web-canister.sh",
+    "setup:env": "sh ./scripts/setup-dev-env.sh",
+    "start:local": "dfx start --background && sh ./scripts/setup-dev-env.sh"
   },
   "workspaces": [
     "apps/*",

@@ -1,0 +1,9 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[1216],{7764:function(e,t,r){Promise.resolve().then(r.bind(r,5141))},5141:function(e,t,r){"use strict";r.r(t),r.d(t,{default:function(){return ConnectWalletRedirect}});var n=r(7573),c=r(7653),s=r(2859);function ConnectWalletRedirect(){let e=(0,s.useRouter)();return(0,c.useEffect)(()=>{e.replace("/login")},[e]),(0,n.jsx)("div",{className:"min-h-screen flex items-center justify-center",children:(0,n.jsxs)("div",{className:"text-center",children:[(0,n.jsx)("h2",{className:"text-xl font-semibold",children:"Redirecting to Connect Wallet…"}),(0,n.jsxs)("p",{className:"text-gray-500",children:["If you aren't redirected, ",(0,n.jsx)("a",{href:"/login",className:"text-blue-600",children:"click here"}),"."]})]})})}},8294:function(e,t,r){"use strict";/**
+ * @license React
+ * react-jsx-runtime.production.min.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */var n=r(7653),c=Symbol.for("react.element"),s=Symbol.for("react.fragment"),o=Object.prototype.hasOwnProperty,i=n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,l={key:!0,ref:!0,__self:!0,__source:!0};function q(e,t,r){var n,s={},f=null,u=null;for(n in void 0!==r&&(f=""+r),void 0!==t.key&&(f=""+t.key),void 0!==t.ref&&(u=t.ref),t)o.call(t,n)&&!l.hasOwnProperty(n)&&(s[n]=t[n]);if(e&&e.defaultProps)for(n in t=e.defaultProps)void 0===s[n]&&(s[n]=t[n]);return{$$typeof:c,type:e,key:f,ref:u,props:s,_owner:i.current}}t.Fragment=s,t.jsx=q,t.jsxs=q},7573:function(e,t,r){"use strict";e.exports=r(8294)},2859:function(e,t,r){e.exports=r(7699)}},function(e){e.O(0,[1293,1053,1744],function(){return e(e.s=7764)}),_N_E=e.O()}]);

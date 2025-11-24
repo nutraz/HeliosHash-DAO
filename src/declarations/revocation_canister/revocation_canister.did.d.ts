@@ -3,6 +3,7 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface _SERVICE {
+  'getRevocation' : ActorMethod<[string], [] | [[string, bigint, string]]>,
   'isRevoked' : ActorMethod<[string], boolean>,
   'listRevoked' : ActorMethod<[], Array<string>>,
   'revoke' : ActorMethod<[string, string, bigint, string], boolean>,

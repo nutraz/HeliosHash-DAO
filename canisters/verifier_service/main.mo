@@ -1,27 +1,51 @@
-import Debug "mo:base/Debug";
 import HashMap "mo:base/HashMap";
+import Text "mo:base/Text";
+import Hash "mo:base/Hash";
+import Result "mo:base/Result";
+import Iter "mo:base/Iter";
 
-// Persistent verifier service - lightweight issuance anchor
 persistent actor VerifierService {
 
-  // issuance records: vcHash -> (issuer, subject, issuedAt)
-  stable var issuance : HashMap.HashMap<Text, (Text, Text, Int)> = HashMap.HashMap<Text, (Text, Text, Int)>();
+  // Stable storage for issuance records
+  stable var issuanceEntries : [(Text, (Text, Text, Int))] = [];
 
-  public shared(msg) func recordIssuance(vcHash : Text, issuer : Text, subject : Text, issuedAt : Int) : async Bool {
-    issuance.put(vcHash, (issuer, subject, issuedAt));
-    true
+  // Non-stable HashMap (rebuilt after upgrade)
+  private transient var issuance : HashMap.HashMap<Text, (Text, Text, Int)> =
+    HashMap.HashMap(10, Text.equal, Text.hash);
+
+  // Before upgrade: convert HashMap → stable array
+  system func preupgrade() {
+    issuanceEntries := Iter.toArray(issuance.entries());
   };
 
-  public query func getIssuance(vcHash : Text) : async Opt<(Text, Text, Int)> {
-    issuance.get(vcHash)
+  // After upgrade: rebuild HashMap from stable array
+  system func postupgrade() {
+    issuance := HashMap.fromIter<Text, (Text, Text, Int)>(
+      issuanceEntries.vals(),
+      10,
+      Text.equal,
+      Text.hash,
+    );
+    issuanceEntries := []; // free space
   };
 
-  public shared(msg) func recordIssuanceWithProject(vcHash : Text, issuer : Text, subject : Text, issuedAt : Int, projectId : Text, level : Int) : async Bool {
-    issuance.put(vcHash, (issuer # ("|" # projectId), subject, issuedAt));
-    true
+  // Record an issuance
+  public shared(_msg) func recordIssuance(
+    issuance_id : Text,
+    project_id : Text,
+    verifier_id : Text,
+    amount : Int
+  ) : async () {
+    issuance.put(issuance_id, (project_id, verifier_id, amount));
   };
 
-  public query func status() : async Text {
-    "verifier_service: OK"
+  // Read issuance
+  public query func getIssuance(issuance_id : Text) : async ?(Text, Text, Int) {
+    return issuance.get(issuance_id);
   };
-};
+
+  // Dump all entries
+  public query func getAllIssuances() : async [(Text, (Text, Text, Int))] {
+    return Iter.toArray(issuance.entries());
+  };
+}

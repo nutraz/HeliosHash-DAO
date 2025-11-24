@@ -7,17 +7,22 @@ import { useRouter } from 'next/navigation';
 import { AuthClient } from '@dfinity/auth-client';
 import { createActor } from '@/lib/actorFactory';
 import { hhdaoIdlFactory } from '@/lib/hhdaoIdl';
+import { ensureKycAndMint } from '@/lib/canisters/identity';
 
 interface User {
   principal: string;
   name?: string;
   email?: string;
   avatar?: string;
+  kycStatus?: string;
+  idNftMinted?: boolean;
+  roles?: string[];
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
+  updateRoles: (roles: string[]) => Promise<void>;
   login: () => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
@@ -39,6 +44,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isClient, setIsClient] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
+  const STORAGE_KEY = 'helioshash_user';
+
+  const saveUserToStorage = useCallback((u: User | null) => {
+    try {
+      if (!u) {
+        localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+      const minimal = { principal: u.principal, name: u.name, email: u.email, avatar: u.avatar, roles: u.roles || [] };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(minimal));
+    } catch (e) {
+      // ignore storage errors
+    }
+  }, []);
+
+  const loadUserFromStorage = useCallback((): Partial<User> | null => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      return null;
+    }
+  }, []);
 
   const logout = useCallback(async () => {
     if (authClient) {
@@ -108,10 +137,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
 
         const principalText = typeof principal?.toText === 'function' ? principal.toText() : String(principal);
-        setUser({
+        // Base profile assembled from identity/principal and local wallet
+        const baseProfile = {
           principal: principalText,
           name: `User ${principalText.slice(0, 8)}...`,
-        });
+          email: undefined,
+          avatar: undefined,
+          kycStatus: 'unknown',
+          idNftMinted: false,
+        };
+
+        setUser(baseProfile);
+
+        // Kick off KYC + ID NFT issuance in the background; don't block UI.
+        (async () => {
+          try {
+            const k = await ensureKycAndMint(identity, principalText, { name: baseProfile.name });
+            if (k?.kyc) {
+              setUser((prev) => prev ? { ...prev, kycStatus: k.kyc } : prev);
+            }
+            if (k?.minted) {
+              setUser((prev) => prev ? { ...prev, idNftMinted: true } : prev);
+            }
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.warn('Background KYC/mint failed', e);
+          }
+        })();
 
         // Navigate to the dashboard after successful authentication.
         try {
@@ -128,13 +180,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Debug: log re-renders and key auth state
   useEffect(() => {
-    console.log('AuthContext re-rendered', {
+    // Debug: log when key auth state changes (avoid logging on every render)
+    console.log('AuthContext state', {
       user,
       authClient: !!authClient,
       isLoading,
       isClient,
     });
-  });
+  }, [user, authClient, isLoading, isClient]);
 
   // Prevent multiple authentication checks from racing/re-triggering
   const authenticationChecked = useRef(false);
@@ -152,6 +205,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(false);
       }
     })();
+
+    // hydrate user roles/profile from localStorage if present
+    try {
+      const stored = loadUserFromStorage();
+      if (stored && (stored as any).principal) {
+        setUser((prev) => ({ ...(prev || {}), principal: (stored as any).principal, name: (stored as any).name, email: (stored as any).email, avatar: (stored as any).avatar, roles: (stored as any).roles || [] } as User));
+      }
+    } catch (e) {
+      // ignore
+    }
   }, []); // Run only once on mount
 
   // Separate effect to check authentication once authClient is available
@@ -181,7 +244,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, [authClient, retryCount]); // Now handleAuthentication is stable
 
-  const login = async () => {
+  const login = useCallback(async () => {
     if (!authClient) {
       throw new Error("Auth client not initialized");
     }
@@ -222,22 +285,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Login error:", error);
       throw error;
     }
-  };
+  }, [authClient]);
+
+  // update roles (persisted)
+  const updateRoles = useCallback(async (roles: string[]) => {
+    setUser((prev) => {
+      const updated = prev ? { ...prev, roles } : null;
+      try { saveUserToStorage(updated as User); } catch {}
+      return updated;
+    });
+  }, [saveUserToStorage]);
+
+  // persist user changes to localStorage (minimal profile)
+  useEffect(() => {
+    if (!isClient) return;
+    try { saveUserToStorage(user); } catch {}
+  }, [user, isClient, saveUserToStorage]);
 
   // Provide default values when not on client
-  const value: AuthContextType = {
-    user: isClient ? user : null,
-    isAuthenticated: isClient ? !!user : false,
-    login,
-    logout,
-    isLoading: isClient ? isLoading : true,
-    // legacy compatibility fields
-    isConnected: isClient ? !!user : false,
-    walletType: isClient && user ? 'internet-identity' : null,
-    principal: isClient ? user?.principal || null : null,
-    connect: login,
-    disconnect: logout,
-  };
+  const value: AuthContextType = React.useMemo(
+    () => ({
+      user: isClient ? user : null,
+      isAuthenticated: isClient ? !!user : false,
+      updateRoles,
+      login,
+      logout,
+      isLoading: isClient ? isLoading : true,
+      // legacy compatibility fields
+      isConnected: isClient ? !!user : false,
+      walletType: isClient && user ? 'internet-identity' : null,
+      principal: isClient ? user?.principal || null : null,
+      connect: login,
+      disconnect: logout,
+    }),
+    [user, isClient, isLoading, login, logout, updateRoles]
+  );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -251,6 +333,7 @@ export function useAuth() {
       isAuthenticated: false,
       login: async () => {},
       logout: async () => {},
+      updateRoles: async () => {},
       isLoading: true,
       isConnected: false,
       walletType: null,

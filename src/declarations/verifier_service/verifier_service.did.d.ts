@@ -3,13 +3,12 @@ import type { ActorMethod } from '@dfinity/agent';
 import type { IDL } from '@dfinity/candid';
 
 export interface _SERVICE {
-  'getIssuance' : ActorMethod<[string], string>,
-  'recordIssuance' : ActorMethod<[string, string, string, bigint], boolean>,
-  'recordIssuanceWithProject' : ActorMethod<
-    [string, string, string, bigint, string, bigint],
-    boolean
+  'getAllIssuances' : ActorMethod<
+    [],
+    Array<[string, [string, string, bigint]]>
   >,
-  'status' : ActorMethod<[], string>,
+  'getIssuance' : ActorMethod<[string], [] | [[string, string, bigint]]>,
+  'recordIssuance' : ActorMethod<[string, string, string, bigint], undefined>,
 }
 export declare const idlFactory: IDL.InterfaceFactory;
 export declare const init: (args: { IDL: typeof IDL }) => IDL.Type[];

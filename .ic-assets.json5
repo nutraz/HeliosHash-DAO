@@ -1,6 +1,10 @@
 [
   {
-    match: '**/*',
-    security_policy: 'standard',
-  },
+    "match": "**/*",
+    "security_policy": "standard",
+    "headers": {
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff"
+    }
+  }
 ]

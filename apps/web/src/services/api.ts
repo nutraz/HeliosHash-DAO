@@ -6,7 +6,7 @@ import { getCanisterActors } from '@/lib/canister-actors';
 const API_BASE =
   process.env.NODE_ENV === 'production'
     ? 'https://your-domain.com/api'
-    : 'http://localhost:3000/api';
+    : 'http://localhost:3002/api';
 
 interface ApiResponse<T> {
   success: boolean;

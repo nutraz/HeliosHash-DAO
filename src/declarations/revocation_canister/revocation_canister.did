@@ -1,4 +1,9 @@
 service : {
+  getRevocation: (vcHash: text) -> (opt record {
+                                          text;
+                                          int;
+                                          text;
+                                        }) query;
   isRevoked: (vcHash: text) -> (bool) query;
   listRevoked: () -> (vec text) query;
   revoke: (vcHash: text, issuer: text, revokedAt: int, reason: text) ->

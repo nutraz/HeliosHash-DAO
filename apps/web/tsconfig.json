@@ -28,7 +28,8 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
@@ -39,6 +40,9 @@
   ],
   "exclude": [
     "node_modules",
-    "src/app/helioshash-dao-fusion/components/**"
+    "src/app/helioshash-dao-fusion/components/**",
+    // Exclude build/export helper assets (copied frontend assets) so they
+    // don't get picked up by the TypeScript compiler during the web build.
+    "src/frontend/assets/**"
   ]
 }

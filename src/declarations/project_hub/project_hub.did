@@ -1,0 +1,45 @@
+type Result_3 = 
+ variant {
+   err: text;
+   ok: vec text;
+ };
+type Result_2 = 
+ variant {
+   err: text;
+   ok: bool;
+ };
+type Result_1 = 
+ variant {
+   err: text;
+   ok: text;
+ };
+type Result = 
+ variant {
+   err: text;
+   ok: Project;
+ };
+type ProjectHub = 
+ service {
+   create_opportunity: (project_id: text, job_type: text, details: text) ->
+    (Result_1);
+   create_project: (name: text, location: text, capacity: nat, metadata:
+    text) -> (Result);
+   get_project_stats: (project_id: text) -> (Result_1);
+   list_opportunities: (project_id: text, filter: opt text) -> (Result_3);
+   log_energy_production: (project_id: text, kwh: nat, timestamp: nat64) ->
+    (Result_2);
+   post_update: (project_id: text, content: text, author_id: text) ->
+    (Result_2);
+   submit_dispute: (project_id: text, issue: text, parties: vec text) ->
+    (Result_1);
+   update_status: (project_id: text, new_status: text) -> (Result);
+ };
+type Project = 
+ record {
+   capacity: nat;
+   id: text;
+   location: text;
+   metadata: opt text;
+   name: text;
+ };
+service : () -> ProjectHub

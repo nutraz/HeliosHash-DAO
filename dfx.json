@@ -1,33 +1,46 @@
 {
   "version": 1,
   "canisters": {
-    "treasury": {
-      "main": "canisters/treasury/Treasury.mo",
-      "type": "motoko"
+    "audit_log_canister": {
+      "type": "motoko",
+      "main": "canisters/audit_log_canister/main.mo"
     },
     "governance": {
-      "main": "canisters/governance/Governance.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "main": "canisters/governance/Governance.mo"
+    },
+    "hhdao_dao": {
+      "type": "motoko",
+      "main": "canisters/hhdao/src/main.mo"
+    },
+    "hhu_token": {
+      "type": "motoko",
+      "main": "canisters/hhu_token/main.mo"
     },
     "identity_canister": {
-      "main": "canisters/identity_canister/main.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "main": "canisters/identity_canister/main.mo"
     },
-    "verifier_service": {
-      "main": "canisters/verifier_service/main.mo",
-      "type": "motoko"
-    },
-    "audit_log_canister": {
-      "main": "canisters/audit_log_canister/main.mo",
-      "type": "motoko"
+    "project_hub": {
+      "type": "motoko",
+      "main": "canisters/project_hub/src/main.mo"
     },
     "revocation_canister": {
-      "main": "canisters/revocation_canister/main.mo",
-      "type": "motoko"
+      "type": "motoko",
+      "main": "canisters/revocation_canister/main.mo"
+    },
+    "treasury": {
+      "type": "motoko",
+      "main": "canisters/treasury/Treasury.mo"
+    },
+    "verifier_service": {
+      "type": "motoko",
+      "main": "canisters/verifier_service/main.mo"
     },
     "frontend": {
       "type": "assets",
-      "source": ["src/frontend/assets"]
+      "source": ["frontend-assets"]
     }
   }
 }
+

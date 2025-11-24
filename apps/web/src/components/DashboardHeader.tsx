@@ -56,6 +56,17 @@ export default function DashboardHeader() {
         <div>
           <h1 className="text-2xl font-bold">HHDAO Dashboard</h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">{getDisplayName()}</p>
+          <div className="flex items-center gap-2 mt-1">
+            {user?.kycStatus === 'approved' ? (
+              <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-md">KYC Verified</span>
+            ) : (
+              <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded-md">KYC: {user?.kycStatus || 'unknown'}</span>
+            )}
+
+            {user?.idNftMinted ? (
+              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-md">ID NFT</span>
+            ) : null}
+          </div>
         </div>
       </div>
 

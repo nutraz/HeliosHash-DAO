@@ -1,0 +1,31 @@
+# --------------------------------------------
+# HeliosHash DAO – Core Code Ownership Matrix
+# --------------------------------------------
+# H#00 → Lead Architect / First Maintainer (YOU)
+# H#01 → Nick (First verified contributor)
+# H#02 … H#11 → Initial invited maintainers
+#
+# All critical project areas require review by core maintainers.
+# --------------------------------------------
+
+/* @H00 @H01 @H02 @H03 @H04 @H05 @H06 @H07 @H08 @H09 @H10 @H11 @H12
+
+# Web App (Next.js frontend)
+apps/web/ @H00 @H01 @H02
+
+# Canisters / DFX Motoko / IC Logic
+canisters/ @H00 @H01 @H02 @H03
+
+# Infrastructure / GitHub Actions / CI-CD
+.github/ @H00 @H01
+
+# Global configuration, schemas, packages
+package.json @H00
+pnpm-workspace.yaml @H00
+tsconfig.json @H00
+
+# Security-sensitive components (IC identities, auth)
+apps/web/src/contexts/AuthContext.tsx @H00 @H01
+
+# Default fallback for anything not explicitly matched
+* @H00

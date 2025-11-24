@@ -1,5 +1,5 @@
-import AuthEntry from '@/components/auth/AuthEntry'
+import { redirect } from 'next/navigation';
 
 export default function Home() {
-  return <AuthEntry />
+  redirect('/dashboard');
 }

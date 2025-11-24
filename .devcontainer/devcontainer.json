@@ -4,10 +4,16 @@
   
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
+      "nodeGypDependencies": true,
       "version": "20"
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
   },
 
   "customizations": {
@@ -16,13 +22,25 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "ms-azuretools.vscode-docker"
-      ]
+      ],
+      "settings": {
+        "typescript.preferences.includePackageJsonAutoImports": "auto",
+        "typescript.suggest.autoImports": true,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": true
+        }
+      }
     }
   },
 
-  "forwardPorts": [3000, 8000, 5173],
+  "forwardPorts": [3000, 3002, 4943, 8000, 5173],
   
-  "postCreateCommand": "npm install -g pnpm && pnpm install",
+  "postCreateCommand": "npm install -g pnpm @angular/cli concurrently && pnpm install",
 
-  "remoteUser": "node"
+  "remoteUser": "node",
+  
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ]
 }

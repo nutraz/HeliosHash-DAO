@@ -2,7 +2,10 @@
   "name": "helioshash-web",
   "version": "1.0.0",
   "scripts": {
-    "dev": "next dev -p 3002",
+    "dev": "concurrently -n \"WEB,BACKEND\" -c \"green,blue\" \"pnpm dev:web\" \"pnpm dev:backend\"",
+    "dev:web": "cd apps/web && pnpm dev",
+    "dev:backend": "dfx start --background --clean || dfx start --background || true",
+    "dev:simple": "cd apps/web && pnpm dev",
     "build": "next build",
     "export-static": "next export",
     "start": "next start -p 3002",

@@ -2,7 +2,8 @@
   "name": "helioshash-web",
   "version": "1.0.0",
   "scripts": {
-    "dev": "cd apps/web && pnpm dev",
+    "dev": "next dev -p 3002",
+    "dev:alt": "next dev -p 3003",
     "dev:full": "dfx start --background --clean && cd apps/web && pnpm dev",
     "dev:backend": "dfx start --background --clean",
     "build": "next build",

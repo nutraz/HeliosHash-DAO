@@ -13,7 +13,7 @@ Deployment notes:
 
 ```chatagent
 <p align="center">
-	<img src="/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="220" />
+	<img src="https://raw.githubusercontent.com/nutraz/HeliosHash-DAO/refs/heads/main/assets/icons/hhdao%20logo.avif" alt="HeliosHash DAO Logo" width="220" />
 </p>
 
 <h1 align="center">HeliosHash DAO (HHDAO)</h1>

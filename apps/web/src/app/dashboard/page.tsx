@@ -15,6 +15,12 @@ export default function DashboardPage() {
   const [solarData, setSolarData] = useState({ energy: 0, panels: 0, location: '' });
   const [loading, setLoading] = useState(false);
 
+  // Local UI state for social, proposals and projects
+  const [activeProposals, setActiveProposals] = useState<any[]>([]);
+  const [socialFeed, setSocialFeed] = useState<any[]>([]);
+  const [userBalance, setUserBalance] = useState<number>(15000);
+  const [createdProjects, setCreatedProjects] = useState<any[]>([]);
+
   // Initialize theme and load real data
   useEffect(() => {
     const savedTheme = localStorage.getItem('hhdao-theme');
@@ -69,7 +75,19 @@ export default function DashboardPage() {
 
   // Real ICP-integrated button handlers
   const handleSendTokens = async () => {
-    alert('🚀 Opening token transfer modal...\n\nFeature: Integrated with HHD token canister');
+    const recipient = prompt('Enter recipient address:');
+    const amountStr = prompt('Enter amount:');
+    const amount = amountStr ? parseFloat(amountStr) : NaN;
+    if (!recipient || !amount || isNaN(amount)) return;
+
+    try {
+      const result = await icpService.transferTokens(recipient, amount);
+      setUserBalance((b) => b - amount);
+      setNotifications((n) => n + 1);
+      return result;
+    } catch (error) {
+      console.error('Transfer failed:', error);
+    }
   };
 
   const handleViewNFTs = async () => {
@@ -88,27 +106,50 @@ export default function DashboardPage() {
   const handleExplore = async () => {
     try {
       const result = await icpService.createOpportunity(
-        "baghpat_solar", 
-        "maintenance", 
+        "baghpat_solar",
+        "maintenance",
         "Solar panel maintenance technician needed"
       );
-      alert(`🔍 Opening Project Explorer...\n\n• UrgamU Smart City\n• Baghpat Solar Farm\n• New Opportunity Created: ${JSON.stringify(result)}`);
+
+      const id = (result as any)?.ok ?? result;
+      setActiveProposals((prev) => [
+        ...prev,
+        { id, title: 'New Maintenance Opportunity', status: 'created', timestamp: Date.now() },
+      ]);
+      setNotifications((n) => n + 1);
     } catch (error) {
-      alert('🔍 Opening Project Explorer...\n\n• UrgamU Smart City\n• Baghpat Solar Farm\n• Data Center Expansion');
+      console.error('Failed to create opportunity:', error);
     }
   };
 
   const handleCreateProject = async () => {
     try {
       const result = await icpService.createProject(
-        "New Solar Farm", 
-        "Uttar Pradesh", 
-        500, 
-        "Community solar initiative"
+        "Community Solar Initiative",
+        "Uttar Pradesh",
+        500,
+        "Demo community solar project"
       );
-      alert(`✅ Project Created Successfully!\n\n${JSON.stringify(result, null, 2)}`);
+      const id = (result as any)?.ok ?? result;
+      setCreatedProjects((prev) => [...prev, { id, name: 'Community Solar Initiative', createdAt: Date.now() }]);
     } catch (error) {
-      alert('✅ Project Creation Ready!\n\nFeature: Integrated with ProjectHub canister');
+      console.error('Failed to create project:', error);
+    }
+  };
+
+  const handleSocialPost = async () => {
+    const content = prompt('Enter your post content:');
+    if (!content) return;
+    try {
+      const result = await icpService.createSocialPost(content);
+      const id = (result as any)?.ok ?? result;
+      setSocialFeed((prev) => [
+        { id, author: 'You', content, timestamp: Date.now(), likes: 0 },
+        ...prev,
+      ]);
+      setNotifications((n) => n + 1);
+    } catch (error) {
+      console.error('Failed to create post:', error);
     }
   };
 

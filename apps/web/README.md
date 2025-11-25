@@ -10,5 +10,27 @@ If you need to update the logo used in the site, replace `helioshash.svg` and
 references `/assets/icons/helioshash.svg` as its favicon and brand asset.
 
 Deployment notes:
+
+```chatagent
+<p align="center">
+	<img src="/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="220" />
+</p>
+
+<h1 align="center">HeliosHash DAO (HHDAO)</h1>
+
+**HeliosHash DAO Logo — A OneWorldProject Initiative (India)**
+
+- Project page: https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity
+- Short description: Fintech RWA Monitoring & Management Platform for Solar, Compute & Mining Infrastructure
+
+CI Status | License
+
+🌍 HeliosHash DAO (HHDAO) is a fintech RWA (Real-World Asset) initiative focused on monitoring, financing, and managing solar, compute, and mining infrastructure. This repository holds the web frontend for the HHDAO demo and governance dashboard.
+
+If the logo does not render, ensure the file exists at `public/assets/icons/helioshash.svg` and is committed to the repo.
+
+Deployment notes:
 - Build: `pnpm build`
 - Deploy: `npx vercel --prod --yes`
+
+``` 

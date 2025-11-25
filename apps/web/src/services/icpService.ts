@@ -26,4 +26,13 @@ export const icpService = {
     await new Promise((r) => setTimeout(r, 160));
     return { id: Math.floor(Math.random() * 100000), title: _title };
   }
+  async transferTokens(_recipient: string, _amount: number) {
+    // simulate network delay and return a mock transfer receipt
+    await new Promise((r) => setTimeout(r, 140));
+    return { ok: true, txId: `tx_${Date.now()}_${Math.floor(Math.random() * 10000)}` };
+  },
+  async createSocialPost(_content: string) {
+    await new Promise((r) => setTimeout(r, 120));
+    return { ok: Math.floor(Math.random() * 100000), content: _content };
+  }
 };

@@ -217,6 +217,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []); // Run only once on mount
 
+  // Temporary: Force authentication in development for debugging
+  useEffect(() => {
+    try {
+      if (process.env.NODE_ENV === 'development') {
+        const debugPrincipal = 'plmu2-gt2p5-3b24o-nralm-x6x67-ascob-4eg6j-3a34i-izvcw-6xlfh-tqe';
+        setUser({ principal: debugPrincipal, name: 'Debug User', kycStatus: 'unknown', idNftMinted: false, roles: ['developer'] });
+        setIsLoading(false);
+        // mark checked so auth check won't override during dev
+        authenticationChecked.current = true;
+        console.warn('Temporary dev auth bypass enabled — user set to Debug User');
+      }
+    } catch (e) {
+      // ignore errors in the temporary bypass
+    }
+  }, []);
+
   // Separate effect to check authentication once authClient is available
   useEffect(() => {
     if (!authClient) return;

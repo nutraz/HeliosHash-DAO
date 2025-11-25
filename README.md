@@ -1,10 +1,10 @@
 # **HeliosHash DAO**
 
 <div align="center">
-  <img src="apps/web/public/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo">
+  <img src="https://raw.githubusercontent.com/nutraz/HeliosHash-DAO/main/assets/icons/hhdaologo.svg" alt="HeliosHash DAO Logo" width="120" style="margin-bottom: 20px;" />
 
-**A OneWorldProject Initiative — India**
-**[https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)**
+**A OneWorldProject Initiative — India**  
+**[https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)**  
 **Fintech RWA Monitoring & Management Platform for Solar, Compute & Mining Infrastructure**
 
 [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
@@ -275,4 +275,18 @@ See: `LICENSE`
 <div align="center">
   Made with ❤️ by the OneWorldProject Community  
 </div>
+```
 
+## 🚀 **Quick Update Command**
+
+```bash
+# Update README with fixed logo and centered title
+cat > README.md << 'EOF'
+[PASTE THE FIXED README CONTENT ABOVE]
+EOF
+
+# Commit the changes
+git add README.md
+git commit -m "docs: Fix README - centered title and properly sized logo"
+git push origin main
+```

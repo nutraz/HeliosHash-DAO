@@ -1,7 +1,7 @@
 # **HeliosHash DAO**
 
 <div align="center">
-  <img src="apps/web/public/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="360"  />
+  <img src="apps/web/public/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="360">
 
 **A OneWorldProject Initiative — India**
 **[https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)**

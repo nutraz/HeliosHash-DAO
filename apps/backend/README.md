@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="apps/web/public/hhdaologo.svg" alt="HeliosHash DAO Logo" width="400" style="animation: pulse 2s infinite;" />
+  <img src="apps/web/public/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="400" style="animation: pulse 2s infinite;" />
   
   # HeliosHash DAO
   **A OneWorldProject Initiative India** 

@@ -282,17 +282,19 @@ export default function DashboardPage() {
               <div className="space-y-2">
                 {navItems.map((item) => (
                   <button
-                    key={item.id}
-                    onClick={() => handleNavClick(item.id)}
-                    className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
-                      activeNav === item.id 
-                        ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm' 
-                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:translate-x-1'
-                    }`}
-                  >
-                    <item.icon size={18} />
-                    <span className="font-medium">{item.label}</span>
-                  </button>
+                        key={item.id}
+                        onClick={() => handleNavClick(item.id)}
+                        title={item.label}
+                        aria-label={item.label}
+                        className={`w-full flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
+                          activeNav === item.id 
+                            ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 shadow-sm' 
+                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 hover:translate-x-1'
+                        }`}
+                      >
+                        <item.icon size={18} />
+                        <span className="font-medium">{item.label}</span>
+                      </button>
                 ))}
               </div>
             </nav>

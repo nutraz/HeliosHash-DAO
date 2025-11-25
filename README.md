@@ -1,7 +1,7 @@
 # **HeliosHash DAO**
 
 <div align="center">
-  <img src="https://raw.githubusercontent.com/nutraz/HeliosHash-DAO/refs/heads/main/assets/icons/hhdao%20logo.avif" alt="HeliosHash DAO Logo" width="180" style="animation: pulse 2s infinite;" />
+  <img src="apps/web/public/assets/icons/helioshash.svg" alt="HeliosHash DAO Logo" width="360" style="animation: pulse 2s infinite;" />
 
 **A OneWorldProject Initiative — India**
 **[https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity](https://dapp.oneworldproject.io/daodetail/UrgamUSmartCity)**
@@ -275,3 +275,4 @@ See: `LICENSE`
 <div align="center">
   Made with ❤️ by the OneWorldProject Community  
 </div>
+

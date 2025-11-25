@@ -44,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> with TickerProviderSt
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: SvgPicture.asset(
-                  'assets/icons/hhdaologo.svg',
+                  'assets/icons/helioshash.svg',
                   height: 32,
                   width: 32,
                   fit: BoxFit.contain,

@@ -24,7 +24,7 @@ const FeedList: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-testid="post-list">
       {loading && <div className="text-sm text-slate-500">Loading feed…</div>}
       {!loading && posts.length===0 && <div className="text-sm text-slate-500">No posts yet.</div>}
       {posts.map(p => <PostCard key={p.id} id={p.id} authorHandle={p.authorHandle} content={p.content} createdAt={p.createdAt} />)}

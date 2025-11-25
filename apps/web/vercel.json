@@ -14,6 +14,8 @@
     }
   ],
   "env": {
-    "NODE_ENV": "production"
+    "NODE_ENV": "production",
+    "NEXT_PUBLIC_BAGHPAT_ENERGY_CANISTER_ID": "your_mainnet_canister_id",
+    "NEXT_PUBLIC_PROJECT_HUB_CANISTER_ID": "your_mainnet_canister_id"
   }
 }

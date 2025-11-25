@@ -4,6 +4,8 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { ChevronRight, Settings, Plus, Gift, Users, Activity } from 'lucide-react'
 import NFTCollection from './shared/NFTCollection'
 import HeliosBaghpatMapNode from './projects/HeliosBaghpatMapNode'
+import { icpService } from '@/lib/services/icpService'
+import InternetIdentityButton from '@/components/auth/InternetIdentityButton'
 
 type NFTItem = { id: string; name: string; image?: string; projectId?: string; community?: string }
 type Project = { id: string; name: string; status: 'live' | 'planning' | 'paused'; kW?: number; holders?: number }
@@ -44,8 +46,30 @@ export default function HHDAODashboard(): JSX.Element {
     setCurrentView('map')
   }
 
+  // Demo handlers using icpService
+  const handleCreateProject = async () => {
+    const result = await icpService.createProject(
+      'Community Solar Farm',
+      'Uttar Pradesh',
+      500,
+      'Demo community solar initiative'
+    )
+    alert(`✅ DEMO: Project created!\n${JSON.stringify(result, null, 2)}`)
+  }
+
+  const handleSocialPost = async () => {
+    const content = prompt('Enter your post content:')
+    if (!content) return
+    const result = await icpService.createSocialPost(content)
+    alert(`💬 DEMO: Post created! ID: ${result.ok}`)
+  }
+
+  const handleVote = async (proposalId: string, vote: 'for' | 'against') => {
+    alert(`🗳️ DEMO: Voted ${vote} on proposal ${proposalId}`)
+  }
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen bg-gray-900 text-white" data-testid="dashboard-main">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header / Breadcrumbs */}
         <div className="flex items-center justify-between mb-6">
@@ -56,10 +80,11 @@ export default function HHDAODashboard(): JSX.Element {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="text-right mr-2">
+            <div className="text-right mr-2" data-testid="rwa-metrics">
               <div className="text-xs text-gray-400">Real-time metric</div>
-              <div className="text-xl font-bold text-cyan-300">{realtimeMetric.toFixed(2)} kW</div>
+              <div className="text-xl font-bold text-cyan-300" data-testid="solar-yield">{realtimeMetric.toFixed(2)} kW</div>
             </div>
+            <InternetIdentityButton />
             <button onClick={() => setSettingsOpen(!settingsOpen)} className="px-3 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 flex items-center gap-2">
               <Settings size={16} /> <span className="hidden sm:inline">Settings</span>
             </button>
@@ -210,6 +235,8 @@ export default function HHDAODashboard(): JSX.Element {
                 <button onClick={() => setCurrentView('community')} className="p-2 bg-purple-600 rounded flex items-center gap-2"><Users size={16}/> Community</button>
                 <button onClick={() => alert('Telemetry opened')} className="p-2 bg-cyan-600 rounded flex items-center gap-2"><Activity size={16}/> Telemetry</button>
                 <button onClick={() => setShowNFTCollection(true)} className="p-2 bg-blue-600 rounded flex items-center gap-2"><ChevronRight size={16}/> My NFTs</button>
+                <button onClick={handleCreateProject} className="p-2 bg-green-600 rounded flex items-center gap-2">🚀 Demo Create</button>
+                <button onClick={handleSocialPost} className="p-2 bg-indigo-600 rounded flex items-center gap-2">💬 Demo Post</button>
               </div>
             </div>
 

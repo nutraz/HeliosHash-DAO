@@ -22,7 +22,7 @@ class AuthenticationOptionsScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: SvgPicture.asset(
-              'assets/icons/hhdaologo.svg',
+              'assets/icons/helioshash.svg',
               height: 32,
               width: 32,
               fit: BoxFit.contain,
@@ -37,7 +37,7 @@ class AuthenticationOptionsScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                'assets/icons/hhdaologo.svg',
+                'assets/icons/helioshash.svg',
                 height: 120,
                 width: 120,
                 placeholderBuilder: (context) => const Icon(Icons.broken_image, size: 80, color: Colors.teal),

@@ -1,28 +1,27 @@
 {
-  "name": "HeliosHash DAO Development",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+  "name": "HeliosHash DAO Dev (Podman Non-GPU)",
+  "image": "ubuntu:22.04",
 
   "overrideCommand": false,
-  "runArgs": ["--network=host"],
-
-  "remoteUser": "node",
 
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "20"
+      "version": "20",
+      "nodeGypDependencies": true
     },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {
-      "version": "latest",
-      "moby": true
-    },
-    "ghcr.io/devcontainers/features/git:1": {}
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
   },
 
-  "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
-  ],
+  "postCreateCommand": "apt-get update && apt-get install -y curl gnupg2 build-essential ca-certificates && \
+    npm install -g pnpm @angular/cli concurrently && pnpm install",
 
-  "postCreateCommand": "sudo chmod 666 /var/run/docker.sock && sudo usermod -aG docker node && npm install -g pnpm && pnpm install",
+  "runArgs": [
+    "--security-opt=seccomp=unconfined",
+    "--ipc=host",
+    "--network=host"
+  ],
 
   "customizations": {
     "vscode": {
@@ -34,11 +33,13 @@
     }
   },
 
-  "forwardPorts": [3000, 3002, 8000, 5173],
+  "forwardPorts": [3000, 3002, 4943, 8000, 5173],
 
-  "runCommands": [
-    "export VERCEL_TOKEN=your_token_here",
-    "cd /workspaces/HeliosHash-DAO/apps/web",
-    "npx vercel --prod --yes"
-  ]
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+
+  "remoteEnv": {
+    "NODE_ENV": "development"
+  }
 }
+

@@ -106,7 +106,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 width: 120,
                 height: 120,
                 child: SvgPicture.asset(
-                  'assets/icons/hhdaologo.svg',
+                  'assets/icons/helioshash.svg',
                   fit: BoxFit.contain,
                   placeholderBuilder: (context) => const Icon(Icons.broken_image, size: 80, color: Colors.white),
                 ),

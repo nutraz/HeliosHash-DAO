@@ -9,8 +9,8 @@ export const metadata = {
   title: 'HeliosHash DAO',
   description: 'Decentralized renewable energy management platform',
   icons: {
-    icon: ['/favicon.ico', '/assets/icons/hhdaologo.svg'],
-    apple: '/assets/icons/hhdaologo.avif'
+    icon: ['/favicon.ico', '/assets/icons/helioshash.svg'],
+    apple: '/assets/icons/helioshash.svg'
   },
 }
 
@@ -32,8 +32,7 @@ export default function RootLayout({
             content={`connect-src 'self' http://localhost:4000 ws://localhost:3002 http://localhost:3002;`}
           />
         )}
-        <link rel="icon" type="image/avif" href="/assets/icons/hhdaologo.avif" />
-        <link rel="icon" href="/assets/icons/hhdaologo.svg" />
+        <link rel="icon" href="/assets/icons/helioshash.svg" />
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>

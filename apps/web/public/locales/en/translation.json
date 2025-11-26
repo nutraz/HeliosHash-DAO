@@ -1,6 +1,0 @@
-{
-  "dashboard": {
-    "welcome": "Welcome to HeliosHash DAO",
-    "description": "You have {{count}} active projects"
-  }
-}

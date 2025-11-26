@@ -1,0 +1,5 @@
+service : {
+  addRevocation: (text) -> (bool);
+  isRevoked: (text) -> (bool) query;
+  listRevoked: () -> (vec text) query;
+}

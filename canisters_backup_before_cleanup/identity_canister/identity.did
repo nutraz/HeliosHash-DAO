@@ -1,0 +1,13 @@
+type VC = record {
+  subject: text;
+  vcHash: text;
+  issuer: text;
+  iat: nat;
+  exp: opt nat;
+};
+
+service : {
+  anchorVC: (text, text, text, nat, opt nat) -> (bool);
+  getVCs: (text) -> (vec VC) query;
+  revokeVC: (text) -> (bool);
+}

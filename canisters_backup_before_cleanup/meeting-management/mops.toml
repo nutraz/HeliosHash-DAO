@@ -1,0 +1,11 @@
+[package]
+name = "meeting-management"
+version = "0.1.0"
+
+[dependencies]
+base = "0.16.0"
+
+[package.metadata]
+# Auto-generated minimal mops.toml to satisfy dfx/mops build requirements.
+# Replace with real dependencies if needed.
+

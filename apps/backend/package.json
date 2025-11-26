@@ -1,8 +1,0 @@
-{
-  "name": "helioshash_backend",
-  "version": "0.0.0",
-  "scripts": {
-    "build": "echo 'Backend built'",
-    "dev": "echo 'Backend dev'"
-  }
-}

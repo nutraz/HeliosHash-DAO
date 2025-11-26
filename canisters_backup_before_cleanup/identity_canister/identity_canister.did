@@ -1,0 +1,16 @@
+service : {
+  "addVC" : (text, text) -> (bool);
+  "getVCs" : (text) -> (vec text) query;
+  "hasVC" : (text, text) -> (bool) query;
+  "revokeVC" : (text) -> (bool);
+  "isRevoked" : (text) -> (bool) query;
+  "status" : () -> (text) query;
+}
+service : {
+  "addVC" : (text, text) -> (bool);
+  "getVCs" : (text) -> (vec text) query;
+  "hasVC" : (text, text) -> (bool) query;
+  "revokeVC" : (text) -> (bool);
+  "isRevoked" : (text) -> (bool) query;
+  "status" : () -> (text) query;
+}

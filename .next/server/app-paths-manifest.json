@@ -1,0 +1,6 @@
+{
+  "/_not-found": "app/_not-found.js",
+  "/api/helios/projects/route": "app/api/helios/projects/route.js",
+  "/api/helios/user/route": "app/api/helios/user/route.js",
+  "/page": "app/page.js"
+}

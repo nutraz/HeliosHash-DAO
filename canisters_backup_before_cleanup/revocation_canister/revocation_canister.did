@@ -1,0 +1,10 @@
+service : {
+  "revoke" : (text, text, int, text) -> (bool);
+  "isRevoked" : (text) -> (opt (text, int, text)) query;
+  "status" : () -> (text) query;
+}
+service : {
+  "revoke" : (text, text, int, text) -> (bool);
+  "isRevoked" : (text) -> (opt (text, int, text)) query;
+  "status" : () -> (text) query;
+}

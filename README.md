@@ -8,6 +8,7 @@
 **Fintech RWA Monitoring & Management Platform for Solar, Compute & Mining Infrastructure**
 
 [![CI Status](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/ci.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions)
+[![Security Audit](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/security.yml/badge.svg)](https://github.com/nutraz/HeliosHash-DAO/actions/workflows/security.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
 </div>

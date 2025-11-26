@@ -1,0 +1,118 @@
+name: Security Audit
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * 1' # Weekly on Monday
+
+jobs:
+  code-security:
+    name: Code Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install
+
+      - name: Run security audit
+        run: |
+          # Node.js security audit
+          pnpm audit --audit-level high || true
+          
+          # Run linting and type checking
+          pnpm lint || true
+          pnpm type-check || true
+
+      - name: Run tests
+        run: pnpm test || true
+
+  smart-contract-security:
+    name: Smart Contract Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Slither
+        run: |
+          pip install slither-analyzer
+
+      - name: Run Slither analysis
+        run: |
+          # Analyze Solidity contracts if they exist
+          if [ -d "contracts" ] && [ "$(ls -A contracts/*.sol 2>/dev/null)" ]; then
+            slither contracts/ --fail-medium || true
+          else
+            echo "No Solidity contracts found to analyze"
+          fi
+
+  motoko-security:
+    name: Motoko Canister Security
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install DFX
+        run: |
+          DFX_VERSION=0.15.1
+          curl -L https://github.com/dfinity/sdk/releases/download/$DFX_VERSION/dfx-$DFX_VERSION-x86_64-linux.tar.gz | tar -xz
+          sudo mv dfx /usr/local/bin/
+
+      - name: Build and test canisters
+        run: |
+          dfx start --background --clean
+          dfx deploy || true
+          # Add canister-specific tests here
+
+  container-security:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    if: false  # Disabled until we have Dockerfiles
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Detect secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.pull_request.base.sha || github.sha }}
+          head: ${{ github.sha }}

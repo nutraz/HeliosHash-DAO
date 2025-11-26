@@ -1,0 +1,48 @@
+name: E2E — Playwright
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  e2e:
+    name: Run full E2E test suite
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Enable corepack (pnpm)
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers and deps
+        run: |
+          npx playwright install --with-deps
+
+      - name: Start frontend (background)
+        run: |
+          cd apps/web
+          pnpm dev &
+          sleep 12
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright test e2e/tests/ --project=chromium --reporter=github
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report || playwright-report || .

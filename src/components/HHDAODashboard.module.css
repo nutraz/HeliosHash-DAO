@@ -1,0 +1,31 @@
+.progressInner {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease;
+}
+.green {}
+.yellow {}
+.orange {}
+
+/* Width utility classes (0%..100% step 5) */
+.pct0 { width: 0%; }
+.pct5 { width: 5%; }
+.pct10 { width: 10%; }
+.pct15 { width: 15%; }
+.pct20 { width: 20%; }
+.pct25 { width: 25%; }
+.pct30 { width: 30%; }
+.pct35 { width: 35%; }
+.pct40 { width: 40%; }
+.pct45 { width: 45%; }
+.pct50 { width: 50%; }
+.pct55 { width: 55%; }
+.pct60 { width: 60%; }
+.pct65 { width: 65%; }
+.pct70 { width: 70%; }
+.pct75 { width: 75%; }
+.pct80 { width: 80%; }
+.pct85 { width: 85%; }
+.pct90 { width: 90%; }
+.pct95 { width: 95%; }
+.pct100 { width: 100%; }

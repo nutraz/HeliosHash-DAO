@@ -4,7 +4,7 @@ set -e
 echo "🚀 HeliosHash DAO Complete E2E Test Suite"
 echo "=========================================="
 
-cd ~/HeliosHash-DAO/apps/web
+cd "$(pwd)/apps/web"
 
 # Clean previous results
 rm -rf test-results/ playwright-report/

@@ -9,6 +9,17 @@ build/
 # Environment files
 .env
 .env.local
+# Dependencies
+node_modules/
+.mops/
+.canisters/
+.dfx/
+dist/
+build/
+
+# Environment files
+.env
+.env.local
 .env.production
 
 # OS files
@@ -37,4 +48,9 @@ apps/web/.next/
 apps/web/out/
 apps/web/apps/
 apps/web/next.config.js
+
+# Security scan artifacts (ignore JSON reports but keep runbooks)
+security/*.json
+!security/incident-response.md
+!security/backup-recovery.md
 

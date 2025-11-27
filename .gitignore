@@ -54,3 +54,4 @@ security/*.json
 !security/incident-response.md
 !security/backup-recovery.md
 
+frontend/.next/

@@ -1,30 +1,34 @@
+# Next.js
+.frontend/.next/
+.frontend/out/
+.frontend/build
+
 # Dependencies
 node_modules/
-.mops/
-.canisters/
-.dfx/
+*.tgz
+*.tar.gz
+
+# Production builds
 dist/
 build/
 
-# Environment files
+# Environment variables
 .env
 .env.local
-# Dependencies
-node_modules/
-.mops/
-.canisters/
-.dfx/
-dist/
-build/
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Environment files
-.env
-.env.local
-.env.production
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# OS files
-.DS_Store
-Thumbs.db
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
 
 # IDE
 .vscode/
@@ -32,25 +36,6 @@ Thumbs.db
 *.swp
 *.swo
 
-# Logs
-*.log
-npm-debug.log*
-
-# Backup files
-*_BACKUP_*
-*_BASE_*
-*_LOCAL_*
-*_REMOTE_*
-*.backup
-
-.pnpm-store/
-apps/web/.next/
-apps/web/out/
-apps/web/apps/
-apps/web/next.config.js
-
-# Security scan artifacts (ignore JSON reports but keep runbooks)
-security/*.json
-!security/incident-response.md
-!security/backup-recovery.md
-
+# OS
+.DS_Store
+Thumbs.db

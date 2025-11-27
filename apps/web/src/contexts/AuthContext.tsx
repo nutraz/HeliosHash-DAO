@@ -5,6 +5,13 @@ import { useRouter } from 'next/navigation';
 // Note: avoid importing Identity as a TS namespace type here to prevent
 // compatibility issues with different @dfinity/agent type exports.
 import { AuthClient } from '@dfinity/auth-client';
+import {
+  initAuthClient,
+  loginWithProvider,
+  logoutClient,
+  isAuthenticated as isAuthenticatedWithClient,
+  getIdentity as getIdentityFromClient,
+} from '@/lib/auth/internetIdentity';
 import { createActor } from '@/lib/actorFactory';
 import { hhdaoIdlFactory } from '@/lib/hhdaoIdl';
 import { ensureKycAndMint } from '@/lib/canisters/identity';
@@ -197,7 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     (async function initializeAuthClient() {
       try {
-        const client = await AuthClient.create();
+        const client = await initAuthClient();
         setAuthClient(client);
       } catch (error) {
         console.error("Failed to initialize auth client:", error);
@@ -288,15 +295,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       }
 
-      await authClient.login({
+      await loginWithProvider(
+        authClient,
         identityProvider,
-        onSuccess: async () => {
-          await handleAuthenticationRef.current?.(authClient.getIdentity());
+        async () => {
+          await handleAuthenticationRef.current?.(getIdentityFromClient(authClient));
         },
-        onError: (error) => {
-          console.error("Login failed:", error);
+        (error) => {
+          console.error('Login failed:', error);
         }
-      });
+      );
     } catch (error) {
       console.error("Login error:", error);
       throw error;

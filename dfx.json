@@ -39,7 +39,7 @@
     },
     "frontend": {
       "type": "assets",
-      "source": ["frontend-assets"]
+      "source": ["frontend/out"]
     }
   }
 }

@@ -1,0 +1,55 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["dom", "dom.iterable", "es2020"],
+
+    "allowJs": true,
+    "skipLibCheck": true,
+
+    "strict": false,
+    "strictNullChecks": true,
+
+    "noEmit": true,
+    "incremental": true,
+
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "downlevelIteration": true,
+
+    "jsx": "preserve",
+
+    "plugins": [
+      { "name": "next" }
+    ],
+
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@declarations/*": ["../src/declarations/*"]
+    }
+  },
+
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "out/types/**/*.ts"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "src/app/helioshash-dao-fusion/components/**",
+    "src/frontend/assets/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "e2e",
+    "**/__tests__/**"
+  ]
+}
+

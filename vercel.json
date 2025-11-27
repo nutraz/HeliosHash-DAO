@@ -1,16 +1,41 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "apps/web/package.json",
-      "use": "@vercel/next"
+  "version": 3,
+  "buildCommand": "npm run build || pnpm build",
+  "outputDirectory": ".next",
+  "installCommand": "npm install || pnpm install",
+  "framework": "nextjs",
+  "functions": {
+    "app/**/*.ts": {
+      "includeFiles": "**/*"
     }
-  ],
-  "routes": [
-    {
-      "src": "./(.*)",
-      "dest": "apps/web/$1"
+  },
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "NEXT_PUBLIC_IC_HOST": "https://ic0.app",
+      "NEXT_PUBLIC_II_CANISTER_ID": "rdmx6-jaaaa-aaaaa-aaadq-cai",
+      "NEXT_PUBLIC_PROJECT_HUB_ID": "@helioshash/project-hub-canister-id"
     }
-  ],
-  "outputDirectory": "apps/web/.next"
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET,POST,PUT,DELETE,OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization"
+        }
+      ]
+    }
+  ]
 }

@@ -1,9 +1,0 @@
-name: ic_dart
-description: "Local stub of ic_dart used to unblock analysis in HeliosHash-DAO"
-version: 0.0.1
-environment:
-  sdk: ">=3.0.0 <4.0.0"
-
-flutter:
-  plugin:
-    platforms: {}

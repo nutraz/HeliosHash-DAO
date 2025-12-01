@@ -277,17 +277,3 @@ See: `LICENSE`
   Made with ❤️ by the OneWorldProject Community  
 </div>
 ```
-
-## 🚀 **Quick Update Command**
-
-```bash
-# Update README with fixed logo and centered title
-cat > README.md << 'EOF'
-[PASTE THE FIXED README CONTENT ABOVE]
-EOF
-
-# Commit the changes
-git add README.md
-git commit -m "docs: Fix README - centered title and properly sized logo"
-git push origin main
-```

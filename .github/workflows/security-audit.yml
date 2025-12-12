@@ -84,7 +84,7 @@ jobs:
           pnpm audit --json > security-reports/audit-$(date +%Y%m%d).json || true
 
       - name: Upload security report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: security-audit-report
           path: security-reports/

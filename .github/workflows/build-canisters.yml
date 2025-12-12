@@ -23,13 +23,13 @@ jobs:
           dfx generate || true
       - name: Upload canister declarations
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: canister-declarations
           path: src/declarations/**
       - name: Upload canister WASM
         if: success()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: canisters-wasm
           path: .dfx/**/**/*.wasm

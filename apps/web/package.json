@@ -16,7 +16,7 @@
     "@dfinity/candid": "^3.4.3",
     "@dfinity/principal": "^3.4.3",
     "tweetnacl": "^1.0.3",
-    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-query": "^5.90.21",
     "lucide-react": "^0.263.1",
     "next": "14.0.0",
     "react": "^18.2.0",

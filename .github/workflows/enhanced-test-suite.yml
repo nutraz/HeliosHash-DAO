@@ -230,7 +230,7 @@ jobs:
           EOF
 
       - name: 🔄 Upload Test Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: test-reports-${{ matrix.category }}-${{ matrix.browser }}
@@ -300,7 +300,7 @@ jobs:
           EOF
 
       - name: 🔄 Upload Canister Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: always()
         with:
           name: canister-reports-${{ matrix.category }}

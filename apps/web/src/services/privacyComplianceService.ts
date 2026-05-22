@@ -119,9 +119,6 @@ class PrivacyCompliantGenderService {
       this.consentRecords.set(userId, consentRecord);
       this.privacySettings.set(userId, settings);
 
-      // Log consent for audit trail
-      console.log(`[PRIVACY] Consent obtained for user ${userId}: ${consentLevel}`);
-
       return {
         success: true,
         consentId: `consent_${userId}_${Date.now()}`,
@@ -244,14 +241,12 @@ class PrivacyCompliantGenderService {
       // Check if user allows bonus eligibility
       const settings = this.privacySettings.get(userId);
       if (!settings?.allowBonusEligibility) {
-        console.log(`[PRIVACY] Bonus eligibility disabled by user ${userId}`);
         return null;
       }
 
       // Check consent is still valid
       const consent = this.consentRecords.get(userId);
       if (!consent || consent.withdrawalDate) {
-        console.log(`[PRIVACY] Consent withdrawn for user ${userId}`);
         return null;
       }
 
@@ -262,9 +257,6 @@ class PrivacyCompliantGenderService {
       genderData.lastAccessed = Date.now();
       genderData.accessCount += 1;
       this.encryptedGenderData.set(userId, genderData);
-
-      // Log access for audit (no sensitive data)
-      console.log(`[PRIVACY] Gender data accessed for bonus calculation: ${userId}`);
 
       return decryptedGender;
     } catch (error) {
@@ -297,8 +289,6 @@ class PrivacyCompliantGenderService {
       };
 
       this.encryptedGenderData.set(userId, updatedData);
-
-      console.log(`[PRIVACY] Gender data updated for user ${userId}`);
 
       return {
         success: true,
@@ -382,8 +372,6 @@ class PrivacyCompliantGenderService {
     if (this.auditLog.length > 1000) {
       this.auditLog.shift();
     }
-
-    console.log(`[AUDIT] ${action} for user ${userId}:`, details);
   }
 
   /**
@@ -433,8 +421,7 @@ class PrivacyCompliantGenderService {
           );
           deletedCount++;
         }
-      } catch (error) {
-        console.error(`[PRIVACY] Cleanup failed for user ${userId}:`, error);
+      } catch {
         errors++;
       }
     }

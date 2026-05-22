@@ -1,28 +1,19 @@
 "use client"
 
 import React, { useState } from "react"
-import { useRouter } from "next/navigation"
 
 export default function SignInPage() {
-  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
-  const [loading, setLoading] = useState(false)
 
   function handleSignIn(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
-    setError("")
-    // Mock authentication logic
-    setTimeout(() => {
-      if (email === "user@hhdao.com" && password === "password") {
-        router.push("/dashboard")
-      } else {
-        setError("Invalid credentials. Try user@hhdao.com / password.")
-        setLoading(false)
-      }
-    }, 800)
+    // H0c.1: the hardcoded mock credentials check (and its self-documenting error
+    // message) are removed. Sign-in is not wired to a real auth backend, so we do
+    // NOT fake success or route to /dashboard. Real auth + a /dashboard auth guard
+    // are the bookmarked H0c.2 follow-up.
+    setError("Sign-in is not yet implemented — coming soon.")
   }
 
   return (
@@ -53,9 +44,8 @@ export default function SignInPage() {
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition"
-          disabled={loading}
         >
-          {loading ? "Signing In..." : "Sign In"}
+          Sign In
         </button>
       </form>
     </div>

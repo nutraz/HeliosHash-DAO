@@ -18,28 +18,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Mock user data - replace with actual API call
-      const mockUser: User = {
-        id: '1',
-        email,
-        name: 'John Doe',
-        role: 'admin',
-        createdAt: new Date().toISOString(),
-      };
-
-      setUser(mockUser);
-      if (typeof window !== 'undefined') localStorage.setItem('user', JSON.stringify(mockUser));
-    } catch (error) {
-      throw new Error('Login failed');
-    } finally {
-      setIsLoading(false);
-    }
+  const login = async (_email: string, _password: string) => {
+    // H0a: the mock admin-granting login is removed. It previously fabricated a
+    // { role: 'admin' } user and persisted it to localStorage — a trivial admin
+    // grant if this (currently unmounted) provider were ever wired in. Throw
+    // loudly so any future accidental wiring fails instead of silently granting
+    // access. Do NOT narrow this to grant a 'user' (or any) role.
+    throw new Error("not implemented");
   };
 
   const register = async (userData: RegisterData) => {

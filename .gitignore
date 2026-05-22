@@ -46,3 +46,6 @@ Thumbs.db
 # Temporary security holdbacks
 SECURITY_DEEP_DIVE_REVIEW.md
 docs/security-drafts/
+
+# Internet Computer local replica state
+.dfx/

@@ -67,9 +67,10 @@ persistent actor HHUToken {
   private stable var totalSupply : Nat = 0;
   private stable var burntSupply : Nat = 0;
 
-  // Initialize owner placeholder. Real minting should be done via `mint` call.
-  // Use a stable textual placeholder to avoid runtime traps during init.
-  private transient var owner : Principal = Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai");
+  // Mint authority. Set once post-deploy by a canister controller via setOwner
+  // (controller-gated, same model as Treasury C1). null until configured, so
+  // mint is disabled until an owner is established.
+  private stable var tokenOwner : ?Principal = null;
 
   // ============================================================================
   // INITIALIZATION
@@ -317,9 +318,31 @@ persistent actor HHUToken {
   // PUBLIC FUNCTIONS - MINT & BURN
   // ============================================================================
 
-  /// Mint new tokens (admin only - simplified)
+  /// Set / rotate the mint authority. Gated on IC controller authority
+  /// (ic0.is_controller): only a controller of this canister may set the owner,
+  /// so there is no "first caller wins" race. Same model as Treasury C1.
+  public shared ({ caller }) func setOwner(newOwner : Principal) : async ApiResponse<Bool> {
+    if (not Principal.isController(caller)) {
+      return #Err("only a canister controller may set the owner");
+    };
+    if (Principal.isAnonymous(newOwner)) {
+      return #Err("owner cannot be the anonymous principal");
+    };
+    tokenOwner := ?newOwner;
+    #Ok(true)
+  };
+
+  /// Mint new tokens (owner-gated)
   public shared(msg) func mint(to : Principal, amount : Nat) : async ApiResponse<Bool> {
-    // In production, check caller is authorized minter
+    let caller = msg.caller;
+    if (Principal.isAnonymous(caller)) {
+      return #Err("anonymous caller not permitted");
+    };
+    switch (tokenOwner) {
+      case (null) { return #Err("mint authority not configured"); };
+      case (?o) { if (caller != o) { return #Err("caller is not the mint owner"); } };
+    };
+
     let toBalance = Option.get(balances.get(to), 0);
     balances.put(to, toBalance + amount);
     totalSupply += amount;

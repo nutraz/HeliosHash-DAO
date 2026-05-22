@@ -42,3 +42,7 @@ Thumbs.db
 # Backup files
 *.backup
 *backup*/
+
+# Temporary security holdbacks
+SECURITY_DEEP_DIVE_REVIEW.md
+docs/security-drafts/

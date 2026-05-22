@@ -1,5 +1,6 @@
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
 
 // Persistent actor keeps stable memory across upgrades
 persistent actor AuditLog {
@@ -8,8 +9,28 @@ persistent actor AuditLog {
   stable var logs : [ (Nat, Text) ] = [];
   stable var counter : Nat = 0;
 
-  // Append a new log entry, return its ID
-  public shared(_msg) func append(logHash : Text) : async Nat {
+  // Audit-write authority (H6). Set post-deploy by a canister controller via
+  // setOwner; same model as C1/C4/C5/C6.
+  stable var owner : ?Principal = null;
+
+  private func isOwner(caller : Principal) : Bool {
+    if (Principal.isAnonymous(caller)) { return false };
+    switch (owner) {
+      case (null) { false };
+      case (?o) { caller == o };
+    };
+  };
+
+  public shared ({ caller }) func setOwner(newOwner : Principal) : async Bool {
+    if (not Principal.isController(caller)) { return false };
+    if (Principal.isAnonymous(newOwner)) { return false };
+    owner := ?newOwner;
+    return true;
+  };
+
+  // Append a new log entry, return its ID. Owner-gated (H6); traps on unauthorized.
+  public shared ({ caller }) func append(logHash : Text) : async Nat {
+    if (not isOwner(caller)) { Debug.trap("unauthorized") };
     counter += 1;
     logs := Array.append(logs, [ (counter, logHash) ]);
     return counter;

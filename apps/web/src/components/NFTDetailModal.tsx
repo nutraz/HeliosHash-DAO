@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import NextImage from 'next/image';
+import { safeHref } from './urlSafety';
 
 interface NFTItem {
   id: string;
@@ -64,6 +65,9 @@ export default function NFTDetailModal({ nft, project, onClose }: Props) {
 
   if (!nft) return null;
 
+  // H15: validated outbound link; null when the permalink scheme is not allowlisted.
+  const permalinkHref = safeHref(assetData?.permalink);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60" onClick={onClose}></div>
@@ -99,7 +103,11 @@ export default function NFTDetailModal({ nft, project, onClose }: Props) {
                       <div>
                         <p className="text-white font-medium">{assetData.name}</p>
                         <p className="text-sm text-gray-400">{assetData.collection?.name}</p>
-                        <a className="text-blue-400 text-sm" href={assetData.permalink} target="_blank" rel="noreferrer">View on OpenSea</a>
+                        {permalinkHref ? (
+                          <a className="text-blue-400 text-sm" href={permalinkHref} target="_blank" rel="noreferrer">View on OpenSea</a>
+                        ) : (
+                          <span className="text-gray-500 text-sm">Link unavailable</span>
+                        )}
                       </div>
                     ) : (
                       <p className="text-sm text-gray-400">{assetData.info || 'No asset metadata found'}</p>
@@ -121,7 +129,11 @@ export default function NFTDetailModal({ nft, project, onClose }: Props) {
                 <div className="bg-gray-800 rounded-lg p-4">
                   <p className="text-sm text-gray-400">Actions</p>
                   <div className="mt-2 flex flex-col space-y-2">
-                    <a className="text-left bg-blue-600 text-white px-3 py-2 rounded-lg" href={assetData?.permalink || '#'} target="_blank" rel="noreferrer">Open on OpenSea</a>
+                    {permalinkHref ? (
+                      <a className="text-left bg-blue-600 text-white px-3 py-2 rounded-lg" href={permalinkHref} target="_blank" rel="noreferrer">Open on OpenSea</a>
+                    ) : (
+                      <span className="text-left bg-gray-700 text-gray-400 px-3 py-2 rounded-lg cursor-not-allowed" aria-disabled="true">Open on OpenSea (unavailable)</span>
+                    )}
                     <button className="bg-gray-700 text-gray-200 px-3 py-2 rounded-lg">Join Project Community</button>
                   </div>
                 </div>

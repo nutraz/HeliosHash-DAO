@@ -5,6 +5,10 @@ packages:
   - scripts/*
   - infra/*
 
-ignoredBuiltDependencies:
+# Dependencies whose install/build scripts are allowed to run (pnpm 10+ blocks
+# all dependency build scripts by default). Equivalent to `pnpm approve-builds`.
+onlyBuiltDependencies:
   - esbuild
-
+  - msw
+  - '@sentry/cli'
+  - unrs-resolver

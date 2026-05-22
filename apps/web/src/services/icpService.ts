@@ -25,7 +25,7 @@ export const icpService = {
   async createProject(_title: string, _region: string, _size: number, _desc: string) {
     await new Promise((r) => setTimeout(r, 160));
     return { id: Math.floor(Math.random() * 100000), title: _title };
-  }
+  },
   async transferTokens(_recipient: string, _amount: number) {
     // simulate network delay and return a mock transfer receipt
     await new Promise((r) => setTimeout(r, 140));

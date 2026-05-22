@@ -39,7 +39,8 @@
     },
     "frontend": {
       "type": "assets",
-      "source": ["frontend-assets"]
+      "source": ["frontend-assets"],
+      "build": []
     }
   }
 }

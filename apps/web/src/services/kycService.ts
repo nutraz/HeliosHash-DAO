@@ -17,14 +17,10 @@ export interface KYCResult {
 }
 
 export class KycService {
-  private apiBaseUrl: string;
-  private apiKey: string;
-
-  constructor() {
-    // In production, these would come from environment variables
-    this.apiBaseUrl = process.env.KYC_API_URL || 'https://api.kyc-provider.com';
-    this.apiKey = process.env.KYC_API_KEY || '';
-  }
+  // H16b: the KYC API key/URL are no longer read here — this module is
+  // client-reachable and the mock methods below never used them. Real KYC
+  // integration must read these server-side via apps/web/src/server/secrets.ts
+  // (getKycApiKey / getKycApiUrl) and inject what it needs.
 
   async initiateVerification(userId: string, kycType: 'aadhaar' | 'pan' | 'passport'): Promise<KYCResult> {
     try {

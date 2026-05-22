@@ -70,9 +70,12 @@ class PrivacyCompliantGenderService {
   }> = [];
 
   constructor(encryptionKey?: string) {
-    // In production, use secure key management (AWS KMS, HashiCorp Vault, etc.)
-    this.ENCRYPTION_KEY =
-      encryptionKey || process.env.GENDER_ENCRYPTION_KEY || this.generateSecureKey();
+    // H16b: no process.env read here — this module is client-reachable. The real
+    // key is injected via the `encryptionKey` arg by a server-only caller (which
+    // reads it from apps/web/src/server/secrets.ts). Absent injection, a
+    // per-instance random key is used. In production, use secure key management
+    // (AWS KMS, HashiCorp Vault, etc.).
+    this.ENCRYPTION_KEY = encryptionKey ?? this.generateSecureKey();
   }
 
   private generateSecureKey(): string {

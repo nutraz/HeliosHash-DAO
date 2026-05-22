@@ -66,7 +66,6 @@ npm run audit:prep                # runs slither + mythril + cargo-audit for Mot
 ```
 
 Stick to these instructions and the project will ship mainnet before Q1 2026.
-<<<<<<< HEAD
 # HeliosHash DAO — Copilot Agent Instructions
 
 *Last updated: November 2025*
@@ -80,7 +79,7 @@ This is a **multi-platform monorepo**:
 ```
 /
 ├── apps/
-│   ├── web/          # Next.js 14 web app (App Router, port 3002)
+│   ├── web/          # Next.js 14 web app (App Router; default port 3000)
 │   ├── mobile/       # Flutter mobile app
 │   └── backend/      # Legacy ICP backend (prefer /canisters)
 ├── canisters/        # Motoko smart contracts (30+ canisters)
@@ -93,55 +92,6 @@ This is a **multi-platform monorepo**:
 ```
 
 ## Architecture & Key Boundaries
-=======
-## HeliosHash DAO — Copilot Agent Instructions (Nov 2025)
-
-This repository is a hybrid dApp combining Motoko canisters (Internet Computer) and a Next.js TypeScript frontend. These instructions give immediate, practical guidance for an AI coding agent to be productive in this codebase.
-
-**Architecture & Boundaries**
-- Backend: Motoko canisters live under `canisters/`. Business logic typically sits in `src/lib.mo` and actors/entrypoints in `src/main.mo` (see `canisters/hhdao/`).
-- Frontend: Multiple frontends/apps exist under `apps/` and `web/` (Next.js App Router). Shared UI/hooks live under `src/` and `app/` in the web package.
-- Generated bindings: TypeScript canister bindings appear under `src/declarations/` after running `dfx generate` or `dfx deploy`.
-
-**Key Patterns & Conventions**
-- Motoko: Keep logic in `lib.mo`, expose via `main.mo` actor wrappers. Use `Result` for error returns and `async` for public calls. Use `shared ({ caller })` for access control.
-- Frontend: Import canister actors from generated declarations, e.g. `import { createActor, canisterId } from '@/declarations/hhdao_dao'`.
-- Auth: Wallet/auth flows are mocked (localStorage or test hooks). Do not attempt to implement or rely on real wallet flows in PRs.
-- TypeScript: Prefer project path alias `@/*` (see `tsconfig.json`). Use generated interfaces for canister responses when available.
-
-**Developer Workflow — common commands**
-- Start local dev frontend: `pnpm dev` (dev server; default port used by repo is 3001 in many scripts).
-- Build frontend: `pnpm build`.
-- Run unit tests: `pnpm test:run` (Vitest).
-- Run E2E tests: `pnpm test:e2e` (Playwright config at `playwright.config.ts`).
-- Run Motoko/canister tests: `pnpm test:canister` or use scripts in `canisters/test-runner/` (see `run-tests.sh`).
-- Generate TypeScript bindings: `dfx generate` or `dfx deploy` (local dfx required).
-- Build/compile canisters: `pnpm build:canisters` or use `dfx` as described in docs.
-
-**Integration & external pieces to know**
-- Internet Computer (ICP): Backend canisters rely on DFX — ensure local dfx is available for canister tasks.
-- Mobile/E2E: Mobile flows reference `mobile_hhdao_server.js` and QR scripts (`mobile-*.sh`); E2E tests and mobile helpers live in `apps/mobile` and `mobile/` folders.
-- Smart contracts: Solidity contracts live under `contracts/` (used for other integrations/tests).
-
-**Key files & examples**
-- `dfx.json` — canister configuration.
-- `canisters/hhdao/src/lib.mo` — core business logic for the hhdao canister.
-- `canisters/hhdao/src/main.mo` — actor entrypoints that call into `lib.mo`.
-- `src/declarations/` — generated TS bindings for canisters (import from frontend code).
-- `canisters/test-runner/run-tests.sh` — helper to run Motoko tests locally.
-
-Example: importing and using a canister actor (frontend)
-```ts
-import { createActor, canisterId } from '@/declarations/hhdao_dao';
-const dao = createActor(canisterId);
-const proposals = await dao.getProposals();
-```
-
-Example: Motoko pattern (lib -> main)
-```motoko
-// canisters/hhdao/src/lib.mo
-public func createProposal(...) : async Result.Result<Proposal, Text> { ... }
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))
 
 ### Backend: ICP Canisters (Motoko)
 - **Pattern:** Business logic in `canisters/{name}/src/lib.mo`, actor wrapper in `main.mo`
@@ -166,7 +116,7 @@ public func createProposal(...) : async Result.Result<Proposal, Text> { ... }
 ### Frontend: Next.js 14 Web App
 - **Location:** `apps/web/src/`
 - **Router:** App Router (NOT Pages Router) — routes in `apps/web/src/app/`
-- **Port:** 3002 (run with `cd apps/web && pnpm dev`)
+- **Port:** 3000 by default — prod/CI and `pnpm dev` (run with `cd apps/web && pnpm dev`). Local dev may use 3002 only when explicitly started with `pnpm dev -p 3002`.
 - **Auth:** Context pattern using `@/contexts/AuthContext` (localStorage-based mock)
 - **ICP Integration:** Direct `Actor.createActor()` calls with programmatic IDL (see `apps/web/src/lib/api/heliosBaghpat.ts`)
 - **Imports:** Use `@/` alias for `apps/web/src/` (configured in `tsconfig.json`)
@@ -208,7 +158,7 @@ pnpm install                    # Install all workspace deps
 
 # Web development
 cd apps/web
-pnpm dev                        # Dev server on :3002
+pnpm dev                        # Dev server on :3000 (use `pnpm dev -p 3002` for the alternate local port)
 
 # Canister development
 dfx start --background --clean  # Start local ICP replica
@@ -237,7 +187,7 @@ flutter run -d linux            # Linux desktop
 1. **TypeScript:** Strict mode disabled (`strict: false`). Avoid `any` types; use proper interfaces.
 2. **Canister bindings:** Generated bindings in `apps/web/src/declarations/` are optional. Prefer inline IDL or programmatic `Actor.createActor()`.
 3. **Auth is mocked:** LocalStorage-based simulation only. No real wallet/UPI integrations.
-4. **Port conflicts:** Web runs on 3002 (not 3001).
+4. **Port:** Prod/CI default is 3000, and `pnpm dev` uses 3000. Local dev may use 3002 only when explicitly started with `pnpm dev -p 3002` (no default 3001/3002).
 5. **Workspace commands:** Always run `pnpm` from root or app-specific directories.
 
 ## Key Files Reference
@@ -361,7 +311,6 @@ module HHDAOLib {
 }
 ```
 
-<<<<<<< HEAD
 - `canisters/hhdao/src/main.mo` — actor wrapper (inject principals via constructor)
 ```motoko
 persistent actor class HHDAO(controller: Principal) {
@@ -465,24 +414,3 @@ If you want a visible banner when the heavy splash is skipped, add a small dev-o
 - Stop servers: `pkill -f "next dev" || true`
 
 ---
-=======
-
-**Agent Guidance & Restrictions**
-- Only use discoverable code patterns from this codebase.
-- **Do not implement real wallet/payment integrations**; the auth flow is mocked via `localStorage` and test principals.
-- When changing canister interfaces, **regenerate TS bindings** (`dfx generate`) and **redeploy canisters** (`dfx deploy`) if needed, then update frontend imports and usage.
-- Understand that frontend-canister calls are often "anonymous" unless the actor is configured with an authenticated identity. Access control is handled in Motoko via `shared ({ caller })`.
-- Motoko `Result` type is used for recoverable business logic errors (e.g., "Insufficient funds"). System-level failures (canister traps, out of cycles) are handled by the IC and may surface as network/agent errors in the frontend. The frontend should catch and display both types.
-- The mocked auth flow generates or reuses a "fake" Principal and stores it in `localStorage`. Do not replace this with a production solution unless explicitly instructed.
-- The `mobile_hhdao_server.js` script is for local mobile/E2E testing. Do not modify its core purpose.
-
-#### Troubleshooting Common Issues
-- **Frontend can't find canister:** Ensure `dfx` is running and the canister IDs in `declarations/` are correct. Run `dfx deploy` to refresh.
-- **Authentication errors:** Check the mock auth implementation; it should provide a valid `Principal` to the actor creation.
-- **Type errors after canister changes:** Always run `dfx generate` and restart the TypeScript server (or frontend dev server).
-**If you update this file**
-- Keep it concise (20–50 lines), include code examples and exact commands, and reference the concrete files you used as examples.
-
-If anything here is unclear or you'd like additional examples (e.g., exact `pnpm` scripts for a specific app under `apps/`), tell me which area to expand and I'll update the file.
-- Follow actual code patterns, not aspirational docs.
->>>>>>> 954253d5 (docs: refresh and clean up all documentation (README, repo summary, critical fixes, copilot context))

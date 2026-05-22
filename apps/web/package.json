@@ -26,6 +26,7 @@
     "pino-http": "^8.3.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^2.6.1",
     "tweetnacl": "^1.0.3",
     "zod": "^3.22.4",

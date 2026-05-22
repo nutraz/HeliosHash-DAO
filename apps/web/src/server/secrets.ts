@@ -1,10 +1,11 @@
+import "server-only";
+
 // H16b: server-only accessor for KYC / privacy secrets.
 //
 // These env vars must only ever be read from server code, never from a
-// client-reachable module. The `server-only` package (which throws at *build*
-// time on a client import) is NOT installed in this repo, and adding a dependency
-// is outside H16b scope — so the runtime guard below is the equivalent enforcement
-// available without a dep change: importing this module in the browser throws.
+// client-reachable module. The `server-only` import above is the structural
+// guard: any client-side import of this module FAILS THE BUILD. The runtime
+// `typeof window` check below is kept as defense-in-depth.
 //
 // Future server callers (API routes / server actions) read secrets here and inject
 // them into the relevant services (e.g. PrivacyComplianceService's `encryptionKey`

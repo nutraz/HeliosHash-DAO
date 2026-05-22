@@ -9,7 +9,7 @@ export default defineConfig({
   reporter: 'html',
   
   use: {
-    baseURL: 'http://localhost:3002',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     actionTimeout: 10000, // Reduced from 30s
     navigationTimeout: 15000, // Reduced from 30s

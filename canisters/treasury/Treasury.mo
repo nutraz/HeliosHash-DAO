@@ -27,10 +27,14 @@ persistent actor Treasury {
   // Minimal interface to the deployed HHU token (homegrown, not ICRC-2).
   type TokenApiResponse = { #Ok : Bool; #Err : Text };
   type Token = actor {
+    transfer : (Principal, Nat) -> async TokenApiResponse;
     transfer_from : (Principal, Principal, Nat) -> async TokenApiResponse;
     balance_of : (Principal) -> async Nat;
   };
 
+  // DEPRECATED / HISTORICAL: legacy forgeable counter from the pre-C2 design.
+  // No longer written by deposit (C2) or withdraw (C2 wiring); kept readable for
+  // backward compatibility only. Scheduled for removal once no consumer reads it.
   var balance : Int = 0;
   var transactions : [Transaction] = [];
   var nextTransactionId : Nat = 1;
@@ -122,29 +126,48 @@ persistent actor Treasury {
       };
     };
 
+    let ledgerPrincipal = switch (ledger) {
+      case (null) { return "Error: ledger not configured" };
+      case (?l) { l };
+    };
+
     if (amount <= 0) {
       return "Error: Withdrawal amount must be positive";
     };
 
-    if (balance < amount) {
-      return "Error: Insufficient balance";
+    let amt : Nat = Int.abs(amount);
+    // Guard before subtraction: clean reject, never a Nat underflow trap.
+    if (amt > tokenBalance) {
+      return "Error: insufficient token balance";
     };
 
-    balance -= amount;
-    
-    let transaction : Transaction = {
-      id = nextTransactionId;
-      amount = -amount;
-      description = description;
-      timestamp = Time.now();
-      from = Principal.fromActor(Treasury);
-      to = to;
+    // Move real HHU tokens out of the Treasury to the recipient. Decrement
+    // tokenBalance ONLY after the token confirms the transfer; on #Err leave all
+    // state unchanged. (Trap-after-effect remains Path B debt: a trap after a
+    // successful transfer would leave tokenBalance overstated; reconcile()
+    // surfaces it and the token still enforces the real on-chain balance.)
+    let token : Token = actor (Principal.toText(ledgerPrincipal));
+    let result = await token.transfer(to, amt);
+
+    switch (result) {
+      case (#Ok(_)) {
+        tokenBalance -= amt;
+        let transaction : Transaction = {
+          id = nextTransactionId;
+          amount = -amount;
+          description = description;
+          timestamp = Time.now();
+          from = Principal.fromActor(Treasury);
+          to = to;
+        };
+        transactions := Array.append(transactions, [transaction]);
+        nextTransactionId += 1;
+        return "Withdrawal successful. tokenBalance: " # Nat.toText(tokenBalance);
+      };
+      case (#Err(e)) {
+        return "Error: token transfer failed: " # e;
+      };
     };
-    
-    transactions := Array.append(transactions, [transaction]);
-    nextTransactionId += 1;
-    
-    return "Withdrawal successful! New balance: " # Int.toText(balance);
   };
 
   // Bootstrap and rotate the treasury owner. Gated on IC controller authority

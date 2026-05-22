@@ -3,6 +3,7 @@ import HashMap "mo:base/HashMap";
 import Option "mo:base/Option";
 import Text "mo:base/Text";
 import Iter "mo:base/Iter";
+import Principal "mo:base/Principal";
 
 /* Revocation canister — single persistent actor using HashMap with stable backing */
 persistent actor RevocationCanister {
@@ -26,7 +27,29 @@ persistent actor RevocationCanister {
     revokedEntries := [];
   };
 
-  public shared(_msg) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
+  // Revocation authority (C5). Set post-deploy by a canister controller via
+  // setOwner; same model as Treasury C1 / token C4 / hhdao C6.
+  stable var owner : ?Principal = null;
+
+  private func isOwner(caller : Principal) : Bool {
+    if (Principal.isAnonymous(caller)) { return false };
+    switch (owner) {
+      case (null) { false };
+      case (?o) { caller == o };
+    };
+  };
+
+  public shared ({ caller }) func setOwner(newOwner : Principal) : async Bool {
+    if (not Principal.isController(caller)) { return false };
+    if (Principal.isAnonymous(newOwner)) { return false };
+    owner := ?newOwner;
+    return true;
+  };
+
+  // Owner-gated (C5). Signature unchanged; `issuer` stays a parameter per the
+  // agreed minimal fix (only the trusted owner can write).
+  public shared ({ caller }) func revoke(vcHash : Text, issuer : Text, revokedAt : Int, reason : Text) : async Bool {
+    if (not isOwner(caller)) { return false };
     revoked.put(vcHash, (issuer, revokedAt, reason));
     true
   };

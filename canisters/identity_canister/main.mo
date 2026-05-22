@@ -1,5 +1,6 @@
 import Array "mo:base/Array";
 import Debug "mo:base/Debug";
+import Principal "mo:base/Principal";
 
 // Minimal IdentityCanister scaffold.
 // Stores VC hashes per subject in stable memory and keeps a simple revocation list.
@@ -13,8 +14,28 @@ persistent actor IdentityCanister {
   // Each entry: (vcHash, revoked)
   stable var revocations : [ (Text, Bool) ] = [];
 
-  // Append a VC for a subject
-  public shared(_msg) func addVC(subject : Text, vcHash : Text) : async Bool {
+  // VC issuance/revocation authority (C5). Set post-deploy by a canister
+  // controller via setOwner; same model as Treasury C1 / token C4 / hhdao C6.
+  stable var owner : ?Principal = null;
+
+  private func isOwner(caller : Principal) : Bool {
+    if (Principal.isAnonymous(caller)) { return false };
+    switch (owner) {
+      case (null) { false };
+      case (?o) { caller == o };
+    };
+  };
+
+  public shared ({ caller }) func setOwner(newOwner : Principal) : async Bool {
+    if (not Principal.isController(caller)) { return false };
+    if (Principal.isAnonymous(newOwner)) { return false };
+    owner := ?newOwner;
+    return true;
+  };
+
+  // Append a VC for a subject. Owner-gated (C5).
+  public shared ({ caller }) func addVC(subject : Text, vcHash : Text) : async Bool {
+    if (not isOwner(caller)) { return false };
     let n = Array.size(vcStore);
     var i : Nat = 0;
     while (i < n) {
@@ -61,8 +82,9 @@ persistent actor IdentityCanister {
     return false;
   };
 
-  // Revoke a VC (mark revoked)
-  public shared(_msg) func revokeVC(vcHash : Text) : async Bool {
+  // Revoke a VC (mark revoked). Owner-gated (C5).
+  public shared ({ caller }) func revokeVC(vcHash : Text) : async Bool {
+    if (not isOwner(caller)) { return false };
     let n = Array.size(revocations);
     var i : Nat = 0;
     while (i < n) {

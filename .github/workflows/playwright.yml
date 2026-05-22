@@ -18,7 +18,10 @@ jobs:
     - name: Install pnpm
       uses: pnpm/action-setup@v4
       with:
-        version: 11
+        # pnpm 9 (not 11): pnpm 11 needs Node >=22.13 (breaks the 20.x matrix) and
+        # hard-errors on un-approved dependency build scripts. pnpm 9 supports
+        # Node 18+ and reads the v9.0 lockfile.
+        version: 9
 
     - uses: actions/setup-node@v5
       with:

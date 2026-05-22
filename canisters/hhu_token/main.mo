@@ -67,6 +67,15 @@ persistent actor HHUToken {
   private stable var totalSupply : Nat = 0;
   private stable var burntSupply : Nat = 0;
 
+  // Stable backing for the transient maps above (H2). Populated at preupgrade,
+  // drained at postupgrade. Without these, balances/allowances reset on upgrade.
+  private stable var balancesEntries : [(Principal, Nat)] = [];
+  private stable var allowancesEntries : [(Principal, [(Principal, Nat)])] = [];
+  // One-time guard: the upgrade that introduces these hooks cannot capture the
+  // pre-hook transient balances (old code had no preupgrade), so on first run we
+  // reconstruct them from the stable `transactions` log. true thereafter.
+  private stable var migratedV2 : Bool = false;
+
   // Mint authority. Set once post-deploy by a canister controller via setOwner
   // (controller-gated, same model as Treasury C1). null until configured, so
   // mint is disabled until an owner is established.
@@ -80,6 +89,69 @@ persistent actor HHUToken {
     // No automatic mint at init to avoid depending on canister principal during deployment.
     // Use `mint` externally to distribute initial supply when ready.
     ();
+  };
+
+  // ============================================================================
+  // UPGRADE PERSISTENCE (H2)
+  // ============================================================================
+
+  system func preupgrade() {
+    balancesEntries := Iter.toArray(balances.entries());
+    var accs : [(Principal, [(Principal, Nat)])] = [];
+    for ((owner, inner) in allowances.entries()) {
+      accs := Array.append(accs, [(owner, Iter.toArray(inner.entries()))]);
+    };
+    allowancesEntries := accs;
+  };
+
+  system func postupgrade() {
+    for ((p, amt) in balancesEntries.vals()) { balances.put(p, amt) };
+    for ((owner, inner) in allowancesEntries.vals()) {
+      let innerMap = HashMap.HashMap<Principal, Nat>(
+        if (inner.size() == 0) 1 else inner.size(), Principal.equal, Principal.hash
+      );
+      for ((spender, amt) in inner.vals()) { innerMap.put(spender, amt) };
+      allowances.put(owner, innerMap);
+    };
+    // One-time recovery of pre-hook transient balances from the tx log.
+    if (not migratedV2) {
+      reconstructBalancesFromLog();
+      migratedV2 := true;
+    };
+    balancesEntries := [];
+    allowancesEntries := [];
+  };
+
+  // Replay the stable transaction log to rebuild balances (mint/transfer/
+  // transfer_from credit/debit; burn debit). Used once during the H2-introducing
+  // upgrade; faithful because every balance-changing op appends to the log.
+  private func reconstructBalancesFromLog() {
+    for (tx in transactions.vals()) {
+      switch (tx.kind) {
+        case ("mint") { creditFromAcct(tx.to, tx.amount) };
+        case ("burn") { debitFromAcct(tx.from, tx.amount) };
+        case ("transfer") { debitFromAcct(tx.from, tx.amount); creditFromAcct(tx.to, tx.amount) };
+        case ("transfer_from") { debitFromAcct(tx.from, tx.amount); creditFromAcct(tx.to, tx.amount) };
+        case (_) {};
+      };
+    };
+  };
+
+  private func creditFromAcct(acct : ?Account, amt : Nat) {
+    switch (acct) {
+      case (?a) { balances.put(a.owner, Option.get(balances.get(a.owner), 0) + amt) };
+      case null {};
+    };
+  };
+
+  private func debitFromAcct(acct : ?Account, amt : Nat) {
+    switch (acct) {
+      case (?a) {
+        let cur = Option.get(balances.get(a.owner), 0);
+        balances.put(a.owner, if (cur >= amt) cur - amt else 0);
+      };
+      case null {};
+    };
   };
 
   // ============================================================================

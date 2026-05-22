@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google'
 // Import global styles
 import './globals.css'
 import ClientLayout from './ClientLayout'
+import { isDemoMode } from '../lib/demoMode'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -36,6 +37,15 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={inter.className}>
+        {/* H16a: persistent, non-dismissible DEMO MODE banner (above the fold). */}
+        {isDemoMode() && (
+          <div
+            role="status"
+            className="sticky top-0 z-50 w-full bg-amber-400 text-black text-center text-sm font-semibold py-2 px-4 border-b border-amber-600"
+          >
+            DEMO MODE — actions shown are simulated, not on-chain.
+          </div>
+        )}
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

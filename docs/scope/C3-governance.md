@@ -23,9 +23,12 @@ the controller-gated owner pattern already shipped in C1/C4/C5/C6/H6.
 2. **`vote(proposalId, inFavor)`** — rejects anonymous; member-gated; **one vote per
    principal per proposal** (dedup); rejects if the proposal is missing, past its
    deadline, or already executed; updates `votesFor` / `votesAgainst`.
-3. **`execute(proposalId)` — flag-only.** Sets `executed = true` (and records an
-   outcome) once quorum + threshold are met and the deadline has passed; idempotent
-   (no double-execute); rejects anonymous. **Does NOT call any other canister.**
+3. **`execute(proposalId)` — flag-only.** Fires once quorum + threshold are met
+   **while the proposal is still within its deadline** (sets `executed = true`);
+   proposals past their deadline without meeting conditions are **expired and cannot
+   execute** — the deadline is an expiry timer, not an execution gate. Idempotent
+   (no double-execute); any member may call; rejects anonymous. **Does NOT call any
+   other canister and performs no token movement.**
 4. **Membership** — an owner-managed member set held *inside the governance canister
    itself*; controller-gated admin (`setOwner`, `addMember` / `removeMember`)
    mirroring C1/C4/C6.
@@ -73,12 +76,14 @@ These are the only real forks; defaults shown. Confirm or adjust before implemen
 2. `vote` as a non-member → documented reject; tally unchanged.
 3. member `vote(p, true)` → `votesFor` +1; a second `vote` from the **same** principal on `p` → documented reject; tally unchanged (dedup).
 4. `vote` on a missing / past-deadline / already-executed proposal → documented reject.
-5. `execute(p)` with `votesFor < quorum` → reject; `executed` stays `false`.
-6. `execute(p)` at/after quorum + threshold and past deadline → success; `executed` = `true`.
-7. `execute(p)` again after success → documented no-op; tally and `executed` unchanged (idempotent).
-8. `createProposal` as anonymous → reject; as non-member → reject (per the gating choice); as member → success.
-9. Controller-gated admin: `setOwner` / `addMember` / `setQuorum` as anonymous → reject, as non-controller → reject, as controller → success (mirrors C1/C4).
-10. Upgrade survival: create → vote → `dfx deploy governance --upgrade-unchanged` → proposal + tally + `executed` persist.
+5. `execute(p)` with total votes < quorum → reject; `executed` stays `false`.
+6. `execute(p)` with quorum met but `votesFor` below threshold → reject; `executed` stays `false`.
+7. `execute(p)` within deadline with quorum + threshold met → success; `executed` = `true`.
+8. `execute(p)` on a proposal past its deadline without passing → reject (expired); `executed` stays `false`.
+9. `execute(p)` again after success → documented no-op; tally and `executed` unchanged (idempotent).
+10. `createProposal` as anonymous → reject; as non-member → reject (per the gating choice); as member → success.
+11. Controller-gated admin: `setOwner` (controller-gated) / `addMember` · `setQuorum` (owner-gated) as anonymous → reject, as non-controller/non-owner → reject, as controller/owner → success (mirrors C1/C4).
+12. Upgrade survival: create → vote → `dfx deploy governance --upgrade-unchanged` → proposal + tally + `executed` persist.
 
 ## Out-of-scope / future-compatibility (listed only — not designed)
 

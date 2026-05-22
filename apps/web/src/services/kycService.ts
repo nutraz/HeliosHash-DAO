@@ -27,8 +27,6 @@ export class KycService {
       // Mock implementation for development
       // In production, this would call a real KYC provider like Onfido, Jumio, etc.
 
-      console.log(`Initiating ${kycType} verification for user ${userId}`);
-
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -51,8 +49,6 @@ export class KycService {
 
   async verifyIdentity(userId: string, verificationData: KYCVerificationData): Promise<KYCResult> {
     try {
-      console.log(`Verifying identity for user ${userId} with ${verificationData.documentType}`);
-
       // Basic validation
       const validationResult = this.validateDocumentData(verificationData);
       if (!validationResult.valid) {
@@ -155,8 +151,6 @@ export class KycService {
     try {
       // Mock file upload
       // In production, this would upload to secure storage and return a URL
-      console.log(`Uploading ${documentType} document for user ${userId}`);
-
       await new Promise(resolve => setTimeout(resolve, 1500));
 
       return {

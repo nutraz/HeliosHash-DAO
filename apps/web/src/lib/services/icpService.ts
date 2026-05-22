@@ -1,3 +1,11 @@
+import { isDemoMode } from "../demoMode";
+
+// H16a (rollup): the icpService singleton's action methods fall back to fabricated
+// mock results when the real canister call fails. Outside DEMO MODE they must not
+// fake on-chain success — they throw "coming soon" instead (same pattern as
+// src/services/icpService.ts). Getters (display data) are left alone, as in H16a.
+const COMING_SOON = "This action is not yet available — coming soon.";
+
 export class ICPAuthService {
   private authenticated = false;
   private principal: string | null = null;
@@ -105,6 +113,7 @@ class ICPService {
       return await (actor as any).create_project(name, location, capacity, metadata);
     } catch (err) {
       console.warn('createProject failed, returning mock', err);
+      if (!isDemoMode()) throw new Error(COMING_SOON);
       return { ok: false, message: 'mock create' };
     }
   }
@@ -128,6 +137,7 @@ class ICPService {
       throw new Error('No transfer method found on treasury actor');
     } catch (err) {
       console.warn('transferTokens failed, falling back to demo mock', err);
+      if (!isDemoMode()) throw new Error(COMING_SOON);
       // DEMO: simulate a detailed tx response
       await new Promise((r) => setTimeout(r, 2000));
       return {
@@ -198,6 +208,7 @@ class ICPService {
     } catch (e) {
       console.warn('createSocialPost remote failed, using demo fallback', e);
     }
+    if (!isDemoMode()) throw new Error(COMING_SOON);
     await new Promise((r) => setTimeout(r, 1000));
     return { ok: `post_${Date.now()}` };
   }

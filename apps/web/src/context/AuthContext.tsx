@@ -27,26 +27,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     throw new Error("not implemented");
   };
 
-  const register = async (userData: RegisterData) => {
-    setIsLoading(true);
-    try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockUser: User = {
-        id: '2',
-        email: userData.email,
-        name: userData.name,
-        role: 'user',
-        createdAt: new Date().toISOString(),
-      };
-
-      setUser(mockUser);
-      if (typeof window !== 'undefined') localStorage.setItem('user', JSON.stringify(mockUser));
-    } catch (error) {
-      throw new Error('Registration failed');
-    } finally {
-      setIsLoading(false);
-    }
+  const register = async (_userData: RegisterData) => {
+    // H0a (rollup): the mock register is neutered alongside login(). It previously
+    // fabricated a { role: 'user' } session and persisted it to localStorage. Throw
+    // loudly so any future accidental wiring fails instead of silently creating a
+    // session. Do NOT narrow this to grant any role.
+    throw new Error("not implemented");
   };
 
   const logout = () => {

@@ -39,5 +39,7 @@ jobs:
           cache: 'pnpm'
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build --if-present
+      # NB: `pnpm build --if-present` passes --if-present through to `next build`,
+      # which rejects it (exit 1). The root `build` script exists, so call it plainly.
+      - run: pnpm build
       - run: pnpm test

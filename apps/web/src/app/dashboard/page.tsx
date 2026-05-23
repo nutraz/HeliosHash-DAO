@@ -7,24 +7,24 @@ import {
   Battery, Sun as SunIcon, Copy
 } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { icpService } from '@/services/icpService';
 import { useAuth } from '@/contexts/AuthContext';
 
 function DashboardContent() {
   const [darkMode, setDarkMode] = useState(false);
   const [activeNav, setActiveNav] = useState('profile');
-  const [notifications, setNotifications] = useState(3);
+  const [notifications] = useState(0);
   const [solarData, setSolarData] = useState({ energy: 0, panels: 0, location: '' });
   const [loading, setLoading] = useState(false);
 
-  // Local UI state for social, proposals and projects
-  const [activeProposals, setActiveProposals] = useState<any[]>([]);
-  const [socialFeed, setSocialFeed] = useState<any[]>([]);
-  const [userBalance, setUserBalance] = useState<number>(15000);
-  const [createdProjects, setCreatedProjects] = useState<any[]>([]);
-
   // Identity comes from the connected Internet Identity principal — no fake name.
   const { principal } = useAuth();
+  const router = useRouter();
+
+  // Demo honesty: actions not wired to a real canister flow surface one honest
+  // "coming soon" instead of fabricated proposals/balances/transactions.
+  const comingSoon = () => alert('Coming soon — not part of this demo.');
 
   // Initialize theme and load real data
   useEffect(() => {
@@ -78,117 +78,28 @@ function DashboardContent() {
     }
   };
 
-  // Real ICP-integrated button handlers
-  const handleSendTokens = async () => {
-    const recipient = prompt('Enter recipient address:');
-    const amountStr = prompt('Enter amount:');
-    const amount = amountStr ? parseFloat(amountStr) : NaN;
-    if (!recipient || !amount || isNaN(amount)) return;
+  // Demo honesty: these actions aren't wired to a real canister flow, so they
+  // surface one honest "coming soon" rather than fabricating success.
+  const handleSendTokens = () => comingSoon();
+  const handleViewNFTs = () => comingSoon();
+  const handleJoinVote = () => comingSoon();
+  const handleExplore = () => comingSoon();
+  const handleCreateProject = () => comingSoon();
 
-    try {
-      const result = await icpService.transferTokens(recipient, amount);
-      setUserBalance((b) => b - amount);
-      setNotifications((n) => n + 1);
-      return result;
-    } catch (error) {
-      console.error('Transfer failed:', error);
-    }
-  };
-
-  const handleViewNFTs = async () => {
-    alert('🖼️ Opening NFT Gallery...\n\nFeature: Connected to NFT membership canister');
-  };
-
-  const handleJoinVote = async () => {
-    try {
-      const result = await icpService.getProjectStats("baghpat_solar");
-      alert(`🗳️ Active Governance Proposals\n\n• Proposal #45: Treasury Allocation\n• Proposal #46: New Validator Rules\n• Status: ${JSON.stringify(result)}`);
-    } catch (error) {
-      alert('🗳️ Active Governance Proposals\n\n• Proposal #45: Treasury Allocation\n• Proposal #46: New Validator Rules\n• Status: Voting open');
-    }
-  };
-
-  const handleExplore = async () => {
-    try {
-      const result = await icpService.createOpportunity(
-        "baghpat_solar",
-        "maintenance",
-        "Solar panel maintenance technician needed"
-      );
-
-      const id = (result as any)?.ok ?? result;
-      setActiveProposals((prev) => [
-        ...prev,
-        { id, title: 'New Maintenance Opportunity', status: 'created', timestamp: Date.now() },
-      ]);
-      setNotifications((n) => n + 1);
-    } catch (error) {
-      console.error('Failed to create opportunity:', error);
-    }
-  };
-
-  const handleCreateProject = async () => {
-    try {
-      const result = await icpService.createProject(
-        "Community Solar Initiative",
-        "Uttar Pradesh",
-        500,
-        "Demo community solar project"
-      );
-      const id = (result as any)?.ok ?? result;
-      setCreatedProjects((prev) => [...prev, { id, name: 'Community Solar Initiative', createdAt: Date.now() }]);
-    } catch (error) {
-      console.error('Failed to create project:', error);
-    }
-  };
-
-  const handleSocialPost = async () => {
-    const content = prompt('Enter your post content:');
-    if (!content) return;
-    try {
-      const result = await icpService.createSocialPost(content);
-      const id = (result as any)?.ok ?? result;
-      setSocialFeed((prev) => [
-        { id, author: 'You', content, timestamp: Date.now(), likes: 0 },
-        ...prev,
-      ]);
-      setNotifications((n) => n + 1);
-    } catch (error) {
-      console.error('Failed to create post:', error);
-    }
-  };
-
-  const handleNavClick = async (navItem: string) => {
+  const handleNavClick = (navItem: string) => {
     setActiveNav(navItem);
-    
-    // Real actions based on navigation
-    switch(navItem) {
-      case 'projects':
-        try {
-          const stats = await icpService.getProjectStats("baghpat_solar");
-          alert(`📊 Projects Dashboard\n\nBaghpat Solar Farm Stats:\n${JSON.stringify(stats, null, 2)}`);
-        } catch (error) {
-          alert('📊 Projects Dashboard\n\n• Baghpat Solar Farm: 420 MWh\n• UrgamU Data Center: Online\n• Community Projects: 12 active');
-        }
-        break;
-      case 'rewards':
-        alert('🏆 Rewards Hub\n\n• Available: 1,200 HHD\n• Pending: 450 HHD\n• Next reward: 2 days');
-        break;
-      case 'governance':
-        alert('🏛️ DAO Governance\n\n• Active Proposals: 3\n• Your Votes: 12\n• Treasury: 1.2M HHD');
-        break;
-      default:
-        alert(`📱 ${navItem.charAt(0).toUpperCase() + navItem.slice(1)} Module\n\nFeature: Connected to ${navItem} canister`);
+    // Only "Explore Projects" has a real destination today; route there.
+    if (navItem === 'projects') {
+      router.push('/projects/helios-baghpat');
+      return;
     }
+    comingSoon();
   };
 
-  const handleNotificationClick = () => {
-    setNotifications(0);
-    alert('🔔 Real-time Notifications\n\n• New governance vote: Proposal #47\n• Reward available: 50 HHD\n• System: Canister update complete');
-  };
+  const handleNotificationClick = () => comingSoon();
 
   const handleSettingsClick = () => {
-    alert(`⚙️ Settings Panel\n\n• Theme: ${darkMode ? 'Dark' : 'Light'}\n• Network: ${process.env.NEXT_PUBLIC_IC_HOST || 'Local'}\n• Canisters: Connected\n• Version: HHDAO v1.0`);
+    alert(`⚙️ Settings Panel\n\n• Theme: ${darkMode ? 'Dark' : 'Light'}\n• Network: ${process.env.NEXT_PUBLIC_IC_HOST || 'Local'}\n• Version: HHDAO v1.0`);
   };
 
   const navItems = [
@@ -213,42 +124,42 @@ function DashboardContent() {
     { 
       title: 'Governance Engine', 
       description: 'Vote on proposals and shape the DAO', 
-      status: 'Active', 
+      status: 'Coming soon', 
       icon: Shield,
       action: () => handleNavClick('governance')
     },
     { 
       title: 'Treasury Manager', 
       description: 'Track and manage community funds', 
-      status: 'Active', 
+      status: 'Coming soon', 
       icon: BarChart3,
       action: () => handleNavClick('wallet')
     },
     { 
       title: 'NFT Marketplace', 
       description: 'Trade and collect community NFTs', 
-      status: 'Live', 
+      status: 'Coming soon', 
       icon: Gem,
       action: () => handleNavClick('nfts')
     },
     { 
       title: 'Project Hub', 
       description: 'Discover and fund new initiatives', 
-      status: 'Active', 
+      status: 'Coming soon', 
       icon: Compass,
       action: () => handleNavClick('projects')
     },
     { 
       title: 'Rewards System', 
       description: 'Earn and claim your rewards', 
-      status: 'Live', 
+      status: 'Coming soon', 
       icon: Gift,
       action: () => handleNavClick('rewards')
     },
     { 
       title: 'Create Project', 
       description: 'Launch new community initiatives', 
-      status: 'Ready', 
+      status: 'Coming soon',
       icon: Zap,
       action: handleCreateProject
     },
@@ -318,7 +229,7 @@ function DashboardContent() {
                 <Settings size={20} />
               </button>
               
-              <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center cursor-pointer">
+              <div className="w-8 h-8 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center">
                 <User size={16} className="text-white" />
               </div>
             </div>
@@ -458,13 +369,6 @@ function DashboardContent() {
                       Solar Data: {loading ? 'Loading...' : `${solarData.energy} MWh/year (demo) from ${solarData.panels} panels`}
                     </p>
                     <p className="text-slate-500 dark:text-slate-400 text-xs">{solarData.location}</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-slate-50 dark:bg-slate-700/50 rounded-lg">
-                  <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-slate-900 dark:text-white text-sm">New governance proposal available</p>
-                    <p className="text-slate-500 dark:text-slate-400 text-xs">1 hour ago</p>
                   </div>
                 </div>
               </div>

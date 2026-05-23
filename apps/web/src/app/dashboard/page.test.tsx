@@ -22,6 +22,11 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => authState,
 }));
 
+// DashboardContent routes "Explore Projects" via the app router.
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), back: vi.fn() }),
+}));
+
 // Only the authenticated branch mounts DashboardContent, which fetches solar
 // data on mount — keep it deterministic and offline.
 vi.mock('@/services/icpService', () => ({
@@ -126,5 +131,21 @@ describe('DashboardPage auth gate (H0c.2)', () => {
     expect(screen.getByText(/720 MWh\/year \(demo\) from 1200 panels/)).toBeInTheDocument();
     // The impossible millions figure must be gone everywhere on the dashboard.
     expect(screen.queryByText(/420M/)).not.toBeInTheDocument();
+  });
+
+  it('shows honest module badges and no fabricated activity', async () => {
+    authState.isAuthenticated = true;
+    authState.isLoading = false;
+    render(<DashboardPage />);
+
+    await waitFor(() => expect(screen.getByText('DAO Modules')).toBeInTheDocument());
+    // All six module badges are the uniform honest "Coming soon".
+    expect(screen.getAllByText('Coming soon').length).toBeGreaterThanOrEqual(6);
+    // No misleading status badges remain.
+    expect(screen.queryByText('Active')).not.toBeInTheDocument();
+    expect(screen.queryByText('Live')).not.toBeInTheDocument();
+    expect(screen.queryByText('Ready')).not.toBeInTheDocument();
+    // The fabricated governance activity row must be gone.
+    expect(screen.queryByText('New governance proposal available')).not.toBeInTheDocument();
   });
 });

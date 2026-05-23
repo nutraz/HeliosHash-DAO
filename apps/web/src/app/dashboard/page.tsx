@@ -6,6 +6,7 @@ import {
   Search, Gift, MessageCircle, BarChart3, ShieldCheck,
   Battery, Sun as SunIcon, MapPin
 } from 'lucide-react';
+import Link from 'next/link';
 import { icpService } from '@/services/icpService';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -344,7 +345,22 @@ function DashboardContent() {
 
           {/* Main Dashboard Area */}
           <div className="lg:col-span-3 space-y-6">
-            
+
+            {/* Demo Polish (MVP2): the one clear next action — explore the
+                flagship solar project. Links to the presentable project page. */}
+            <Link
+              href="/projects/helios-baghpat"
+              className="block rounded-xl p-5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold">Explore the Baghpat solar project</h3>
+                  <p className="text-sm text-cyan-50">See live solar yield, the community, and open opportunities →</p>
+                </div>
+                <Compass size={28} className="shrink-0" />
+              </div>
+            </Link>
+
             {/* Real Solar Data Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div 

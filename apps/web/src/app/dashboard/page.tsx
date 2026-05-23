@@ -502,7 +502,7 @@ export default function DashboardPage() {
             Connect your Internet Identity to view it.
           </p>
           <button
-            onClick={() => { void login(); }}
+            onClick={() => { void login('/dashboard'); }}
             className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors"
           >
             Connect Internet Identity

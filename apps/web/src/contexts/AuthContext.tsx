@@ -23,7 +23,10 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   updateRoles: (roles: string[]) => Promise<void>;
-  login: () => Promise<void>;
+  // `returnTo` lets a caller (e.g. the /dashboard auth gate) ask to be sent
+  // back to its originating route after a successful connect. Optional —
+  // omit it to keep the default landing behaviour.
+  login: (returnTo?: string) => Promise<void>;
   logout: () => Promise<void>;
   isLoading: boolean;
   // Backwards-compatible fields for legacy wallet components
@@ -84,10 +87,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Stable ref to the authentication handler to avoid recreating the function
   // and triggering effect dependency loops.
-  const handleAuthenticationRef = useRef<((identity: unknown) => Promise<void>) | null>(null);
+  const handleAuthenticationRef = useRef<((identity: unknown, returnTo?: string) => Promise<void>) | null>(null);
 
   useEffect(() => {
-    handleAuthenticationRef.current = async (identity: unknown): Promise<void> => {
+    handleAuthenticationRef.current = async (identity: unknown, returnTo?: string): Promise<void> => {
       console.log('handleAuthentication called');
       try {
         // Narrow the unknown identity to the minimal shape we need
@@ -165,9 +168,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           }
         })();
 
-        // Navigate to the dashboard after successful authentication.
+        // Navigate after successful authentication. If a return route was
+        // provided (e.g. the /dashboard auth gate captured where the user
+        // started), send them back there; otherwise fall back to the default
+        // landing route.
         try {
-          router.push('/helioshash-dao');
+          router.push(returnTo ?? '/helioshash-dao');
         } catch (e) {
           // ignore navigation errors during SSR or tests
         }
@@ -217,7 +223,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []); // Run only once on mount
 
-  // Temporary: Force authentication in development for debugging
+  // TODO(H0b): development-only auth bypass — force a debug user so the UI is
+  // usable without a live Internet Identity / replica during local dev.
+  // SECURITY: this MUST stay behind the `process.env.NODE_ENV === 'development'`
+  // gate. Next strips this branch from production bundles, so the bypass never
+  // ships. Removing or widening the gate would grant an unauthenticated visitor
+  // a fully-authenticated session in production — a critical auth bypass.
+  // Do not "fix" this by deleting the gate; the dev-bypass itself is a separate
+  // tracked decision (H0b: comment-and-keep).
   useEffect(() => {
     try {
       if (process.env.NODE_ENV === 'development') {
@@ -260,7 +273,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })();
   }, [authClient, retryCount]); // Now handleAuthentication is stable
 
-  const login = useCallback(async () => {
+  const login = useCallback(async (returnTo?: string) => {
     if (!authClient) {
       throw new Error("Auth client not initialized");
     }
@@ -291,7 +304,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await authClient.login({
         identityProvider,
         onSuccess: async () => {
-          await handleAuthenticationRef.current?.(authClient.getIdentity());
+          await handleAuthenticationRef.current?.(authClient.getIdentity(), returnTo);
         },
         onError: (error) => {
           console.error("Login failed:", error);
@@ -331,7 +344,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isConnected: isClient ? !!user : false,
       walletType: isClient && user ? 'internet-identity' : null,
       principal: isClient ? user?.principal || null : null,
-      connect: login,
+      // Legacy wallet components pass a wallet-type string to connect(); never
+      // forward that as login()'s returnTo route (it would push e.g. "MetaMask").
+      connect: (_type: string) => login(),
       disconnect: logout,
     }),
     [user, isClient, isLoading, login, logout, updateRoles]
@@ -347,7 +362,7 @@ export function useAuth() {
     return {
       user: null,
       isAuthenticated: false,
-      login: async () => {},
+      login: async (_returnTo?: string) => {},
       logout: async () => {},
       updateRoles: async () => {},
       isLoading: true,

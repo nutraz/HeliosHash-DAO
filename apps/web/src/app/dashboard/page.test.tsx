@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 // H0c.2: the dashboard route must gate private content behind Internet
@@ -147,5 +147,24 @@ describe('DashboardPage auth gate (H0c.2)', () => {
     expect(screen.queryByText('Ready')).not.toBeInTheDocument();
     // The fabricated governance activity row must be gone.
     expect(screen.queryByText('New governance proposal available')).not.toBeInTheDocument();
+  });
+
+  it('placeholder actions show an inline notice, not a browser alert/prompt', async () => {
+    authState.isAuthenticated = true;
+    authState.isLoading = false;
+    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => {});
+    const promptSpy = vi.spyOn(window, 'prompt').mockImplementation(() => null);
+    render(<DashboardPage />);
+
+    await waitFor(() => expect(screen.getByRole('button', { name: /Send Tokens/i })).toBeInTheDocument());
+    fireEvent.click(screen.getByRole('button', { name: /Send Tokens/i }));
+
+    // Inline styled notice appears (role=status), and no raw browser dialog fired.
+    expect(await screen.findByText(/Demo action/i)).toBeInTheDocument();
+    expect(alertSpy).not.toHaveBeenCalled();
+    expect(promptSpy).not.toHaveBeenCalled();
+
+    alertSpy.mockRestore();
+    promptSpy.mockRestore();
   });
 });

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { 
   Bell, Settings, User, Gem, Wallet, Trophy, Zap, 
   Compass, Users, Shield, Sun, Moon, Send, Vote, 
@@ -22,9 +22,17 @@ function DashboardContent() {
   const { principal } = useAuth();
   const router = useRouter();
 
-  // Demo honesty: actions not wired to a real canister flow surface one honest
-  // "coming soon" instead of fabricated proposals/balances/transactions.
-  const comingSoon = () => alert('Coming soon — not part of this demo.');
+  // Demo honesty: actions not wired to a real canister flow surface an inline,
+  // styled notice (never a browser alert/prompt) instead of fabricating success.
+  const [toast, setToast] = useState<string | null>(null);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const showToast = (message: string) => {
+    setToast(message);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToast(null), 3500);
+  };
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
+  const comingSoon = () => showToast('Demo action — coming soon. This isn’t wired up in the demo yet.');
 
   // Initialize theme and load real data
   useEffect(() => {
@@ -99,7 +107,7 @@ function DashboardContent() {
   const handleNotificationClick = () => comingSoon();
 
   const handleSettingsClick = () => {
-    alert(`⚙️ Settings Panel\n\n• Theme: ${darkMode ? 'Dark' : 'Light'}\n• Network: ${process.env.NEXT_PUBLIC_IC_HOST || 'Local'}\n• Version: HHDAO v1.0`);
+    showToast(`Settings (demo): ${darkMode ? 'Dark' : 'Light'} theme · ${process.env.NEXT_PUBLIC_IC_HOST || 'Local'} network · HHDAO v1.0`);
   };
 
   const navItems = [
@@ -376,6 +384,17 @@ function DashboardContent() {
           </div>
         </div>
       </div>
+
+      {/* Inline demo notice — replaces browser alert/prompt for placeholder actions. */}
+      {toast && (
+        <div
+          role="status"
+          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex max-w-[90vw] items-center gap-3 rounded-lg bg-slate-900 dark:bg-slate-700 px-4 py-3 text-white shadow-lg"
+        >
+          <span className="text-sm">{toast}</span>
+          <button onClick={() => setToast(null)} aria-label="Dismiss notice" className="text-slate-300 hover:text-white">✕</button>
+        </div>
+      )}
     </div>
   );
 }

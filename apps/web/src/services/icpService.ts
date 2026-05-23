@@ -11,7 +11,8 @@ const COMING_SOON = "This action is not yet available — coming soon.";
 export const icpService = {
   async getSolarEnergy() {
     await new Promise((r) => setTimeout(r, 120));
-    return 420000000;
+    // Demo value in MWh/year: ~1,200 panels x 0.4 kW x 1,500 kWh/kWp/yr ≈ 720 MWh/yr.
+    return 720;
   },
   async getPanelCount() {
     await new Promise((r) => setTimeout(r, 80));

@@ -26,9 +26,9 @@ vi.mock('@/contexts/AuthContext', () => ({
 // data on mount — keep it deterministic and offline.
 vi.mock('@/services/icpService', () => ({
   icpService: {
-    getSolarEnergy: async () => 0,
-    getPanelCount: async () => 0,
-    getLocation: async () => '',
+    getSolarEnergy: async () => 720,
+    getPanelCount: async () => 1200,
+    getLocation: async () => 'Baghpat, Uttar Pradesh, India',
   },
 }));
 
@@ -112,5 +112,19 @@ describe('DashboardPage auth gate (H0c.2)', () => {
     expect(screen.queryByText('Level 6')).not.toBeInTheDocument();
     expect(screen.queryByText('Reputation Score')).not.toBeInTheDocument();
     expect(screen.queryByText('DAO Tier')).not.toBeInTheDocument();
+  });
+
+  it('shows a plausible demo solar-energy metric, not the impossible 420M', async () => {
+    authState.isAuthenticated = true;
+    authState.isLoading = false;
+    render(<DashboardPage />);
+
+    // Card value resolves once loadSolarData runs (mocked getSolarEnergy → 720).
+    await waitFor(() => expect(screen.getByText('720')).toBeInTheDocument());
+    expect(screen.getByText('Solar Energy (MWh/year) (demo)')).toBeInTheDocument();
+    // Recent Activity must agree with the card (same value + unit, consistent panels).
+    expect(screen.getByText(/720 MWh\/year \(demo\) from 1200 panels/)).toBeInTheDocument();
+    // The impossible millions figure must be gone everywhere on the dashboard.
+    expect(screen.queryByText(/420M/)).not.toBeInTheDocument();
   });
 });

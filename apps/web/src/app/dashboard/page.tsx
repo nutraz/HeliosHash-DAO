@@ -56,9 +56,9 @@ function DashboardContent() {
       });
     } catch (error) {
       console.error('Failed to load solar data:', error);
-      // Fallback to demo data
+      // Fallback to demo data (MWh/year, consistent with ~1,200 panels)
       setSolarData({
-        energy: 420000000,
+        energy: 720,
         panels: 1200,
         location: "Baghpat, Uttar Pradesh, India"
       });
@@ -383,10 +383,10 @@ function DashboardContent() {
                 <div className="flex items-center justify-between">
                   <Battery className="text-green-500" size={20} />
                   <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                    {loading ? '...' : (solarData.energy / 1000000).toFixed(0)}M
+                    {loading ? '...' : solarData.energy}
                   </p>
                 </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Solar Energy (MWh)</p>
+                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Solar Energy (MWh/year) (demo)</p>
               </div>
 
               <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
@@ -455,7 +455,7 @@ function DashboardContent() {
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
                   <div className="flex-1">
                     <p className="text-slate-900 dark:text-white text-sm">
-                      Solar Data: {loading ? 'Loading...' : `${(solarData.energy / 1000000).toFixed(0)}M MWh from ${solarData.panels} panels`}
+                      Solar Data: {loading ? 'Loading...' : `${solarData.energy} MWh/year (demo) from ${solarData.panels} panels`}
                     </p>
                     <p className="text-slate-500 dark:text-slate-400 text-xs">{solarData.location}</p>
                   </div>

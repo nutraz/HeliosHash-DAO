@@ -7,10 +7,16 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 // Auth state is supplied per-test via this mutable holder so a single
 // module-level mock can serve loading / unauthenticated / authenticated.
-const authState: { isAuthenticated: boolean; isLoading: boolean; login: () => Promise<void> } = {
+const authState: {
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: () => Promise<void>;
+  principal: string | null;
+} = {
   isAuthenticated: false,
   isLoading: false,
   login: vi.fn(async () => {}),
+  principal: null,
 };
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => authState,
@@ -31,6 +37,7 @@ import DashboardPage from './page';
 beforeEach(() => {
   authState.isAuthenticated = false;
   authState.isLoading = false;
+  authState.principal = null;
   // DashboardContent reads matchMedia/localStorage on mount; jsdom lacks
   // matchMedia, so stub it for the authenticated render.
   if (!window.matchMedia) {
@@ -86,5 +93,24 @@ describe('DashboardPage auth gate (H0c.2)', () => {
     expect(screen.getByText('DAO Modules')).toBeInTheDocument();
     // The gate must not be present for authenticated users.
     expect(screen.queryByTestId('dashboard-auth-gate')).not.toBeInTheDocument();
+  });
+
+  it('shows the connected principal (not a fabricated identity) when authenticated', async () => {
+    authState.isAuthenticated = true;
+    authState.isLoading = false;
+    authState.principal = 'abc12-def34-ghi56-jkl78-cai';
+    render(<DashboardPage />);
+
+    await waitFor(() => expect(screen.getByText('Quick Actions')).toBeInTheDocument());
+    // Truncated principal is shown, with a copy affordance and full value in title.
+    expect(screen.getByText('abc12...cai')).toBeInTheDocument();
+    expect(screen.getByLabelText('Copy full principal')).toBeInTheDocument();
+    expect(screen.getByTitle('abc12-def34-ghi56-jkl78-cai')).toBeInTheDocument();
+    // No fabricated identity must render.
+    expect(screen.queryByText('Rahul Kumar')).not.toBeInTheDocument();
+    expect(screen.queryByText('Investor & Collaborator')).not.toBeInTheDocument();
+    expect(screen.queryByText('Level 6')).not.toBeInTheDocument();
+    expect(screen.queryByText('Reputation Score')).not.toBeInTheDocument();
+    expect(screen.queryByText('DAO Tier')).not.toBeInTheDocument();
   });
 });

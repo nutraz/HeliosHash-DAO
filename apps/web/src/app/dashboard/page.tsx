@@ -4,7 +4,7 @@ import {
   Bell, Settings, User, Gem, Wallet, Trophy, Zap, 
   Compass, Users, Shield, Sun, Moon, Send, Vote, 
   Search, Gift, MessageCircle, BarChart3, ShieldCheck,
-  Battery, Sun as SunIcon, MapPin
+  Battery, Sun as SunIcon, Copy
 } from 'lucide-react';
 import Link from 'next/link';
 import { icpService } from '@/services/icpService';
@@ -22,6 +22,9 @@ function DashboardContent() {
   const [socialFeed, setSocialFeed] = useState<any[]>([]);
   const [userBalance, setUserBalance] = useState<number>(15000);
   const [createdProjects, setCreatedProjects] = useState<any[]>([]);
+
+  // Identity comes from the connected Internet Identity principal — no fake name.
+  const { principal } = useAuth();
 
   // Initialize theme and load real data
   useEffect(() => {
@@ -265,15 +268,25 @@ function DashboardContent() {
               <h1 className="text-xl font-bold text-slate-900 dark:text-white">HeliosHash DAO</h1>
             </div>
 
-            {/* Center: Name & Rank */}
-            <div className="flex items-center space-x-4">
-              <div className="text-center">
-                <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Rahul Kumar</h2>
-                <p className="text-sm text-slate-600 dark:text-slate-400">Investor & Collaborator</p>
-              </div>
-              <div className="bg-amber-100 dark:bg-amber-900 px-3 py-1 rounded-full transition-colors">
-                <span className="text-amber-800 dark:text-amber-200 text-sm font-medium">Level 6</span>
-              </div>
+            {/* Center: connected Internet Identity principal (no fabricated name/rank/level) */}
+            <div className="flex items-center space-x-2">
+              {principal ? (
+                <>
+                  <span className="text-sm font-mono text-slate-700 dark:text-slate-300" title={principal}>
+                    {`${principal.slice(0, 5)}...${principal.slice(-3)}`}
+                  </span>
+                  <button
+                    onClick={() => { void navigator.clipboard?.writeText(principal); }}
+                    className="p-1 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
+                    title="Copy full principal"
+                    aria-label="Copy full principal"
+                  >
+                    <Copy size={14} />
+                  </button>
+                </>
+              ) : (
+                <span className="text-sm text-slate-500 dark:text-slate-400">Connecting…</span>
+              )}
             </div>
 
             {/* Right: Controls */}
@@ -362,7 +375,7 @@ function DashboardContent() {
             </Link>
 
             {/* Real Solar Data Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div 
                 className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700 transition-all duration-300 hover:shadow-md cursor-pointer"
                 onClick={loadSolarData}
@@ -384,22 +397,6 @@ function DashboardContent() {
                   </p>
                 </div>
                 <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Solar Panels</p>
-              </div>
-
-              <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                <div className="flex items-center justify-between">
-                  <MapPin className="text-blue-500" size={20} />
-                  <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">85/100</p>
-                </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Reputation Score</p>
-              </div>
-
-              <div className="bg-white dark:bg-slate-800 rounded-xl p-4 border border-slate-200 dark:border-slate-700">
-                <div className="flex items-center justify-between">
-                  <Shield className="text-purple-500" size={20} />
-                  <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">Explorer</p>
-                </div>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">DAO Tier</p>
               </div>
             </div>
 

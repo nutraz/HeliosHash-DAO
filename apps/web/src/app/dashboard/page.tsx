@@ -7,8 +7,9 @@ import {
   Battery, Sun as SunIcon, MapPin
 } from 'lucide-react';
 import { icpService } from '@/services/icpService';
+import { useAuth } from '@/contexts/AuthContext';
 
-export default function DashboardPage() {
+function DashboardContent() {
   const [darkMode, setDarkMode] = useState(false);
   const [activeNav, setActiveNav] = useState('profile');
   const [notifications, setNotifications] = useState(3);
@@ -460,4 +461,57 @@ export default function DashboardPage() {
       </div>
     </div>
   );
+}
+
+// H0c.2: gate the dashboard behind Internet Identity auth. Unauthenticated
+// visitors can load the route but see only a connect gate; private dashboard
+// content is never rendered (and its data-fetching hooks never mount) unless
+// the session is authenticated.
+export default function DashboardPage() {
+  const { isAuthenticated, isLoading, login } = useAuth();
+
+  // While auth state is resolving, render a neutral placeholder so private
+  // dashboard content never flashes for an unauthenticated/unknown session.
+  if (isLoading) {
+    return (
+      <div
+        data-testid="dashboard-auth-loading"
+        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800"
+      >
+        <p className="text-slate-600 dark:text-slate-400">Checking sign-in status…</p>
+      </div>
+    );
+  }
+
+  // Unauthenticated visitors get the connect gate only — no dashboard content.
+  if (!isAuthenticated) {
+    return (
+      <div
+        data-testid="dashboard-auth-gate"
+        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 p-6"
+      >
+        <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-xl p-8 border border-slate-200 dark:border-slate-700 text-center">
+          <div className="w-12 h-12 mx-auto mb-4 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-xl">H</span>
+          </div>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
+            Connect Internet Identity to continue
+          </h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mb-6">
+            The HeliosHash DAO dashboard is available to authenticated members.
+            Connect your Internet Identity to view it.
+          </p>
+          <button
+            onClick={() => { void login(); }}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+          >
+            Connect Internet Identity
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Authenticated: render the full dashboard.
+  return <DashboardContent />;
 }
